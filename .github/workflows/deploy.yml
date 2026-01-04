@@ -15,11 +15,11 @@ jobs:
           python-version: '3.9'
       - name: Install dependencies
         run: |
-          cd backend/app
+          cd BACKEND/app
           pip install -r requirements.txt
       - name: Run tests
         run: |
-          cd backend/app
+          cd BACKEND/app
           python -m pytest || echo "No tests found"
 
   deploy:
@@ -35,25 +35,19 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            cd /home/deploy/nekwas
+            PROJECT_DIR="asabak" 
+            cd ~/$PROJECT_DIR
 
-            # Pull latest changes
+            # Pull latest changes (Make sure your VPS can authenticate with Git)
             git fetch origin
             git reset --hard origin/main
 
-            # Install/update dependencies
-            cd backend/app
-            pip install -r requirements.txt
+            # Deploy with Docker Compose
+            docker-compose down
+            docker-compose up -d --build
 
-            # Restart services
-            pkill -f uvicorn || true
-            pkill -f http.server || true
+            # Clean up old/unused images to prevent disk from filling up
+            docker image prune -f
 
-            # Start services
-            uvicorn main:app --host 0.0.0.0 --port 8000 &
-            cd ../../portfolio && python3 -m http.server 8001 &
-            cd ../blog && python3 -m http.server 8002 &
-            cd ../store && python3 -m http.server 8003 &
-
-            # Restart nginx
+            # Restart nginx (optional, but good if your config changed)
             sudo systemctl restart nginx
