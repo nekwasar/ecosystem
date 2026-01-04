@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from fastapi import BackgroundTasks
 
-from models.blog import NewsletterSubscriber, NewsletterCampaign, BlogPost, NewsletterTemplate, NewsletterAutomation, SystemSetting
-from schemas.blog import NewsletterSubscriberCreate, NewsletterCampaignCreate, NewsletterTemplateCreate
+from models.blog import NewsletterSubscriber, NewsletterCampaign, BlogPost, NewsletterTemplate, NewsletterAutomation, SystemSetting, NewsletterSegment
+from schemas.blog import NewsletterSubscriberCreate, NewsletterCampaignCreate, NewsletterTemplateCreate, NewsletterSegmentCreate
 from services.email_service import email_service
 
 logger = logging.getLogger(__name__)
@@ -442,3 +442,44 @@ class NewsletterService:
         except Exception as e:
             self.db.rollback()
             raise Exception(f"Automation deletion failed: {str(e)}")
+
+    def get_segments(self) -> List[NewsletterSegment]:
+        """Get all segments"""
+        return self.db.query(NewsletterSegment).order_by(NewsletterSegment.created_at.desc()).all()
+
+    def create_segment(self, segment_data: NewsletterSegmentCreate) -> NewsletterSegment:
+        """Create a new segment"""
+        try:
+            count = self.calculate_segment_size(segment_data.criteria)
+            segment = NewsletterSegment(
+                name=segment_data.name,
+                type=segment_data.type,
+                description=segment_data.description,
+                criteria=segment_data.criteria,
+                cached_count=count,
+                last_calcd_at=datetime.now()
+            )
+            self.db.add(segment)
+            self.db.commit()
+            self.db.refresh(segment)
+            return segment
+        except Exception as e:
+            self.db.rollback()
+            raise Exception(f"Segment creation failed: {str(e)}")
+
+    def delete_segment(self, segment_id: int) -> bool:
+        """Delete a segment"""
+        try:
+            seg = self.db.query(NewsletterSegment).filter(NewsletterSegment.id == segment_id).first()
+            if seg:
+                self.db.delete(seg)
+                self.db.commit()
+                return True
+            return False
+        except Exception as e:
+            self.db.rollback()
+            raise Exception(f"Segment deletion failed: {str(e)}")
+
+    def calculate_segment_size(self, criteria: Dict[str, Any]) -> int:
+        """Calculate segment size based on criteria"""
+        return self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.is_active == True).count()

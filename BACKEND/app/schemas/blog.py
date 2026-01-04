@@ -81,6 +81,23 @@ class NewsletterSubscriber(NewsletterSubscriberBase):
     class Config:
         from_attributes = True
 
+class NewsletterSegmentBase(BaseModel):
+    name: str
+    type: Optional[str] = "dynamic"
+    criteria: dict
+    description: Optional[str] = None
+
+class NewsletterSegmentCreate(NewsletterSegmentBase):
+    pass
+
+class NewsletterSegment(NewsletterSegmentBase):
+    id: int
+    cached_count: int
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True
+
 class NewsletterCampaignBase(BaseModel):
     subject: str
     content: str

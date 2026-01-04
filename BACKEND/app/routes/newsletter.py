@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Form, Request, Background
 from sqlalchemy.orm import Session
 from database import get_db
 from services.newsletter_service import NewsletterService
-from schemas.blog import NewsletterSubscriberCreate, NewsletterCampaignCreate, NewsletterTemplateCreate
+from schemas.blog import NewsletterSubscriberCreate, NewsletterCampaignCreate, NewsletterTemplateCreate, NewsletterSegmentCreate
 from typing import Optional
 import shutil
 import os
@@ -587,3 +587,35 @@ async def upload_image(file: UploadFile = File(...)):
     except Exception as e:
         print(f"Upload failed: {e}")
         return {"success": False, "error": str(e)}
+
+@router.get("/admin/segments")
+async def get_segments(db: Session = Depends(get_db)):
+    """Get all segments"""
+    try:
+        service = NewsletterService(db)
+        segments = service.get_segments()
+        return {"success": True, "segments": segments}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@router.post("/admin/segments")
+async def create_segment(segment: NewsletterSegmentCreate, db: Session = Depends(get_db)):
+    """Create a new segment"""
+    try:
+        service = NewsletterService(db)
+        new_seg = service.create_segment(segment)
+        return {"success": True, "segment": new_seg}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@router.delete("/admin/segments/{segment_id}")
+async def delete_segment(segment_id: int, db: Session = Depends(get_db)):
+    """Delete a segment"""
+    try:
+        service = NewsletterService(db)
+        success = service.delete_segment(segment_id)
+        if success:
+            return {"success": True}
+        raise HTTPException(404, "Segment not found")
+    except Exception as e:
+        raise HTTPException(500, str(e))

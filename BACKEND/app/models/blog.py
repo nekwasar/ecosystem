@@ -125,6 +125,18 @@ class NewsletterSubscriber(Base):
     subscribed_at = Column(DateTime(timezone=True), server_default=func.now())
     unsubscribed_at = Column(DateTime(timezone=True), nullable=True)
 
+class NewsletterSegment(Base):
+    __tablename__ = "newsletter_segments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False)
+    type = Column(String(50), default="dynamic")  # dynamic, static
+    description = Column(Text)
+    criteria = Column(JSON, nullable=False)  # {"field": "email", "op": "contains", "value": "@gmail"}
+    cached_count = Column(Integer, default=0)
+    last_calcd_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
 class SearchAnalytics(Base):
     __tablename__ = "search_analytics"
 
