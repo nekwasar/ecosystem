@@ -105,6 +105,8 @@ class NewsletterCampaignBase(BaseModel):
 
 class NewsletterCampaignCreate(NewsletterCampaignBase):
     scheduled_at: Optional[datetime] = None
+    segment_id: Optional[int] = None
+    status: Optional[str] = "draft"
 
 class NewsletterCampaign(NewsletterCampaignBase):
     id: int
