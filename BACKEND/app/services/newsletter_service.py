@@ -444,8 +444,20 @@ class NewsletterService:
             raise Exception(f"Automation deletion failed: {str(e)}")
 
     def get_segments(self) -> List[NewsletterSegment]:
-        """Get all segments"""
-        return self.db.query(NewsletterSegment).order_by(NewsletterSegment.created_at.desc()).all()
+        """Get all segments and refresh their counts"""
+        segments = self.db.query(NewsletterSegment).order_by(NewsletterSegment.created_at.desc()).all()
+        for seg in segments:
+            try:
+                # Recalculate count
+                count = self.calculate_segment_size(seg.criteria)
+                if seg.cached_count != count:
+                    seg.cached_count = count
+                    seg.last_calcd_at = datetime.now()
+            except Exception as e:
+                logger.error(f"Failed to calc size for segment {seg.id}: {e}")
+        
+        self.db.commit()
+        return segments
 
     def create_segment(self, segment_data: NewsletterSegmentCreate) -> NewsletterSegment:
         """Create a new segment"""
@@ -482,4 +494,22 @@ class NewsletterService:
 
     def calculate_segment_size(self, criteria: Dict[str, Any]) -> int:
         """Calculate segment size based on criteria"""
-        return self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.is_active == True).count()
+        query = self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.is_active == True)
+        
+        if not criteria:
+            return query.count()
+            
+        field = criteria.get('field')
+        op = criteria.get('op')
+        value = criteria.get('value')
+        
+        if field == 'email' and op == 'contains' and value:
+            query = query.filter(NewsletterSubscriber.email.like(f"%{value}%"))
+        elif field == 'name' and op == 'contains' and value:
+             query = query.filter(NewsletterSubscriber.name.like(f"%{value}%"))
+        elif field == 'is_confirmed' and op == 'eq':
+             val = str(value).lower() == 'true'
+             query = query.filter(NewsletterSubscriber.is_confirmed == val)
+        # Add more logic as necessary (e.g., date ranges)
+        
+        return query.count()
