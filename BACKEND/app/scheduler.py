@@ -26,6 +26,17 @@ async def send_weekly_newsletter_job():
     finally:
         db.close()
 
+async def check_scheduled_campaigns_job():
+    """Job to check for and send scheduled campaigns every minute"""
+    try:
+        db = next(get_db())
+        newsletter_service = NewsletterService(db)
+        await newsletter_service.process_scheduled_campaigns()
+    except Exception as e:
+        print(f"Scheduled campaigns check failed: {e}")
+    finally:
+        db.close()
+
 async def cleanup_expired_data_job():
     """Scheduled job to cleanup expired likes and temporal users daily at 2 AM"""
     try:
@@ -76,9 +87,19 @@ def init_scheduler():
         replace_existing=True
     )
 
+    # Schedule check for scheduled campaigns every minute
+    scheduler.add_job(
+        check_scheduled_campaigns_job,
+        trigger=CronTrigger(second=0), # Runs at the start of every minute
+        id='check_scheduled',
+        name='Check Scheduled Campaigns',
+        replace_existing=True
+    )
+
     print("Scheduler initialized:")
     print("- Weekly newsletter scheduled for every Monday at 9 AM")
     print("- Daily cleanup scheduled for every day at 2 AM")
+    print("- Scheduled campaigns check set for every minute")
 
 def start_scheduler():
     """Start the scheduler"""

@@ -282,6 +282,7 @@ async def get_campaign(
 @router.post("/admin/campaigns")
 async def create_campaign(
     campaign_data: NewsletterCampaignCreate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
     """Create newsletter campaign (admin only)"""
@@ -304,7 +305,7 @@ async def create_campaign(
         if final_content:
             campaign_data.content = final_content
         
-        campaign = await newsletter_service.create_campaign(campaign_data)
+        campaign = await newsletter_service.create_campaign(campaign_data, background_tasks)
 
         return {
             "success": True,
@@ -320,12 +321,13 @@ async def create_campaign(
 async def update_campaign(
     campaign_id: int,
     campaign_data: NewsletterCampaignCreate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
     """Update newsletter campaign (admin only)"""
     try:
         service = NewsletterService(db)
-        campaign = await service.update_campaign(campaign_id, campaign_data)
+        campaign = await service.update_campaign(campaign_id, campaign_data, background_tasks)
         return {
             "success": True,
             "message": "Campaign updated successfully",

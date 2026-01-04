@@ -120,28 +120,24 @@ class NewsletterService:
             self.db.commit()
             self.db.refresh(campaign)
 
-            # Check if it should be sent immediately
-            # Logic: If scheduled_at is None (Immediate) AND status is 'sending'
-            should_send_now = (campaign.scheduled_at is None) and (campaign.status == 'sending')
-            
-            if should_send_now:
-                # Update status to 'sending'
-                campaign.status = "sending"
-                self.db.commit()
-
-                # Trigger sending
-                # If we have background tasks, use them to avoid blocking the API
-                if background_tasks:
-                    background_tasks.add_task(self._execute_campaign_send, campaign.id)
-                else: 
-                     # Fallback for sync execution (e.g. tests)
-                     await self._execute_campaign_send(campaign.id)
+            # Trigger send if applicable
+            await self._maybe_trigger_send(campaign, background_tasks)
 
             return campaign
-            
         except Exception as e:
             self.db.rollback()
             raise Exception(f"Campaign creation failed: {str(e)}")
+
+    async def _maybe_trigger_send(self, campaign: NewsletterCampaign, background_tasks: Optional[BackgroundTasks] = None):
+        """Internal helper to trigger sending if it's immediate"""
+        # Logic: If scheduled_at is None (Immediate) AND status is 'sending'
+        should_send_now = (campaign.scheduled_at is None) and (campaign.status == 'sending')
+        
+        if should_send_now:
+            if background_tasks:
+                background_tasks.add_task(self._execute_campaign_send, campaign.id)
+            else: 
+                 await self._execute_campaign_send(campaign.id)
     async def delete_campaign(self, campaign_id: int) -> bool:
         """Delete a campaign"""
         try:
@@ -155,7 +151,7 @@ class NewsletterService:
             self.db.rollback()
             raise Exception(f"Campaign deletion failed: {str(e)}")
 
-    async def update_campaign(self, campaign_id: int, campaign_data: NewsletterCampaignCreate) -> NewsletterCampaign:
+    async def update_campaign(self, campaign_id: int, campaign_data: NewsletterCampaignCreate, background_tasks: Optional[BackgroundTasks] = None) -> NewsletterCampaign:
         """Update an existing campaign"""
         try:
             campaign = self.db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
@@ -168,18 +164,59 @@ class NewsletterService:
             
             self.db.commit()
             self.db.refresh(campaign)
+
+            # Trigger send if applicable (e.g. if user just flipped a draft to "Immediate")
+            await self._maybe_trigger_send(campaign, background_tasks)
+
             return campaign
         except Exception as e:
             self.db.rollback()
             raise Exception(f"Campaign update failed: {str(e)}")
+
+    async def process_scheduled_campaigns(self):
+        """Find and send campaigns scheduled for 'now' or in the past that haven't sent yet"""
+        now = datetime.now()
+        # Find scheduled campaigns where scheduled_at <= now and status is 'scheduled'
+        pending = self.db.query(NewsletterCampaign).filter(
+            NewsletterCampaign.status == "scheduled",
+            NewsletterCampaign.scheduled_at <= now
+        ).all()
+        
+        for campaign in pending:
+            logger.info(f"Processing scheduled campaign {campaign.id} ('{campaign.name}')")
+            # We call _execute_campaign_send directly
+            await self._execute_campaign_send(campaign.id)
     async def _execute_campaign_send(self, campaign_id: int):
         """Internal method to process the sending of a campaign"""
         try:
             campaign = self.db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
             if not campaign: return
 
-            # Get target audience (active subscribers)
-            subscribers = self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.is_active == True).all()
+            # Update status to 'sending' explicitly if not already
+            if campaign.status != "sending":
+                campaign.status = "sending"
+                self.db.commit()
+
+            # Get target audience
+            query = self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.is_active == True)
+            
+            # Apply segment filtering if segment_id is set
+            if campaign.segment_id:
+                segment = self.db.query(NewsletterSegment).filter(NewsletterSegment.id == campaign.segment_id).first()
+                if segment and segment.criteria:
+                    field = segment.criteria.get('field')
+                    op = segment.criteria.get('op')
+                    value = segment.criteria.get('value')
+                    
+                    if field == 'email' and op == 'contains' and value:
+                        query = query.filter(NewsletterSubscriber.email.like(f"%{value}%"))
+                    elif field == 'name' and op == 'contains' and value:
+                         query = query.filter(NewsletterSubscriber.name.like(f"%{value}%"))
+                    elif field == 'is_confirmed' and op == 'eq':
+                         val = str(value).lower() == 'true'
+                         query = query.filter(NewsletterSubscriber.is_confirmed == val)
+
+            subscribers = query.all()
             
             # Fetch Custom Sender Settings if available
             system_settings = self.db.query(SystemSetting).first()
@@ -189,13 +226,9 @@ class NewsletterService:
 
             sent_count = 0
             for sub in subscribers:
-                # Basic personalization (could be expanded with Jinja within the content if needed)
-                # But typically we just send the static HTML or simple str.replace
-                
                 content_html = campaign.customized_html or campaign.content
-                content_html = content_html.replace("{{name}}", sub.name).replace("{{email}}", sub.email)
+                content_html = content_html.replace("{{name}}", sub.name or "").replace("{{email}}", sub.email)
                 
-                # Use Transactional batch or single? We'll do single loop for now as per EmailService design logic
                 email_service.send_transactional_email(
                     to_email=sub.email,
                     to_name=sub.name,
@@ -206,14 +239,18 @@ class NewsletterService:
                 )
                 sent_count += 1
             
-            # Done
+            # Finalize status
             campaign.status = "sent"
             campaign.sent_at = datetime.now()
             campaign.recipient_count = sent_count
             self.db.commit()
+            logger.info(f"Campaign {campaign.id} successfully sent to {sent_count} recipients.")
             
         except Exception as e:
             logger.error(f"Campaign send failed: {e}")
+            self.db.rollback()
+            # Try to mark as failed
+            campaign = self.db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
             if campaign:
                 campaign.status = "failed"
                 self.db.commit()
