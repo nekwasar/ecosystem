@@ -1,7 +1,7 @@
 import logging
 import os
 from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
 from fastapi import BackgroundTasks
 
@@ -179,16 +179,32 @@ class NewsletterService:
 
     async def process_scheduled_campaigns(self):
         """Find and send campaigns scheduled for 'now' or in the past that haven't sent yet"""
-        now = datetime.now()
-        # Find scheduled campaigns where scheduled_at <= now and status is 'scheduled'
-        pending = self.db.query(NewsletterCampaign).filter(
-            NewsletterCampaign.status == "scheduled",
-            NewsletterCampaign.scheduled_at <= now
+        now = datetime.now(timezone.utc)
+        
+        # Get all campaigns with status 'scheduled'
+        scheduled_campaigns = self.db.query(NewsletterCampaign).filter(
+            NewsletterCampaign.status == "scheduled"
         ).all()
         
-        for campaign in pending:
-            logger.info(f"Processing scheduled campaign {campaign.id} ('{campaign.name}')")
-            await self._execute_campaign_send(campaign.id)
+        logger.info(f"Found {len(scheduled_campaigns)} campaigns in 'scheduled' status.")
+        
+        for campaign in scheduled_campaigns:
+            if not campaign.scheduled_at:
+                logger.warning(f"Campaign {campaign.id} is marked as scheduled but has no scheduled_at timestamp. Skipping.")
+                continue
+                
+            # Handle potentially naive/aware comparison
+            sch_at = campaign.scheduled_at
+            if sch_at.tzinfo is None:
+                # If naive, assume it's UTC (since our frontend sends UTC)
+                sch_at = sch_at.replace(tzinfo=timezone.utc)
+            
+            if sch_at <= now:
+                logger.info(f"Triggering scheduled campaign {campaign.id} ('{campaign.name}') - was set for {sch_at}")
+                await self._execute_campaign_send(campaign.id)
+            else:
+                diff = sch_at - now
+                logger.debug(f"Campaign {campaign.id} still in future. {diff} remaining.")
 
     async def send_weekly_newsletter(self) -> Dict[str, Any]:
         """Manually trigger or schedule the weekly update (used by scheduler)"""
@@ -275,7 +291,7 @@ class NewsletterService:
             
             # Finalize status
             campaign.status = "sent"
-            campaign.sent_at = datetime.now()
+            campaign.sent_at = datetime.now(timezone.utc)
             campaign.recipient_count = sent_count
             self.db.commit()
             logger.info(f"Campaign {campaign.id} successfully sent to {sent_count} recipients.")

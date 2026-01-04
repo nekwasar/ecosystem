@@ -6,6 +6,10 @@ from sqlalchemy.orm import Session
 from models.blog import BlogLike, TemporalUser as TemporalUserModel, BlogPost as BlogPostModel
 from sqlalchemy import func
 import asyncio
+import logging
+
+logger = logging.getLogger("scheduler")
+logger.setLevel(logging.INFO)
 
 scheduler = AsyncIOScheduler()
 
@@ -18,8 +22,7 @@ async def send_weekly_newsletter_job():
         # Create newsletter service and send
         newsletter_service = NewsletterService(db)
         result = await newsletter_service.send_weekly_newsletter()
-
-        print(f"Weekly newsletter sent: {result}")
+        logger.info(f"Weekly newsletter job completed: {result}")
 
     except Exception as e:
         print(f"Weekly newsletter job failed: {e}")
@@ -31,9 +34,10 @@ async def check_scheduled_campaigns_job():
     try:
         db = next(get_db())
         newsletter_service = NewsletterService(db)
+        logger.info("Checking for scheduled campaigns...")
         await newsletter_service.process_scheduled_campaigns()
     except Exception as e:
-        print(f"Scheduled campaigns check failed: {e}")
+        logger.error(f"Scheduled campaigns check failed: {e}", exc_info=True)
     finally:
         db.close()
 
