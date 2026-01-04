@@ -65,12 +65,16 @@ class NewsletterService:
                 # Use the configured template
                 await self._send_content_email(subscriber, welcome_auto.template_id, is_automation=True, background_tasks=background_tasks)
             else:
-                # Fallback to hardcoded regular welcome if no automation is set up yet
-                await self._send_welcome_email(subscriber, background_tasks)
+                # Default behavior if no automation is set: Just log it or send a very basic confirmation
+                logger.info(f"New subscriber {subscriber.email} joined, but no welcome automation is configured.")
+
+            msg = "Successfully subscribed!"
+            if welcome_auto and welcome_auto.template_id:
+                msg += " Check your email for a welcome message."
 
             return {
                 "success": True,
-                "message": "Successfully subscribed! Check your email for a welcome message.",
+                "message": msg,
                 "subscriber_id": subscriber.id
             }
 
@@ -184,8 +188,35 @@ class NewsletterService:
         
         for campaign in pending:
             logger.info(f"Processing scheduled campaign {campaign.id} ('{campaign.name}')")
-            # We call _execute_campaign_send directly
             await self._execute_campaign_send(campaign.id)
+
+    async def send_weekly_newsletter(self) -> Dict[str, Any]:
+        """Manually trigger or schedule the weekly update (used by scheduler)"""
+        content = self._get_weekly_content()
+        # Find the 'Weekly' template
+        template = self.db.query(NewsletterTemplate).filter(
+            NewsletterTemplate.category == 'weekly',
+            NewsletterTemplate.is_active == True
+        ).first()
+
+        # Get settings for branding
+        settings = self.get_settings()
+        site_name = settings.get("site_name", "Our Website")
+        
+        # Create a campaign for this send for history/tracking
+        campaign = NewsletterCampaign(
+            name=f"Weekly Update - {datetime.now().strftime('%Y-%m-%d')}",
+            subject=template.subject_template if template else f"Weekly Update from {site_name}",
+            content=content,
+            template_id=template.id if template else None,
+            status="sending"
+        )
+        self.db.add(campaign)
+        self.db.commit()
+        self.db.refresh(campaign)
+        
+        await self._execute_campaign_send(campaign.id)
+        return {"success": True, "campaign_id": campaign.id}
     async def _execute_campaign_send(self, campaign_id: int):
         """Internal method to process the sending of a campaign"""
         try:
@@ -219,21 +250,24 @@ class NewsletterService:
             subscribers = query.all()
             
             # Fetch Custom Sender Settings if available
-            system_settings = self.db.query(SystemSetting).first()
-            sender_config = None
-            if system_settings and system_settings.sender_email:
-                sender_config = {"name": system_settings.sender_name, "email": system_settings.sender_email}
+            settings = self.get_settings()
+            sender_config = {
+                "name": settings.get("sender_name"),
+                "email": settings.get("sender_email")
+            }
 
             sent_count = 0
             for sub in subscribers:
                 content_html = campaign.customized_html or campaign.content
-                content_html = content_html.replace("{{name}}", sub.name or "").replace("{{email}}", sub.email)
+                # Robust replacement
+                display_name = sub.name if sub.name else "Subscriber"
+                content_html = content_html.replace("{{name}}", display_name).replace("{{email}}", sub.email)
                 
                 email_service.send_transactional_email(
                     to_email=sub.email,
-                    to_name=sub.name,
                     subject=campaign.subject,
                     html_content=content_html,
+                    to_name=sub.name,
                     tags=[f"campaign_{campaign.id}"],
                     sender=sender_config
                 )
@@ -351,51 +385,22 @@ class NewsletterService:
         content = template.content_template.replace("{{name}}", subscriber.name).replace("{{unsubscribe_url}}", unsubscribe_url)
 
         if background_tasks:
-            # Use background sender
              background_tasks.add_task(
                 email_service.send_transactional_email,
-                subscriber.email,
-                subject,
-                content,
-                subscriber.name
+                to_email=subscriber.email,
+                subject=subject,
+                html_content=content,
+                to_name=subscriber.name
             )
         else:
             email_service.send_transactional_email(
                 to_email=subscriber.email,
-                to_name=subscriber.name,
                 subject=subject,
-                html_content=content
+                html_content=content,
+                to_name=subscriber.name
             )
 
-    async def _send_welcome_email(self, subscriber: NewsletterSubscriber, background_tasks: Optional[BackgroundTasks] = None):
-        """Legacy fallback welcome email"""
-        subject = "Welcome to NekwasaR Blog! 🎉"
-        unsubscribe_url = f"https://nekwasar.com/api/newsletter/unsubscribe?email={subscriber.email}"
 
-        content = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <h1 style="color: #333; text-align: center;">Welcome to NekwasaR Blog! 🎉</h1>
-            <p>Hi {subscriber.name},</p>
-            <p>Thanks for subscribing!</p>
-            <p><a href="{unsubscribe_url}">Unsubscribe</a></p>
-        </div>
-        """
-        
-        if background_tasks:
-             background_tasks.add_task(
-                email_service.send_transactional_email,
-                subscriber.email,
-                subject,
-                content,
-                subscriber.name
-            )
-        else:
-            email_service.send_transactional_email(
-                to_email=subscriber.email,
-                to_name=subscriber.name,
-                subject=subject,
-                html_content=content
-            )
 
     def _get_weekly_content(self) -> str:
         """Generate weekly newsletter content from recent posts"""
@@ -408,44 +413,34 @@ class NewsletterService:
             ).order_by(BlogPost.published_at.desc()).limit(5).all()
 
             if not recent_posts:
-                # Fallback to any recent posts
                 recent_posts = self.db.query(BlogPost).filter(
                     BlogPost.published_at >= week_ago
                 ).order_by(BlogPost.published_at.desc()).limit(5).all()
 
-            # Build newsletter content
+            settings = self.get_settings()
+            site_url = settings.get("site_url", "")
+            
             content_parts = []
-
             if recent_posts:
-                content_parts.append("<h2>This Week's Highlights</h2>")
                 for post in recent_posts:
-                    content_parts.append(f"<div><h3><a href='https://nekwasar.com/blog/{post.slug}'>{post.title}</a></h3><p>{post.excerpt}</p></div>")
-            else:
-                content_parts.append("""
-                <h2>This Week's Highlights</h2>
-                <p>We're working on some exciting new content! Stay tuned for our next update.</p>
-                """)
-
+                    link = f"{site_url}/blog/{post.slug}" if site_url else f"/blog/{post.slug}"
+                    content_parts.append(f"<div><h3><a href='{link}'>{post.title}</a></h3><p>{post.excerpt}</p></div>")
+            
             return "\n".join(content_parts)
 
         except Exception as e:
-            return "<h2>Weekly Update</h2><p>Check our website for updates!</p>"
+            logger.error(f"Failed to generate weekly content: {e}")
+            return ""
 
     # --- Settings Management (Database) ---
     def get_settings(self) -> Dict[str, Any]:
         """Get global newsletter settings"""
-        default_settings = {
-            "sender_name": "NekwasaR Team",
-            "sender_email": "newsletter@nekwasar.com"
-        }
-        
         try:
             settings_rows = self.db.query(SystemSetting).all()
-            db_settings = {s.key: s.value for s in settings_rows}
-            return {**default_settings, **db_settings}
+            return {s.key: s.value for s in settings_rows}
         except Exception as e:
             logger.error(f"Failed to load settings from DB: {e}")
-            return default_settings
+            return {}
 
     def save_settings(self, settings: Dict[str, Any]) -> bool:
         """Save global newsletter settings"""

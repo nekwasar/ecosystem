@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from database import get_db
 from models.contact import Contact as DBContact
 from schemas import ContactCreate, Contact
@@ -28,25 +29,31 @@ async def create_contact(
     db.refresh(db_contact)
 
     # Send Notification Email to Admin
-    subject = f"New Contact: {contact.name}"
+    subject = f"New Message: {contact.name}"
     html_content = f"""
-    <h2>New Contact Message</h2>
-    <p><strong>Name:</strong> {contact.name}</p>
-    <p><strong>Email:</strong> {contact.email}</p>
-    <p><strong>Message:</strong></p>
-    <blockquote style="background: #f9f9f9; padding: 10px; border-left: 5px solid #ccc;">
-        {contact.message}
-    </blockquote>
+    <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+        <h2 style="color: #333; margin-top: 0;">New Contact Message</h2>
+        <p><strong>Name:</strong> {contact.name}</p>
+        <p><strong>Email:</strong> {contact.email}</p>
+        <p><strong>Message:</strong></p>
+        <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #007bff; margin: 10px 0;">
+            {contact.message}
+        </div>
+    </div>
     """
     
     # Send to the configured sender email (admin)
     if settings.sender_email:
+        settings_rows = db.execute(text("SELECT key, value FROM system_settings")).all()
+        db_settings = {s[0]: s[1] for s in settings_rows}
+        site_name = db_settings.get("site_name", "Admin")
+
         await email_service.send_email_background(
             background_tasks,
             to_email=settings.sender_email,
             subject=subject,
             html_content=html_content,
-            to_name="NekwasaR Admin",
+            to_name=f"{site_name} Admin",
             reply_to={"email": contact.email, "name": contact.name}
         )
 

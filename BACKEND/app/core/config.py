@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     # Brevo (Sendinblue)
     brevo_api_key: Optional[str] = None
     sender_email: Optional[str] = None
-    sender_name: Optional[str] = "NekwasaR Team"
+    sender_name: Optional[str] = None
 
     # Analytics
     google_analytics_property_id: Optional[str] = None

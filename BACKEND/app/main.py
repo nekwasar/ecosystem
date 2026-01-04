@@ -229,7 +229,7 @@ async def root(request: Request):
         return FileResponse(str(portfolio_path))
     
     # Ultimate fallback if portfolio file is missing
-    return HTMLResponse("Welcome to NekwasaR")
+    return HTMLResponse("OK")
 
 # --- PORTFOLIO & STORE ASSET ROUTES (CSS, JS, IMG, FONTS) ---
 # These routes serve static assets for the portfolio and store domains when they ask for relative paths (e.g. /css/main.css)

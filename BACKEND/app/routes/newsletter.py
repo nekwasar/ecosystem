@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Form, Request, BackgroundTasks, File, UploadFile
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from database import get_db
 from services.newsletter_service import NewsletterService
 from schemas.blog import NewsletterSubscriberCreate, NewsletterCampaignCreate, NewsletterTemplateCreate, NewsletterSegmentCreate
@@ -132,6 +133,10 @@ async def unsubscribe_via_link(
     try:
         newsletter_service = NewsletterService(db)
         result = await newsletter_service.unsubscribe_user(email)
+        
+        settings = newsletter_service.get_settings()
+        site_name = settings.get("site_name", "Our Website")
+        site_url = settings.get("site_url", "/")
 
         # Return HTML response
         if result["success"]:
@@ -139,18 +144,22 @@ async def unsubscribe_via_link(
             <!DOCTYPE html>
             <html>
             <head>
-                <title>Unsubscribed - NekwasaR Blog</title>
+                <title>Unsubscribed - {site_name}</title>
                 <style>
-                    body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; }}
+                    body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f7f6; color: #333; }}
+                    .card {{ background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; max-width: 500px; }}
                     .success {{ color: #28a745; }}
                     .message {{ font-size: 18px; margin: 20px 0; }}
+                    .btn {{ display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }}
                 </style>
             </head>
             <body>
-                <h1 class="success">✓ Successfully Unsubscribed</h1>
-                <p class="message">{result["message"]}</p>
-                <p>We're sorry to see you go. You can always subscribe again if you change your mind.</p>
-                <a href="https://nekwasar.com/blog">Visit Our Blog</a>
+                <div class="card">
+                    <h1 class="success">✓ Successfully Unsubscribed</h1>
+                    <p class="message">{result["message"]}</p>
+                    <p>We're sorry to see you go. You can always subscribe again if you change your mind.</p>
+                    <a href="{site_url}" class="btn">Return to {site_name}</a>
+                </div>
             </body>
             </html>
             """
@@ -159,17 +168,21 @@ async def unsubscribe_via_link(
             <!DOCTYPE html>
             <html>
             <head>
-                <title>Unsubscribe - NekwasaR Blog</title>
+                <title>Unsubscribe - {site_name}</title>
                 <style>
-                    body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; }}
+                    body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f7f6; }}
+                    .card {{ background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; max-width: 500px; }}
                     .error {{ color: #dc3545; }}
                     .message {{ font-size: 18px; margin: 20px 0; }}
+                    .btn {{ display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; }}
                 </style>
             </head>
             <body>
-                <h1 class="error">Unsubscribe Failed</h1>
-                <p class="message">{result["message"]}</p>
-                <a href="https://nekwasar.com/blog">Visit Our Blog</a>
+                <div class="card">
+                    <h1 class="error">Unsubscribe Failed</h1>
+                    <p class="message">{result["message"]}</p>
+                    <a href="{site_url}" class="btn">Return to {site_name}</a>
+                </div>
             </body>
             </html>
             """
@@ -178,11 +191,16 @@ async def unsubscribe_via_link(
         return HTMLResponse(content=html_content)
 
     except Exception as e:
+        settings_rows = db.execute(text("SELECT key, value FROM system_settings")).all()
+        settings = {s[0]: s[1] for s in settings_rows}
+        site_name = settings.get("site_name", "Our Website")
+        site_url = settings.get("site_url", "/")
+        
         error_html = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Error - NekwasaR Blog</title>
+            <title>Error - {site_name}</title>
             <style>
                 body {{ font-family: Arial, sans-serif; text-align: center; padding: 50px; }}
                 .error {{ color: #dc3545; }}
@@ -191,7 +209,7 @@ async def unsubscribe_via_link(
         <body>
             <h1 class="error">Error</h1>
             <p>Something went wrong. Please try again later.</p>
-            <a href="https://nekwasar.com/blog">Visit Our Blog</a>
+            <a href="{site_url}">Return home</a>
         </body>
         </html>
         """
