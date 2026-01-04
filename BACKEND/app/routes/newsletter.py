@@ -594,7 +594,21 @@ async def get_segments(db: Session = Depends(get_db)):
     try:
         service = NewsletterService(db)
         segments = service.get_segments()
-        return {"success": True, "segments": segments}
+        return {
+            "success": True, 
+            "segments": [
+                {
+                    "id": s.id,
+                    "name": s.name,
+                    "type": s.type,
+                    "criteria": s.criteria,
+                    "description": s.description,
+                    "cached_count": s.cached_count,
+                    "last_calcd_at": s.last_calcd_at.isoformat() if s.last_calcd_at else None,
+                    "created_at": s.created_at.isoformat() if s.created_at else None
+                } for s in segments
+            ]
+        }
     except Exception as e:
         raise HTTPException(500, str(e))
 
