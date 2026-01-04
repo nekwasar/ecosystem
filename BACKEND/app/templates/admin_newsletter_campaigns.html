@@ -565,18 +565,30 @@
 
                                             <!-- Schedule Inputs -->
                                             <div id="scheduleContainer" class="hidden mt-3 space-y-2">
-                                                <div class="grid grid-cols-2 gap-2">
+                                                <div class="space-y-2">
                                                     <div>
                                                         <label
                                                             class="block text-[10px] text-t-muted uppercase mb-1">Date</label>
                                                         <input type="date" id="scheduleDate"
                                                             class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
                                                     </div>
-                                                    <div>
-                                                        <label
-                                                            class="block text-[10px] text-t-muted uppercase mb-1">Time</label>
-                                                        <input type="time" id="scheduleTime"
-                                                            class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                    <div class="flex gap-2">
+                                                        <div class="flex-1">
+                                                            <label
+                                                                class="block text-[10px] text-t-muted uppercase mb-1">Time
+                                                                (12h)</label>
+                                                            <input type="time" id="scheduleTime"
+                                                                class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                        </div>
+                                                        <div class="w-20">
+                                                            <label
+                                                                class="block text-[10px] text-t-muted uppercase mb-1">AM/PM</label>
+                                                            <select id="scheduleAMPM"
+                                                                class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                                <option value="AM">AM</option>
+                                                                <option value="PM">PM</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <p class="text-[10px] text-t-muted">Time will be sent in your current
@@ -1158,13 +1170,37 @@
 
             if (option === 'schedule') {
                 const dateVal = document.getElementById('scheduleDate').value;
-                const timeVal = document.getElementById('scheduleTime').value;
+                const timeVal = document.getElementById('scheduleTime').value; // Usually returns 24h HH:mm but we'll normalize
+                const amPm = document.getElementById('scheduleAMPM').value;
 
                 if (!dateVal || !timeVal) {
                     alert('Please select both a date and time to schedule.');
                     return;
                 }
-                const localDate = new Date(`${dateVal}T${timeVal}`);
+
+                // Parse timeVal and adjust based on AM/PM selection
+                let [hours, minutes] = timeVal.split(':').map(Number);
+
+                // If browser input is 24h, we allow for it but override with AM/PM selection for force-preference
+                if (amPm === 'PM' && hours < 12) hours += 12;
+                if (amPm === 'AM' && hours === 12) hours = 0;
+
+                // Format back to 24h HH:mm for Date constructor
+                const formattedHours = hours.toString().padStart(2, '0');
+                const formattedMinutes = minutes.toString().padStart(2, '0');
+
+                const localDate = new Date(`${dateVal}T${formattedHours}:${formattedMinutes}:00`);
+
+                // Ensure the date is valid and in the future
+                if (isNaN(localDate.getTime())) {
+                    alert('Invalid date or time selected.');
+                    return;
+                }
+
+                if (localDate < new Date()) {
+                    if (!confirm('The scheduled time is in the past. It will be sent as soon as possible. Continue?')) return;
+                }
+
                 scheduledAt = localDate.toISOString();
                 status = 'scheduled';
             } else if (option === 'immediate') {
@@ -1291,7 +1327,9 @@
                 </span>
             </td>
             <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">${formatNumber(campaign.recipientCount || 0)}</td>
-            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">${campaign.sentAt ? formatDate(campaign.sentAt) : '-'}</td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">
+                ${campaign.status === 'scheduled' && campaign.scheduledAt ? formatDate(campaign.scheduledAt, true) : (campaign.sentAt ? formatDate(campaign.sentAt, true) : '-')}
+            </td>
             <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">${campaign.openRate || 0}%</td>
             <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4">
                 <div class="flex items-center space-x-1">
@@ -1343,12 +1381,19 @@
         return new Intl.NumberFormat().format(num);
     }
 
-    function formatDate(dateString) {
+    function formatDate(dateString, withTime = false) {
+        if (!dateString) return '-';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
+        let options = {
             month: 'short',
             day: 'numeric'
-        });
+        };
+        if (withTime) {
+            options.hour = 'numeric';
+            options.minute = '2-digit';
+            options.hour12 = true;
+        }
+        return date.toLocaleDateString('en-US', options).replace(',', '');
     }
 
     function updatePagination() {
@@ -1476,6 +1521,30 @@
                 const segSel = document.getElementById('segmentSelect');
                 if (segSel && c.segmentId) {
                     segSel.value = c.segmentId;
+                }
+
+                // Pre-fill send time options
+                const sendOpt = document.getElementById('sendTimeOption');
+                if (c.status === 'scheduled' && c.scheduledAt) {
+                    sendOpt.value = 'schedule';
+                    toggleScheduleInput();
+
+                    const schedDate = new Date(c.scheduledAt);
+                    document.getElementById('scheduleDate').value = schedDate.toISOString().split('T')[0];
+
+                    // Input type="time" expects 24h format HH:mm
+                    const hours24 = schedDate.getHours();
+                    const mins = schedDate.getMinutes().toString().padStart(2, '0');
+                    document.getElementById('scheduleTime').value = `${hours24.toString().padStart(2, '0')}:${mins}`;
+
+                    // Set our custom AM/PM selector
+                    document.getElementById('scheduleAMPM').value = hours24 >= 12 ? 'PM' : 'AM';
+                } else if (c.status === 'draft') {
+                    sendOpt.value = 'draft';
+                    toggleScheduleInput();
+                } else {
+                    sendOpt.value = 'immediate';
+                    toggleScheduleInput();
                 }
 
                 wizardStep = 1;
