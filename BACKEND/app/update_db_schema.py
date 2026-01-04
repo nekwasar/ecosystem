@@ -35,6 +35,16 @@ def update_schema():
                  connection.execute(text("ALTER TABLE newsletter_campaigns ADD COLUMN customized_html TEXT"))
                  connection.commit()
 
+            if 'open_count' not in columns:
+                 print("   ➕ Adding open_count to newsletter_campaigns")
+                 connection.execute(text("ALTER TABLE newsletter_campaigns ADD COLUMN open_count INTEGER DEFAULT 0"))
+                 connection.commit()
+
+            if 'click_count' not in columns:
+                 print("   ➕ Adding click_count to newsletter_campaigns")
+                 connection.execute(text("ALTER TABLE newsletter_campaigns ADD COLUMN click_count INTEGER DEFAULT 0"))
+                 connection.commit()
+
         # 2. newsletter_templates
         if inspector.has_table("newsletter_templates"):
             columns = [c['name'] for c in inspector.get_columns('newsletter_templates')]

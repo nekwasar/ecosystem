@@ -100,6 +100,10 @@ class NewsletterService:
             self.db.rollback()
             raise Exception(f"Unsubscription failed: {str(e)}")
 
+    async def get_campaigns(self, skip: int = 0, limit: int = 100) -> List[NewsletterCampaign]:
+        """Get all campaigns"""
+        return self.db.query(NewsletterCampaign).order_by(NewsletterCampaign.created_at.desc()).offset(skip).limit(limit).all()
+
     async def create_campaign(self, campaign_data: NewsletterCampaignCreate, background_tasks: Optional[BackgroundTasks] = None) -> NewsletterCampaign:
         """Create and optionally SEND a newsletter campaign"""
         try:
@@ -171,7 +175,8 @@ class NewsletterService:
                     to_email=sub.email,
                     to_name=sub.name,
                     subject=campaign.subject,
-                    html_content=content_html
+                    html_content=content_html,
+                    tags=[f"campaign_{campaign.id}"]
                 )
                 sent_count += 1
             

@@ -26,7 +26,8 @@ class EmailService:
         subject: str, 
         html_content: str, 
         to_name: Optional[str] = None,
-        reply_to: Optional[Dict[str, str]] = None
+        reply_to: Optional[Dict[str, str]] = None,
+        tags: Optional[List[str]] = None
     ) -> bool:
         """
         Send a single transactional email.
@@ -45,7 +46,8 @@ class EmailService:
                 sender=self.sender,
                 subject=subject,
                 html_content=html_content,
-                reply_to=reply_to
+                reply_to=reply_to,
+                tags=tags
             )
 
             api_response = self.api_instance.send_transac_email(send_smtp_email)

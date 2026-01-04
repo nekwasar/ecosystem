@@ -462,16 +462,14 @@
                 </div>
 
                 <!-- STEP 2: SELECT TEMPLATE -->
-                <div id="step2"
-                    class="wizard-step absolute inset-0 p-8 overflow-y-auto hidden translate-x-full transition-transform">
+                <div id="step2" class="wizard-step absolute inset-0 p-8 overflow-y-auto hidden">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="wizardTemplateGrid">
                         <!-- Templates injected here -->
                     </div>
                 </div>
 
                 <!-- STEP 3: VISUAL EDITOR -->
-                <div id="step3"
-                    class="wizard-step absolute inset-0 flex flex-col hidden translate-x-full transition-transform">
+                <div id="step3" class="wizard-step absolute inset-0 flex flex-col hidden">
                     <div
                         class="bg-base-tint p-2 flex justify-center text-xs text-t-medium border-b border-stroke-elements">
                         <span class="flex items-center gap-2"><i class="ph-bold ph-info"></i> Click directly on the
@@ -486,8 +484,7 @@
                 </div>
 
                 <!-- STEP 4: SUMMARY & PREVIEW -->
-                <div id="step4"
-                    class="wizard-step absolute inset-0 flex flex-col hidden translate-x-full transition-transform">
+                <div id="step4" class="wizard-step absolute inset-0 flex flex-col hidden">
                     <div class="flex-1 flex overflow-hidden">
                         <!-- Left: Preview -->
                         <div class="flex-1 bg-gray-200 p-8 overflow-y-auto flex flex-col items-center">
@@ -766,20 +763,39 @@
     }
 </style>
 
+<!-- Editor Context Menu -->
+<div id="editorContextMenu"
+    class="fixed z-50 bg-white dark:bg-gray-800 shadow-xl rounded-lg border border-gray-200 dark:border-gray-700 w-56 hidden flex flex-col py-1 text-sm font-medium text-gray-700 dark:text-gray-200 transition-opacity duration-100">
+    <div class="px-3 py-2 text-xs text-gray-400 uppercase tracking-wider font-bold border-b border-gray-100 dark:border-gray-700 mb-1"
+        id="ctxMenuTitle">Element Actions</div>
+
+    <button onclick="execCtx('editLink')" id="ctxEditLink"
+        class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+        <i class="ph-bold ph-link"></i> Set Link (Href)
+    </button>
+    <hr class="my-1 border-stroke-elements">
+    <button onclick="execCtx('editText')" class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+        <i class="ph-bold ph-text-t"></i> Edit Text
+    </button>
+    <button onclick="execCtx('toggleButton')" class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+        <i class="ph-bold ph-toggle-left"></i> Toggle Button Style
+    </button>
+</div>
+
 <script>
     // Newsletter Campaigns Page
-    let allCampaigns = [];
-    let currentPage = 1;
-    let pageSize = 25;
-    let selectedCampaigns = new Set();
-    let wizardStep = 1;
-    let campaignData = {
+    var allCampaigns = [];
+    var currentPage = 1;
+    var pageSize = 25;
+    var selectedCampaigns = new Set();
+    var wizardStep = 1;
+    var campaignData = {
         name: '',
         subject: '',
         templateId: null,
         htmlContent: ''
     };
-    let allTemplates = []; // Will be loaded from API
+    var allTemplates = []; // Will be loaded from API
 
     function initNewsletterCampaigns() {
         loadCampaignData();
@@ -832,7 +848,7 @@
         updateWizardUI();
     }
 
-    function nextStep() {
+    async function nextStep() {
         if (!validateStep(wizardStep)) return;
 
         if (wizardStep === 1) {
@@ -843,8 +859,18 @@
             // Capture chosen template content for editing
             const tpl = allTemplates.find(t => t.id === campaignData.templateId);
             if (tpl) {
+                // Fetch content if missing (since we removed pre-caching)
+                if (!tpl.content_template) {
+                    try {
+                        const res = await fetch(`/api/newsletter/admin/templates/${tpl.id}`, {
+                            headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                        });
+                        const data = await res.json();
+                        if (data.success) tpl.content_template = data.template.content_template;
+                    } catch (e) { console.error('Failed to load content', e); }
+                }
                 // Initialize Visual Editor
-                document.getElementById('visualEditorContainer').innerHTML = tpl.content_template;
+                document.getElementById('visualEditorContainer').innerHTML = tpl.content_template || '';
             }
         }
 
@@ -917,37 +943,42 @@
 
     // --- Templates Loading ---
     async function loadTemplatesForWizard() {
+        console.log('🧙 loadTemplatesForWizard: Starting...');
         try {
             const res = await fetch('/api/newsletter/admin/templates', {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
             });
+            console.log('🧙 loadTemplatesForWizard: API Status', res.status);
+
             const data = await res.json();
+            console.log('🧙 loadTemplatesForWizard: Data', data);
+
             if (data.success && data.templates) {
                 allTemplates = data.templates;
-                await loadTemplateDetailsForCache(allTemplates);
+                console.log('🧙 loadTemplatesForWizard: Templates found', allTemplates.length);
                 renderWizardTemplates(allTemplates);
+            } else {
+                console.warn('🧙 loadTemplatesForWizard: No success or no templates', data);
             }
-        } catch (e) { console.error("Template load failed", e); }
-    }
-
-    async function loadTemplateDetailsForCache(templates) {
-        // Pre-fetch details (content) for each template so we have the HTML ready
-        // In a real optimized app, we might fetch on demand, but this ensures smooth transition
-        for (let t of templates) {
-            try {
-                const res = await fetch(`/api/newsletter/admin/templates/${t.id}`, {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
-                });
-                const data = await res.json();
-                if (data.success) {
-                    t.content_template = data.template.content_template;
-                }
-            } catch (e) { }
+        } catch (e) {
+            console.error("🧙 loadTemplatesForWizard: Failed", e);
         }
     }
 
     function renderWizardTemplates(templates) {
+        console.log('🧙 renderWizardTemplates: Rendering', templates.length, 'templates');
         const grid = document.getElementById('wizardTemplateGrid');
+
+        if (!grid) {
+            console.error('🧙 renderWizardTemplates: CRITICAL - #wizardTemplateGrid NOT FOUND in DOM');
+            return;
+        }
+
+        if (templates.length === 0) {
+            grid.innerHTML = '<div class="col-span-full text-center p-4 text-gray-500">No templates found. Please create one in the Templates section.</div>';
+            return;
+        }
+
         grid.innerHTML = templates.map(t => `
         <div onclick="selectTemplate(${t.id})" id="tpl-card-${t.id}" class="cursor-pointer border-2 border-transparent hover:border-accent rounded-xl bg-base-tint overflow-hidden transition-all text-left group">
             <div class="h-32 bg-gray-200 flex items-center justify-center relative overlow-hidden">
@@ -1454,6 +1485,100 @@
             await loadAutomationsList();
         } catch (e) { alert('Error deleting'); }
     }
+
+    // --- Visual Editor Context Menu & Logic ---
+    let ctxTarget = null;
+    // (Note: editor variable removed from global scope to avoid conflicts, accessed in init)
+
+    function initVisualEditorListeners() {
+        const editor = document.getElementById('visualEditorContainer');
+        const menu = document.getElementById('editorContextMenu');
+        if (!editor || !menu) return;
+
+        // Right Click
+        editor.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const target = e.target.closest('a, button, .button, [role="button"]') || e.target;
+            ctxTarget = target;
+
+            // Position menu
+            const rect = editor.getBoundingClientRect();
+            let x = e.clientX;
+            let y = e.clientY;
+
+            // Ensure menu stays within viewport
+            if (x + 230 > window.innerWidth) x -= 230;
+
+            menu.style.left = `${x}px`;
+            menu.style.top = `${y}px`;
+            menu.classList.remove('hidden');
+
+            // Update Menu Title
+            const type = target.tagName.toLowerCase();
+            const titleEl = document.getElementById('ctxMenuTitle');
+            if (titleEl) titleEl.innerText = `${type.toUpperCase()} ACTIONS`;
+        });
+
+        // Hide on click elsewhere
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target)) menu.classList.add('hidden');
+        });
+
+        // Also hide on scroll
+        editor.addEventListener('scroll', () => menu.classList.add('hidden'));
+    }
+
+    function execCtx(action) {
+        if (!ctxTarget) return;
+        const menu = document.getElementById('editorContextMenu');
+        menu.classList.add('hidden');
+
+        switch (action) {
+            case 'editLink':
+                const currentHref = ctxTarget.getAttribute('href') || '#';
+                const newHref = prompt('Enter URL (href):', currentHref);
+                if (newHref !== null) ctxTarget.setAttribute('href', newHref);
+                break;
+
+            case 'editText':
+                const txt = prompt('Edit Text:', ctxTarget.innerText);
+                if (txt !== null) ctxTarget.innerText = txt;
+                break;
+
+            case 'toggleButton':
+                // Simple preset for a nice button style
+                if (ctxTarget.classList.contains('button-style')) {
+                    // Remove style
+                    ctxTarget.classList.remove('button-style');
+                    ctxTarget.removeAttribute('style');
+                } else {
+                    // Add inline styles for email compatibility
+                    ctxTarget.classList.add('button-style');
+                    Object.assign(ctxTarget.style, {
+                        display: "inline-block",
+                        padding: "12px 24px",
+                        backgroundColor: "#007bff",
+                        color: "#ffffff",
+                        textDecoration: "none",
+                        borderRadius: "5px",
+                        fontWeight: "bold",
+                        cursor: "pointer"
+                    });
+                }
+                break;
+        }
+    }
+
+    function showToast(msg) {
+        // Simple console log or alert for now
+        console.log("Toast:", msg);
+        // We could implement a real toast later
+    }
+
+    // Attach to window so onclick works
+    window.execCtx = execCtx;
+    // Auto-init listeners if page is loaded
+    setTimeout(initVisualEditorListeners, 1000);
 
     // Initialize
     if (document.readyState === 'loading') {

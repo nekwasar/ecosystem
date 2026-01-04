@@ -149,6 +149,8 @@ class NewsletterCampaign(Base):
     scheduled_at = Column(DateTime(timezone=True), nullable=True)
     sent_at = Column(DateTime(timezone=True), nullable=True)
     recipient_count = Column(Integer, default=0)
+    open_count = Column(Integer, default=0)
+    click_count = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class NewsletterTemplate(Base):

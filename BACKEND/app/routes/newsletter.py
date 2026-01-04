@@ -204,6 +204,34 @@ async def send_weekly_newsletter(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(500, f"Weekly newsletter failed: {str(e)}")
 
+@router.get("/admin/campaigns")
+async def get_campaigns(
+    skip: int = 0, 
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    """Get all campaigns (admin only)"""
+    try:
+        service = NewsletterService(db)
+        campaigns = await service.get_campaigns(skip, limit)
+        return {
+            "success": True,
+            "campaigns": [
+                {
+                    "id": c.id,
+                    "subject": c.subject,
+                    "status": c.status,
+                    "template_type": c.template_type,
+                    "scheduled_at": c.scheduled_at.isoformat() if c.scheduled_at else None,
+                    "sent_at": c.sent_at.isoformat() if c.sent_at else None,
+                    "recipient_count": c.recipient_count,
+                    "created_at": c.created_at.isoformat() if c.created_at else None
+                } for c in campaigns
+            ]
+        }
+    except Exception as e:
+        raise HTTPException(500, f"Failed to get campaigns: {str(e)}")
+
 @router.post("/admin/campaigns")
 async def create_campaign(
     subject: str = Form(...),
