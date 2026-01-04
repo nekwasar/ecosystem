@@ -225,6 +225,10 @@ async def get_campaigns(
                     "scheduled_at": c.scheduled_at.isoformat() if c.scheduled_at else None,
                     "sent_at": c.sent_at.isoformat() if c.sent_at else None,
                     "recipient_count": c.recipient_count,
+                    "open_count": c.open_count,
+                    "click_count": c.click_count,
+                    "openRate": round((c.open_count / c.recipient_count * 100), 1) if c.recipient_count and c.recipient_count > 0 else 0,
+                    "clickRate": round((c.click_count / c.recipient_count * 100), 1) if c.recipient_count and c.recipient_count > 0 else 0,
                     "created_at": c.created_at.isoformat() if c.created_at else None
                 } for c in campaigns
             ]
@@ -505,3 +509,39 @@ async def delete_automation(auto_id: int, db: Session = Depends(get_db)):
         return {"success": True, "message": "Automation deleted"}
     except Exception as e:
         raise HTTPException(500, str(e))
+@router.post("/webhook")
+async def brevo_webhook(request: Request, db: Session = Depends(get_db)):
+    """Handle Brevo Webhooks"""
+    try:
+        payload = await request.json()
+        event = payload.get('event')
+        tags = payload.get('tags', [])
+        
+        # Extract Campaign ID
+        campaign_id = None
+        if tags:
+            for tag in tags:
+                if tag.startswith('campaign_'):
+                    try:
+                        campaign_id = int(tag.split('_')[1])
+                        break
+                    except: pass
+        
+        if campaign_id:
+            from models.blog import NewsletterCampaign
+            campaign = db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
+            if campaign:
+                # Update Stats
+                if event == 'opened' or event == 'unique_opened':
+                    campaign.open_count = (campaign.open_count or 0) + 1
+                elif event == 'click' or event == 'valid_click':
+                    campaign.click_count = (campaign.click_count or 0) + 1
+                
+                # We could also track soft/hard bounces to update subscriber status
+                
+                db.commit()
+                
+        return {"success": True}
+    except Exception as e:
+        print(f"Webhook Error: {str(e)}")
+        return {"success": False}

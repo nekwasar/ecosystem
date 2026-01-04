@@ -144,52 +144,47 @@ class NewsletterService:
             raise Exception(f"Campaign creation failed: {str(e)}")
 
     async def _execute_campaign_send(self, campaign_id: int):
-        """
-        Internal method to execute the sending of a campaign.
-        Iterates all active subscribers and sends the email.
-        """
-        # Create a new session for background task to avoid binding issues
-        # Or reuse if safer. For now, we assume self.db is thread-safe or scoped correctly (FastAPI Depends)
-        # Note: In production background tasks, you want a fresh DB session usually.
-        # Here we proceed with caution using self.db
-        
+        """Internal method to process the sending of a campaign"""
         try:
             campaign = self.db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
-            if not campaign:
-                return
+            if not campaign: return
 
+            # Get target audience (active subscribers)
             subscribers = self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.is_active == True).all()
             
-            sent_count = 0
-            
-            # TODO: Batching logic here for large lists (chunks of 50)
-            # For now, simple loop
-            for sub in subscribers:
-                unsubscribe_url = f"https://nekwasar.com/api/newsletter/unsubscribe?email={sub.email}"
-                
-                # Render content (basic replacement)
-                # In a real system, use Jinja2
-                content_html = campaign.content.replace("{{name}}", sub.name).replace("{{unsubscribe_url}}", unsubscribe_url)
+            # Fetch Custom Sender Settings if available
+            system_settings = self.db.query(SystemSetting).first()
+            sender_config = None
+            if system_settings and system_settings.sender_email:
+                sender_config = {"name": system_settings.sender_name, "email": system_settings.sender_email}
 
+            sent_count = 0
+            for sub in subscribers:
+                # Basic personalization (could be expanded with Jinja within the content if needed)
+                # But typically we just send the static HTML or simple str.replace
+                
+                content_html = campaign.customized_html or campaign.content
+                content_html = content_html.replace("{{name}}", sub.name).replace("{{email}}", sub.email)
+                
+                # Use Transactional batch or single? We'll do single loop for now as per EmailService design logic
                 email_service.send_transactional_email(
                     to_email=sub.email,
                     to_name=sub.name,
                     subject=campaign.subject,
                     html_content=content_html,
-                    tags=[f"campaign_{campaign.id}"]
+                    tags=[f"campaign_{campaign.id}"],
+                    sender=sender_config
                 )
                 sent_count += 1
             
-            # Update Campaign stats
+            # Done
             campaign.status = "sent"
             campaign.sent_at = datetime.now()
             campaign.recipient_count = sent_count
             self.db.commit()
             
-            logger.info(f"Campaign {campaign_id} sent to {sent_count} recipients.")
-
         except Exception as e:
-            logger.error(f"Error executing campaign {campaign_id}: {e}")
+            logger.error(f"Campaign send failed: {e}")
             if campaign:
                 campaign.status = "failed"
                 self.db.commit()

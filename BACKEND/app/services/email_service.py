@@ -27,7 +27,8 @@ class EmailService:
         html_content: str, 
         to_name: Optional[str] = None,
         reply_to: Optional[Dict[str, str]] = None,
-        tags: Optional[List[str]] = None
+        tags: Optional[List[str]] = None,
+        sender: Optional[Dict[str, str]] = None
     ) -> bool:
         """
         Send a single transactional email.
@@ -43,7 +44,7 @@ class EmailService:
 
             send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
                 to=[to_contact],
-                sender=self.sender,
+                sender=sender or self.sender,
                 subject=subject,
                 html_content=html_content,
                 reply_to=reply_to,
