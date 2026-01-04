@@ -372,16 +372,10 @@
                 </div>
                 <div class="flex items-center space-x-3">
                     <button
-                        class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-accent/20 hover:bg-accent/30 text-accent font-semibold rounded-lg transition-all duration-medium font-syne text-sm"
-                        id="bulkDuplicateBtn">
-                        <i class="ph-bold ph-copy text-sm"></i>
-                        <span>Duplicate</span>
-                    </button>
-                    <button
-                        class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-500 font-semibold rounded-lg transition-all duration-medium font-syne text-sm"
-                        id="bulkScheduleBtn">
-                        <i class="ph-bold ph-clock text-sm"></i>
-                        <span>Schedule</span>
+                        class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-accent/20 hover:bg-accent/30 text-accent font-semibold rounded-lg transition-all duration-medium font-syne text-sm hidden"
+                        id="bulkEditBtn">
+                        <i class="ph-bold ph-pencil text-sm"></i>
+                        <span>Edit</span>
                     </button>
                     <button
                         class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-500 font-semibold rounded-lg transition-all duration-medium font-syne text-sm"
@@ -943,7 +937,7 @@
 
     function resetWizard() {
         wizardStep = 1;
-        campaignData = { name: '', subject: '', templateId: null, htmlContent: '' };
+        campaignData = { id: null, name: '', subject: '', templateId: null, htmlContent: '' };
         document.getElementById('campName').value = '';
         document.getElementById('campSubject').value = '';
 
@@ -980,8 +974,13 @@
                         if (data.success) tpl.content_template = data.template.content_template;
                     } catch (e) { console.error('Failed to load content', e); }
                 }
-                // Initialize Visual Editor
-                document.getElementById('visualEditorContainer').innerHTML = tpl.content_template || '';
+                // Initialize Visual Editor: If we already have content (from editing a draft), use that.
+                // Otherwise use the template default.
+                if (campaignData.htmlContent) {
+                    document.getElementById('visualEditorContainer').innerHTML = campaignData.htmlContent;
+                } else {
+                    document.getElementById('visualEditorContainer').innerHTML = tpl.content_template || '';
+                }
             }
         }
 
@@ -1174,6 +1173,7 @@
             }
 
             const payload = {
+                name: campaignData.name,
                 subject: campaignData.subject,
                 content: campaignData.htmlContent,
                 template_id: campaignData.templateId,
@@ -1183,8 +1183,11 @@
                 status: status
             };
 
-            const res = await fetch('/api/newsletter/admin/campaigns', {
-                method: 'POST',
+            const url = campaignData.id ? `/api/newsletter/admin/campaigns/${campaignData.id}` : '/api/newsletter/admin/campaigns';
+            const method = campaignData.id ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
@@ -1257,10 +1260,12 @@
             return;
         }
 
-        tbody.innerHTML = campaignsToShow.map(campaign => `
-        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium group">
+        tbody.innerHTML = campaignsToShow.map(campaign => {
+            const isSelected = selectedCampaigns.has(campaign.id.toString());
+            return `
+        <tr class="transition-all duration-medium group ${isSelected ? 'bg-accent/10 border-l-4 border-l-accent' : 'hover:bg-base-tint/30 dark:hover:bg-base-shade/30'}">
             <td class="w-12 px-2 md:px-4 py-3 md:py-4">
-                <input type="checkbox" class="campaign-checkbox w-4 h-4 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0 cursor-pointer" value="${campaign.id}" ${selectedCampaigns.has(campaign.id) ? 'checked' : ''}>
+                <input type="checkbox" class="campaign-checkbox w-4 h-4 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0 cursor-pointer" value="${campaign.id}" ${isSelected ? 'checked' : ''}>
             </td>
             <td class="w-40 md:w-48 px-2 md:px-4 py-3 md:py-4">
                 <div class="flex items-center space-x-2">
@@ -1281,8 +1286,8 @@
                 </span>
             </td>
             <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4">
-                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide font-syne ${getTypeClass(campaign.type)} border">
-                    ${formatType(campaign.type || 'standard')}
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide font-syne ${getTypeClass(campaign.templateType)} border">
+                    ${formatType(campaign.templateType || 'standard')}
                 </span>
             </td>
             <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">${formatNumber(campaign.recipientCount || 0)}</td>
@@ -1293,11 +1298,14 @@
                     <button class="w-6 h-6 bg-accent/10 hover:bg-accent/20 text-accent rounded flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Edit Campaign" onclick="editCampaign('${campaign.id}')">
                         <i class="ph-bold ph-pencil text-xs"></i>
                     </button>
-                    <!-- Other actions -->
+                    <button class="w-6 h-6 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Delete Campaign" onclick="deleteCampaign('${campaign.id}')">
+                        <i class="ph-bold ph-trash text-xs"></i>
+                    </button>
                 </div>
             </td>
         </tr>
-    `).join('');
+    `;
+        }).join('');
 
         updatePagination();
     }
@@ -1399,10 +1407,87 @@
         });
 
         // Bulk action buttons
-        document.getElementById('bulkDuplicateBtn').onclick = () => bulkDuplicate();
-        document.getElementById('bulkScheduleBtn').onclick = () => bulkSchedule();
-        document.getElementById('bulkDeleteBtn').onclick = () => bulkDelete();
-        document.getElementById('clearSelectionBtn').onclick = () => clearSelection();
+        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+        if (bulkDeleteBtn) bulkDeleteBtn.onclick = () => bulkDelete();
+
+        const bulkEditBtn = document.getElementById('bulkEditBtn');
+        if (bulkEditBtn) bulkEditBtn.onclick = () => {
+            if (selectedCampaigns.size === 1) {
+                const id = selectedCampaigns.values().next().value;
+                editCampaign(id);
+            } else {
+                alert('Please select exactly one campaign to edit.');
+            }
+        };
+
+        const clearSelectionBtn = document.getElementById('clearSelectionBtn');
+        if (clearSelectionBtn) clearSelectionBtn.onclick = () => clearSelection();
+    }
+
+    async function deleteCampaign(id) {
+        if (!confirm('Are you sure you want to delete this campaign?')) return;
+        try {
+            const res = await fetch(`/api/newsletter/admin/campaigns/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Campaign deleted');
+                loadCampaignData();
+            } else {
+                alert('Delete failed: ' + data.message);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error deleting campaign. Check console.');
+        }
+    }
+
+    async function editCampaign(id) {
+        if (!id) return;
+
+        try {
+            const res = await fetch(`/api/newsletter/admin/campaigns/${id}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            const data = await res.json();
+
+            if (data.success && data.campaign) {
+                // Pre-load segments
+                await fetchSegments();
+
+                document.getElementById('campaignWizardModal').classList.remove('hidden');
+                resetWizard();
+
+                const c = data.campaign;
+                campaignData = {
+                    id: c.id,
+                    name: c.name || '',
+                    subject: c.subject || '',
+                    templateId: c.templateId,
+                    htmlContent: c.content || ''
+                };
+
+                // Set UI values
+                document.getElementById('campName').value = campaignData.name;
+                document.getElementById('campSubject').value = campaignData.subject;
+
+                const segSel = document.getElementById('segmentSelect');
+                if (segSel && c.segmentId) {
+                    segSel.value = c.segmentId;
+                }
+
+                wizardStep = 1;
+                updateWizardUI();
+                loadTemplatesForWizard();
+            } else {
+                alert('Campaign not found or failed to load.');
+            }
+        } catch (e) {
+            console.error('Wizard Edit Error:', e);
+            alert('Error loading campaign data. Check console.');
+        }
     }
 
     function toggleSelectAll() {
@@ -1422,19 +1507,38 @@
     }
 
     function updateBulkActionsState() {
-        const checkboxes = document.querySelectorAll('.campaign-checkbox:checked');
+        const checkboxes = document.querySelectorAll('.campaign-checkbox');
         selectedCampaigns.clear();
 
         checkboxes.forEach(checkbox => {
-            selectedCampaigns.add(checkbox.value);
+            const row = checkbox.closest('tr');
+            if (checkbox.checked) {
+                selectedCampaigns.add(checkbox.value);
+                if (row) {
+                    row.classList.add('bg-accent/10', 'border-l-4', 'border-l-accent');
+                    row.classList.remove('hover:bg-base-tint/30', 'dark:hover:bg-base-shade/30');
+                }
+            } else {
+                if (row) {
+                    row.classList.remove('bg-accent/10', 'border-l-4', 'border-l-accent');
+                    row.classList.add('hover:bg-base-tint/30', 'dark:hover:bg-base-shade/30');
+                }
+            }
         });
 
         const bulkPanel = document.getElementById('bulkActionsPanel');
         const selectedCount = document.getElementById('selectedCount');
+        const bulkEditBtn = document.getElementById('bulkEditBtn');
 
         if (selectedCampaigns.size > 0) {
             bulkPanel.classList.remove('hidden');
             selectedCount.textContent = `${selectedCampaigns.size} campaign${selectedCampaigns.size > 1 ? 's' : ''} selected`;
+
+            // Only show Edit button if exactly 1 is selected
+            if (bulkEditBtn) {
+                if (selectedCampaigns.size === 1) bulkEditBtn.classList.remove('hidden');
+                else bulkEditBtn.classList.add('hidden');
+            }
         } else {
             bulkPanel.classList.add('hidden');
         }
@@ -1471,34 +1575,30 @@
         // Placeholder
     }
 
-    function editCampaign(campaignId) {
-        // Placeholder
-    }
 
-    function viewCampaignAnalytics(campaignId) {
-        // Placeholder
-    }
 
-    function duplicateCampaign(campaignId) {
-        // Placeholder
-    }
+    async function bulkDelete() {
+        if (selectedCampaigns.size === 0) return;
+        if (!confirm(`Are you sure you want to delete ${selectedCampaigns.size} campaigns?`)) return;
 
-    function deleteCampaign(campaignId) {
-        if (confirm('Are you sure you want to delete this campaign? This action cannot be undone.')) {
-            // Placeholder
+        let okCount = 0;
+        let failCount = 0;
+
+        for (const id of selectedCampaigns) {
+            try {
+                const res = await fetch(`/api/newsletter/admin/campaigns/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) okCount++;
+                else failCount++;
+            } catch (e) { failCount++; }
         }
-    }
 
-    function bulkDuplicate() {
-        // Placeholder
-    }
-
-    function bulkSchedule() {
-        // Placeholder
-    }
-
-    function bulkDelete() {
-        // Placeholder
+        alert(`Bulk delete complete. Success: ${okCount}, Failed: ${failCount}`);
+        selectedCampaigns.clear();
+        loadCampaignData();
     }
 
     function clearSelection() {

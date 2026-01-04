@@ -231,22 +231,53 @@ async def get_campaigns(
             "campaigns": [
                 {
                     "id": c.id,
+                    "name": c.name,
                     "subject": c.subject,
                     "status": c.status,
-                    "template_type": c.template_type,
-                    "scheduled_at": c.scheduled_at.isoformat() if c.scheduled_at else None,
-                    "sent_at": c.sent_at.isoformat() if c.sent_at else None,
-                    "recipient_count": c.recipient_count,
-                    "open_count": c.open_count,
-                    "click_count": c.click_count,
+                    "templateType": c.template_type,
+                    "scheduledAt": c.scheduled_at.isoformat() if c.scheduled_at else None,
+                    "sentAt": c.sent_at.isoformat() if c.sent_at else None,
+                    "recipientCount": c.recipient_count,
+                    "openCount": c.open_count,
+                    "clickCount": c.click_count,
                     "openRate": round((c.open_count / c.recipient_count * 100), 1) if c.recipient_count and c.recipient_count > 0 else 0,
                     "clickRate": round((c.click_count / c.recipient_count * 100), 1) if c.recipient_count and c.recipient_count > 0 else 0,
-                    "created_at": c.created_at.isoformat() if c.created_at else None
+                    "createdAt": c.created_at.isoformat() if c.created_at else None
                 } for c in campaigns
             ]
         }
     except Exception as e:
         raise HTTPException(500, f"Failed to get campaigns: {str(e)}")
+
+@router.get("/admin/campaigns/{campaign_id}")
+async def get_campaign(
+    campaign_id: int,
+    db: Session = Depends(get_db)
+):
+    """Get single campaign details (admin only)"""
+    try:
+        service = NewsletterService(db)
+        campaign = await service.get_campaign(campaign_id)
+        if not campaign:
+            raise HTTPException(404, "Campaign not found")
+        
+        return {
+            "success": True,
+            "campaign": {
+                "id": campaign.id,
+                "name": campaign.name,
+                "subject": campaign.subject,
+                "content": campaign.content,
+                "templateId": campaign.template_id,
+                "templateType": campaign.template_type,
+                "status": campaign.status,
+                "segmentId": campaign.segment_id,
+                "scheduledAt": campaign.scheduled_at.isoformat() if campaign.scheduled_at else None
+            }
+        }
+    except Exception as e:
+        if isinstance(e, HTTPException): raise e
+        raise HTTPException(500, str(e))
 
 @router.post("/admin/campaigns")
 async def create_campaign(
@@ -284,6 +315,43 @@ async def create_campaign(
     except Exception as e:
         print(f"Create Campaign Error: {e}")
         raise HTTPException(500, f"Campaign creation failed: {str(e)}")
+
+@router.put("/admin/campaigns/{campaign_id}")
+async def update_campaign(
+    campaign_id: int,
+    campaign_data: NewsletterCampaignCreate,
+    db: Session = Depends(get_db)
+):
+    """Update newsletter campaign (admin only)"""
+    try:
+        service = NewsletterService(db)
+        campaign = await service.update_campaign(campaign_id, campaign_data)
+        return {
+            "success": True,
+            "message": "Campaign updated successfully",
+            "campaign": {
+                "id": campaign.id,
+                "name": campaign.name,
+                "status": campaign.status
+            }
+        }
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@router.delete("/admin/campaigns/{campaign_id}")
+async def delete_campaign(
+    campaign_id: int,
+    db: Session = Depends(get_db)
+):
+    """Delete newsletter campaign (admin only)"""
+    try:
+        service = NewsletterService(db)
+        success = await service.delete_campaign(campaign_id)
+        if success:
+            return {"success": True, "message": "Campaign deleted"}
+        raise HTTPException(404, "Campaign not found")
+    except Exception as e:
+        raise HTTPException(500, str(e))
 
 # Template Management Endpoints
 @router.post("/admin/templates")

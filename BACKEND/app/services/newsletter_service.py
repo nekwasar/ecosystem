@@ -104,6 +104,10 @@ class NewsletterService:
         """Get all campaigns"""
         return self.db.query(NewsletterCampaign).order_by(NewsletterCampaign.created_at.desc()).offset(skip).limit(limit).all()
 
+    async def get_campaign(self, campaign_id: int) -> Optional[NewsletterCampaign]:
+        """Get a single campaign by ID"""
+        return self.db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
+
     async def create_campaign(self, campaign_data: NewsletterCampaignCreate, background_tasks: Optional[BackgroundTasks] = None) -> NewsletterCampaign:
         """Create and optionally SEND a newsletter campaign"""
         try:
@@ -138,7 +142,36 @@ class NewsletterService:
         except Exception as e:
             self.db.rollback()
             raise Exception(f"Campaign creation failed: {str(e)}")
+    async def delete_campaign(self, campaign_id: int) -> bool:
+        """Delete a campaign"""
+        try:
+            campaign = self.db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
+            if campaign:
+                self.db.delete(campaign)
+                self.db.commit()
+                return True
+            return False
+        except Exception as e:
+            self.db.rollback()
+            raise Exception(f"Campaign deletion failed: {str(e)}")
 
+    async def update_campaign(self, campaign_id: int, campaign_data: NewsletterCampaignCreate) -> NewsletterCampaign:
+        """Update an existing campaign"""
+        try:
+            campaign = self.db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
+            if not campaign:
+                raise Exception("Campaign not found")
+            
+            # Update fields
+            for key, value in campaign_data.dict(exclude_unset=True).items():
+                setattr(campaign, key, value)
+            
+            self.db.commit()
+            self.db.refresh(campaign)
+            return campaign
+        except Exception as e:
+            self.db.rollback()
+            raise Exception(f"Campaign update failed: {str(e)}")
     async def _execute_campaign_send(self, campaign_id: int):
         """Internal method to process the sending of a campaign"""
         try:

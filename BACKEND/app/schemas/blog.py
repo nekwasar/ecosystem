@@ -99,6 +99,7 @@ class NewsletterSegment(NewsletterSegmentBase):
         from_attributes = True
 
 class NewsletterCampaignBase(BaseModel):
+    name: Optional[str] = None
     subject: str
     content: str
     template_type: Optional[str] = "weekly"
