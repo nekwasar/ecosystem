@@ -250,36 +250,29 @@ async def get_campaigns(
 
 @router.post("/admin/campaigns")
 async def create_campaign(
-    subject: str = Form(...),
-    content: Optional[str] = Form(None),
-    template_type: str = Form("custom"),
-    template_id: Optional[int] = Form(None),
-    scheduled_at: Optional[str] = Form(None),
+    campaign_data: NewsletterCampaignCreate,
     db: Session = Depends(get_db)
 ):
     """Create newsletter campaign (admin only)"""
     try:
-        from datetime import datetime
+        # Debug log
+        print(f"Creating campaign with: {campaign_data}")
         
         newsletter_service = NewsletterService(db)
         
         # If template_id is provided, try to fetch its content
-        final_content = content
-        if template_id:
-            template = newsletter_service.get_template(template_id)
+        final_content = campaign_data.content
+        if campaign_data.template_id:
+            template = newsletter_service.get_template(campaign_data.template_id)
             if template:
                 # Use template content if available, and if content wasn't explicitly provided (or is empty)
                 if not final_content:
                     final_content = template.content_template
         
-        campaign_data = NewsletterCampaignCreate(
-            subject=subject,
-            content=final_content or "", # Ensure we have string
-            template_type=template_type,
-            template_id=template_id,
-            scheduled_at=datetime.fromisoformat(scheduled_at) if scheduled_at else None
-        )
-
+        # Update content in data object (if we modified it)
+        if final_content:
+            campaign_data.content = final_content
+        
         campaign = await newsletter_service.create_campaign(campaign_data)
 
         return {
@@ -289,6 +282,7 @@ async def create_campaign(
         }
 
     except Exception as e:
+        print(f"Create Campaign Error: {e}")
         raise HTTPException(500, f"Campaign creation failed: {str(e)}")
 
 # Template Management Endpoints

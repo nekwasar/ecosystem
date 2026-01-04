@@ -45,6 +45,11 @@ def update_schema():
                  connection.execute(text("ALTER TABLE newsletter_campaigns ADD COLUMN click_count INTEGER DEFAULT 0"))
                  connection.commit()
 
+            if 'segment_id' not in columns:
+                 print("   ➕ Adding segment_id to newsletter_campaigns")
+                 connection.execute(text("ALTER TABLE newsletter_campaigns ADD COLUMN segment_id INTEGER"))
+                 connection.commit()
+
         # 2. newsletter_templates
         if inspector.has_table("newsletter_templates"):
             columns = [c['name'] for c in inspector.get_columns('newsletter_templates')]

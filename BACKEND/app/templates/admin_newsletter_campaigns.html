@@ -551,7 +551,8 @@
                                             <div class="text-xs text-t-medium uppercase tracking-wide mb-1">Audience
                                             </div>
                                             <div class="flex justify-between items-center">
-                                                <span class="font-medium text-t-bright">All Subscribers</span>
+                                                <span class="font-medium text-t-bright" id="summaryAudience">All
+                                                    Subscribers</span>
                                                 <span
                                                     class="bg-accent/10 text-accent px-2 py-0.5 rounded text-xs font-bold"
                                                     id="summaryCount">0</span>
@@ -567,8 +568,26 @@
                                                 <option value="draft">Leave as Draft</option>
                                                 <option value="schedule">Schedule</option>
                                             </select>
-                                            <input type="datetime-local" id="scheduleDateInput"
-                                                class="w-full mt-2 bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm hidden outline-none focus:border-accent">
+
+                                            <!-- Schedule Inputs -->
+                                            <div id="scheduleContainer" class="hidden mt-3 space-y-2">
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <div>
+                                                        <label
+                                                            class="block text-[10px] text-t-muted uppercase mb-1">Date</label>
+                                                        <input type="date" id="scheduleDate"
+                                                            class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                    </div>
+                                                    <div>
+                                                        <label
+                                                            class="block text-[10px] text-t-muted uppercase mb-1">Time</label>
+                                                        <input type="time" id="scheduleTime"
+                                                            class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                    </div>
+                                                </div>
+                                                <p class="text-[10px] text-t-muted">Time will be sent in your current
+                                                    timezone.</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1095,24 +1114,40 @@
     function renderFinalPreview() {
         // Iframe injection
         const frame = document.getElementById('finalPreviewFrame');
-        // Ensure iframe is clear
-        // We use srcdoc for modern browsers
-        frame.srcdoc = campaignData.htmlContent;
+        if (frame) frame.srcdoc = campaignData.htmlContent;
 
         // Metadata
-        document.getElementById('summarySubject').innerText = campaignData.subject;
-        // Fetch real count
-        const totalSubs = document.getElementById('totalSubscribers') ? document.getElementById('totalSubscribers').innerText : 'All Subscribers'; // Fallback
-        document.getElementById('summaryCount').innerText = totalSubs;
+        document.getElementById('summarySubject').innerText = campaignData.subject || '(No Subject)';
+
+        // Audience Logic
+        const segSelect = document.getElementById('segmentSelect');
+        const summaryAudience = document.getElementById('summaryAudience');
+        const summaryCount = document.getElementById('summaryCount');
+
+        if (segSelect && segSelect.selectedIndex >= 0) {
+            const selectedText = segSelect.options[segSelect.selectedIndex].text;
+            // Text format is usually "Name (Count active)"
+            // Let's just display the whole text for clarity
+            summaryAudience.innerText = selectedText;
+
+            // Try to extract count for the badge, or just hide/clear it if redundancy is weird
+            // Format: "Name (5 active)"
+            // Let's just blank the count badge since the text contains it
+            summaryCount.innerText = '';
+            summaryCount.classList.add('hidden');
+        } else {
+            summaryAudience.innerText = 'All Subscribers';
+            summaryCount.innerText = '?';
+        }
     }
 
     function toggleScheduleInput() {
         const option = document.getElementById('sendTimeOption').value;
-        const input = document.getElementById('scheduleDateInput');
+        const container = document.getElementById('scheduleContainer');
         if (option === 'schedule') {
-            input.classList.remove('hidden');
+            container.classList.remove('hidden');
         } else {
-            input.classList.add('hidden');
+            container.classList.add('hidden');
         }
     }
 
@@ -1123,12 +1158,15 @@
             let status = 'draft';
 
             if (option === 'schedule') {
-                const dateVal = document.getElementById('scheduleDateInput').value;
-                if (!dateVal) {
-                    alert('Please select a date and time to schedule.');
+                const dateVal = document.getElementById('scheduleDate').value;
+                const timeVal = document.getElementById('scheduleTime').value;
+
+                if (!dateVal || !timeVal) {
+                    alert('Please select both a date and time to schedule.');
                     return;
                 }
-                scheduledAt = new Date(dateVal).toISOString();
+                const localDate = new Date(`${dateVal}T${timeVal}`);
+                scheduledAt = localDate.toISOString();
                 status = 'scheduled';
             } else if (option === 'immediate') {
                 if (!confirm('Are you sure you want to send this campaign immediately?')) return;

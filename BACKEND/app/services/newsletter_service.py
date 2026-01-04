@@ -117,12 +117,8 @@ class NewsletterService:
             self.db.refresh(campaign)
 
             # Check if it should be sent immediately
-            # Logic: If scheduled_at is None (Immediate) AND status is NOT 'draft' (user clicked Send Now in Wizard?)
-            # Actually, let's assume if the user hits the "Send Now" endpoint, they want to send it.
-            # But the Controller (endpoint) determines intent.
-            # Let's check if scheduled_at is NULL or in Past, we trigger send
-            
-            should_send_now = campaign.scheduled_at is None
+            # Logic: If scheduled_at is None (Immediate) AND status is 'sending'
+            should_send_now = (campaign.scheduled_at is None) and (campaign.status == 'sending')
             
             if should_send_now:
                 # Update status to 'sending'

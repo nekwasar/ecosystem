@@ -152,6 +152,7 @@ class NewsletterCampaign(Base):
     __tablename__ = "newsletter_campaigns"
 
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=True)
     segment_id = Column(Integer, ForeignKey("newsletter_segments.id"), nullable=True)
     subject = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
