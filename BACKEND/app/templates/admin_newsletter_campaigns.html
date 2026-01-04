@@ -828,6 +828,14 @@
             class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
             <i class="ph-bold ph-align-center-horizontal"></i> Align Center
         </button>
+        <button onclick="execCtx('imgSetBackground')"
+            class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+            <i class="ph-bold ph-image-square"></i> Set as Background
+        </button>
+        <button onclick="execCtx('imgRemove')"
+            class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2 text-red-600">
+            <i class="ph-bold ph-trash"></i> Remove Image
+        </button>
     </div>
 </div>
 
@@ -1655,14 +1663,64 @@
                 ctxTarget.style.margin = '0 auto';
                 showToast('Aligned Center');
                 break;
+            case 'imgSetBackground':
+                const bgUrl = ctxTarget.src;
+
+                // Traverse up to find a suitable container (TD, or Card Div)
+                // Stop if we hit the editor root
+                let contextEl = ctxTarget.parentElement;
+                let foundContainer = null;
+
+                while (contextEl && contextEl.id !== 'visualEditorContainer') {
+                    const tag = contextEl.tagName;
+                    // Prefer Table Cells (standard for email) or specific Classes
+                    if (tag === 'TD' || tag === 'TH' || contextEl.classList.contains('card') || contextEl.classList.contains('content-block')) {
+                        foundContainer = contextEl;
+                        break;
+                    }
+                    // Fallback: if this element is a direct child of the editor, it is the "Row/Section"
+                    if (contextEl.parentElement && contextEl.parentElement.id === 'visualEditorContainer') {
+                        foundContainer = contextEl;
+                        break;
+                    }
+                    contextEl = contextEl.parentElement;
+                }
+
+                if (foundContainer) {
+                    foundContainer.style.backgroundImage = `url('${bgUrl}')`;
+                    foundContainer.style.backgroundSize = 'cover';
+                    foundContainer.style.backgroundPosition = 'center';
+                    foundContainer.style.backgroundRepeat = 'no-repeat';
+                    showToast('Background set on ' + foundContainer.tagName);
+                } else {
+                    showToast('No suitable container found');
+                }
+                break;
+            case 'imgRemove':
+                if (ctxTarget) {
+                    ctxTarget.remove();
+                    ctxTarget = null;
+                    showToast('Image removed');
+                }
+                break;
         }
     }
 
     function insertImage() {
         const url = prompt('Enter Image URL:', 'https://');
-        if (url && url !== 'https://') {
-            const img = `<img src="${url}" style="max-width:100%; height:auto; display:block; margin: 10px 0;" alt="Inserted">`;
-            document.execCommand('insertHTML', false, img);
+        if (url && url !== 'https://' && url !== null) {
+            const container = document.getElementById('visualEditorContainer');
+            container.focus();
+
+            const imgHtml = `<img src="${url}" style="max-width:100%; height:auto; display:block; margin: 10px 0;" alt="Inserted">`;
+            const success = document.execCommand('insertHTML', false, imgHtml);
+
+            if (!success) {
+                // Fallback: Append to end if command fails (e.g. selection lost)
+                const div = document.createElement('div');
+                div.innerHTML = imgHtml;
+                container.appendChild(div.firstChild);
+            }
         }
     }
 

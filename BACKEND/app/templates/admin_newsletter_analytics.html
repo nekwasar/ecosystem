@@ -1,614 +1,261 @@
-{% extends "admin_base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block title %}Newsletter Analytics - Admin Dashboard{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script>
+        // Check for dark mode preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
 
-{% block content %}
-<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-    <div class="container mx-auto px-6 py-8">
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white antialiased transition-colors duration-200">
+    <div class="min-h-screen p-6">
         <!-- Header -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-white mb-2">Newsletter Analytics</h1>
-                    <p class="text-slate-300">Comprehensive campaign performance insights</p>
-                </div>
-                <div class="flex gap-4">
-                    <select id="dateRangeSelect" class="bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="7">Last 7 days</option>
-                        <option value="30" selected>Last 30 days</option>
-                        <option value="90">Last 90 days</option>
-                        <option value="365">Last year</option>
-                    </select>
-                    <button id="exportReportBtn" class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-                        <i class="fas fa-download mr-2"></i>Export Report
-                    </button>
-                </div>
+        <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-1">Analytics</h1>
+                <p class="text-gray-600 dark:text-gray-400">Performance insights for your campaigns</p>
             </div>
+            <!-- Export controls if needed -->
         </div>
 
-        <!-- Key Metrics Overview -->
+        <!-- KPI Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
+            <div
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-between h-32">
+                <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-slate-300 text-sm">Total Sent</p>
-                        <p class="text-2xl font-bold text-white" id="totalSent">24,582</p>
-                        <p class="text-green-400 text-sm">
-                            <i class="fas fa-arrow-up mr-1"></i>+12.3%
-                        </p>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Emails Sent</p>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="totalSent">0</h3>
                     </div>
-                    <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-paper-plane text-blue-400"></i>
+                    <div class="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                        <i class="ph-bold ph-paper-plane-tilt text-xl"></i>
                     </div>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-slate-300 text-sm">Open Rate</p>
-                        <p class="text-2xl font-bold text-white" id="openRate">28.4%</p>
-                        <p class="text-green-400 text-sm">
-                            <i class="fas fa-arrow-up mr-1"></i>+2.1%
-                        </p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-envelope-open text-green-400"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-slate-300 text-sm">Click Rate</p>
-                        <p class="text-2xl font-bold text-white" id="clickRate">4.7%</p>
-                        <p class="text-red-400 text-sm">
-                            <i class="fas fa-arrow-down mr-1"></i>-0.8%
-                        </p>
-                    </div>
-                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-mouse-pointer text-purple-400"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-slate-300 text-sm">Bounce Rate</p>
-                        <p class="text-2xl font-bold text-white" id="bounceRate">2.1%</p>
-                        <p class="text-green-400 text-sm">
-                            <i class="fas fa-arrow-down mr-1"></i>-0.3%
-                        </p>
-                    </div>
-                    <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-exchange-alt text-orange-400"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Charts Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <!-- Email Performance Chart -->
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-white">Email Performance</h3>
-                    <div class="flex gap-2">
-                        <button class="px-3 py-1 bg-blue-600 text-white text-sm rounded-lg">Opens</button>
-                        <button class="px-3 py-1 bg-white/10 text-white text-sm rounded-lg hover:bg-white/20">Clicks</button>
-                        <button class="px-3 py-1 bg-white/10 text-white text-sm rounded-lg hover:bg-white/20">Unsubscribes</button>
-                    </div>
-                </div>
-                <div class="h-64 relative">
-                    <canvas id="performanceChart"></canvas>
                 </div>
             </div>
 
-            <!-- Subscriber Growth -->
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-white">Subscriber Growth</h3>
-                    <select id="growthTimeframe" class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="30">30 days</option>
-                        <option value="90">90 days</option>
-                        <option value="365">1 year</option>
-                    </select>
+            <div
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-between h-32">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Avg. Open Rate</p>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="avgOpenRate">0%</h3>
+                    </div>
+                    <div class="p-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
+                        <i class="ph-bold ph-envelope-open text-xl"></i>
+                    </div>
                 </div>
-                <div class="h-64 relative">
-                    <canvas id="growthChart"></canvas>
+            </div>
+
+            <div
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-between h-32">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Avg. Click Rate</p>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="avgClickRate">0%</h3>
+                    </div>
+                    <div class="p-2 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-lg">
+                        <i class="ph-bold ph-cursor-click text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-between h-32">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Clicks</p>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-1" id="totalClicks">0</h3>
+                    </div>
+                    <div class="p-2 bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-lg">
+                        <i class="ph-bold ph-mouse-left-click text-xl"></i>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Campaign Performance Table -->
-        <div class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden mb-8">
-            <div class="p-6 border-b border-white/20">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-white">Campaign Performance</h3>
-                    <div class="flex gap-4">
-                        <div class="relative">
-                            <input type="text" id="campaignSearch" placeholder="Search campaigns..." class="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                        </div>
-                        <select id="campaignStatusFilter" class="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">All Status</option>
-                            <option value="sent">Sent</option>
-                            <option value="scheduled">Scheduled</option>
-                            <option value="draft">Draft</option>
-                        </select>
-                    </div>
-                </div>
+        <div
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Campaign Performance</h3>
             </div>
+
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-white/5">
+                    <thead class="bg-gray-50/50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Campaign</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Status</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Sent</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Delivered</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Opens</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Clicks</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Open Rate</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Click Rate</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Date</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Campaign</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Status</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Sent</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Opens</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Clicks</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Date</th>
                         </tr>
                     </thead>
-                    <tbody id="campaignTableBody">
-                        <!-- Campaign data will be loaded here -->
+                    <tbody id="campaignTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                        <tr>
+                            <td colspan="6" class="px-6 py-10 text-center text-gray-500 dark:text-gray-400">
+                                <i
+                                    class="ph-duotone ph-spinner-gap animate-spin text-2xl mb-2 text-blue-600 dark:text-blue-400"></i>
+                                <p>Loading data...</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
-        <!-- Geographic and Device Analytics -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <!-- Geographic Distribution -->
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <h3 class="text-xl font-bold text-white mb-6">Geographic Distribution</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <img src="https://flagcdn.com/24x18/us.png" alt="US" class="w-6 h-4 rounded">
-                            <span class="text-white">United States</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
-                                <div class="w-3/4 h-full bg-blue-500 rounded-full"></div>
-                            </div>
-                            <span class="text-white font-medium">42%</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <img src="https://flagcdn.com/24x18/gb.png" alt="UK" class="w-6 h-4 rounded">
-                            <span class="text-white">United Kingdom</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
-                                <div class="w-1/2 h-full bg-green-500 rounded-full"></div>
-                            </div>
-                            <span class="text-white font-medium">28%</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <img src="https://flagcdn.com/24x18/ca.png" alt="Canada" class="w-6 h-4 rounded">
-                            <span class="text-white">Canada</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
-                                <div class="w-1/3 h-full bg-purple-500 rounded-full"></div>
-                            </div>
-                            <span class="text-white font-medium">15%</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <img src="https://flagcdn.com/24x18/de.png" alt="Germany" class="w-6 h-4 rounded">
-                            <span class="text-white">Germany</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
-                                <div class="w-1/5 h-full bg-orange-500 rounded-full"></div>
-                            </div>
-                            <span class="text-white font-medium">8%</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <img src="https://flagcdn.com/24x18/fr.png" alt="France" class="w-6 h-4 rounded">
-                            <span class="text-white">France</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-24 h-2 bg-slate-700 rounded-full overflow-hidden">
-                                <div class="w-1/6 h-full bg-pink-500 rounded-full"></div>
-                            </div>
-                            <span class="text-white font-medium">7%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Device Analytics -->
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <h3 class="text-xl font-bold text-white mb-6">Device Analytics</h3>
-                <div class="space-y-6">
-                    <div class="text-center">
-                        <div class="relative w-32 h-32 mx-auto mb-4">
-                            <canvas id="deviceChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                            <div class="w-4 h-4 bg-blue-500 rounded-full mx-auto mb-2"></div>
-                            <p class="text-white font-semibold">52%</p>
-                            <p class="text-slate-400 text-sm">Mobile</p>
-                        </div>
-                        <div>
-                            <div class="w-4 h-4 bg-green-500 rounded-full mx-auto mb-2"></div>
-                            <p class="text-white font-semibold">35%</p>
-                            <p class="text-slate-400 text-sm">Desktop</p>
-                        </div>
-                        <div>
-                            <div class="w-4 h-4 bg-purple-500 rounded-full mx-auto mb-2"></div>
-                            <p class="text-white font-semibold">13%</p>
-                            <p class="text-slate-400 text-sm">Tablet</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Top Performing Content -->
-        <div class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden">
-            <div class="p-6 border-b border-white/20">
-                <h3 class="text-xl font-bold text-white">Top Performing Content</h3>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-white/5 rounded-xl p-4">
-                        <h4 class="text-white font-semibold mb-2">"Weekly Product Update"</h4>
-                        <div class="flex items-center gap-4 mb-3">
-                            <span class="text-green-400 text-sm">
-                                <i class="fas fa-envelope-open mr-1"></i>45.2% open
-                            </span>
-                            <span class="text-blue-400 text-sm">
-                                <i class="fas fa-mouse-pointer mr-1"></i>12.8% click
-                            </span>
-                        </div>
-                        <p class="text-slate-400 text-sm">Sent 2 days ago • 1,245 recipients</p>
-                    </div>
-                    <div class="bg-white/5 rounded-xl p-4">
-                        <h4 class="text-white font-semibold mb-2">"Special Holiday Offer"</h4>
-                        <div class="flex items-center gap-4 mb-3">
-                            <span class="text-green-400 text-sm">
-                                <i class="fas fa-envelope-open mr-1"></i>42.1% open
-                            </span>
-                            <span class="text-blue-400 text-sm">
-                                <i class="fas fa-mouse-pointer mr-1"></i>18.4% click
-                            </span>
-                        </div>
-                        <p class="text-slate-400 text-sm">Sent 5 days ago • 892 recipients</p>
-                    </div>
-                    <div class="bg-white/5 rounded-xl p-4">
-                        <h4 class="text-white font-semibold mb-2">"Welcome to Our Community"</h4>
-                        <div class="flex items-center gap-4 mb-3">
-                            <span class="text-green-400 text-sm">
-                                <i class="fas fa-envelope-open mr-1"></i>38.7% open
-                            </span>
-                            <span class="text-blue-400 text-sm">
-                                <i class="fas fa-mouse-pointer mr-1"></i>8.9% click
-                            </span>
-                        </div>
-                        <p class="text-slate-400 text-sm">Sent 1 week ago • 2,103 recipients</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Sample campaign data
-    let campaigns = [
-        {
-            name: "Weekly Product Update",
-            status: "sent",
-            sent: 1245,
-            delivered: 1218,
-            opens: 551,
-            clicks: 159,
-            openRate: "45.2%",
-            clickRate: "13.0%",
-            date: "2024-01-15"
-        },
-        {
-            name: "Holiday Special Offer",
-            status: "sent",
-            sent: 892,
-            delivered: 876,
-            opens: 369,
-            clicks: 164,
-            openRate: "42.1%",
-            clickRate: "18.7%",
-            date: "2024-01-12"
-        },
-        {
-            name: "Welcome Series #1",
-            status: "sent",
-            sent: 2103,
-            delivered: 2089,
-            opens: 808,
-            clicks: 187,
-            openRate: "38.7%",
-            clickRate: "9.0%",
-            date: "2024-01-10"
-        },
-        {
-            name: "Monthly Newsletter",
-            status: "sent",
-            sent: 3456,
-            delivered: 3398,
-            opens: 1234,
-            clicks: 234,
-            openRate: "36.3%",
-            clickRate: "6.9%",
-            date: "2024-01-08"
-        },
-        {
-            name: "Product Launch Announcement",
-            status: "scheduled",
-            sent: 0,
-            delivered: 0,
-            opens: 0,
-            clicks: 0,
-            openRate: "-",
-            clickRate: "-",
-            date: "2024-01-20"
-        },
-        {
-            name: "Customer Survey",
-            status: "draft",
-            sent: 0,
-            delivered: 0,
-            opens: 0,
-            clicks: 0,
-            openRate: "-",
-            clickRate: "-",
-            date: "2024-01-25"
+    <script>
+        document.addEventListener('DOMContentLoaded', init);
+
+        async function init() {
+            try {
+                const res = await fetch('/api/newsletter/admin/campaigns');
+                const data = await res.json();
+                if (data.campaigns) {
+                    processData(data.campaigns);
+                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('campaignTableBody').innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-red-500 dark:text-red-400">Failed to load data</td></tr>`;
+            }
         }
-    ];
 
-    let filteredCampaigns = [...campaigns];
+        function processData(campaigns) {
+            const tbody = document.getElementById('campaignTableBody');
+            tbody.innerHTML = '';
 
-    // Initialize charts
-    initializeCharts();
-    
-    // Load campaign table
-    loadCampaignTable();
-
-    // Event listeners
-    document.getElementById('dateRangeSelect').addEventListener('change', updateDateRange);
-    document.getElementById('exportReportBtn').addEventListener('click', exportReport);
-    document.getElementById('campaignSearch').addEventListener('input', filterCampaigns);
-    document.getElementById('campaignStatusFilter').addEventListener('change', filterCampaigns);
-    document.getElementById('growthTimeframe').addEventListener('change', updateGrowthChart);
-
-    function initializeCharts() {
-        // Performance Chart
-        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
-        new Chart(performanceCtx, {
-            type: 'line',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    label: 'Opens',
-                    data: [1200, 1900, 3000, 2500, 2200, 1800, 2100],
-                    borderColor: 'rgb(59, 130, 246)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4
-                }, {
-                    label: 'Clicks',
-                    data: [200, 300, 400, 350, 280, 220, 290],
-                    borderColor: 'rgb(168, 85, 247)',
-                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    }
-                }
+            if (campaigns.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-gray-400 dark:text-gray-500">No campaigns found</td></tr>`;
+                return;
             }
-        });
 
-        // Growth Chart
-        const growthCtx = document.getElementById('growthChart').getContext('2d');
-        new Chart(growthCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                datasets: [{
-                    label: 'New Subscribers',
-                    data: [156, 203, 289, 245],
-                    backgroundColor: 'rgba(34, 197, 94, 0.8)',
-                    borderColor: 'rgb(34, 197, 94)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    }
+            let totalSent = 0;
+            let totalOpens = 0;
+            let totalClicks = 0;
+            let countWithRecipients = 0;
+
+            // Sort by date desc
+            campaigns.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            campaigns.forEach(c => {
+                const sent = c.recipient_count || 0;
+                const opens = c.open_count || 0;
+                const clicks = c.click_count || 0;
+                const status = c.status || 'draft';
+
+                if (sent > 0) {
+                    totalSent += sent;
+                    totalOpens += opens;
+                    totalClicks += clicks;
+                    countWithRecipients++;
                 }
+
+                const openRate = sent > 0 ? ((opens / sent) * 100).toFixed(1) : '0.0';
+                const clickRate = sent > 0 ? ((clicks / sent) * 100).toFixed(1) : '0.0';
+                const date = c.created_at ? new Date(c.created_at).toLocaleDateString() : '-';
+
+                // Render row
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="font-medium text-gray-900 dark:text-white block mb-0.5">${c.subject || '(No Subject)'}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-medium rounded-full ${getStatusColor(status)}">
+                                ${status.toUpperCase()}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">${sent.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                            <div class="font-medium text-gray-900 dark:text-white">${openRate}%</div>
+                            <div class="text-xs text-gray-400 dark:text-gray-500">${opens} opens</div>
+                        </td>
+                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                            <div class="font-medium text-gray-900 dark:text-white">${clickRate}%</div>
+                            <div class="text-xs text-gray-400 dark:text-gray-500">${clicks} clicks</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${date}</td>
+                    </tr>
+                `;
+            });
+
+            // Update KPI Cards
+            document.getElementById('totalSent').innerText = totalSent.toLocaleString();
+            document.getElementById('totalClicks').innerText = totalClicks.toLocaleString();
+
+            const avgOpenRate = totalSent > 0 ? ((totalOpens / totalSent) * 100).toFixed(1) : '0.0';
+            const avgClickRate = totalSent > 0 ? ((totalClicks / totalSent) * 100).toFixed(1) : '0.0';
+
+            document.getElementById('avgOpenRate').innerText = avgOpenRate + '%';
+            document.getElementById('avgClickRate').innerText = avgClickRate + '%';
+        }
+
+        function getStatusColor(status) {
+            // Colors optimized for both light and dark modes
+            switch (status.toLowerCase()) {
+                case 'sent': return 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800';
+                case 'draft': return 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600';
+                case 'failed': return 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800';
+                default: return 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800';
             }
-        });
+        }
+    </script>
+</body>
 
-        // Device Chart
-        const deviceCtx = document.getElementById('deviceChart').getContext('2d');
-        new Chart(deviceCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Mobile', 'Desktop', 'Tablet'],
-                datasets: [{
-                    data: [52, 35, 13],
-                    backgroundColor: [
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(168, 85, 247, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgb(59, 130, 246)',
-                        'rgb(34, 197, 94)',
-                        'rgb(168, 85, 247)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    }
-
-    function loadCampaignTable() {
-        const tbody = document.getElementById('campaignTableBody');
-        tbody.innerHTML = '';
-
-        filteredCampaigns.forEach(campaign => {
-            const row = document.createElement('tr');
-            row.className = 'border-b border-white/10 hover:bg-white/5 transition-colors';
-            row.innerHTML = `
-                <td class="px-6 py-4">
-                    <div>
-                        <p class="text-white font-medium">${campaign.name}</p>
-                    </div>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="px-3 py-1 text-xs font-medium rounded-full ${
-                        campaign.status === 'sent' ? 'bg-green-500/20 text-green-400' :
-                        campaign.status === 'scheduled' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-yellow-500/20 text-yellow-400'
-                    }">
-                        ${campaign.status}
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-white">${campaign.sent.toLocaleString()}</td>
-                <td class="px-6 py-4 text-white">${campaign.delivered.toLocaleString()}</td>
-                <td class="px-6 py-4 text-white">${campaign.opens.toLocaleString()}</td>
-                <td class="px-6 py-4 text-white">${campaign.clicks.toLocaleString()}</td>
-                <td class="px-6 py-4">
-                    <span class="text-white font-medium">${campaign.openRate}</span>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="text-white font-medium">${campaign.clickRate}</span>
-                </td>
-                <td class="px-6 py-4 text-slate-300">${new Date(campaign.date).toLocaleDateString()}</td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
-
-    function filterCampaigns() {
-        const searchTerm = document.getElementById('campaignSearch').value.toLowerCase();
-        const statusFilter = document.getElementById('campaignStatusFilter').value;
-
-        filteredCampaigns = campaigns.filter(campaign => {
-            const matchesSearch = campaign.name.toLowerCase().includes(searchTerm);
-            const matchesStatus = !statusFilter || campaign.status === statusFilter;
-
-            return matchesSearch && matchesStatus;
-        });
-
-        loadCampaignTable();
-    }
-
-    function updateDateRange() {
-        const days = document.getElementById('dateRangeSelect').value;
-        // Simulate updating data based on selected range
-        console.log(`Updating data for last ${days} days`);
-    }
-
-    function updateGrowthChart() {
-        const timeframe = document.getElementById('growthTimeframe').value;
-        // Simulate updating growth chart data
-        console.log(`Updating growth chart for ${timeframe} days`);
-    }
-
-    function exportReport() {
-        // Simulate export functionality
-        showNotification('Analytics report exported successfully!', 'success');
-    }
-
-    function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-lg ${
-            type === 'success' ? 'bg-green-600' : 
-            type === 'error' ? 'bg-red-600' : 
-            'bg-blue-600'
-        } text-white`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
-    }
-});
-</script>
-{% endblock %}
+</html>

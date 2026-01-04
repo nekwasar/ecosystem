@@ -1,11 +1,23 @@
-from fastapi import APIRouter, Depends, HTTPException, Form, Request, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, Form, Request, BackgroundTasks, File, UploadFile
 from sqlalchemy.orm import Session
 from database import get_db
 from services.newsletter_service import NewsletterService
 from schemas.blog import NewsletterSubscriberCreate, NewsletterCampaignCreate, NewsletterTemplateCreate
 from typing import Optional
+import shutil
+import os
+from pathlib import Path
+from datetime import datetime
 
 router = APIRouter()
+
+# Ensure uploads dir
+# We need to save to the directory served by /static (which is mounted to PROJECT_ROOT/portfolio)
+# This file is in BACKEND/app/routes/newsletter.py
+# parents[0]=routes, parents[1]=app, parents[2]=BACKEND, parents[3]=ROOT
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+UPLOAD_DIR = PROJECT_ROOT / "portfolio" / "newsletter_uploads"
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 # Admin endpoints
 @router.get("/admin/subscribers")
@@ -500,6 +512,8 @@ async def create_automation(
     except Exception as e:
         raise HTTPException(500, str(e))
 
+
+
 @router.delete("/admin/automations/{auto_id}")
 async def delete_automation(auto_id: int, db: Session = Depends(get_db)):
     """Delete automation"""
@@ -545,3 +559,31 @@ async def brevo_webhook(request: Request, db: Session = Depends(get_db)):
     except Exception as e:
         print(f"Webhook Error: {str(e)}")
         return {"success": False}
+
+from fastapi import File, UploadFile
+import shutil
+import os
+from pathlib import Path
+
+# Ensure static directory exists
+UPLOAD_DIR = Path("static/newsletter_uploads")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+@router.post("/admin/upload")
+async def upload_image(file: UploadFile = File(...)):
+    """Upload an image for newsletter"""
+    try:
+        # Generate safe filename
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        safe_name = f"{timestamp}_{file.filename.replace(' ', '_')}"
+        file_location = UPLOAD_DIR / safe_name
+        
+        with open(file_location, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+            
+        # Return URL (assuming /static mount)
+        # We need to know the domain, but relative URL /static/... usually works for frontend
+        return {"success": True, "url": f"/static/newsletter_uploads/{safe_name}"}
+    except Exception as e:
+        print(f"Upload failed: {e}")
+        return {"success": False, "error": str(e)}

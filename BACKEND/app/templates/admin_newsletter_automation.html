@@ -1,682 +1,370 @@
-{% extends "admin_base.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block title %}Newsletter Automation - Admin Dashboard{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script>
+        // Check for dark mode preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
 
-{% block content %}
-<div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-    <div class="container mx-auto px-6 py-8">
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white antialiased transition-colors duration-200">
+    <div class="min-h-screen p-6">
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-4xl font-bold text-white mb-2">Newsletter Automation</h1>
-                    <p class="text-slate-300">Create and manage automated email workflows</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Newsletter Automations</h1>
+            <p class="text-gray-600 dark:text-gray-400">Manage your automated email workflows based on triggers</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-lg">
+                        <i class="ph-bold ph-robot text-2xl text-blue-600 dark:text-blue-400"></i>
+                    </div>
                 </div>
-                <div class="flex gap-4">
-                    <button id="createWorkflowBtn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
-                        <i class="fas fa-plus mr-2"></i>Create Workflow
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="statTotalAutomations">0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Total Automations</div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-green-100 dark:bg-green-900/50 rounded-lg">
+                        <i class="ph-bold ph-lightning text-2xl text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="statActiveAutomations">0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Active Workflows</div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
+                        <i class="ph-bold ph-envelope-simple-open text-2xl text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                </div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="statTotalSent">-</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Emails Sent (Target)</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-100 dark:border-gray-700">
+            <!-- Toolbar -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="relative max-w-md w-full">
+                        <input type="text" id="searchInput" placeholder="Search automations..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder-gray-400 dark:placeholder-gray-500">
+                        <i
+                            class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500"></i>
+                    </div>
+                    <button onclick="openCreateModal()"
+                        class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 font-medium transition-colors shadow-sm">
+                        <i class="ph-bold ph-plus"></i> New Automation
                     </button>
-                    <button id="importWorkflowBtn" class="bg-slate-700 text-white px-6 py-3 rounded-xl hover:bg-slate-600 transition-all duration-200">
-                        <i class="fas fa-download mr-2"></i>Import
-                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Automation Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-slate-300 text-sm">Active Workflows</p>
-                        <p class="text-2xl font-bold text-white" id="activeWorkflows">12</p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-play text-green-400"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-slate-300 text-sm">This Month</p>
-                        <p class="text-2xl font-bold text-white" id="emailsSent">2,847</p>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-envelope text-blue-400"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-slate-300 text-sm">Conversion Rate</p>
-                        <p class="text-2xl font-bold text-white" id="conversionRate">8.4%</p>
-                    </div>
-                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-chart-line text-purple-400"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-slate-300 text-sm">Revenue Generated</p>
-                        <p class="text-2xl font-bold text-white" id="revenueGenerated">$24,580</p>
-                    </div>
-                    <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-dollar-sign text-orange-400"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Workflow Templates -->
-        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-bold text-white">Workflow Templates</h3>
-                <div class="flex gap-2">
-                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">All</button>
-                    <button class="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20">Welcome</button>
-                    <button class="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20">Abandonment</button>
-                    <button class="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20">Re-engagement</button>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white/5 rounded-xl p-6 cursor-pointer hover:bg-white/10 transition-all duration-200">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-handshake text-green-400"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-white font-semibold">Welcome Series</h4>
-                            <p class="text-slate-400 text-sm">5 emails • 7 days</p>
-                        </div>
-                    </div>
-                    <p class="text-slate-300 text-sm mb-4">Introduce new subscribers to your brand and offerings</p>
-                    <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">Popular</span>
-                        <button class="text-blue-400 hover:text-blue-300 text-sm font-medium">Use Template</button>
-                    </div>
-                </div>
-                <div class="bg-white/5 rounded-xl p-6 cursor-pointer hover:bg-white/10 transition-all duration-200">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-shopping-cart text-orange-400"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-white font-semibold">Cart Abandonment</h4>
-                            <p class="text-slate-400 text-sm">3 emails • 5 days</p>
-                        </div>
-                    </div>
-                    <p class="text-slate-300 text-sm mb-4">Recover abandoned carts with timely reminders</p>
-                    <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs rounded-full">High ROI</span>
-                        <button class="text-blue-400 hover:text-blue-300 text-sm font-medium">Use Template</button>
-                    </div>
-                </div>
-                <div class="bg-white/5 rounded-xl p-6 cursor-pointer hover:bg-white/10 transition-all duration-200">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-heart text-purple-400"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-white font-semibold">Re-engagement</h4>
-                            <p class="text-slate-400 text-sm">4 emails • 14 days</p>
-                        </div>
-                    </div>
-                    <p class="text-slate-300 text-sm mb-4">Win back inactive subscribers with special offers</p>
-                    <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full">Effective</span>
-                        <button class="text-blue-400 hover:text-blue-300 text-sm font-medium">Use Template</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Workflows -->
-        <div class="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 overflow-hidden mb-8">
-            <div class="p-6 border-b border-white/20">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-white">Active Workflows</h3>
-                    <div class="flex gap-4">
-                        <div class="relative">
-                            <input type="text" id="workflowSearch" placeholder="Search workflows..." class="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                        </div>
-                        <select id="workflowStatusFilter" class="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="paused">Paused</option>
-                            <option value="draft">Draft</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <!-- Table -->
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-white/5">
+                    <thead class="bg-gray-50/50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Workflow</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Type</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Status</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Trigger</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Subscribers</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Sent This Month</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Conversion</th>
-                            <th class="px-6 py-4 text-left text-sm font-medium text-slate-300">Actions</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Name</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Trigger</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Template</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Delay</th>
+                            <th
+                                class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Status</th>
+                            <th
+                                class="px-6 py-4 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="workflowTableBody">
-                        <!-- Workflow data will be loaded here -->
+                    <tbody id="automationTableBody" class="divide-y divide-gray-100 dark:divide-gray-700">
+                        <tr>
+                            <td colspan="6" class="px-6 py-10 text-center text-gray-500 dark:text-gray-400"
+                                id="loadingRow">
+                                <i
+                                    class="ph-duotone ph-spinner-gap animate-spin text-2xl mb-2 text-blue-600 dark:text-blue-400"></i>
+                                <p>Loading automations...</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <!-- Workflow Performance Chart -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-white">Workflow Performance</h3>
-                    <select id="performanceTimeframe" class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="7">7 days</option>
-                        <option value="30" selected>30 days</option>
-                        <option value="90">90 days</option>
-                    </select>
+            <!-- Empty State (Hidden) -->
+            <div id="emptyState" class="hidden flex flex-col items-center justify-center py-12 text-center">
+                <div
+                    class="w-16 h-16 bg-gray-50 dark:bg-gray-700/50 rounded-full flex items-center justify-center mb-4">
+                    <i class="ph-duotone ph-robot text-3xl text-gray-400 dark:text-gray-500"></i>
                 </div>
-                <div class="h-64 relative">
-                    <canvas id="performanceChart"></canvas>
-                </div>
-            </div>
-
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-                <h3 class="text-xl font-bold text-white mb-6">Top Performing Workflows</h3>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-handshake text-green-400 text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="text-white font-medium">Welcome Series</p>
-                                <p class="text-slate-400 text-sm">1,245 active subscribers</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-white font-semibold">12.8%</p>
-                            <p class="text-slate-400 text-sm">Conversion</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-shopping-cart text-orange-400 text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="text-white font-medium">Cart Abandonment</p>
-                                <p class="text-slate-400 text-sm">567 active subscribers</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-white font-semibold">18.3%</p>
-                            <p class="text-slate-400 text-sm">Recovery</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-heart text-purple-400 text-sm"></i>
-                            </div>
-                            <div>
-                                <p class="text-white font-medium">Re-engagement</p>
-                                <p class="text-slate-400 text-sm">892 active subscribers</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-white font-semibold">8.7%</p>
-                            <p class="text-slate-400 text-sm">Reactivation</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Workflow Builder Modal -->
-        <div id="workflowBuilderModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
-            <div class="flex items-center justify-center min-h-screen p-4">
-                <div class="bg-slate-800 rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
-                    <div class="p-6 border-b border-slate-700">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-xl font-bold text-white">Workflow Builder</h3>
-                            <button id="closeBuilderBtn" class="text-slate-400 hover:text-white">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-                        <div id="workflowBuilderContent">
-                            <!-- Builder content will be loaded here -->
-                        </div>
-                    </div>
-                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-1">No automations found</h3>
+                <p class="text-gray-500 dark:text-gray-400 mb-4 max-w-sm">Get started by creating your first automated
+                    workflow.</p>
+                <button onclick="openCreateModal()"
+                    class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">Create
+                    Automation</button>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Sample workflow data
-    let workflows = [
-        {
-            name: "Welcome Series",
-            type: "Onboarding",
-            status: "active",
-            trigger: "New subscriber",
-            subscribers: 1245,
-            sentThisMonth: 287,
-            conversion: "12.8%"
-        },
-        {
-            name: "Cart Abandonment",
-            type: "E-commerce",
-            status: "active",
-            trigger: "Cart abandoned",
-            subscribers: 567,
-            sentThisMonth: 123,
-            conversion: "18.3%"
-        },
-        {
-            name: "Re-engagement Campaign",
-            type: "Retention",
-            status: "active",
-            trigger: "30 days inactive",
-            subscribers: 892,
-            sentThisMonth: 156,
-            conversion: "8.7%"
-        },
-        {
-            name: "Birthday Emails",
-            type: "Personal",
-            status: "paused",
-            trigger: "Birthday",
-            subscribers: 234,
-            sentThisMonth: 0,
-            conversion: "24.1%"
-        },
-        {
-            name: "Post-Purchase Follow-up",
-            type: "Customer Success",
-            status: "active",
-            trigger: "Purchase completed",
-            subscribers: 678,
-            sentThisMonth: 198,
-            conversion: "15.6%"
-        },
-        {
-            name: "Win-Back Campaign",
-            type: "Retention",
-            status: "draft",
-            trigger: "60 days inactive",
-            subscribers: 0,
-            sentThisMonth: 0,
-            conversion: "-"
-        }
-    ];
+    <!-- Create Modal -->
+    <dialog id="createModal"
+        class="bg-transparent p-0 w-full max-w-lg backdrop:bg-black/50 backdrop:backdrop-blur-sm z-50">
+        <div
+            class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden mx-auto mt-20 transform transition-all">
+            <div
+                class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white">New Automation</h3>
+                <button onclick="closeCreateModal()"
+                    class="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg text-gray-500 dark:text-gray-400 transition-colors">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
 
-    let filteredWorkflows = [...workflows];
+            <form id="createForm" onsubmit="handleCreate(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Automation
+                        Name</label>
+                    <input type="text" name="name" required
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                        placeholder="e.g. Welcome Series">
+                </div>
 
-    // Initialize
-    loadWorkflowTable();
-    initializePerformanceChart();
-
-    // Event listeners
-    document.getElementById('workflowSearch').addEventListener('input', filterWorkflows);
-    document.getElementById('workflowStatusFilter').addEventListener('change', filterWorkflows);
-    document.getElementById('createWorkflowBtn').addEventListener('click', openWorkflowBuilder);
-    document.getElementById('importWorkflowBtn').addEventListener('click', importWorkflow);
-    document.getElementById('closeBuilderBtn').addEventListener('click', closeWorkflowBuilder);
-    document.getElementById('performanceTimeframe').addEventListener('change', updatePerformanceChart);
-
-    function loadWorkflowTable() {
-        const tbody = document.getElementById('workflowTableBody');
-        tbody.innerHTML = '';
-
-        filteredWorkflows.forEach((workflow, index) => {
-            const row = document.createElement('tr');
-            row.className = 'border-b border-white/10 hover:bg-white/5 transition-colors';
-            row.innerHTML = `
-                <td class="px-6 py-4">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <p class="text-white font-medium">${workflow.name}</p>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trigger</label>
+                        <select name="trigger"
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            <option value="welcome">New Subscriber</option>
+                        </select>
                     </div>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-400">
-                        ${workflow.type}
-                    </span>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="px-3 py-1 text-xs font-medium rounded-full ${
-                        workflow.status === 'active' ? 'bg-green-500/20 text-green-400' :
-                        workflow.status === 'paused' ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-slate-500/20 text-slate-400'
-                    }">
-                        ${workflow.status}
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-slate-300">${workflow.trigger}</td>
-                <td class="px-6 py-4 text-white">${workflow.subscribers.toLocaleString()}</td>
-                <td class="px-6 py-4 text-white">${workflow.sentThisMonth.toLocaleString()}</td>
-                <td class="px-6 py-4">
-                    <span class="text-white font-medium">${workflow.conversion}</span>
-                </td>
-                <td class="px-6 py-4">
-                    <div class="flex gap-2">
-                        <button onclick="editWorkflow(${index})" class="p-2 text-slate-400 hover:text-white transition-colors">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button onclick="toggleWorkflow(${index})" class="p-2 text-slate-400 hover:text-white transition-colors">
-                            <i class="fas fa-${workflow.status === 'active' ? 'pause' : 'play'}"></i>
-                        </button>
-                        <button onclick="duplicateWorkflow(${index})" class="p-2 text-slate-400 hover:text-white transition-colors">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                        <button onclick="deleteWorkflow(${index})" class="p-2 text-slate-400 hover:text-red-400 transition-colors">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
-
-    function filterWorkflows() {
-        const searchTerm = document.getElementById('workflowSearch').value.toLowerCase();
-        const statusFilter = document.getElementById('workflowStatusFilter').value;
-
-        filteredWorkflows = workflows.filter(workflow => {
-            const matchesSearch = workflow.name.toLowerCase().includes(searchTerm) ||
-                                workflow.type.toLowerCase().includes(searchTerm);
-            const matchesStatus = !statusFilter || workflow.status === statusFilter;
-
-            return matchesSearch && matchesStatus;
-        });
-
-        loadWorkflowTable();
-    }
-
-    function openWorkflowBuilder(workflowIndex = null) {
-        const modal = document.getElementById('workflowBuilderModal');
-        const content = document.getElementById('workflowBuilderContent');
-        
-        if (workflowIndex !== null) {
-            const workflow = workflows[workflowIndex];
-            content.innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <h4 class="text-lg font-semibold text-white">Workflow Settings</h4>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Workflow Name</label>
-                                <input type="text" value="${workflow.name}" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Type</label>
-                                <select class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="Onboarding" ${workflow.type === 'Onboarding' ? 'selected' : ''}>Onboarding</option>
-                                    <option value="E-commerce" ${workflow.type === 'E-commerce' ? 'selected' : ''}>E-commerce</option>
-                                    <option value="Retention" ${workflow.type === 'Retention' ? 'selected' : ''}>Retention</option>
-                                    <option value="Personal" ${workflow.type === 'Personal' ? 'selected' : ''}>Personal</option>
-                                    <option value="Customer Success" ${workflow.type === 'Customer Success' ? 'selected' : ''}>Customer Success</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Trigger</label>
-                                <select class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="New subscriber" ${workflow.trigger === 'New subscriber' ? 'selected' : ''}>New subscriber</option>
-                                    <option value="Cart abandoned" ${workflow.trigger === 'Cart abandoned' ? 'selected' : ''}>Cart abandoned</option>
-                                    <option value="Purchase completed" ${workflow.trigger === 'Purchase completed' ? 'selected' : ''}>Purchase completed</option>
-                                    <option value="30 days inactive" ${workflow.trigger === '30 days inactive' ? 'selected' : ''}>30 days inactive</option>
-                                    <option value="Birthday" ${workflow.trigger === 'Birthday' ? 'selected' : ''}>Birthday</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <h4 class="text-lg font-semibold text-white">Workflow Flow</h4>
-                            <div class="bg-white/5 rounded-xl p-4">
-                                <div class="flex items-center gap-4 mb-4">
-                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
-                                    <div class="flex-1">
-                                        <p class="text-white font-medium">Trigger Event</p>
-                                        <p class="text-slate-400 text-sm">${workflow.trigger}</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-4 mb-4">
-                                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
-                                    <div class="flex-1">
-                                        <p class="text-white font-medium">Send Email</p>
-                                        <p class="text-slate-400 text-sm">Immediate</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-4">
-                                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
-                                    <div class="flex-1">
-                                        <p class="text-white font-medium">Wait</p>
-                                        <p class="text-slate-400 text-sm">1 day</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-4 justify-end">
-                        <button onclick="closeWorkflowBuilder()" class="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors">Cancel</button>
-                        <button class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all">Save Workflow</button>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Delay
+                            (Hours)</label>
+                        <input type="number" name="delay" value="0" min="0"
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                     </div>
                 </div>
-            `;
-        } else {
-            content.innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <h4 class="text-lg font-semibold text-white">Create New Workflow</h4>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Workflow Name</label>
-                                <input type="text" placeholder="Enter workflow name" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Type</label>
-                                <select class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="">Select Type</option>
-                                    <option value="Onboarding">Onboarding</option>
-                                    <option value="E-commerce">E-commerce</option>
-                                    <option value="Retention">Retention</option>
-                                    <option value="Personal">Personal</option>
-                                    <option value="Customer Success">Customer Success</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-300 mb-2">Trigger</label>
-                                <select class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="">Select Trigger</option>
-                                    <option value="New subscriber">New subscriber</option>
-                                    <option value="Cart abandoned">Cart abandoned</option>
-                                    <option value="Purchase completed">Purchase completed</option>
-                                    <option value="30 days inactive">30 days inactive</option>
-                                    <option value="Birthday">Birthday</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <h4 class="text-lg font-semibold text-white">Quick Start Templates</h4>
-                            <div class="space-y-3">
-                                <div class="bg-white/5 rounded-lg p-3 cursor-pointer hover:bg-white/10 transition-colors">
-                                    <div class="flex items-center gap-3">
-                                        <i class="fas fa-handshake text-green-400"></i>
-                                        <div>
-                                            <p class="text-white font-medium">Welcome Series</p>
-                                            <p class="text-slate-400 text-sm">5 emails • 7 days</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="bg-white/5 rounded-lg p-3 cursor-pointer hover:bg-white/10 transition-colors">
-                                    <div class="flex items-center gap-3">
-                                        <i class="fas fa-shopping-cart text-orange-400"></i>
-                                        <div>
-                                            <p class="text-white font-medium">Cart Abandonment</p>
-                                            <p class="text-slate-400 text-sm">3 emails • 5 days</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="bg-white/5 rounded-lg p-3 cursor-pointer hover:bg-white/10 transition-colors">
-                                    <div class="flex items-center gap-3">
-                                        <i class="fas fa-heart text-purple-400"></i>
-                                        <div>
-                                            <p class="text-white font-medium">Re-engagement</p>
-                                            <p class="text-slate-400 text-sm">4 emails • 14 days</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-4 justify-end">
-                        <button onclick="closeWorkflowBuilder()" class="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors">Cancel</button>
-                        <button class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all">Create Workflow</button>
-                    </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email
+                        Template</label>
+                    <select name="template_id" required id="templateSelect"
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        <option value="">Loading templates...</option>
+                    </select>
                 </div>
-            `;
+
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeCreateModal()"
+                        class="px-4 py-2 rounded-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancel</button>
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 shadow-md">Create</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <script>
+        let allAutomations = [];
+        let allTemplates = [];
+        const modal = document.getElementById('createModal');
+
+        document.addEventListener('DOMContentLoaded', init);
+
+        async function init() {
+            await Promise.all([fetchAutomations(), fetchTemplates()]);
+            render();
         }
-        
-        modal.classList.remove('hidden');
-    }
 
-    function closeWorkflowBuilder() {
-        document.getElementById('workflowBuilderModal').classList.add('hidden');
-    }
+        async function fetchAutomations() {
+            try {
+                const res = await fetch('/api/newsletter/admin/automations');
+                const data = await res.json();
+                if (data.success) allAutomations = data.automations || [];
 
-    function initializePerformanceChart() {
-        const ctx = document.getElementById('performanceChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                datasets: [{
-                    label: 'Emails Sent',
-                    data: [1200, 1900, 3000, 2500],
-                    borderColor: 'rgb(59, 130, 246)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4
-                }, {
-                    label: 'Conversions',
-                    data: [150, 280, 420, 380],
-                    borderColor: 'rgb(34, 197, 94)',
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white'
-                        }
+                // Update stats
+                const total = allAutomations.length;
+                const active = allAutomations.filter(a => a.is_active).length;
+                document.getElementById('statTotalAutomations').innerText = total;
+                document.getElementById('statActiveAutomations').innerText = active;
+
+            } catch (e) { console.error('Fetch Error:', e); }
+        }
+
+        async function fetchTemplates() {
+            try {
+                const res = await fetch('/api/newsletter/admin/templates');
+                const data = await res.json();
+                if (data.success) {
+                    allTemplates = data.templates || [];
+                    const sel = document.getElementById('templateSelect');
+                    if (allTemplates.length === 0) {
+                        sel.innerHTML = '<option value="">No templates found</option>';
+                        return;
                     }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    }
+                    sel.innerHTML = '<option value="">Select a template...</option>';
+                    allTemplates.forEach(t => {
+                        sel.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+                    });
                 }
-            }
-        });
-    }
-
-    function updatePerformanceChart() {
-        // Simulate chart update
-        console.log('Updating performance chart');
-    }
-
-    function importWorkflow() {
-        // Simulate file upload
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.json';
-        input.onchange = function(e) {
-            if (e.target.files[0]) {
-                showNotification('Workflow imported successfully!', 'success');
-            }
-        };
-        input.click();
-    }
-
-    // Global functions for workflow actions
-    window.editWorkflow = function(index) {
-        openWorkflowBuilder(index);
-    };
-
-    window.toggleWorkflow = function(index) {
-        const workflow = workflows[index];
-        workflow.status = workflow.status === 'active' ? 'paused' : 'active';
-        loadWorkflowTable();
-        showNotification(`Workflow ${workflow.status === 'active' ? 'activated' : 'paused'} successfully!`, 'success');
-    };
-
-    window.duplicateWorkflow = function(index) {
-        const workflow = workflows[index];
-        const newWorkflow = {
-            ...workflow,
-            name: workflow.name + ' (Copy)',
-            subscribers: 0,
-            sentThisMonth: 0,
-            status: 'draft'
-        };
-        workflows.push(newWorkflow);
-        loadWorkflowTable();
-        showNotification('Workflow duplicated successfully!', 'success');
-    };
-
-    window.deleteWorkflow = function(index) {
-        if (confirm('Are you sure you want to delete this workflow?')) {
-            workflows.splice(index, 1);
-            loadWorkflowTable();
-            showNotification('Workflow deleted successfully!', 'success');
+            } catch (e) { console.error(e); }
         }
-    };
 
-    function showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-lg ${
-            type === 'success' ? 'bg-green-600' : 
-            type === 'error' ? 'bg-red-600' : 
-            'bg-blue-600'
-        } text-white`;
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
-    }
-});
-</script>
-{% endblock %}
+        function render() {
+            const tbody = document.getElementById('automationTableBody');
+            tbody.innerHTML = '';
+
+            if (allAutomations.length === 0) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                // Use a minimalist empty row or just the div below
+                tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-gray-400 dark:text-gray-500">List is empty</td></tr>`;
+                return;
+            }
+            document.getElementById('emptyState').classList.add('hidden');
+
+            allAutomations.forEach(auto => {
+                const tpl = allTemplates.find(t => t.id === auto.template_id);
+                const tplName = tpl ? tpl.name : 'Unknown Template';
+                const triggerLabel = auto.trigger_type === 'welcome' ? 'New Subscriber' : auto.trigger_type;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 flex-shrink-0 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center">
+                                    <i class="ph-bold ph-robot text-xl"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-semibold text-gray-900 dark:text-white">${auto.name}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2.5 py-1 inline-flex text-xs leading-5 font-medium rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                ${triggerLabel}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-bold ph-file-text text-gray-400 dark:text-gray-500"></i>
+                                ${tplName}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300">
+                            ${auto.delay_hours} hours
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button onclick="return" class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${auto.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600'}">
+                                ${auto.is_active ? 'Active' : 'Inactive'}
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button onclick="deleteAutomation(${auto.id})" class="text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors p-2 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg">
+                                <i class="ph-bold ph-trash text-lg"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openCreateModal() {
+            modal.showModal();
+            modal.classList.add('flex');
+        }
+
+        function closeCreateModal() {
+            modal.close();
+            document.getElementById('createForm').reset();
+        }
+
+        async function handleCreate(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+            try {
+                const res = await fetch('/api/newsletter/admin/automations', {
+                    method: 'POST',
+                    body: fd,
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeCreateModal();
+                    init();
+                } else {
+                    alert('Error: ' + (data.detail || 'Failed'));
+                }
+            } catch (err) { console.error(err); alert('Failed'); }
+        }
+
+        async function deleteAutomation(id) {
+            if (!confirm('Delete this automation?')) return;
+            try {
+                const res = await fetch(`/api/newsletter/admin/automations/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) init();
+            } catch (e) { console.error(e); }
+        }
+    </script>
+</body>
+
+</html>
