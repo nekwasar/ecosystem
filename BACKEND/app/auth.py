@@ -28,17 +28,25 @@ security = HTTPBearer(auto_error=False)
 access_cookie_scheme = APIKeyCookie(name="access_token", auto_error=False)
 refresh_cookie_scheme = APIKeyCookie(name="refresh_token", auto_error=False)
 
+def get_password_hash(password: str) -> str:
+    """Hash a password using bcrypt. Handles >72 chars by pre-hashing."""
+    import hashlib
+    # Pre-hash long passwords to bypass bcrypt's 72-byte limit (Rec 4)
+    if len(password) > 72:
+        password = hashlib.sha256(password.encode()).hexdigest()
+    return pwd_context.hash(password)
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash safely using bcrypt"""
+    """Verify a password against its hash safely."""
+    import hashlib
     try:
+        # Check if we need to pre-hash for verification
+        if len(plain_password) > 72:
+            plain_password = hashlib.sha256(plain_password.encode()).hexdigest()
         return pwd_context.verify(plain_password, hashed_password)
     except Exception as e:
         auth_logger.error(f"❌ Password verification failed: {e}")
         return False
-
-def get_password_hash(password: str) -> str:
-    """Hash a password using bcrypt with salt"""
-    return pwd_context.hash(password)
 
 # --- TOTP / MFA Helpers (Phase 4) ---
 
