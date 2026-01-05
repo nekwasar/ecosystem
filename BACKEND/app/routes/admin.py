@@ -134,6 +134,59 @@ async def get_dashboard_kpi(current_user = Depends(get_current_active_user), db:
     except Exception as e:
         auth_logger.error(f"❌ Error getting KPI data: {e}")
         raise HTTPException(status_code=500, detail="Failed to load KPI data")
+@router.get("/api/admin/security/users")
+async def get_admin_users_api(current_user = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    """Get all admin users for management"""
+    from models.user import AdminUser
+    try:
+        users = db.query(AdminUser).all()
+        user_list = []
+        for u in users:
+            user_list.append({
+                "id": str(u.id),
+                "name": u.username,
+                "email": u.email,
+                "role": "super_admin" if u.is_superuser else "admin",
+                "status": "active" if u.is_active else "inactive",
+                "lastLogin": u.last_login.isoformat() if u.last_login else None,
+                "createdAt": u.created_at.isoformat() if u.created_at else None
+            })
+        
+        # Calculate stats
+        total = len(users)
+        active = len([u for u in users if u.is_active])
+        supers = len([u for u in users if u.is_superuser])
+        pending = 0 # Not implemented yet
+        
+        return {
+            "users": user_list,
+            "stats": {
+                "totalUsers": total,
+                "activeUsers": active,
+                "superAdmins": supers,
+                "pendingUsers": pending,
+                "usersChange": 0,
+                "activeChange": 0,
+                "superAdminChange": 0,
+                "pendingChange": 0
+            }
+        }
+    except Exception as e:
+        auth_logger.error(f"❌ Error getting users data: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load users data")
+
+@router.get("/api/admin/security/apikeys")
+async def get_admin_apikeys_api(current_user = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    """Get all API keys for management (Placeholder)"""
+    return {
+        "keys": [],
+        "stats": {
+            "totalApiKeys": 0,
+            "activeKeys": 0,
+            "expiredKeys": 0,
+            "apiCallsToday": "0"
+        }
+    }
 
 @router.get("/api/dashboard/popular-content")
 @router.get("/admin/api/dashboard/popular-content")
