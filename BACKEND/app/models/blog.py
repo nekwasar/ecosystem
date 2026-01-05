@@ -191,6 +191,16 @@ class NewsletterAutomation(Base):
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class NewsletterAutomationQueue(Base):
+    __tablename__ = "newsletter_automation_queue"
+
+    id = Column(Integer, primary_key=True, index=True)
+    subscriber_id = Column(Integer, ForeignKey("newsletter_subscribers.id"), nullable=False)
+    automation_id = Column(Integer, ForeignKey("newsletter_automations.id"), nullable=False)
+    scheduled_at = Column(DateTime(timezone=True), nullable=False)
+    sent_at = Column(DateTime(timezone=True), nullable=True)
+    status = Column(String(20), default="pending")  # pending, sent, failed
+
 # Search Models - Full-Text Search with FTS5
 # Note: FTS5 virtual tables need to be created manually in SQLite
 # We'll handle this in the database initialization

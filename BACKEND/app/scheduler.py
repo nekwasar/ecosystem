@@ -71,6 +71,18 @@ async def cleanup_expired_data_job():
     finally:
         db.close()
 
+async def automation_queue_job():
+    """Check and process the automation queue every minute"""
+    db = next(get_db())
+    try:
+        from services.newsletter_service import NewsletterService
+        service = NewsletterService(db)
+        await service.process_automation_queue()
+    except Exception as e:
+        logger.error(f"Automation queue processing failed: {e}")
+    finally:
+        db.close()
+
 def init_scheduler():
     """Initialize the scheduler with jobs"""
     # Schedule weekly newsletter for every Monday at 9:00 AM
@@ -100,10 +112,20 @@ def init_scheduler():
         replace_existing=True
     )
 
+    # Schedule check for automation queue every minute
+    scheduler.add_job(
+        automation_queue_job,
+        trigger=CronTrigger(second=30), # Offset by 30 seconds to split the load
+        id='automation_queue',
+        name='Process Automation Queue',
+        replace_existing=True
+    )
+
     print("Scheduler initialized:")
     print("- Weekly newsletter scheduled for every Monday at 9 AM")
     print("- Daily cleanup scheduled for every day at 2 AM")
     print("- Scheduled campaigns check set for every minute")
+    print("- Automation queue check set for every minute (offset by 30s)")
     
     # Log registered jobs for verification
     for job in scheduler.get_jobs():

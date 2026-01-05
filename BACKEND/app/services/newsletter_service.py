@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
 from fastapi import BackgroundTasks
 
-from models.blog import NewsletterSubscriber, NewsletterCampaign, BlogPost, NewsletterTemplate, NewsletterAutomation, SystemSetting, NewsletterSegment
+from models.blog import NewsletterSubscriber, NewsletterCampaign, BlogPost, NewsletterTemplate, NewsletterAutomation, SystemSetting, NewsletterSegment, NewsletterAutomationQueue
 from schemas.blog import NewsletterSubscriberCreate, NewsletterCampaignCreate, NewsletterTemplateCreate, NewsletterSegmentCreate
 from services.email_service import email_service
 
@@ -54,23 +54,31 @@ class NewsletterService:
             self.db.commit()
             self.db.refresh(subscriber)
 
-            # Trigger Welcome Automation
-            # We look for an active automation rule for 'welcome'
-            welcome_auto = self.db.query(NewsletterAutomation).filter(
+            # Trigger Welcome Automations (Queue them instead of immediate send)
+            # This follows the 'Standard' professional approach for handleable delays
+            welcome_automations = self.db.query(NewsletterAutomation).filter(
                 NewsletterAutomation.trigger_type == 'welcome',
                 NewsletterAutomation.is_active == True
-            ).first()
+            ).all()
 
-            if welcome_auto and welcome_auto.template_id:
-                # Use the configured template
-                await self._send_content_email(subscriber, welcome_auto.template_id, is_automation=True, background_tasks=background_tasks)
-            else:
-                # Default behavior if no automation is set: Just log it or send a very basic confirmation
-                logger.info(f"New subscriber {subscriber.email} joined, but no welcome automation is configured.")
+            now_utc = datetime.now(timezone.utc)
+            for auto in welcome_automations:
+                scheduled_time = now_utc + timedelta(hours=auto.delay_hours)
+                
+                queue_item = NewsletterAutomationQueue(
+                    subscriber_id=subscriber.id,
+                    automation_id=auto.id,
+                    scheduled_at=scheduled_time,
+                    status="pending"
+                )
+                self.db.add(queue_item)
+                logger.info(f"Queued welcome automation '{auto.name}' for {subscriber.email} to be sent at {scheduled_time}")
+
+            self.db.commit()
 
             msg = "Successfully subscribed!"
-            if welcome_auto and welcome_auto.template_id:
-                msg += " Check your email for a welcome message."
+            if welcome_automations:
+                msg += f" {len(welcome_automations)} automation(s) have been queued."
 
             return {
                 "success": True,
@@ -206,9 +214,51 @@ class NewsletterService:
             if sch_at <= now:
                 logger.info(f"Triggering scheduled campaign {campaign.id} ('{campaign.name}') - was set for {sch_at}")
                 await self._execute_campaign_send(campaign.id)
-            else:
                 diff = sch_at - now
                 logger.info(f"Campaign {campaign.id} still in future. {diff} remaining.")
+
+    async def process_automation_queue(self):
+        """Standard professional background runner to process the automation queue"""
+        now = datetime.now(timezone.utc)
+        pending = self.db.query(NewsletterAutomationQueue).filter(
+            NewsletterAutomationQueue.status == "pending",
+            NewsletterAutomationQueue.scheduled_at <= now
+        ).all()
+
+        if not pending:
+            return
+
+        logger.info(f"Processing {len(pending)} items from the automation queue...")
+
+        for item in pending:
+            try:
+                # Fetch related data
+                subscriber = self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.id == item.subscriber_id).first()
+                automation = self.db.query(NewsletterAutomation).filter(NewsletterAutomation.id == item.automation_id).first()
+                
+                if not subscriber or not subscriber.is_active:
+                    logger.warning(f"Skipping queue item {item.id}: Subscriber not found or inactive.")
+                    item.status = "canceled"
+                    continue
+                
+                if not automation or not automation.is_active:
+                    logger.warning(f"Skipping queue item {item.id}: Automation disabled or deleted.")
+                    item.status = "canceled"
+                    continue
+
+                # Send the email
+                await self._send_content_email(subscriber, automation.template_id, is_automation=True)
+                
+                # Update queue status
+                item.status = "sent"
+                item.sent_at = datetime.now(timezone.utc)
+                logger.info(f"Successfully processed automation '{automation.name}' for {subscriber.email}")
+
+            except Exception as e:
+                logger.error(f"Failed to process queue item {item.id}: {str(e)}")
+                item.status = "failed"
+            
+            self.db.commit()
 
     async def send_weekly_newsletter(self) -> Dict[str, Any]:
         """Manually trigger or schedule the weekly update (used by scheduler)"""
@@ -401,6 +451,30 @@ class NewsletterService:
             }
         except Exception as e:
             raise Exception(f"Failed to get subscriber stats: {str(e)}")
+
+    def get_automation_stats(self) -> Dict[str, Any]:
+        """Get stats for the automation system"""
+        try:
+            total_sent = self.db.query(NewsletterAutomationQueue).filter(
+                NewsletterAutomationQueue.status == "sent"
+            ).count()
+            
+            pending = self.db.query(NewsletterAutomationQueue).filter(
+                NewsletterAutomationQueue.status == "pending"
+            ).count()
+            
+            active_automations = self.db.query(NewsletterAutomation).filter(
+                NewsletterAutomation.is_active == True
+            ).count()
+
+            return {
+                "total_sent": total_sent,
+                "pending_queue": pending,
+                "active_workflows": active_automations
+            }
+        except Exception as e:
+            logger.error(f"Automation stats failed: {e}")
+            return {"total_sent": 0, "pending_queue": 0, "active_workflows": 0}
 
     async def _send_content_email(self, subscriber: NewsletterSubscriber, template_id: int, is_automation: bool = False, background_tasks: Optional[BackgroundTasks] = None):
         """Helper to send an email based on a Template ID"""

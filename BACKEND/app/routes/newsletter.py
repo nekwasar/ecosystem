@@ -578,6 +578,15 @@ async def get_automations(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@router.get("/admin/automations/stats")
+async def get_automation_stats(db: Session = Depends(get_db)):
+    """Get automation monitoring stats"""
+    try:
+        service = NewsletterService(db)
+        return {"success": True, "stats": service.get_automation_stats()}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
 @router.post("/admin/automations")
 async def create_automation(
     name: str = Form(...),

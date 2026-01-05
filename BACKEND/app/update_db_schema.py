@@ -81,6 +81,15 @@ def update_schema():
         else:
             print("   ⚠️ system_settings missing even after create_all?")
 
+        # 4. newsletter_automation_queue
+        if not inspector.has_table("newsletter_automation_queue"):
+             print("   ➕ Creating newsletter_automation_queue table...")
+             # Since Base.metadata.create_all was called at the top, it should exist now
+             # But we double check or force it if needed.
+             Base.metadata.create_all(bind=engine, tables=[NewsletterAutomationQueue.__table__])
+             connection.commit()
+             print("   ✅ newsletter_automation_queue table created")
+
     print("✅ Database schema updated successfully!")
 
 if __name__ == "__main__":

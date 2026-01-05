@@ -82,11 +82,21 @@
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-100 dark:border-gray-700">
                 <div class="flex items-center justify-between mb-4">
                     <div class="p-3 bg-purple-100 dark:bg-purple-900/50 rounded-lg">
-                        <i class="ph-bold ph-envelope-simple-open text-2xl text-purple-600 dark:text-purple-400"></i>
+                        <i class="ph-bold ph-hourglass text-2xl text-purple-600 dark:text-purple-400"></i>
                     </div>
                 </div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="statTotalSent">-</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">Emails Sent (Target)</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="statPendingQueue">0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Queue (Pending)</div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-3 bg-green-100 dark:bg-green-900/50 rounded-lg">
+                        <i class="ph-bold ph-check-circle text-2xl text-green-600 dark:text-green-400"></i>
+                    </div>
+                </div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white" id="statHistorySent">0</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400">Total Auto-Sent</div>
             </div>
         </div>
 
@@ -188,7 +198,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Trigger</label>
-                        <select name="trigger"
+                        <select name="trigger_type"
                             class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                             <option value="welcome">New Subscriber</option>
                         </select>
@@ -228,8 +238,19 @@
         document.addEventListener('DOMContentLoaded', init);
 
         async function init() {
-            await Promise.all([fetchAutomations(), fetchTemplates()]);
+            await Promise.all([fetchAutomations(), fetchTemplates(), fetchStats()]);
             render();
+        }
+
+        async function fetchStats() {
+            try {
+                const res = await fetch('/api/newsletter/admin/automations/stats');
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('statPendingQueue').innerText = data.stats.pending_queue;
+                    document.getElementById('statHistorySent').innerText = data.stats.total_sent;
+                }
+            } catch (e) { console.error('Stats Error:', e); }
         }
 
         async function fetchAutomations() {
