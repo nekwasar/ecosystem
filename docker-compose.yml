@@ -31,6 +31,7 @@ services:
       - API_PORT=8000
       - BREVO_API_KEY=${BREVO_API_KEY}
       - SENDER_EMAIL=${SENDER_EMAIL}
+      - TZ=Europe/London
 
 volumes:
   postgres_data:

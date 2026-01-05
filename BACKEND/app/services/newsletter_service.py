@@ -208,7 +208,7 @@ class NewsletterService:
                 await self._execute_campaign_send(campaign.id)
             else:
                 diff = sch_at - now
-                logger.debug(f"Campaign {campaign.id} still in future. {diff} remaining.")
+                logger.info(f"Campaign {campaign.id} still in future. {diff} remaining.")
 
     async def send_weekly_newsletter(self) -> Dict[str, Any]:
         """Manually trigger or schedule the weekly update (used by scheduler)"""
