@@ -471,7 +471,7 @@
 
   <!-- Newsletter Slide-in (Behavioral Trigger) -->
   <div id="newsletterSlideIn"
-    class="fixed bottom-60 right-10 z-[9998] w-[95%] max-w-[540px] translate-x-[120%] opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
+    class="fixed bottom-[420px] md:bottom-60 right-1/2 translate-x-1/2 md:right-10 md:translate-x-0 z-[9998] w-[95%] max-w-[540px] translate-y-20 opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
     <div
       class="bg-base-tint/60 backdrop-blur-3xl border border-white/10 dark:border-white/5 rounded-[2.5rem] p-10 md:p-12 shadow-[0_50px_150px_rgba(0,0,0,0.7)] relative overflow-hidden group">
       <!-- Decorative background orb with increased size -->
@@ -573,7 +573,7 @@
           const scrollPct = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
           if (scrollPct > 0.5) { // 50% scroll
             triggered = true;
-            slideIn.classList.remove('translate-x-[120%]', 'opacity-0', 'pointer-events-none');
+            slideIn.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
             window.removeEventListener('scroll', onScroll);
           }
         };
@@ -583,7 +583,7 @@
         // --- 3. Close Logic ---
         closeBtn?.addEventListener('click', () => {
           localStorage.setItem('nekwasar_newsletter_interacted', 'true'); // Persistent dismissal
-          slideIn.classList.add('translate-x-[120%]', 'opacity-0', 'pointer-events-none');
+          slideIn.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
         });
 
         // --- 4. Submission Logic ---
@@ -614,7 +614,7 @@
               message.classList.remove('hidden');
 
               setTimeout(() => {
-                slideIn.classList.add('translate-x-[120%]', 'opacity-0', 'pointer-events-none');
+                slideIn.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
               }, 3000);
             } else {
               throw new Error(data.message || 'Subscription failed');
