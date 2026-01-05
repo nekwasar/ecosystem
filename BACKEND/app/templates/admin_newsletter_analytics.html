@@ -307,6 +307,7 @@
     <script>
         var engagementChart = engagementChart || null;
         var deviceChart = deviceChart || null;
+        var analyticsRefreshInterval = analyticsRefreshInterval || null;
 
         async function init() {
             // Check for dark mode (Robustness)
@@ -318,12 +319,20 @@
 
             await loadAnalytics();
 
-            // Auto refresh every 2 minutes
-            setInterval(loadAnalytics, 120000);
+            // Auto refresh every 2 minutes - Clear existing to prevent duplicates
+            if (analyticsRefreshInterval) clearInterval(analyticsRefreshInterval);
+            analyticsRefreshInterval = setInterval(loadAnalytics, 120000);
         }
 
         async function loadAnalytics() {
-            const days = document.getElementById('timeRange').value;
+            const timeRangeEl = document.getElementById('timeRange');
+            if (!timeRangeEl) {
+                // If element is missing, we likely navigated away. Clear interval.
+                if (analyticsRefreshInterval) clearInterval(analyticsRefreshInterval);
+                return;
+            }
+
+            const days = timeRangeEl.value;
             try {
                 const res = await fetch(`/api/newsletter/admin/analytics?days=${days}`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
