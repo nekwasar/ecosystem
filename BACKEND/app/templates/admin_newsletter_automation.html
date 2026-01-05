@@ -121,27 +121,33 @@
     class="bg-[#f8fafc] dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        <!-- Premium Header Area -->
+        <!-- Header with Dual Buttons -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
             <div>
-                <div class="flex items-center gap-2 mb-2">
-                    <span
-                        class="px-2 py-0.5 bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-bold rounded-full uppercase tracking-wider">Automated
-                        Workflows</span>
-                </div>
-                <h1 class="text-4xl font-extrabold tracking-tight">Email Automations</h1>
-                <p class="text-slate-500 dark:text-slate-400 mt-2 text-lg">Set up triggers that run your newsletter on
-                    autopilot.</p>
+                <h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+                    Marketing <span class="text-brand-600">Automation</span>
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-lg">Manage flows, welcome sequences, and triggered
+                    events.</p>
             </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Button: Default Workflow -->
+                <button onclick="openCreateStep(1)"
+                    class="group relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-white rounded-xl bg-gradient-to-br from-brand-600 to-indigo-600 focus:ring-4 focus:outline-none focus:ring-brand-300 dark:focus:ring-brand-800 transition-all duration-300 hover:scale-105 active:scale-95">
+                    <span
+                        class="relative px-6 py-3 transition-all ease-in duration-75 bg-brand-600 dark:bg-brand-600 rounded-xl group-hover:bg-opacity-0 flex items-center gap-2">
+                        <i class="ph-bold ph-gear-six text-xl"></i>
+                        <span class="text-base font-semibold">Set Default Workflow</span>
+                    </span>
+                </button>
 
-            <button onclick="openCreateStep(1)"
-                class="group relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-white rounded-xl bg-gradient-to-br from-brand-600 to-indigo-600 group-hover:from-brand-600 group-hover:to-indigo-600 focus:ring-4 focus:outline-none focus:ring-brand-300 dark:focus:ring-brand-800 transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]">
-                <span
-                    class="relative px-6 py-3 transition-all ease-in duration-75 bg-brand-600 dark:bg-brand-600 rounded-xl group-hover:bg-opacity-0 flex items-center gap-2">
+                <!-- Button: Targeted Workflow (Coming Later) -->
+                <button onclick="alert('Targeted Workflows with advanced segmentation are coming in the next update!')"
+                    class="px-6 py-3.5 border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-bold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-2">
                     <i class="ph-bold ph-plus-circle text-xl"></i>
-                    <span class="text-base font-semibold">Create New Workflow</span>
-                </span>
-            </button>
+                    <span>Create Targeted Workflow</span>
+                </button>
+            </div>
         </div>
 
         <!-- Dashboard Stats -->
@@ -239,7 +245,7 @@
         <div class="flex flex-col h-full">
             <!-- Modal Header -->
             <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-                <h3 class="text-xl font-bold" id="modalTitle">Set Up New Workflow</h3>
+                <h3 class="text-xl font-bold" id="modalTitle">Default Workflow Setup</h3>
                 <button onclick="closeModal()"
                     class="w-10 h-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
                     <i class="ph-bold ph-x text-xl"></i>
@@ -279,7 +285,8 @@
                         </div>
                     </div>
 
-                    <!-- Trigger: Segment Added -->
+                    <!-- Trigger: Segment Added (Commented out) -->
+                    <!-- 
                     <div onclick="selectTrigger('segment_added')" id="trigger-segment_added"
                         class="trigger-card p-5 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex flex-col gap-3 group">
                         <div
@@ -293,12 +300,14 @@
                                     class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-400 rounded-md">Coming
                                     Soon</span>
                             </h4>
-                            <p class="text-sm text-slate-400 dark:text-slate-500 leading-relaxed italic">Targeted
-                                workflows based on user behavior or tags.</p>
+                            <p class="text-sm text-slate-400 dark:text-slate-500 leading-relaxed italic">Trigger when
+                                a user is moved to a specific mailing segment.</p>
                         </div>
                     </div>
+                    -->
 
-                    <!-- Trigger: Click -->
+                    <!-- Trigger: Click (Commented out) -->
+                    <!-- 
                     <div onclick="selectTrigger('link_click')" id="trigger-link_click"
                         class="trigger-card p-5 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex flex-col gap-3 group">
                         <div
@@ -316,6 +325,7 @@
                                 based on what users click in your emails.</p>
                         </div>
                     </div>
+                    -->
                 </div>
                 <div class="mt-8 flex justify-end">
                     <button onclick="goToStep(2)" id="nextBtn" disabled
@@ -359,6 +369,11 @@
                                 class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 appearance-none focus:border-brand-500 focus:outline-none transition-colors">
                                 <option value="">Loading templates...</option>
                             </select>
+                            <div id="templateError"
+                                class="hidden text-xs text-rose-500 font-medium flex items-center gap-1 mt-1">
+                                <i class="ph-bold ph-warning-circle"></i>
+                                <span id="templateErrorMsg">Error loading templates</span>
+                            </div>
                         </div>
                     </div>
 
@@ -378,20 +393,34 @@
     </dialog>
 
     <script>
-        let allAutomations = [];
-        let allTemplates = [];
-        let selectedTriggerType = null;
-        const modal = document.getElementById('createModal');
+        console.log('🚀 AUTOMATION SCRIPT INITIALIZING...');
 
-        document.addEventListener('DOMContentLoaded', init);
+        var allAutomations = [];
+        var allTemplates = [];
+        var selectedTriggerType = null;
+        var modal = document.getElementById('createModal');
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            console.log('✅ Document already loaded - Triggering Init immediately');
+            init();
+        }
 
         async function init() {
-            await Promise.all([fetchAutomations(), fetchTemplates(), fetchStats()]);
-            render();
+            // Run all fetches, but don't let one failure block everything
+            try {
+                await Promise.allSettled([fetchAutomations(), fetchTemplates(), fetchStats()]);
+                render();
+            } catch (e) {
+                console.error('Init error:', e);
+                render(); // Try to render anyway
+            }
         }
 
         async function fetchStats() {
             try {
+                console.log('📊 [Dashboard] Fetching Stats...');
                 const res = await fetch('/api/newsletter/admin/automations/stats', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
                 });
@@ -399,52 +428,91 @@
                 if (data.success) {
                     document.getElementById('statPendingQueue').innerText = data.stats.pending_queue;
                     document.getElementById('statHistorySent').innerText = data.stats.total_sent;
+                    console.log('📊 Stats Updated:', data.stats);
+                } else {
+                    console.error('📊 Stats API Error:', data.detail);
                 }
             } catch (e) {
-                console.error('Stats Error:', e);
+                console.error('📊 Stats Fetch Exception:', e);
             }
         }
 
         async function fetchAutomations() {
             try {
+                console.log('🤖 [Dashboard] Fetching Automations...');
                 const res = await fetch('/api/newsletter/admin/automations', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
                 });
                 const data = await res.json();
-                if (data.success) allAutomations = data.automations || [];
+                if (data.success) {
+                    allAutomations = data.automations || [];
+                    console.log('🤖 Automations Loaded:', allAutomations.length);
+                } else {
+                    console.error('🤖 Automations API Error:', data.detail);
+                }
 
                 document.getElementById('statTotalAutomations').innerText = allAutomations.length;
                 document.getElementById('statActiveAutomations').innerText = allAutomations.filter(a => a.is_active).length;
             } catch (e) {
-                console.error('Fetch Error:', e);
+                console.error('🤖 Automations Fetch Exception:', e);
             }
         }
 
         async function fetchTemplates() {
             const sel = document.getElementById('templateSelect');
+            const errDiv = document.getElementById('templateError');
+            const errMsg = document.getElementById('templateErrorMsg');
+
             try {
+                console.group('🔧 [AutomationWizard] Fetching Templates');
+                console.log('Endpoint: /api/newsletter/admin/templates');
+
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.warn('No token found in localStorage!');
+                }
+
                 const res = await fetch('/api/newsletter/admin/templates', {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                    headers: { 'Authorization': `Bearer ${token || ''}` }
                 });
-                if (!res.ok) throw new Error('Failed to fetch templates');
+
+                console.log('HTTP Status:', res.status);
+
+                if (!res.ok) {
+                    const errBody = await res.text();
+                    console.error('Fetch Failed. Body:', errBody);
+                    throw new Error(`Server returned ${res.status}: ${errBody.substring(0, 100)}`);
+                }
 
                 const data = await res.json();
+                console.log('Data Received:', data);
+
                 if (data.success) {
                     allTemplates = data.templates || [];
+                    console.log('Template Count:', allTemplates.length);
+
                     if (allTemplates.length === 0) {
                         sel.innerHTML = '<option value="">No templates found</option>';
-                        return;
+                        errDiv.classList.remove('hidden');
+                        errMsg.innerText = "You haven't created any templates yet.";
+                    } else {
+                        sel.innerHTML = '<option value="">Choose a template...</option>';
+                        allTemplates.forEach(t => {
+                            sel.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+                        });
+                        errDiv.classList.add('hidden');
                     }
-                    sel.innerHTML = '<option value="">Choose a template...</option>';
-                    allTemplates.forEach(t => {
-                        sel.innerHTML += `<option value="${t.id}">${t.name}</option>`;
-                    });
                 } else {
-                    sel.innerHTML = `<option value="">Error: ${data.detail || 'Access denied'}</option>`;
+                    console.error('API Error:', data.detail || 'Access denied');
+                    throw new Error(data.detail || 'API returned success: false');
                 }
             } catch (e) {
-                console.error(e);
-                sel.innerHTML = '<option value="">Connection error</option>';
+                console.error('🚨 fetchTemplates Exception:', e);
+                sel.innerHTML = `<option value="">Fetch Failed</option>`;
+                errDiv.classList.remove('hidden');
+                errMsg.innerText = `Error: ${e.message}`;
+            } finally {
+                console.groupEnd();
             }
         }
 
@@ -460,7 +528,7 @@
 
             allAutomations.forEach(auto => {
                 const tpl = allTemplates.find(t => t.id === auto.template_id);
-                const tplName = tpl ? tpl.name : 'No Template Set';
+                const tplName = tpl ? tpl.name : `Template #${auto.template_id} (Unresolved)`;
 
                 // Icon Logic
                 let triggerIcon = 'ph-bold ph-robot';

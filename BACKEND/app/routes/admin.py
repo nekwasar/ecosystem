@@ -38,28 +38,8 @@ async def admin_dashboard(request: Request):
     """Serve admin dashboard HTML page - Authentication handled by JavaScript"""
     return templates.TemplateResponse("admin_base.html", {"request": request})
 
-@router.get("/admin/contact", response_class=HTMLResponse)
-@router.get("/admin/contact/", response_class=HTMLResponse)
-async def admin_contact(request: Request):
-    """Serve admin contact management - Authentication handled by JavaScript"""
-    return templates.TemplateResponse("admin_contact.html", {"request": request})
-
-@router.get("/admin/blog/editor")
-@router.get("/admin/blog/editor/")
-async def admin_blog_editor_page(request: Request):
-    """Serve standalone blog editor page - Authentication handled by JavaScript"""
-    return templates.TemplateResponse("admin_blog_editor.html", {"request": request})
-
-@router.get("/admin/blog/tags")
-@router.get("/admin/blog/tags/")
-async def admin_blog_tags_page(request: Request):
-    """Serve blog tags management page - Authentication handled by JavaScript"""
-    return templates.TemplateResponse("admin_blog_tags.html", {"request": request})
-
-@router.get("/admin/newsletter/templates", response_class=HTMLResponse)
-async def admin_newsletter_templates_page(request: Request):
-    """Serve newsletter templates page"""
-    return templates.TemplateResponse("admin_newsletter_templates.html", {"request": request})
+# Removed redundant explicit routes for partials. 
+# These are now handled by the dynamic route below serving admin_base.html.
 
 @router.get("/admin/{section}/{page}", response_class=HTMLResponse)
 async def admin_section_page(request: Request, section: str, page: str):
