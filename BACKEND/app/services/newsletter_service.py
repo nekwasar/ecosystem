@@ -465,7 +465,7 @@ class NewsletterService:
         from sqlalchemy import func
         from models.blog import NewsletterEvent, NewsletterCampaign, NewsletterAutomation
         
-        since = datetime.now() - timedelta(days=days)
+        since = datetime.now(timezone.utc) - timedelta(days=days)
         
         # 1. Total Metrics
         total_delivered = self.db.query(NewsletterEvent).filter(

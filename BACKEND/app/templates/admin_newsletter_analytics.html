@@ -126,17 +126,32 @@
                 <p class="text-slate-500 dark:text-slate-400 text-lg">Real-time performance metrics and subscriber
                     engagement.</p>
             </div>
-            <div class="flex items-center gap-3">
-                <select id="timeRange" onchange="loadAnalytics()"
-                    class="px-5 py-3 rounded-xl border-2 border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800 text-sm font-bold focus:border-brand-500 outline-none transition-all">
-                    <option value="7">Last 7 Days</option>
-                    <option value="30" selected>Last 30 Days</option>
-                    <option value="90">Last 90 Days</option>
-                </select>
-                <button onclick="loadAnalytics()"
-                    class="p-3 bg-white dark:bg-slate-800 border-2 border-slate-200/50 dark:border-slate-700/50 rounded-xl hover:text-brand-500 transition-colors">
-                    <i class="ph-bold ph-arrow-clockwise text-xl"></i>
-                </button>
+            <div class="flex flex-col items-end gap-2">
+                <div
+                    class="flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[10px] font-black uppercase tracking-widest">Live Sync Alpha</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-end">
+                        <select id="timeRange" onchange="loadAnalytics()"
+                            class="px-5 py-3 rounded-xl border-2 border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800 text-sm font-bold focus:border-brand-500 outline-none transition-all">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30" selected>Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                        <span id="lastUpdated"
+                            class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Updating...</span>
+                    </div>
+                    <button onclick="loadAnalytics()" id="refreshBtn"
+                        class="p-3 bg-white dark:bg-slate-800 border-2 border-slate-200/50 dark:border-slate-700/50 rounded-xl hover:text-brand-500 transition-colors">
+                        <i class="ph-bold ph-arrow-clockwise text-xl" id="refreshIcon"></i>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -319,18 +334,21 @@
 
             await loadAnalytics();
 
-            // Auto refresh every 2 minutes - Clear existing to prevent duplicates
+            // Auto refresh every 15 seconds for a dynamic feel
             if (analyticsRefreshInterval) clearInterval(analyticsRefreshInterval);
-            analyticsRefreshInterval = setInterval(loadAnalytics, 120000);
+            analyticsRefreshInterval = setInterval(loadAnalytics, 15000);
         }
 
         async function loadAnalytics() {
             const timeRangeEl = document.getElementById('timeRange');
+            const refreshIcon = document.getElementById('refreshIcon');
+
             if (!timeRangeEl) {
-                // If element is missing, we likely navigated away. Clear interval.
                 if (analyticsRefreshInterval) clearInterval(analyticsRefreshInterval);
                 return;
             }
+
+            if (refreshIcon) refreshIcon.classList.add('ph-spin');
 
             const days = timeRangeEl.value;
             try {
@@ -341,11 +359,17 @@
 
                 if (response.success) {
                     updateDashboard(response.data, response.realtime);
+                    const lu = document.getElementById('lastUpdated');
+                    if (lu) lu.innerText = 'Last updated: ' + new Date().toLocaleTimeString();
                 }
             } catch (e) {
                 console.error('Failed to load analytics:', e);
+            } finally {
+                if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('ph-spin'), 500);
             }
         }
+
+
 
         function updateDashboard(data, realtime) {
             // 1. Summary Stats
