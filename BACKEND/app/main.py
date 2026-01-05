@@ -311,7 +311,7 @@ async def serve_sitemap(request: Request, db: Session = Depends(get_db)):
             
         # Dynamic Posts
         for post in posts:
-            lastmod = post.updated_at.strftime('%Y-%m-%d') if post.updated_at else datetime.utcnow().strftime('%Y-%m-%d')
+            lastmod = post.published_at.strftime('%Y-%m-%d') if post.published_at else datetime.utcnow().strftime('%Y-%m-%d')
             xml_content += f'  <url>\n    <loc>https://blog.nekwasar.com/{post.slug}</loc>\n    <lastmod>{lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n'
             
         xml_content += '</urlset>'
