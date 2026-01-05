@@ -444,6 +444,29 @@ async def blog_post_by_slug(request: Request, slug: str, db: Session = Depends(g
         }
     )
 
+@app.get("/privacy", response_class=HTMLResponse)
+@app.get("/privacy/", response_class=HTMLResponse)
+async def blog_privacy(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "blog.nekwasar.com" and host != "localhost:8000":
+        return RedirectResponse(url=f"https://blog.nekwasar.com/privacy")
+    return blog_templates.TemplateResponse(
+        "privacy.html",
+        {"request": request, "current_year": datetime.utcnow().year, "post_data": DEFAULT_POST_DATA}
+    )
+
+@app.get("/terms", response_class=HTMLResponse)
+@app.get("/terms/", response_class=HTMLResponse)
+async def blog_terms(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "blog.nekwasar.com" and host != "localhost:8000":
+        return RedirectResponse(url=f"https://blog.nekwasar.com/terms")
+    # For now, reuse privacy or create a simple one. Let's redirect to privacy or return simple HTML.
+    return blog_templates.TemplateResponse(
+        "privacy.html", # Reusing privacy template for terms as a placeholder, or could create separate
+        {"request": request, "current_year": datetime.utcnow().year, "post_data": DEFAULT_POST_DATA}
+    )
+
 # Routes for specific blog templates
 @app.get("/template1", response_class=HTMLResponse)
 @app.get("/template1/", response_class=HTMLResponse)
