@@ -299,23 +299,36 @@ async def serve_sitemap(request: Request, db: Session = Depends(get_db)):
     # 1. Handle Dynamic Blog Sitemap
     if host == "blog.nekwasar.com":
         from models.blog import BlogPost
+        from xml.sax.saxutils import escape
         posts = db.query(BlogPost).filter(BlogPost.published_at.isnot(None)).all()
         
-        xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
-        xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        lines = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        ]
         
         # Static Blog Pages
         for route in ['', 'latest', 'popular', 'featured', 'others', 'topics']:
             url = f"https://blog.nekwasar.com/{route}" if route else "https://blog.nekwasar.com/"
-            xml_content += f'  <url>\n    <loc>{url}</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n'
+            lines.append('  <url>')
+            lines.append(f'    <loc>{url}</loc>')
+            lines.append('    <changefreq>daily</changefreq>')
+            lines.append('    <priority>0.8</priority>')
+            lines.append('  </url>')
             
         # Dynamic Posts
         for post in posts:
             lastmod = post.published_at.strftime('%Y-%m-%d') if post.published_at else datetime.utcnow().strftime('%Y-%m-%d')
-            xml_content += f'  <url>\n    <loc>https://blog.nekwasar.com/{post.slug}</loc>\n    <lastmod>{lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n'
+            safe_slug = escape(post.slug)
+            lines.append('  <url>')
+            lines.append(f'    <loc>https://blog.nekwasar.com/{safe_slug}</loc>')
+            lines.append(f'    <lastmod>{lastmod}</lastmod>')
+            lines.append('    <changefreq>weekly</changefreq>')
+            lines.append('    <priority>0.6</priority>')
+            lines.append('  </url>')
             
-        xml_content += '</urlset>'
-        return Response(content=xml_content, media_type="application/xml")
+        lines.append('</urlset>')
+        return Response(content="\n".join(lines), media_type="application/xml")
 
     # 2. Handle Portfolio & Store Static Sitemaps
     folder = "portfolio" if host == "nekwasar.com" or host == "localhost:8000" else "store" if host == "store.nekwasar.com" else "portfolio"
