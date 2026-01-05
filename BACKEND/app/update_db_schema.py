@@ -81,11 +81,26 @@ def update_schema():
         else:
             print("   ⚠️ system_settings missing even after create_all?")
 
-        # 4. newsletter_automation_queue
+        # 4. newsletter_automations
+        if inspector.has_table("newsletter_automations"):
+            columns = [c['name'] for c in inspector.get_columns('newsletter_automations')]
+            if 'subject' not in columns:
+                 print("   ➕ Adding subject to newsletter_automations")
+                 connection.execute(text("ALTER TABLE newsletter_automations ADD COLUMN subject VARCHAR(255)"))
+                 connection.commit()
+            
+            if 'sender_name' not in columns:
+                 print("   ➕ Adding sender_name to newsletter_automations")
+                 connection.execute(text("ALTER TABLE newsletter_automations ADD COLUMN sender_name VARCHAR(100)"))
+                 connection.commit()
+
+        # 5. newsletter_automation_queue
         if not inspector.has_table("newsletter_automation_queue"):
              print("   ➕ Creating newsletter_automation_queue table...")
              # Since Base.metadata.create_all was called at the top, it should exist now
              # But we double check or force it if needed.
+             # Note: NewsletterAutomationQueue must be imported
+             from models.blog import NewsletterAutomationQueue
              Base.metadata.create_all(bind=engine, tables=[NewsletterAutomationQueue.__table__])
              connection.commit()
              print("   ✅ newsletter_automation_queue table created")

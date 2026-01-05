@@ -247,7 +247,13 @@ class NewsletterService:
                     continue
 
                 # Send the email
-                await self._send_content_email(subscriber, automation.template_id, is_automation=True)
+                await self._send_content_email(
+                    subscriber, 
+                    automation.template_id, 
+                    is_automation=True, 
+                    subject_override=automation.subject,
+                    sender_name_override=automation.sender_name
+                )
                 
                 # Update queue status
                 item.status = "sent"
@@ -476,7 +482,7 @@ class NewsletterService:
             logger.error(f"Automation stats failed: {e}")
             return {"total_sent": 0, "pending_queue": 0, "active_workflows": 0}
 
-    async def _send_content_email(self, subscriber: NewsletterSubscriber, template_id: int, is_automation: bool = False, background_tasks: Optional[BackgroundTasks] = None):
+    async def _send_content_email(self, subscriber: NewsletterSubscriber, template_id: int, is_automation: bool = False, background_tasks: Optional[BackgroundTasks] = None, subject_override: Optional[str] = None, sender_name_override: Optional[str] = None):
         """Helper to send an email based on a Template ID"""
         template = self.get_template(template_id)
         if not template:
@@ -488,7 +494,12 @@ class NewsletterService:
         unsubscribe_url = f"{site_url}/api/newsletter/unsubscribe?email={subscriber.email}"
         
         # Render
-        subject = template.subject_template
+        subject = subject_override or template.subject_template
+        
+        # Prepare sender override if name is provided
+        sender_override = None
+        if sender_name_override:
+            sender_override = {"name": sender_name_override, "email": settings.get("sender_email", email_service.sender["email"])}
         content = template.content_template.replace("{{name}}", subscriber.name).replace("{{unsubscribe_url}}", unsubscribe_url)
 
         if background_tasks:
@@ -497,14 +508,16 @@ class NewsletterService:
                 to_email=subscriber.email,
                 subject=subject,
                 html_content=content,
-                to_name=subscriber.name
+                to_name=subscriber.name,
+                sender=sender_override
             )
         else:
             email_service.send_transactional_email(
                 to_email=subscriber.email,
                 subject=subject,
                 html_content=content,
-                to_name=subscriber.name
+                to_name=subscriber.name,
+                sender=sender_override
             )
 
 
@@ -567,7 +580,7 @@ class NewsletterService:
             raise Exception(f"Failed to save settings: {str(e)}")
 
     # --- Automation Management ---
-    async def create_automation(self, name: str, trigger_type: str, template_id: int, delay_hours: int = 0) -> NewsletterAutomation:
+    async def create_automation(self, name: str, trigger_type: str, template_id: int, delay_hours: int = 0, subject: Optional[str] = None, sender_name: Optional[str] = None) -> NewsletterAutomation:
         """Create a new automation rule"""
         try:
             # Deactivate existing automations of same type if we want single-active rule per type logic?
@@ -585,6 +598,8 @@ class NewsletterService:
                 trigger_type=trigger_type,
                 template_id=template_id,
                 delay_hours=delay_hours,
+                subject=subject,
+                sender_name=sender_name,
                 is_active=True
             )
             self.db.add(auto)

@@ -590,6 +590,8 @@ async def get_automation_stats(db: Session = Depends(get_db)):
 @router.post("/admin/automations")
 async def create_automation(
     name: str = Form(...),
+    subject: str = Form(...),
+    sender_name: str = Form(...),
     trigger_type: str = Form(...),
     template_id: int = Form(...),
     delay_hours: int = Form(0),
@@ -598,7 +600,7 @@ async def create_automation(
     """Create new automation"""
     try:
         service = NewsletterService(db)
-        auto = await service.create_automation(name, trigger_type, template_id, delay_hours)
+        auto = await service.create_automation(name, trigger_type, template_id, delay_hours, subject, sender_name)
         return {"success": True, "message": "Automation created", "automation_id": auto.id}
     except Exception as e:
         raise HTTPException(500, str(e))

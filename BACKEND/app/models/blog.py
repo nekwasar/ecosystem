@@ -187,6 +187,8 @@ class NewsletterAutomation(Base):
     name = Column(String(100), nullable=False)
     trigger_type = Column(String(50), nullable=False)  # welcome, abandoned_cart, etc.
     template_id = Column(Integer, ForeignKey("newsletter_templates.id"), nullable=True)
+    subject = Column(String(255), nullable=True) # Per-automation subject override
+    sender_name = Column(String(100), nullable=True) # Per-automation sender name override
     delay_hours = Column(Integer, default=0)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
