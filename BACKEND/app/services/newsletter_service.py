@@ -252,7 +252,8 @@ class NewsletterService:
                     automation.template_id, 
                     is_automation=True, 
                     subject_override=automation.subject,
-                    sender_name_override=automation.sender_name
+                    sender_name_override=automation.sender_name,
+                    automation_id=automation.id
                 )
                 
                 # Update queue status
@@ -458,6 +459,98 @@ class NewsletterService:
         except Exception as e:
             raise Exception(f"Failed to get subscriber stats: {str(e)}")
 
+    # --- Dashboard & Analytics ---
+    def get_detailed_analytics(self, days: int = 30) -> Dict[str, Any]:
+        """Aggregate data for the newsletter analytics dashboard"""
+        from sqlalchemy import func
+        from models.blog import NewsletterEvent, NewsletterCampaign, NewsletterAutomation
+        
+        since = datetime.now() - timedelta(days=days)
+        
+        # 1. Total Metrics
+        total_delivered = self.db.query(NewsletterEvent).filter(
+            NewsletterEvent.event_type.in_(['delivered', 'sent']),
+            NewsletterEvent.timestamp >= since
+        ).count()
+        
+        unique_opens = self.db.query(func.count(func.distinct(NewsletterEvent.subscriber_email))).filter(
+            NewsletterEvent.event_type.in_(['opened', 'unique_opened']),
+            NewsletterEvent.timestamp >= since
+        ).scalar() or 0
+        
+        total_clicks = self.db.query(NewsletterEvent).filter(
+            NewsletterEvent.event_type.in_(['click', 'valid_click']),
+            NewsletterEvent.timestamp >= since
+        ).count()
+        
+        total_bounces = self.db.query(NewsletterEvent).filter(
+            NewsletterEvent.event_type.like('%bounce%'),
+            NewsletterEvent.timestamp >= since
+        ).count()
+
+        # 2. Time Series Data (Daily)
+        daily_stats = self.db.query(
+            func.date(NewsletterEvent.timestamp).label('date'),
+            func.count(NewsletterEvent.id).filter(NewsletterEvent.event_type.in_(['opened', 'unique_opened'])).label('opens'),
+            func.count(NewsletterEvent.id).filter(NewsletterEvent.event_type.in_(['click', 'valid_click'])).label('clicks')
+        ).filter(NewsletterEvent.timestamp >= since).group_by('date').all()
+
+        # 3. Top Clicked Links
+        top_links = self.db.query(
+            NewsletterEvent.url,
+            func.count(NewsletterEvent.id).label('click_count')
+        ).filter(
+            NewsletterEvent.event_type.in_(['click', 'valid_click']),
+            NewsletterEvent.url.isnot(None),
+            NewsletterEvent.timestamp >= since
+        ).group_by(NewsletterEvent.url).order_by(func.count(NewsletterEvent.id).desc()).limit(10).all()
+
+        # 4. Campaign Performance
+        campaign_perf = self.db.query(
+            NewsletterCampaign.name,
+            NewsletterCampaign.subject,
+            NewsletterCampaign.open_count,
+            NewsletterCampaign.click_count,
+            NewsletterCampaign.recipient_count
+        ).filter(NewsletterCampaign.sent_at >= since).all()
+
+        # 5. Device Breakdown (Basic UA parsing)
+        # In a real app we'd use a UA parser, but let's do simple keyword search for now
+        ua_stats = {
+            "mobile": self.db.query(NewsletterEvent).filter(NewsletterEvent.user_agent.ilike('%mobile%')).count(),
+            "desktop": self.db.query(NewsletterEvent).filter(NewsletterEvent.user_agent.notilike('%mobile%')).count()
+        }
+
+        return {
+            "summary": {
+                "delivered": total_delivered,
+                "opens": unique_opens,
+                "clicks": total_clicks,
+                "bounces": total_bounces,
+                "open_rate": round((unique_opens/total_delivered * 100), 1) if total_delivered > 0 else 0,
+                "click_rate": round((total_clicks/total_delivered * 100), 1) if total_delivered > 0 else 0
+            },
+            "trends": [{"date": str(s.date), "opens": s.opens, "clicks": s.clicks} for s in daily_stats],
+            "top_links": [{"url": l.url, "count": l.click_count} for l in top_links],
+            "campaigns": [{"name": c.name or c.subject, "opens": c.open_count, "clicks": c.click_count, "recipients": c.recipient_count} for c in campaign_perf],
+            "devices": ua_stats
+        }
+
+    def get_realtime_events(self, limit: int = 50):
+        """Get latest raw events for the live feed"""
+        from models.blog import NewsletterEvent
+        events = self.db.query(NewsletterEvent).order_by(NewsletterEvent.timestamp.desc()).limit(limit).all()
+        return [
+            {
+                "id": e.id,
+                "type": e.event_type,
+                "email": e.subscriber_email,
+                "time": e.timestamp.isoformat(),
+                "ip": e.ip,
+                "location": e.location
+            } for e in events
+        ]
+
     def get_automation_stats(self) -> Dict[str, Any]:
         """Get stats for the automation system"""
         try:
@@ -482,7 +575,7 @@ class NewsletterService:
             logger.error(f"Automation stats failed: {e}")
             return {"total_sent": 0, "pending_queue": 0, "active_workflows": 0}
 
-    async def _send_content_email(self, subscriber: NewsletterSubscriber, template_id: int, is_automation: bool = False, background_tasks: Optional[BackgroundTasks] = None, subject_override: Optional[str] = None, sender_name_override: Optional[str] = None):
+    async def _send_content_email(self, subscriber: NewsletterSubscriber, template_id: int, is_automation: bool = False, background_tasks: Optional[BackgroundTasks] = None, subject_override: Optional[str] = None, sender_name_override: Optional[str] = None, automation_id: Optional[int] = None):
         """Helper to send an email based on a Template ID"""
         template = self.get_template(template_id)
         if not template:
@@ -502,6 +595,11 @@ class NewsletterService:
             sender_override = {"name": sender_name_override, "email": settings.get("sender_email", email_service.sender["email"])}
         content = template.content_template.replace("{{name}}", subscriber.name).replace("{{unsubscribe_url}}", unsubscribe_url)
 
+        # Prepare tags for tracking
+        tags = []
+        if is_automation and automation_id:
+            tags.append(f"automation_{automation_id}")
+
         if background_tasks:
              background_tasks.add_task(
                 email_service.send_transactional_email,
@@ -509,7 +607,8 @@ class NewsletterService:
                 subject=subject,
                 html_content=content,
                 to_name=subscriber.name,
-                sender=sender_override
+                sender=sender_override,
+                tags=tags
             )
         else:
             email_service.send_transactional_email(
@@ -517,7 +616,8 @@ class NewsletterService:
                 subject=subject,
                 html_content=content,
                 to_name=subscriber.name,
-                sender=sender_override
+                sender=sender_override,
+                tags=tags
             )
 
 

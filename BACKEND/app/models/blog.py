@@ -203,6 +203,20 @@ class NewsletterAutomationQueue(Base):
     sent_at = Column(DateTime(timezone=True), nullable=True)
     status = Column(String(20), default="pending")  # pending, sent, failed
 
+class NewsletterEvent(Base):
+    __tablename__ = "newsletter_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    event_type = Column(String(50), nullable=False)  # sent, opened, clicked, bounced, unsubscribed
+    campaign_id = Column(Integer, ForeignKey("newsletter_campaigns.id", ondelete="CASCADE"), nullable=True)
+    automation_id = Column(Integer, ForeignKey("newsletter_automations.id", ondelete="CASCADE"), nullable=True)
+    subscriber_email = Column(String(255), nullable=False)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    ip = Column(String(45), nullable=True)
+    location = Column(String(100), nullable=True)
+    user_agent = Column(Text, nullable=True)
+    url = Column(Text, nullable=True)  # For click events
+
 # Search Models - Full-Text Search with FTS5
 # Note: FTS5 virtual tables need to be created manually in SQLite
 # We'll handle this in the database initialization

@@ -105,6 +105,14 @@ def update_schema():
              connection.commit()
              print("   ✅ newsletter_automation_queue table created")
 
+        # 6. newsletter_events
+        if not inspector.has_table("newsletter_events"):
+             print("   ➕ Creating newsletter_events table...")
+             from models.blog import NewsletterEvent
+             Base.metadata.create_all(bind=engine, tables=[NewsletterEvent.__table__])
+             connection.commit()
+             print("   ✅ newsletter_events table created")
+
     print("✅ Database schema updated successfully!")
 
 if __name__ == "__main__":

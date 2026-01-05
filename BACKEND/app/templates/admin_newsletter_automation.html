@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Automations | Newsletter Pro</title>
+    <script>
+        // Synchronous theme detection to prevent flickering
+        (function () {
+            const theme = localStorage.getItem('admin.theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -41,16 +49,18 @@
 
         .glass {
             background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .dark .glass {
-            background: rgba(31, 41, 55, 0.7);
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .premium-shadow {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
 
         .animate-float {
@@ -117,8 +127,7 @@
     </style>
 </head>
 
-<body
-    class="bg-[#f8fafc] dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<body class="bg-[#f8fafc] dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         <!-- Header with Dual Buttons -->
@@ -218,7 +227,7 @@
             <!-- Content will be injected here -->
             <div class="flex flex-col items-center justify-center py-20 grayscale opacity-40">
                 <i class="ph-duotone ph-spinner-gap animate-spin text-5xl mb-4 text-brand-600"></i>
-                <p class="text-lg font-medium">Initializing Automation Engine...</p>
+                <p class="text-lg font-bold text-slate-900 dark:text-white">Initializing Automation Engine...</p>
             </div>
         </div>
 
@@ -241,11 +250,12 @@
 
     <!-- Create Workflow Modal (Multi-step) -->
     <dialog id="createModal"
-        class="rounded-3xl p-0 overflow-hidden shadow-2xl w-full max-w-2xl bg-white dark:bg-[#1f2937]">
+        class="rounded-3xl p-0 overflow-hidden shadow-2xl w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+
         <div class="flex flex-col h-full">
             <!-- Modal Header -->
             <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-                <h3 class="text-xl font-bold" id="modalTitle">Default Workflow Setup</h3>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white" id="modalTitle">Default Workflow Setup</h3>
                 <button onclick="closeModal()"
                     class="w-10 h-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
                     <i class="ph-bold ph-x text-xl"></i>
@@ -254,7 +264,7 @@
 
             <!-- Modal Content (Step 1: Select Trigger) -->
             <div id="step1" class="p-8">
-                <p class="text-slate-500 dark:text-slate-400 mb-6 font-medium uppercase text-xs tracking-widest">Step 1:
+                <p class="text-slate-600 dark:text-slate-400 mb-6 font-medium uppercase text-xs tracking-widest">Step 1:
                     Choose a Trigger</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <!-- Trigger: Welcome -->
@@ -265,7 +275,7 @@
                             <i class="ph-bold ph-user-plus text-2xl"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-lg">New Subscriber</h4>
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white">New Subscriber</h4>
                             <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Runs immediately when
                                 someone joins your newsletter list.</p>
                         </div>
@@ -279,7 +289,7 @@
                             <i class="ph-bold ph-newspaper text-2xl"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-lg">Post Published</h4>
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white">Post Published</h4>
                             <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Auto-notify your list
                                 immediately when you publish a new article.</p>
                         </div>
@@ -337,20 +347,20 @@
 
             <!-- Modal Content (Step 2: Configure & Save) -->
             <div id="step2" class="p-8 hidden">
-                <p class="text-slate-500 dark:text-slate-400 mb-6 font-medium uppercase text-xs tracking-widest">Step 2:
+                <p class="text-slate-600 dark:text-slate-400 mb-6 font-medium uppercase text-xs tracking-widest">Step 2:
                     Set the Action</p>
                 <form id="createForm" onsubmit="handleCreate(event)" class="space-y-6">
                     <input type="hidden" name="trigger_type" id="selectedTrigger">
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">Internal
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Internal
                                 Name</label>
                             <input type="text" name="name" required placeholder="e.g. 5-Day Welcome Sequence"
                                 class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-brand-500 focus:outline-none transition-colors">
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">Sender
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Sender
                                 Name</label>
                             <input type="text" name="sender_name" required placeholder="e.g. NekwasaR Team"
                                 class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-brand-500 focus:outline-none transition-colors">
@@ -358,7 +368,7 @@
                     </div>
 
                     <div class="space-y-2">
-                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">Email Subject
+                        <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Email Subject
                             Line</label>
                         <input type="text" name="subject" required placeholder="e.g. Welcome to the Tribe! 🎁"
                             class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-brand-500 focus:outline-none transition-colors">
@@ -366,7 +376,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div class="space-y-2">
-                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">Wait before
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Wait before
                                 sending</label>
                             <div class="relative">
                                 <input type="number" name="delay_hours" value="0" min="0" required
@@ -378,7 +388,7 @@
                         </div>
 
                         <div class="space-y-2">
-                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300">Select Email
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Select Email
                                 Template</label>
                             <select name="template_id" id="templateSelect" required
                                 class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 appearance-none focus:border-brand-500 focus:outline-none transition-colors">
@@ -566,7 +576,7 @@
                                 <i class="${triggerIcon} text-3xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold group-hover:text-brand-500 transition-colors">${auto.name}</h3>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-brand-500 transition-colors">${auto.name}</h3>
                                 <p class="text-sm font-medium text-slate-500 dark:text-slate-400 -mt-1 italic">"${auto.subject || 'No subject set'}"</p>
                                 <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-slate-500 dark:text-slate-400">
                                     <div class="flex items-center gap-1.5 text-sm">

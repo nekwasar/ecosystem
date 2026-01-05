@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Form, Request, BackgroundTasks, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, Form, Request, BackgroundTasks, File, UploadFile, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from database import get_db
@@ -593,6 +593,19 @@ async def get_automation_stats(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@router.get("/admin/analytics")
+async def get_newsletter_analytics(days: int = Query(30), db: Session = Depends(get_db)):
+    """Get detailed newsletter analytics"""
+    try:
+        service = NewsletterService(db)
+        return {
+            "success": True,
+            "data": service.get_detailed_analytics(days),
+            "realtime": service.get_realtime_events()
+        }
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
 @router.post("/admin/automations")
 async def create_automation(
     name: str = Form(...),
@@ -646,36 +659,63 @@ async def brevo_webhook(request: Request, db: Session = Depends(get_db)):
     """Handle Brevo Webhooks"""
     try:
         payload = await request.json()
-        event = payload.get('event')
+        event_type = payload.get('event')
         tags = payload.get('tags', [])
+        email = payload.get('email')
         
-        # Extract Campaign ID
+        # Extract metadata
+        ip = payload.get('ip')
+        user_agent = payload.get('user-agent')
+        url = payload.get('url', payload.get('link')) # Brevo uses 'link' or 'url' depending on event
+        
         campaign_id = None
+        automation_id = None
+        
         if tags:
             for tag in tags:
-                if tag.startswith('campaign_'):
-                    try:
+                try:
+                    if tag.startswith('campaign_'):
                         campaign_id = int(tag.split('_')[1])
-                        break
-                    except: pass
+                    elif tag.startswith('automation_'):
+                        automation_id = int(tag.split('_')[1])
+                except: continue
         
+        from models.blog import NewsletterEvent, NewsletterCampaign, NewsletterSubscriber
+        
+        # 1. Log detailed event for analytics
+        new_event = NewsletterEvent(
+            event_type=event_type,
+            campaign_id=campaign_id,
+            automation_id=automation_id,
+            subscriber_email=email,
+            ip=ip,
+            user_agent=user_agent,
+            url=url
+        )
+        db.add(new_event)
+        
+        # 2. Update summary counts for campaigns
         if campaign_id:
-            from models.blog import NewsletterCampaign
             campaign = db.query(NewsletterCampaign).filter(NewsletterCampaign.id == campaign_id).first()
             if campaign:
-                # Update Stats
-                if event == 'opened' or event == 'unique_opened':
+                if event_type in ['opened', 'unique_opened']:
                     campaign.open_count = (campaign.open_count or 0) + 1
-                elif event == 'click' or event == 'valid_click':
+                elif event_type in ['click', 'valid_click']:
                     campaign.click_count = (campaign.click_count or 0) + 1
-                
-                # We could also track soft/hard bounces to update subscriber status
-                
-                db.commit()
-                
+        
+        # 3. Handle subscriber health (bounces, unsubscribes)
+        if event_type in ['hard_bounce', 'unsubscribe', 'unsubscribed', 'spam']:
+            sub = db.query(NewsletterSubscriber).filter(NewsletterSubscriber.email == email).first()
+            if sub:
+                sub.is_active = False
+                if 'unsub' in event_type:
+                    from datetime import datetime, timezone
+                    sub.unsubscribed_at = datetime.now(timezone.utc)
+
+        db.commit()
         return {"success": True}
     except Exception as e:
-        print(f"Webhook Error: {str(e)}")
+        logger.error(f"Webhook Error: {str(e)}")
         return {"success": False}
 
 from fastapi import File, UploadFile
