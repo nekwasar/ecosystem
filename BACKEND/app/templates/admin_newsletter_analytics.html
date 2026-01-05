@@ -305,8 +305,8 @@
     </div>
 
     <script>
-        let engagementChart = null;
-        let deviceChart = null;
+        var engagementChart = engagementChart || null;
+        var deviceChart = deviceChart || null;
 
         async function init() {
             // Check for dark mode (Robustness)
@@ -519,8 +519,12 @@
             }).join('');
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', init);
+        // Initialize - Support both full load and SPA injection
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 
