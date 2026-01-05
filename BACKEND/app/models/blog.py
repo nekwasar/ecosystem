@@ -197,8 +197,8 @@ class NewsletterAutomationQueue(Base):
     __tablename__ = "newsletter_automation_queue"
 
     id = Column(Integer, primary_key=True, index=True)
-    subscriber_id = Column(Integer, ForeignKey("newsletter_subscribers.id"), nullable=False)
-    automation_id = Column(Integer, ForeignKey("newsletter_automations.id"), nullable=False)
+    subscriber_id = Column(Integer, ForeignKey("newsletter_subscribers.id", ondelete="CASCADE"), nullable=False)
+    automation_id = Column(Integer, ForeignKey("newsletter_automations.id", ondelete="CASCADE"), nullable=False)
     scheduled_at = Column(DateTime(timezone=True), nullable=False)
     sent_at = Column(DateTime(timezone=True), nullable=True)
     status = Column(String(20), default="pending")  # pending, sent, failed

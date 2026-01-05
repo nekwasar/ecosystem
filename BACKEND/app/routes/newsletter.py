@@ -56,6 +56,10 @@ async def delete_subscriber(subscriber_id: int, db: Session = Depends(get_db)):
         if not subscriber:
             raise HTTPException(404, "Subscriber not found")
         
+        # Manual cleanup of queue to prevent foreign key errors
+        from models.blog import NewsletterAutomationQueue
+        db.query(NewsletterAutomationQueue).filter(NewsletterAutomationQueue.subscriber_id == subscriber_id).delete()
+        
         db.delete(subscriber)
         db.commit()
         
@@ -602,7 +606,14 @@ async def create_automation(
     """Create new automation"""
     try:
         service = NewsletterService(db)
-        auto = await service.create_automation(name, trigger_type, template_id, delay_hours, subject, sender_name)
+        auto = await service.create_automation(
+            name=name,
+            trigger_type=trigger_type,
+            template_id=template_id,
+            delay_hours=delay_hours,
+            subject=subject,
+            sender_name=sender_name
+        )
         return {"success": True, "message": "Automation created", "automation_id": auto.id}
     except Exception as e:
         raise HTTPException(500, str(e))
