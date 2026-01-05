@@ -441,6 +441,65 @@
     <i class="ph-bold ph-arrow-up"></i>
   </div>
 
+  <!-- Cookie Consent Banner (Dynamic Overlay) -->
+  <div id="cookieConsent"
+    class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-2xl translate-y-32 opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
+    <div
+      class="bg-base-tint/30 backdrop-blur-3xl border border-white/10 dark:border-white/5 rounded-[2.5rem] p-6 md:p-8 shadow-[0_20px_80px_rgba(0,0,0,0.4)] flex flex-col md:flex-row items-center gap-6">
+      <div class="flex-1 text-center md:text-left">
+        <div class="flex items-center gap-2 justify-center md:justify-start mb-2">
+          <i class="ph ph-shield-check text-accent text-2xl"></i>
+          <h3 class="text-xl font-bold font-syne text-t-bright tracking-tight">Privacy Protection</h3>
+        </div>
+        <p class="text-[1.5rem] text-t-medium leading-relaxed">
+          We use strictly necessary cookies and device tagging to ensure unique engagement metrics.
+          Explore our <a href="/privacy"
+            class="text-accent hover:text-accent/80 transition-colors font-semibold underline underline-offset-4 font-bold">Privacy
+            Policy</a> to learn more.
+        </p>
+      </div>
+      <div class="w-full md:w-auto text-center">
+        <button id="acceptCookies"
+          class="w-full md:w-auto px-12 py-5 bg-accent text-white text-lg font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_10px_30px_rgba(var(--accent-rgb),0.3)]">
+          Consent & Enter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Consent Logic -->
+  <script>
+    (function () {
+      const initCookieBanner = () => {
+        const banner = document.getElementById('cookieConsent');
+        const acceptBtn = document.getElementById('acceptCookies');
+        if (!banner || !acceptBtn) return;
+
+        // Check if consent was already given
+        const hasConsent = localStorage.getItem('nekwasar_cookie_consent');
+
+        if (!hasConsent) {
+          // Show banner after short delay
+          setTimeout(() => {
+            banner.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+          }, 1500);
+        }
+
+        acceptBtn.addEventListener('click', () => {
+          localStorage.setItem('nekwasar_cookie_consent', 'true');
+          // Animate out
+          banner.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCookieBanner);
+      } else {
+        initCookieBanner();
+      }
+    })();
+  </script>
+
   <!-- Device Fingerprinting Script -->
   <script src="/blog/js/device-fingerprint.js" defer></script>
   <!-- Global Blog Script -->
