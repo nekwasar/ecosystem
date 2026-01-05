@@ -122,7 +122,7 @@ def update_schema():
                  connection.commit()
             if 'is_locked' not in columns:
                  print("   ➕ Adding is_locked to admin_users")
-                 connection.execute(text("ALTER TABLE admin_users ADD COLUMN is_locked BOOLEAN DEFAULT 0"))
+                 connection.execute(text("ALTER TABLE admin_users ADD COLUMN is_locked BOOLEAN DEFAULT FALSE"))
                  connection.commit()
 
     print("✅ Database schema updated successfully!")
