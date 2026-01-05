@@ -443,27 +443,72 @@
 
   <!-- Cookie Consent Banner (Dynamic Overlay) -->
   <div id="cookieConsent"
-    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-5xl translate-y-32 opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
+    class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-[1200px] translate-y-32 opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
     <div
-      class="bg-base-tint/40 backdrop-blur-3xl border border-white/10 dark:border-white/5 rounded-[1.5rem] p-4 md:p-5 shadow-[0_20px_80px_rgba(0,0,0,0.4)] flex flex-col md:flex-row items-center gap-5 md:gap-8">
-      <div class="flex-1 flex flex-col md:flex-row items-center gap-3 md:gap-6 text-center md:text-left">
-        <div class="flex items-center gap-2 shrink-0">
-          <i class="ph ph-shield-check text-accent text-xl"></i>
-          <h3 class="text-base font-bold font-syne text-t-bright tracking-tight whitespace-nowrap">Privacy Control</h3>
+      class="bg-base-tint/50 backdrop-blur-3xl border border-white/10 dark:border-white/5 rounded-[2rem] p-6 md:px-12 md:py-8 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row items-center gap-8 md:gap-16">
+      <div class="flex-1 flex flex-col md:flex-row items-center gap-4 md:gap-10 text-center md:text-left">
+        <div class="flex items-center gap-3 shrink-0">
+          <i class="ph ph-shield-check text-accent text-3xl"></i>
+          <h3 class="text-lg font-bold font-syne text-t-bright tracking-[0.15em] uppercase whitespace-nowrap">Privacy
+            First</h3>
         </div>
-        <div class="hidden md:block w-[1px] h-6 bg-white/10"></div>
-        <p class="text-[1.35rem] text-t-medium leading-tight">
-          We use strictly necessary cookies to ensure the best experience.
-          See our <a href="/privacy"
-            class="text-accent hover:text-accent/80 transition-colors font-bold underline underline-offset-4">Privacy
-            Policy</a> for details.
+        <div class="hidden md:block w-[1px] h-10 bg-white/10"></div>
+        <p class="text-[1.5rem] font-medium text-t-medium leading-relaxed tracking-wide">
+          We use strictly necessary cookies to ensure the absolute best experience.
+          Visit our <a href="/privacy"
+            class="text-accent hover:text-accent/80 transition-colors font-bold underline underline-offset-8">Privacy
+            Policy</a> to learn more.
         </p>
       </div>
       <div class="w-full md:w-auto shrink-0">
         <button id="acceptCookies"
-          class="w-full md:w-auto px-10 py-3 bg-accent text-white text-base font-bold rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_8px_20px_rgba(var(--accent-rgb),0.2)]">
+          class="w-full md:w-auto px-12 py-5 bg-accent text-white text-lg font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_12px_30px_rgba(var(--accent-rgb),0.3)] tracking-widest">
           Accept & Enter
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Newsletter Slide-in (Behavioral Trigger) -->
+  <div id="newsletterSlideIn"
+    class="fixed bottom-60 right-10 z-[9998] w-[95%] max-w-[540px] translate-x-[120%] opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
+    <div
+      class="bg-base-tint/60 backdrop-blur-3xl border border-white/10 dark:border-white/5 rounded-[2.5rem] p-10 md:p-12 shadow-[0_50px_150px_rgba(0,0,0,0.7)] relative overflow-hidden group">
+      <!-- Decorative background orb with increased size -->
+      <div
+        class="absolute -top-12 -right-12 w-48 h-48 bg-accent/20 blur-[80px] rounded-full group-hover:bg-accent/30 transition-all duration-700">
+      </div>
+
+      <button id="closeNewsletter" class="absolute top-6 right-6 text-t-muted hover:text-t-bright transition-colors">
+        <i class="ph-bold ph-x text-2xl"></i>
+      </button>
+
+      <div class="relative z-10">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center">
+            <i class="ph-bold ph-sparkle text-accent text-3xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold font-syne text-t-bright tracking-[0.15em] uppercase whitespace-nowrap">Let's
+            Stay Close</h3>
+        </div>
+
+        <p class="text-xl font-medium text-t-medium leading-relaxed mb-8 tracking-wide">
+          Join 2,500+ friends already getting our weekly deep-dives on the future. No spam, just the good stuff!
+        </p>
+
+        <form id="slideInNewsletterForm" class="space-y-4">
+          <div class="relative">
+            <input type="email" id="slideInEmail" placeholder="What's your email?" required
+              class="w-full bg-base/50 border border-white/10 rounded-2xl px-6 py-5 text-xl font-medium text-t-bright focus:outline-none focus:border-accent/50 transition-all placeholder:text-t-muted">
+          </div>
+          <button type="submit" id="slideInSubmit"
+            class="w-full py-5 bg-accent text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_15px_40px_rgba(var(--accent-rgb),0.3)] flex items-center justify-center gap-3 tracking-widest uppercase">
+            <span>Yes! Sign me up</span>
+            <i class="ph-bold ph-arrow-right"></i>
+          </button>
+        </form>
+
+        <div id="slideInMessage" class="mt-6 text-base font-bold hidden"></div>
       </div>
     </div>
   </div>
@@ -497,6 +542,97 @@
         document.addEventListener('DOMContentLoaded', initCookieBanner);
       } else {
         initCookieBanner();
+      }
+    })();
+  </script>
+
+  <!-- Newsletter Controller Logic -->
+  <script>
+    (function () {
+      const initNewsletterController = () => {
+        const slideIn = document.getElementById('newsletterSlideIn');
+        const form = document.getElementById('slideInNewsletterForm');
+        const closeBtn = document.getElementById('closeNewsletter');
+        const message = document.getElementById('slideInMessage');
+        const submitBtn = document.getElementById('slideInSubmit');
+
+        if (!slideIn || !form) return;
+
+        // --- 1. Behavioral Check ---
+        // Don't show if on homepage OR already subscribed/closed
+        const isHome = window.location.pathname === '/' || window.location.pathname === '';
+        const hasInteracted = localStorage.getItem('nekwasar_newsletter_interacted');
+
+        if (isHome || hasInteracted) return;
+
+        // --- 2. Scroll Trigger ---
+        let triggered = false;
+        const onScroll = () => {
+          if (triggered) return;
+
+          const scrollPct = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+          if (scrollPct > 0.5) { // 50% scroll
+            triggered = true;
+            slideIn.classList.remove('translate-x-[120%]', 'opacity-0', 'pointer-events-none');
+            window.removeEventListener('scroll', onScroll);
+          }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        // --- 3. Close Logic ---
+        closeBtn?.addEventListener('click', () => {
+          localStorage.setItem('nekwasar_newsletter_interacted', 'true'); // Persistent dismissal
+          slideIn.classList.add('translate-x-[120%]', 'opacity-0', 'pointer-events-none');
+        });
+
+        // --- 4. Submission Logic ---
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('slideInEmail').value;
+
+          submitBtn.disabled = true;
+          const originalContent = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<span>Entering...</span>';
+
+          try {
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('name', email.split('@')[0]);
+
+            const response = await fetch('/api/newsletter/subscribe', {
+              method: 'POST',
+              body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok || data.success || (data.message && data.message.toLowerCase().includes('already'))) {
+              localStorage.setItem('nekwasar_newsletter_interacted', 'true');
+              message.textContent = 'Successfully joined! Check your inbox soon.';
+              message.className = 'mt-4 text-sm font-bold text-accent animate-pulse';
+              message.classList.remove('hidden');
+
+              setTimeout(() => {
+                slideIn.classList.add('translate-x-[120%]', 'opacity-0', 'pointer-events-none');
+              }, 3000);
+            } else {
+              throw new Error(data.message || 'Subscription failed');
+            }
+          } catch (err) {
+            message.textContent = err.message || 'Something went wrong. Try again.';
+            message.className = 'mt-4 text-sm font-bold text-red-500';
+            message.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalContent;
+          }
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNewsletterController);
+      } else {
+        initNewsletterController();
       }
     })();
   </script>
