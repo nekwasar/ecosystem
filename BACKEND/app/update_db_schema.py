@@ -113,6 +113,18 @@ def update_schema():
              connection.commit()
              print("   ✅ newsletter_events table created")
 
+        # 7. admin_users
+        if inspector.has_table("admin_users"):
+            columns = [c['name'] for c in inspector.get_columns('admin_users')]
+            if 'failed_login_attempts' not in columns:
+                 print("   ➕ Adding failed_login_attempts to admin_users")
+                 connection.execute(text("ALTER TABLE admin_users ADD COLUMN failed_login_attempts INTEGER DEFAULT 0"))
+                 connection.commit()
+            if 'is_locked' not in columns:
+                 print("   ➕ Adding is_locked to admin_users")
+                 connection.execute(text("ALTER TABLE admin_users ADD COLUMN is_locked BOOLEAN DEFAULT 0"))
+                 connection.commit()
+
     print("✅ Database schema updated successfully!")
 
 if __name__ == "__main__":

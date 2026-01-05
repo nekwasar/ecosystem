@@ -20,21 +20,21 @@ SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 
-# Temporarily disable bcrypt due to compatibility issues
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Professional-grade password hashing with Bcrypt
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash"""
-    # Use simple hash verification for now
-    import hashlib
-    return hashlib.sha256(plain_password.encode()).hexdigest() == hashed_password
+    """Verify a password against its hash safely using bcrypt"""
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception as e:
+        auth_logger.error(f"❌ Password verification failed: {e}")
+        return False
 
 def get_password_hash(password: str) -> str:
-    """Hash a password"""
-    # Use a simple hash for now to avoid bcrypt issues
-    import hashlib
-    return hashlib.sha256(password.encode()).hexdigest()
+    """Hash a password using bcrypt with salt"""
+    return pwd_context.hash(password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Create JWT access token"""

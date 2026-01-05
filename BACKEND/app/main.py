@@ -9,7 +9,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pathlib import Path
 import uvicorn
-import hashlib
 import traceback
 from sqlalchemy.orm import Session
 
@@ -20,7 +19,6 @@ from routes import (
 )
 from core.config import settings
 from scheduler import init_scheduler, start_scheduler, stop_scheduler
-from models.user import AdminUser
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -130,33 +128,7 @@ app.add_exception_handler(Exception, general_exception_handler)
 # Add traceback import
 import traceback
 
-def create_default_admin_user():
-    """Create default admin user if it doesn't exist"""
-    db = SessionLocal()
-    try:
-        # Check if admin user already exists
-        admin_user = db.query(AdminUser).filter(AdminUser.username == "gojominitia").first()
-        
-        if admin_user:
-            return
 
-        # Create default admin user
-        hashed_password = hashlib.sha256("gojominitiA@".encode()).hexdigest()
-        default_admin = AdminUser(
-            username="gojominitia",
-            email="gojominitia@nekwasar.com",
-            hashed_password=hashed_password,
-            is_active=True,
-            is_superuser=True
-        )
-        db.add(default_admin)
-        db.commit()
-        
-    except Exception as e:
-        logger.error(f"❌ Error creating admin user: {str(e)}")
-        db.rollback()
-    finally:
-        db.close()
 
 @app.on_event("startup")
 async def startup_event():
@@ -165,8 +137,6 @@ async def startup_event():
         logger.info("🚀 Starting application initialization...")
         create_tables()
         logger.info("✅ Database tables created/verified")
-        create_default_admin_user()
-        logger.info("✅ Admin user created/verified")
         init_scheduler()
         logger.info("✅ Scheduler initialized")
         start_scheduler()
