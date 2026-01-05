@@ -392,33 +392,45 @@
 
         async function fetchStats() {
             try {
-                const res = await fetch('/api/newsletter/admin/automations/stats');
+                const res = await fetch('/api/newsletter/admin/automations/stats', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('statPendingQueue').innerText = data.stats.pending_queue;
                     document.getElementById('statHistorySent').innerText = data.stats.total_sent;
                 }
-            } catch (e) { console.error('Stats Error:', e); }
+            } catch (e) {
+                console.error('Stats Error:', e);
+            }
         }
 
         async function fetchAutomations() {
             try {
-                const res = await fetch('/api/newsletter/admin/automations');
+                const res = await fetch('/api/newsletter/admin/automations', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
                 const data = await res.json();
                 if (data.success) allAutomations = data.automations || [];
 
                 document.getElementById('statTotalAutomations').innerText = allAutomations.length;
                 document.getElementById('statActiveAutomations').innerText = allAutomations.filter(a => a.is_active).length;
-            } catch (e) { console.error('Fetch Error:', e); }
+            } catch (e) {
+                console.error('Fetch Error:', e);
+            }
         }
 
         async function fetchTemplates() {
+            const sel = document.getElementById('templateSelect');
             try {
-                const res = await fetch('/api/newsletter/admin/templates');
+                const res = await fetch('/api/newsletter/admin/templates', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                if (!res.ok) throw new Error('Failed to fetch templates');
+
                 const data = await res.json();
                 if (data.success) {
                     allTemplates = data.templates || [];
-                    const sel = document.getElementById('templateSelect');
                     if (allTemplates.length === 0) {
                         sel.innerHTML = '<option value="">No templates found</option>';
                         return;
@@ -427,8 +439,13 @@
                     allTemplates.forEach(t => {
                         sel.innerHTML += `<option value="${t.id}">${t.name}</option>`;
                     });
+                } else {
+                    sel.innerHTML = `<option value="">Error: ${data.detail || 'Access denied'}</option>`;
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error(e);
+                sel.innerHTML = '<option value="">Connection error</option>';
+            }
         }
 
         function render() {
