@@ -5,26 +5,7 @@
 {% block fluid_layout %}true{% endblock %}
 
 {% block head_extra %}
-<!-- SEO Meta Tags included from base -->
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="article">
-<meta property="og:title"
-    content="{% if post_data %}{{ post_data.title }}{% else %}TOP 10 Best Sci-Fi Epics of the Decade{% endif %}">
-<meta property="og:description"
-    content="{% if post_data %}{{ post_data.excerpt|truncate(160) }}{% else %}Explore how AI is reshaping industries, empowering innovation, and creating unprecedented opportunities for growth and discovery.{% endif %}">
-<meta property="og:image"
-    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
-<meta property="og:url" content="https://blog.nekwasar.com/{% if post_data %}{{ post_data.slug }}{% endif %}">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title"
-    content="{% if post_data %}{{ post_data.title }}{% else %}TOP 10 Best Sci-Fi Epics of the Decade{% endif %}">
-<meta name="twitter:description"
-    content="{% if post_data %}{{ post_data.excerpt|truncate(160) }}{% else %}Explore how AI is reshaping industries, empowering innovation, and creating unprecedented opportunities for growth and discovery.{% endif %}">
-<meta name="twitter:image"
-    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
+<!-- SEO and Structured Data inherited from base_blog.html -->
 {% endblock %}
 
 {% block content %}

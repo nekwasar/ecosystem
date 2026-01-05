@@ -5,28 +5,9 @@ Transforming Our World | NekwasaR Blog{% endif %}{% endblock %}
 {% block fluid_layout %}true{% endblock %}
 
 {% block head_extra %}
-<!-- SEO Meta Tags included from base -->
+<!-- SEO and Structured Data inherited from base_blog.html -->
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="article">
-<meta property="og:title"
-    content="{% if post_data %}{{ post_data.title }}{% else %}The Future of Artificial Intelligence: Transforming Our World{% endif %}">
-<meta property="og:description"
-    content="{% if post_data %}{{ post_data.excerpt|truncate(160) }}{% else %}Explore how AI is reshaping industries, empowering innovation, and creating unprecedented opportunities for growth and discovery.{% endif %}">
-<meta property="og:image"
-    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
-<meta property="og:url" content="https://blog.nekwasar.com/{% if post_data %}{{ post_data.slug }}{% endif %}">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title"
-    content="{% if post_data %}{{ post_data.title }}{% else %}The Future of Artificial Intelligence: Transforming Our World{% endif %}">
-<meta name="twitter:description"
-    content="{% if post_data %}{{ post_data.excerpt|truncate(160) }}{% else %}Explore how AI is reshaping industries, empowering innovation, and creating unprecedented opportunities for growth and discovery.{% endif %}">
-<meta name="twitter:image"
-    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
-
-<!-- Google Fonts - Anton -->
+<!-- Google Fonts - Anton (Specific to this template) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">

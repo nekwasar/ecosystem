@@ -4,16 +4,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}NekwasaR Blog{% endblock %}</title>
+  <title>{% block title %}{{ post_data.title if post_data else 'NekwasaR Blog - Professional Insights & Innovation' }}{%
+    endblock %}</title>
   <meta name="description"
-    content="{% block description %}{% if post_data %}{{ post_data.excerpt|truncate(160) }}{% else %}Professional insights, analysis, and storytelling from NekwasaR.{% endif %}{% endblock %}">
-  <meta name="author"
-    content="{% block author %}{% if post_data %}{{ post_data.author }}{% else %}NekwasaR{% endif %}{% endblock %}">
+    content="{% block description %}{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights, analysis, and storytelling from NekwasaR.' }}{% endblock %}">
+  <meta name="author" content="{{ post_data.author if post_data else 'NekwasaR' }}">
 
-  {% block head_extra %}{% endblock %}
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}">
 
+  <!-- Search Engine Verification (Optional but recommended) -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="{{ 'article' if post_data and post_data.slug else 'website' }}">
+  <meta property="og:url"
+    content="https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}">
+  <meta property="og:title" content="{{ post_data.title if post_data else 'NekwasaR Blog' }}">
+  <meta property="og:description"
+    content="{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights from NekwasaR.' }}">
+  <meta property="og:image"
+    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
   <meta property="og:site_name" content="NekwasaR Blog">
   <meta property="og:locale" content="en_US">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url"
+    content="https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}">
+  <meta name="twitter:title" content="{{ post_data.title if post_data else 'NekwasaR Blog' }}">
+  <meta name="twitter:description"
+    content="{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights from NekwasaR.' }}">
+  <meta name="twitter:image"
+    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
+  <meta name="twitter:site" content="@nekwasar">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "{{ 'BlogPosting' if post_data and post_data.slug else 'WebSite' }}",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}"
+    },
+    "headline": "{{ post_data.title if post_data else 'NekwasaR Blog' }}",
+    "description": "{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights from NekwasaR.' }}",
+    "image": "{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ post_data.author if post_data else 'NekwasaR' }}",
+      "url": "https://nekwasar.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "NekwasaR",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nekwasar.com/icon"
+      }
+    },
+    "datePublished": "{{ post_data.published_at if post_data and post_data.published_at else '2024-01-01' }}",
+    "dateModified": "{{ post_data.published_at if post_data and post_data.published_at else '2024-01-01' }}"
+  }
+  </script>
+
+  {% block head_extra %}{% endblock %}
 
   <!-- Early theme bootstrap: apply saved theme ASAP and provide global fallbacks -->
   <script>
