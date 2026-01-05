@@ -130,12 +130,12 @@ def authenticate_user(db: Session, username: str, password: str):
     user = db.query(AdminUser).filter(AdminUser.username == username).first()
 
     if not user:
-        return None
+        return None, "INVALID"
 
     # Check if locked (Rec 5)
     if getattr(user, 'is_locked', False):
         auth_logger.warning(f"🔒 Account locked login attempt: {username}")
-        return "LOCKED"
+        return user, "LOCKED"
 
     if not verify_password(password, user.hashed_password):
         if hasattr(user, 'failed_login_attempts'):
@@ -143,17 +143,19 @@ def authenticate_user(db: Session, username: str, password: str):
             if user.failed_login_attempts >= 5:
                 user.is_locked = True
                 auth_logger.error(f"❌ Account LOCKED after 5 failed attempts: {username}")
+                db.commit()
+                return user, "JUST_LOCKED"
             db.commit()
-        return None
+        return None, "INVALID"
 
     if not user.is_active:
-        return None
+        return None, "INACTIVE"
 
     # Success! Reset strikes
     if hasattr(user, 'failed_login_attempts'):
         user.failed_login_attempts = 0
         db.commit()
-    return user
+    return user, "SUCCESS"
 
 def get_current_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security), 

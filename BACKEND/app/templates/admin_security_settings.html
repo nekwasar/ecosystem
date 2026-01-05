@@ -1,74 +1,127 @@
 <div class="p-6">
-    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="p-6 border-bottom border-gray-100">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Multi-Factor Authentication (MFA)</h3>
-            <p class="text-gray-600">Enhance your account security by requiring a 6-digit code from your mobile device
-                when logging in.</p>
+    <!-- Main Card -->
+    <div
+        class="bg-base rounded-xl border border-stroke-elements shadow-lg overflow-hidden transition-all duration-medium">
+        <!-- Header -->
+        <div class="p-8 border-b border-stroke-elements bg-gradient-to-r from-base-tint to-base">
+            <h3 class="text-2xl font-bold text-t-bright mb-2 font-syne">Multi-Factor Authentication (MFA)</h3>
+            <p class="text-t-medium font-syne">Enhance your account security by requiring a 6-digit code from your
+                mobile device when logging in.</p>
         </div>
 
-        <div id="mfaStatusSection" class="p-6 bg-gray-50 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div id="mfaBadge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+        <!-- Status Bar -->
+        <div id="mfaStatusSection"
+            class="p-6 bg-base-tint/50 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-6">
+                <div id="mfaBadge" class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm">
                     Checking Status...
                 </div>
-                <div id="mfaDescription" class="text-sm text-gray-500">
-                    Loading settings...
+                <div id="mfaDescription" class="text-sm text-t-medium font-syne">
+                    Loading security settings...
                 </div>
             </div>
             <button id="toggleMfaBtn"
-                class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition hidden">
-                Setup MFA
+                class="px-8 py-3 bg-accent text-t-opp-bright rounded-xl font-bold hover:scale-105 transform transition-all duration-medium shadow-lg hidden">
+                Setup MFA Protection
             </button>
         </div>
 
-        <!-- MFA Setup Wizard (Hidden by default) -->
-        <div id="mfaSetupWizard" class="p-8 border-t border-gray-100 hidden">
-            <div class="max-w-md mx-auto">
-                <div class="text-center mb-8">
-                    <h4 class="text-lg font-bold">Step 1: Scan QR Code</h4>
-                    <p class="text-sm text-gray-500 mt-2">Open your authenticator app (Google Authenticator, Authy,
-                        etc.) and scan this code.</p>
-                    <div id="mfaQrContainer" class="mt-4 p-4 bg-white border rounded-xl flex justify-center">
-                        <img id="mfaQrImg" src="" alt="MFA QR Code" class="w-48 h-48">
+        <!-- MFA Setup Wizard -->
+        <div id="mfaSetupWizard" class="p-10 border-t border-stroke-elements hidden animate-fade-in">
+            <div class="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Step 1 -->
+                <div class="text-center space-y-6">
+                    <div
+                        class="w-12 h-12 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto text-xl font-bold">
+                        1</div>
+                    <h4 class="text-lg font-bold text-t-bright font-syne">Scan QR Code</h4>
+                    <p class="text-sm text-t-muted font-syne leading-relaxed">Scan this code with Google Authenticator,
+                        Authy, or your preferred security app.</p>
+
+                    <!-- QR Container: Always white background for better scanning -->
+                    <div id="mfaQrContainer"
+                        class="p-6 bg-white border border-stroke-elements rounded-2xl flex justify-center shadow-inner mx-auto w-fit">
+                        <img id="mfaQrImg" src="" alt="MFA QR Code" class="w-48 h-48 block">
+                    </div>
+
+                    <div class="text-xs text-t-muted font-mono mt-2 bg-base-tint p-2 rounded hidden" id="manualKey">
+                        Secret: <span id="mfaSecretDisplay">----</span>
                     </div>
                 </div>
 
-                <div class="text-center">
-                    <h4 class="text-lg font-bold">Step 2: Verify Code</h4>
-                    <p class="text-sm text-gray-500 mt-2">Enter the 6-digit code shown in your app to confirm setup.</p>
-                    <div class="mt-4 flex gap-2 justify-center">
+                <!-- Step 2 -->
+                <div class="text-center space-y-6">
+                    <div
+                        class="w-12 h-12 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto text-xl font-bold">
+                        2</div>
+                    <h4 class="text-lg font-bold text-t-bright font-syne">Verify & Enable</h4>
+                    <p class="text-sm text-t-muted font-syne leading-relaxed">Enter the 6-digit code shown in your app
+                        to confirm setup.</p>
+
+                    <div class="pt-4">
                         <input type="text" id="mfaVerifyCode" maxlength="6"
-                            class="w-32 p-3 text-center text-xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                            class="w-full p-4 text-center text-3xl tracking-[1rem] bg-base-tint border border-stroke-elements text-t-bright rounded-2xl focus:ring-2 focus:ring-accent outline-none shadow-sm transition-all font-mono"
                             placeholder="000000">
                     </div>
-                    <button id="confirmMfaBtn"
-                        class="mt-6 w-full py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition">
-                        Enable MFA
-                    </button>
-                    <button id="cancelMfaBtn" class="mt-2 text-gray-400 text-sm hover:underline">Cancel</button>
+
+                    <div class="flex flex-col gap-3 pt-4">
+                        <button id="confirmMfaBtn"
+                            class="w-full py-4 bg-accent text-t-opp-bright rounded-2xl font-bold hover:scale-[1.02] transition-all shadow-xl">
+                            Verify and Activate
+                        </button>
+                        <button id="cancelMfaBtn"
+                            class="text-t-muted text-sm hover:text-t-bright transition-colors font-syne">
+                            Cancel Setup
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Disabling MFA -->
-        <div id="mfaDisableSection" class="p-8 border-t border-gray-100 hidden">
-            <div class="max-w-md mx-auto text-center">
-                <h4 class="text-lg font-bold text-red-600">Disable MFA</h4>
-                <p class="text-sm text-gray-500 mt-2">To disable MFA, please enter your current code for confirmation.
-                </p>
-                <div class="mt-4 flex gap-2 justify-center">
+        <!-- Disabling MFA Section -->
+        <div id="mfaDisableSection" class="p-10 border-t border-stroke-elements hidden animate-fade-in">
+            <div class="max-w-md mx-auto text-center space-y-6">
+                <div
+                    class="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto text-2xl">
+                    <i class="ph-bold ph-shield-warning"></i>
+                </div>
+                <h4 class="text-xl font-bold text-red-500 font-syne">Disable MFA Protection</h4>
+                <p class="text-sm text-t-muted font-syne">For security, please enter your current authenticator code to
+                    remove MFA protection from your account.</p>
+
+                <div class="pt-4">
                     <input type="text" id="mfaDisableCode" maxlength="6"
-                        class="w-32 p-3 text-center text-xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+                        class="w-full p-4 text-center text-3xl tracking-[1rem] bg-base-tint border border-stroke-elements text-t-bright rounded-2xl focus:ring-2 focus:ring-red-500 outline-none shadow-sm font-mono"
                         placeholder="000000">
                 </div>
+
                 <button id="confirmDisableMfaBtn"
-                    class="mt-6 w-full py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">
-                    Remove MFA Protection
+                    class="w-full py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition-all shadow-xl">
+                    Confirm Deactivation
                 </button>
+                <button onclick="checkMfaStatus()" class="text-t-muted text-sm hover:underline">Keep Protected</button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+    }
+</style>
 
 <script>
     function initSecuritySettings() {
@@ -86,6 +139,7 @@
             } else {
                 disableSection.classList.remove('hidden');
                 setupWizard.classList.add('hidden');
+                window.scrollTo({ top: disableSection.offsetTop, behavior: 'smooth' });
             }
         });
 
@@ -100,31 +154,34 @@
 
     async function checkMfaStatus() {
         try {
-            const res = await fetch('/api/auth/me');
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/auth/me', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const user = await res.json();
 
             const badge = document.getElementById('mfaBadge');
             const desc = document.getElementById('mfaDescription');
             const btn = document.getElementById('toggleMfaBtn');
             const disableSection = document.getElementById('mfaDisableSection');
+            const setupWizard = document.getElementById('mfaSetupWizard');
 
             if (user.totp_enabled) {
-                badge.textContent = 'PROTECTED';
-                badge.className = 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-green-100 text-green-800';
-                desc.textContent = 'MFA is active on your account.';
+                badge.textContent = 'SECURED';
+                badge.className = 'px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-green-500/20 text-green-500 shadow-sm';
+                desc.textContent = 'Multi-factor authentication is active on your account.';
                 btn.textContent = 'Disable MFA';
-                btn.classList.remove('bg-indigo-600');
-                btn.classList.add('bg-red-50', 'text-red-600', 'border', 'border-red-200');
+                btn.className = 'px-8 py-3 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl font-bold hover:bg-red-500/20 transition-all shadow-sm';
             } else {
-                badge.textContent = 'UNPROTECTED';
-                badge.className = 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-800';
-                desc.textContent = 'MFA is not enabled. Setup MFA now to secure your account.';
-                btn.textContent = 'Setup MFA';
-                btn.classList.add('bg-indigo-600', 'text-white');
-                btn.classList.remove('bg-red-50', 'text-red-600');
+                badge.textContent = 'VULNERABLE';
+                badge.className = 'px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-red-500/20 text-red-500 shadow-sm';
+                desc.textContent = 'Your account is missing a second layer of security.';
+                btn.textContent = 'Setup MFA Protection';
+                btn.className = 'px-8 py-3 bg-accent text-t-opp-bright rounded-xl font-bold hover:scale-105 transform transition-all shadow-lg';
             }
             btn.classList.remove('hidden');
             disableSection.classList.add('hidden');
+            setupWizard.classList.add('hidden');
         } catch (e) {
             console.error("Failed to check status", e);
         }
@@ -133,37 +190,57 @@
     async function startMfaSetup() {
         const wizard = document.getElementById('mfaSetupWizard');
         const qrImg = document.getElementById('mfaQrImg');
+        const secretSpan = document.getElementById('mfaSecretDisplay');
+        const token = localStorage.getItem('token');
 
         try {
-            const res = await fetch('/api/auth/mfa/setup', { method: 'POST' });
+            const res = await fetch('/api/auth/mfa/setup', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             const data = await res.json();
 
             qrImg.src = data.qr_code_uri;
+            secretSpan.textContent = data.secret;
+            document.getElementById('manualKey').classList.remove('hidden');
+
             wizard.classList.remove('hidden');
             document.getElementById('mfaDisableSection').classList.add('hidden');
+            window.scrollTo({ top: wizard.offsetTop, behavior: 'smooth' });
         } catch (e) {
-            alert('Failed to start setup');
+            alert('Failed to start setup. Please check your connection.');
         }
     }
 
     async function enableMfa() {
         const code = document.getElementById('mfaVerifyCode').value;
-        if (code.length < 6) return;
+        if (code.length < 6) {
+            alert('Please enter a 6-digit code.');
+            return;
+        }
 
+        const token = localStorage.getItem('token');
         try {
             const res = await fetch('/api/auth/mfa/enable', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ code })
             });
 
             if (res.ok) {
-                alert('MFA enabled successfully!');
-                document.getElementById('mfaSetupWizard').classList.add('hidden');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Security Updated',
+                    text: 'MFA enabled successfully!',
+                    confirmButtonColor: 'var(--accent)'
+                });
                 checkMfaStatus();
             } else {
                 const err = await res.json();
-                alert(err.detail || 'Failed to verify code');
+                alert(err.detail || 'Invalid code. Try again.');
             }
         } catch (e) {
             alert('Connection error');
@@ -174,16 +251,24 @@
         const code = document.getElementById('mfaDisableCode').value;
         if (code.length < 6) return;
 
+        const token = localStorage.getItem('token');
         try {
             const res = await fetch('/api/auth/mfa/disable', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ code })
             });
 
             if (res.ok) {
-                alert('MFA disabled.');
-                document.getElementById('mfaDisableSection').classList.add('hidden');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'MFA Disabled',
+                    text: 'Your account security has been downgraded.',
+                    confirmButtonColor: 'var(--accent)'
+                });
                 checkMfaStatus();
             } else {
                 const err = await res.json();

@@ -1,5 +1,4 @@
-from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request, BackgroundTasks
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import get_db
@@ -14,6 +13,7 @@ from schemas import (
     AdminUserCreate, AdminUser as AdminUserSchema, Token, AdminLogin, 
     TOTPSetup, TOTPVerify
 )
+from services.email_service import email_service
 import logging
 from fastapi import Request
 
@@ -60,19 +60,29 @@ async def register_admin(user: AdminUserCreate, db: Session = Depends(get_db)):
 async def login_for_access_token(
     response: Response, 
     request: Request, 
+    background_tasks: BackgroundTasks,
     form_data: OAuth2PasswordRequestForm = Depends(), 
     db: Session = Depends(get_db)
 ):
     """Login and get access token via HttpOnly cookies (Rec 6 & 7)"""
-    user = authenticate_user(db, form_data.username, form_data.password)
+    user, auth_status = authenticate_user(db, form_data.username, form_data.password)
 
-    if user == "LOCKED":
+    if auth_status in ["LOCKED", "JUST_LOCKED"]:
+        if auth_status == "JUST_LOCKED" and user:
+            # Send security alert email
+            await email_service.send_email_background(
+                background_tasks,
+                user.email,
+                "⚠️ Security Alert: Account Locked",
+                f"<h2>Security Alert</h2><p>Your admin account (<b>{user.username}</b>) has been locked due to 5 consecutive failed login attempts.</p><p>If this wasn't you, please contact support immediately.</p>"
+            )
+        
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Account locked due to too many failed attempts. Please contact the administrator for a manual reset.",
         )
 
-    if not user:
+    if auth_status != "SUCCESS":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -180,7 +190,12 @@ async def setup_mfa(current_user: DBAdminUser = Depends(get_current_active_user)
     }
 
 @router.post("/mfa/enable")
-async def enable_mfa(verify_data: TOTPVerify, current_user: DBAdminUser = Depends(get_current_active_user), db: Session = Depends(get_db)):
+async def enable_mfa(
+    verify_data: TOTPVerify, 
+    background_tasks: BackgroundTasks,
+    current_user: DBAdminUser = Depends(get_current_active_user), 
+    db: Session = Depends(get_db)
+):
     """Verify the first code and permanently enable MFA for the account"""
     if not current_user.totp_secret:
         raise HTTPException(status_code=400, detail="MFA setup not initiated")
@@ -188,17 +203,40 @@ async def enable_mfa(verify_data: TOTPVerify, current_user: DBAdminUser = Depend
     if verify_totp_code(current_user.totp_secret, verify_data.code):
         current_user.totp_enabled = True
         db.commit()
+        
+        # Send confirmation email
+        await email_service.send_email_background(
+            background_tasks,
+            current_user.email,
+            "🛡️ 2FA Enabled Successfully",
+            f"<h2>MFA Protected</h2><p>Two-factor authentication has been enabled for your account <b>{current_user.username}</b>.</p>"
+        )
+        
         return {"message": "MFA enabled successfully"}
     else:
         raise HTTPException(status_code=400, detail="Invalid verification code. Please try again.")
 
 @router.post("/mfa/disable")
-async def disable_mfa(verify_data: TOTPVerify, current_user: DBAdminUser = Depends(get_current_active_user), db: Session = Depends(get_db)):
+async def disable_mfa(
+    verify_data: TOTPVerify, 
+    background_tasks: BackgroundTasks,
+    current_user: DBAdminUser = Depends(get_current_active_user), 
+    db: Session = Depends(get_db)
+):
     """Disable MFA (requires a valid code for security)"""
     if verify_totp_code(current_user.totp_secret, verify_data.code):
         current_user.totp_enabled = False
         current_user.totp_secret = None
         db.commit()
+        
+        # Send alert about deactivation
+        await email_service.send_email_background(
+            background_tasks,
+            current_user.email,
+            "⚠️ Security Alert: 2FA Disabled",
+            f"<h2>Security Warning</h2><p>Two-factor authentication has been <b>disabled</b> for your account <b>{current_user.username}</b>.</p><p>If you did not perform this action, change your password immediately.</p>"
+        )
+        
         return {"message": "MFA disabled successfully"}
     else:
         raise HTTPException(status_code=400, detail="Invalid verification code")
