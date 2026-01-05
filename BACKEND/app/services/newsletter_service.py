@@ -612,6 +612,68 @@ class NewsletterService:
             self.db.rollback()
             raise Exception(f"Automation deletion failed: {str(e)}")
 
+    async def toggle_automation(self, automation_id: int, is_active: bool) -> bool:
+        """Enable or disable an automation flow"""
+        try:
+            auto = self.db.query(NewsletterAutomation).filter(NewsletterAutomation.id == automation_id).first()
+            if auto:
+                auto.is_active = is_active
+                self.db.commit()
+                return True
+            return False
+        except Exception as e:
+            self.db.rollback()
+            raise Exception(f"Automation toggle failed: {str(e)}")
+
+    async def trigger_post_published(self, post_id: int):
+        """Trigger automations for a newly published post"""
+        try:
+            post = self.db.query(BlogPost).filter(BlogPost.id == post_id).first()
+            if not post:
+                logger.error(f"Cannot trigger automation for post {post_id}: Post not found")
+                return
+
+            # Find active 'post_published' automations
+            automations = self.db.query(NewsletterAutomation).filter(
+                NewsletterAutomation.trigger_type == 'post_published',
+                NewsletterAutomation.is_active == True
+            ).all()
+
+            if not automations:
+                logger.info(f"No active 'post_published' automations for post {post_id}")
+                return
+
+            # Get all active subscribers
+            # For a 'Standard' professional system, we'd filters by segment if the automation has one.
+            # But for now, we send to all active subscribers.
+            subscribers = self.db.query(NewsletterSubscriber).filter(NewsletterSubscriber.is_active == True).all()
+            
+            if not subscribers:
+                logger.info("No active subscribers to notify.")
+                return
+
+            now_utc = datetime.now(timezone.utc)
+            queued_count = 0
+            
+            for auto in automations:
+                scheduled_time = now_utc + timedelta(hours=auto.delay_hours)
+                for sub in subscribers:
+                    queue_item = NewsletterAutomationQueue(
+                        subscriber_id=sub.id,
+                        automation_id=auto.id,
+                        scheduled_at=scheduled_time,
+                        status="pending"
+                    )
+                    self.db.add(queue_item)
+                    queued_count += 1
+            
+            self.db.commit()
+            logger.info(f"Successfully queued {queued_count} emails for post {post_id} across {len(automations)} automation(s)")
+
+        except Exception as e:
+            self.db.rollback()
+            logger.error(f"Failed to trigger post_published automation: {e}")
+
     def get_segments(self) -> List[NewsletterSegment]:
         """Get all segments and refresh their counts"""
         segments = self.db.query(NewsletterSegment).order_by(NewsletterSegment.created_at.desc()).all()

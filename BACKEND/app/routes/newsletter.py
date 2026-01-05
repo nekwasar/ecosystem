@@ -603,6 +603,18 @@ async def create_automation(
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@router.patch("/admin/automations/{auto_id}/toggle")
+async def toggle_automation(auto_id: int, request: Request, db: Session = Depends(get_db)):
+    """Toggle automation status"""
+    try:
+        data = await request.json()
+        is_active = data.get('is_active', False)
+        service = NewsletterService(db)
+        await service.toggle_automation(auto_id, is_active)
+        return {"success": True, "message": f"Automation {'enabled' if is_active else 'disabled'}"}
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
 
 
 @router.delete("/admin/automations/{auto_id}")

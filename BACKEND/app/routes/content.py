@@ -335,6 +335,14 @@ async def approve_content(
         post = db.query(BlogPost).filter(BlogPost.id == post_id).first()
         if post:
             post.published_at = datetime.now()
+            
+            # Trigger Newsletter Automation
+            try:
+                from services.newsletter_service import NewsletterService
+                ns = NewsletterService(db)
+                await ns.trigger_post_published(post_id)
+            except Exception as auto_err:
+                logging.error(f"Automation trigger failed during approval: {auto_err}")
 
         db.commit()
 
