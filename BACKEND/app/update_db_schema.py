@@ -124,6 +124,18 @@ def update_schema():
                  print("   ➕ Adding is_locked to admin_users")
                  connection.execute(text("ALTER TABLE admin_users ADD COLUMN is_locked BOOLEAN DEFAULT FALSE"))
                  connection.commit()
+            if 'refresh_token' not in columns:
+                 print("   ➕ Adding refresh_token to admin_users")
+                 connection.execute(text("ALTER TABLE admin_users ADD COLUMN refresh_token VARCHAR(255)"))
+                 connection.commit()
+            if 'totp_secret' not in columns:
+                 print("   ➕ Adding totp_secret to admin_users")
+                 connection.execute(text("ALTER TABLE admin_users ADD COLUMN totp_secret VARCHAR(32)"))
+                 connection.commit()
+            if 'totp_enabled' not in columns:
+                 print("   ➕ Adding totp_enabled to admin_users")
+                 connection.execute(text("ALTER TABLE admin_users ADD COLUMN totp_enabled BOOLEAN DEFAULT FALSE"))
+                 connection.commit()
 
     print("✅ Database schema updated successfully!")
 

@@ -1302,7 +1302,7 @@
                 }
 
                 console.log('🔐 SENDING AUTH CHECK REQUEST - URL: /admin/check-auth');
-                const response = await fetch('/admin/check-auth', {
+                let response = await fetch('/admin/check-auth', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -1310,42 +1310,30 @@
                     }
                 });
 
-                console.log('📡 AUTH CHECK RESPONSE - Status:', response.status, 'OK:', response.ok);
+                // Rec 7: If unauthorized, try to refresh the token using HttpOnly refresh cookie
+                if (response.status === 401) {
+                    console.log('🔄 Access Token expired, attempting refresh...');
+                    const refreshed = await refreshAccessToken();
+                    if (refreshed) {
+                        console.log('✅ Refresh successful, retrying auth check...');
+                        response = await fetch('/admin/check-auth');
+                    }
+                }
 
                 if (!response.ok) {
-                    console.log('❌ AUTH CHECK FAILED - Status:', response.status, 'Redirecting to login');
-                    console.log('📋 Response headers:', [...response.headers.entries()]);
-
-                    // Try to get response text for debugging
-                    try {
-                        const errorText = await response.text();
-                        console.log('❌ Response body:', errorText);
-                    } catch (e) {
-                        console.log('❌ Could not read error response body');
-                    }
-
-                    localStorage.removeItem('token'); // Clear invalid token
-                    console.log('🗑️ Token cleared due to authentication failure');
+                    console.log('❌ AUTH CHECK FAILED - Redirecting to login');
+                    localStorage.removeItem('token');
                     redirectToLogin();
                     return;
                 }
 
                 const authData = await response.json();
                 console.log('✅ AUTH CHECK SUCCESS - User authenticated:', authData.user.username);
-                console.log('👤 User data:', authData.user);
-                console.log('🔓 Authentication flow completed successfully');
-
-
-                // Set up session timeout (2 hours from now)
                 setupSessionTimeout();
 
             } catch (error) {
-                console.error('💥 AUTH CHECK ERROR - Exception:', error);
-                console.error('💥 Error type:', error.constructor.name);
-                console.error('💥 Error message:', error.message);
-
-                localStorage.removeItem('token'); // Clear invalid token
-                console.log('🗑️ Token cleared due to error');
+                console.error('💥 AUTH CHECK ERROR:', error);
+                localStorage.removeItem('token');
                 redirectToLogin();
                 return;
             }
@@ -1354,9 +1342,22 @@
             window.adminApp = new AdminApp();
         });
 
+        async function refreshAccessToken() {
+            try {
+                const res = await fetch('/api/auth/refresh', { method: 'POST' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.access_token) localStorage.setItem('token', data.access_token);
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                return false;
+            }
+        }
+
         function redirectToLogin() {
             // Show session expired message
-            alert('Session expired. Please login again.');
             window.location.href = '/admin';
         }
 

@@ -15,6 +15,7 @@ class AdminUser(AdminUserBase):
     is_superuser: bool
     created_at: datetime
     last_login: Optional[datetime] = None
+    totp_enabled: bool = False
 
     class Config:
         from_attributes = True
@@ -29,3 +30,10 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+class TOTPSetup(BaseModel):
+    secret: str
+    qr_code_uri: str
+
+class TOTPVerify(BaseModel):
+    code: str

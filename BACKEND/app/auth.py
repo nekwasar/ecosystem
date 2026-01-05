@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, HTTPException, status, Response
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, APIKeyCookie
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
@@ -10,6 +10,7 @@ from models.user import AdminUser
 from schemas import TokenData
 from core.config import settings
 import logging
+import pyotp
 
 # Set up dedicated auth logging
 auth_logger = logging.getLogger('auth_flow')
@@ -19,10 +20,13 @@ auth_logger.setLevel(logging.DEBUG)
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
+REFRESH_TOKEN_EXPIRE_DAYS = settings.refresh_token_expire_days
 
 # Professional-grade password hashing with Bcrypt
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
+access_cookie_scheme = APIKeyCookie(name="access_token", auto_error=False)
+refresh_cookie_scheme = APIKeyCookie(name="refresh_token", auto_error=False)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash safely using bcrypt"""
@@ -35,6 +39,42 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     """Hash a password using bcrypt with salt"""
     return pwd_context.hash(password)
+
+# --- TOTP / MFA Helpers (Phase 4) ---
+
+def generate_totp_secret():
+    """Generate a new random base32 TOTP secret"""
+    return pyotp.random_base32()
+
+def verify_totp_code(secret: str, code: str):
+    """Verify a 6-digit TOTP code against the secret"""
+    if not secret or not code:
+        return False
+    totp = pyotp.TOTP(secret)
+    # Allows for a small time drift (30 seconds)
+    return totp.verify(code, valid_window=1)
+
+def get_totp_uri(secret: str, username: str):
+    """Generate a provisioning URI for QR codes"""
+    return pyotp.totp.TOTP(secret).provisioning_uri(
+        name=username, 
+        issuer_name="NekwasaR Admin"
+    )
+
+def generate_qr_code(uri: str):
+    """Generate a base64 encoded QR code PNG from a URI"""
+    import qrcode
+    import io
+    import base64
+    
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(uri)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffered = io.BytesIO()
+    img.save(buffered, format="PNG")
+    return base64.b64encode(buffered.getvalue()).decode()
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Create JWT access token"""
@@ -53,54 +93,95 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
         auth_logger.error(f"❌ JWT CREATION FAILED - Error: {e}")
         raise
 
+def create_refresh_token(data: dict):
+    """Create a long-lived refresh token for session persistence"""
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    to_encode.update({"exp": expire, "scope": "refresh"})
+    try:
+        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        return encoded_jwt
+    except Exception as e:
+        auth_logger.error(f"❌ REFRESH TOKEN CREATION FAILED - Error: {e}")
+        raise
+
+def create_mfa_token(data: dict):
+    """Create a short-lived token for MFA verification step"""
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=5)
+    to_encode.update({"exp": expire, "scope": "mfa_pending"})
+    try:
+        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        return encoded_jwt
+    except Exception as e:
+        auth_logger.error(f"❌ MFA TOKEN CREATION FAILED - Error: {e}")
+        raise
+
 def authenticate_user(db: Session, username: str, password: str):
-    """Authenticate user with username and password"""
+    """Authenticate user with username and password with lockout protection"""
     user = db.query(AdminUser).filter(AdminUser.username == username).first()
 
     if not user:
-        return False
+        return None
+
+    # Check if locked (Rec 5)
+    if getattr(user, 'is_locked', False):
+        auth_logger.warning(f"🔒 Account locked login attempt: {username}")
+        return "LOCKED"
 
     if not verify_password(password, user.hashed_password):
-        return False
+        if hasattr(user, 'failed_login_attempts'):
+            user.failed_login_attempts += 1
+            if user.failed_login_attempts >= 5:
+                user.is_locked = True
+                auth_logger.error(f"❌ Account LOCKED after 5 failed attempts: {username}")
+            db.commit()
+        return None
 
     if not user.is_active:
-        return False
+        return None
 
+    # Success! Reset strikes
+    if hasattr(user, 'failed_login_attempts'):
+        user.failed_login_attempts = 0
+        db.commit()
     return user
 
-def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security), db: Session = Depends(get_db)):
-    """Get current authenticated user"""
+def get_current_user(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security), 
+    access_token: Optional[str] = Depends(access_cookie_scheme),
+    db: Session = Depends(get_db)
+):
+    """Get current authenticated user from Cookie (preferred) or Authorization Header"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    
+    # 1. Extraction: Cookie takes priority
+    token = access_token
+    if not token and credentials:
+        token = credentials.credentials
+        
+    if not token:
+        raise credentials_exception
 
     try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
+        scope: str = payload.get("scope")
 
-        if username is None:
+        if username is None or scope == "refresh":
             raise credentials_exception
 
         token_data = TokenData(username=username)
 
-    except jwt.ExpiredSignatureError as e:
-        auth_logger.error(f"❌ TOKEN EXPIRED - {e}")
-        # Note: payload is not available here since decode failed, so we can't show expiration details
-        auth_logger.error(f"❌ TOKEN EXPIRED - Please refresh your session")
-        raise credentials_exception
-    except jwt.InvalidTokenError as e:
-        auth_logger.error(f"❌ INVALID TOKEN - {e}")
-        raise credentials_exception
-    except JWTError as e:
-        auth_logger.error(f"❌ JWT DECODE ERROR - {e}")
-        auth_logger.error(f"❌ ERROR TYPE - {type(e).__name__}")
+    except jwt.ExpiredSignatureError:
+        auth_logger.warning("❌ TOKEN EXPIRED")
         raise credentials_exception
     except Exception as e:
-        auth_logger.error(f"💥 UNEXPECTED ERROR IN TOKEN DECODE - {e}")
-        auth_logger.error(f"💥 ERROR TYPE - {type(e).__name__}")
+        auth_logger.error(f"❌ JWT DECODE ERROR: {e}")
         raise credentials_exception
 
     try:
@@ -108,9 +189,15 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
 
         if user is None:
             raise credentials_exception
+            
+        if getattr(user, 'is_locked', False):
+             auth_logger.warning(f"🔒 Blocked access to locked account: {user.username}")
+             raise HTTPException(status_code=403, detail="Account is locked")
 
         return user
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise credentials_exception
 

@@ -96,6 +96,48 @@ def list_users():
     finally:
         db.close()
 
+def unlock_admin(username):
+    """Unlock an account that was locked due to strikes"""
+    db = SessionLocal()
+    try:
+        user = db.query(AdminUser).filter(AdminUser.username == username).first()
+        if not user:
+            print(f"❌ Error: User '{username}' not found.")
+            return
+
+        user.is_locked = False
+        user.failed_login_attempts = 0
+        db.commit()
+        print(f"🔓 Success: Account '{username}' has been unlocked and strikes reset.")
+    except Exception as e:
+        print(f"❌ Unexpected Error: {str(e)}")
+        db.rollback()
+    finally:
+        db.close()
+
+def delete_admin(username):
+    """Permanently delete an admin user"""
+    db = SessionLocal()
+    try:
+        user = db.query(AdminUser).filter(AdminUser.username == username).first()
+        if not user:
+            print(f"❌ Error: User '{username}' not found.")
+            return
+
+        confirm = input(f"⚠️ Are you sure you want to PERMANENTLY delete '{username}'? (y/N): ")
+        if confirm.lower() != 'y':
+            print("Operation cancelled.")
+            return
+
+        db.delete(user)
+        db.commit()
+        print(f"🗑️ Success: Admin user '{username}' deleted.")
+    except Exception as e:
+        print(f"❌ Unexpected Error: {str(e)}")
+        db.rollback()
+    finally:
+        db.close()
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="🚀 NekwasaR Admin Management Terminal Tool")
     subparsers = parser.add_subparsers(dest="command", help="Manage admin users securely")
@@ -110,6 +152,14 @@ if __name__ == "__main__":
     reset_parser = subparsers.add_parser("reset-password", help="Force reset an admin's password")
     reset_parser.add_argument("--username", required=True, help="Username of the admin")
 
+    # Command: unlock-admin
+    unlock_parser = subparsers.add_parser("unlock-admin", help="Unlock a locked admin account")
+    unlock_parser.add_argument("--username", required=True, help="Username to unlock")
+
+    # Command: delete-admin
+    delete_parser = subparsers.add_parser("delete-admin", help="Permanently delete an admin user")
+    delete_parser.add_argument("--username", required=True, help="Username to delete")
+
     # Command: list
     subparsers.add_parser("list", help="List all registered admin users")
 
@@ -119,6 +169,10 @@ if __name__ == "__main__":
         create_admin(args.username, args.email, getattr(args, 'superuser', True))
     elif args.command == "reset-password":
         reset_password(args.username)
+    elif args.command == "unlock-admin":
+        unlock_admin(args.username)
+    elif args.command == "delete-admin":
+        delete_admin(args.username)
     elif args.command == "list":
         list_users()
     else:

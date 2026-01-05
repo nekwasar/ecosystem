@@ -1,7 +1,7 @@
 from .contact import ContactBase, ContactCreate, Contact
 from .blog import BlogPostBase, BlogPostCreate, BlogPost, CommentBase, CommentCreate, Comment, LikeCreate, Like, TemporalUserBase, TemporalUserCreate, TemporalUser, ViewCreate
 from .product import ProductBase, ProductCreate, Product
-from .user import AdminUserBase, AdminUserCreate, AdminUser, AdminLogin, Token, TokenData
+from .user import AdminUserBase, AdminUserCreate, AdminUser, AdminLogin, Token, TokenData, TOTPSetup, TOTPVerify
 
 __all__ = [
     # Contact schemas
@@ -16,5 +16,5 @@ __all__ = [
     "ProductBase", "ProductCreate", "Product",
     # User schemas
     "AdminUserBase", "AdminUserCreate", "AdminUser",
-    "AdminLogin", "Token", "TokenData"
+    "AdminLogin", "Token", "TokenData", "TOTPSetup", "TOTPVerify"
 ]

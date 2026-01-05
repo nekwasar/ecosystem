@@ -8,7 +8,8 @@ class Settings(BaseSettings):
     # Security
     secret_key: str = "your-secret-key-change-in-production"
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = 120  # 2 hours
+    access_token_expire_minutes: int = 15  # Short-lived for security
+    refresh_token_expire_days: int = 7    # Long-lived persistent session
 
     # API
     api_host: str = "0.0.0.0"

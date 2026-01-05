@@ -1,716 +1,199 @@
-<!-- Tailwind Configuration Script -->
-<script>
-tailwind.config = {
-  darkMode: 'class',
-  theme: {
-    extend: {
-      fontFamily: {
-        'syne': ['Syne', 'sans-serif'],
-      },
-      colors: {
-        'base': 'var(--base)',
-        'base-tint': 'var(--base-tint)',
-        'base-shade': 'var(--base-shade)',
-        'accent': 'var(--accent)',
-        'secondary': 'var(--secondary)',
-        'secondary-rgba': 'var(--secondary-rgba)',
-        'stroke-controls': 'var(--stroke-controls)',
-        'stroke-elements': 'var(--stroke-elements)',
-        't-bright': 'var(--t-bright)',
-        't-medium': 'var(--t-medium)',
-        't-muted': 'var(--t-muted)',
-        't-accent': 'var(--t-accent)',
-        't-secondary': 'var(--t-secondary)',
-        't-disabled': 'var(--t-disabled)',
-        't-placeholder': 'var(--t-placeholder)',
-        'base-opp': 'var(--base-opp)',
-        't-opp-bright': 'var(--t-opp-bright)',
-        't-opp-medium': 'var(--t-opp-medium)',
-        't-opp-muted': 'var(--t-opp-muted)',
-        'gradient-one': 'var(--gradient-one)',
-        'gradient-two': 'var(--gradient-two)',
-        'gradient-three': 'var(--gradient-three)',
-      },
-      borderRadius: {
-        's': 'var(--_radius-s)',
-        'm': 'var(--_radius-m)',
-        'l': 'var(--_radius-l)',
-        'xl': 'var(--_radius-xl)',
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.6s ease-out forwards',
-        'slide-up': 'slideUp 0.6s ease-out forwards',
-        'scale-in': 'scaleIn 0.4s ease-out forwards',
-      },
-      transitionTimingFunction: {
-        'bezier': 'var(--_animbezier)',
-      },
-      transitionDuration: {
-        'fast': 'var(--_animspeed-fast)',
-        'medium': 'var(--_animspeed-medium)',
-        'slow': 'var(--_animspeed-slow)',
-      },
-    },
-  },
-}
-</script>
+<div class="p-6">
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-6 border-bottom border-gray-100">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Multi-Factor Authentication (MFA)</h3>
+            <p class="text-gray-600">Enhance your account security by requiring a 6-digit code from your mobile device
+                when logging in.</p>
+        </div>
 
-<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
-    <div class="p-6 md:p-8 lg:p-12">
-        <!-- Page Header -->
-        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
-            <div class="relative z-10">
-                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Security Settings</h1>
-                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Configure advanced security policies and authentication settings</p>
-                <div class="mt-8 flex justify-center">
-                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+        <div id="mfaStatusSection" class="p-6 bg-gray-50 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div id="mfaBadge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                    Checking Status...
+                </div>
+                <div id="mfaDescription" class="text-sm text-gray-500">
+                    Loading settings...
+                </div>
+            </div>
+            <button id="toggleMfaBtn"
+                class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition hidden">
+                Setup MFA
+            </button>
+        </div>
+
+        <!-- MFA Setup Wizard (Hidden by default) -->
+        <div id="mfaSetupWizard" class="p-8 border-t border-gray-100 hidden">
+            <div class="max-w-md mx-auto">
+                <div class="text-center mb-8">
+                    <h4 class="text-lg font-bold">Step 1: Scan QR Code</h4>
+                    <p class="text-sm text-gray-500 mt-2">Open your authenticator app (Google Authenticator, Authy,
+                        etc.) and scan this code.</p>
+                    <div id="mfaQrContainer" class="mt-4 p-4 bg-white border rounded-xl flex justify-center">
+                        <img id="mfaQrImg" src="" alt="MFA QR Code" class="w-48 h-48">
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <h4 class="text-lg font-bold">Step 2: Verify Code</h4>
+                    <p class="text-sm text-gray-500 mt-2">Enter the 6-digit code shown in your app to confirm setup.</p>
+                    <div class="mt-4 flex gap-2 justify-center">
+                        <input type="text" id="mfaVerifyCode" maxlength="6"
+                            class="w-32 p-3 text-center text-xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                            placeholder="000000">
+                    </div>
+                    <button id="confirmMfaBtn"
+                        class="mt-6 w-full py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition">
+                        Enable MFA
+                    </button>
+                    <button id="cancelMfaBtn" class="mt-2 text-gray-400 text-sm hover:underline">Cancel</button>
                 </div>
             </div>
         </div>
 
-        <!-- Security Overview Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
-            <!-- Security Score Card -->
-            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
-                <div class="relative z-10 flex items-center space-x-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
-                        <i class="ph-bold ph-shield-check"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="securityScore">92</div>
-                        <div class="text-base text-t-medium font-syne mb-3">Security Score</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="scoreChange">
-                            <i class="ph-bold ph-trend-up text-base"></i>
-                            <span>Excellent</span>
-                        </div>
-                    </div>
+        <!-- Disabling MFA -->
+        <div id="mfaDisableSection" class="p-8 border-t border-gray-100 hidden">
+            <div class="max-w-md mx-auto text-center">
+                <h4 class="text-lg font-bold text-red-600">Disable MFA</h4>
+                <p class="text-sm text-gray-500 mt-2">To disable MFA, please enter your current code for confirmation.
+                </p>
+                <div class="mt-4 flex gap-2 justify-center">
+                    <input type="text" id="mfaDisableCode" maxlength="6"
+                        class="w-32 p-3 text-center text-xl tracking-widest border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+                        placeholder="000000">
                 </div>
-                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
-            </div>
-
-            <!-- Active Policies Card -->
-            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
-                <div class="relative z-10 flex items-center space-x-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
-                        <i class="ph-bold ph-gear"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="activePolicies">15</div>
-                        <div class="text-base text-t-medium font-syne mb-3">Active Policies</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-blue-500 dark:text-blue-400" id="policiesChange">
-                            <i class="ph-bold ph-circle text-base"></i>
-                            <span>Enforced</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
-            </div>
-
-            <!-- 2FA Enabled Card -->
-            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-purple-500/20 cursor-pointer overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
-                <div class="relative z-10 flex items-center space-x-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
-                        <i class="ph-bold ph-lock"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="twoFactorUsers">8</div>
-                        <div class="text-base text-t-medium font-syne mb-3">2FA Enabled</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-purple-500 dark:text-purple-400" id="twoFactorChange">
-                            <i class="ph-bold ph-shield text-base"></i>
-                            <span>Protected</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
-            </div>
-
-            <!-- Security Alerts Card -->
-            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
-                <div class="relative z-10 flex items-center space-x-6">
-                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
-                        <i class="ph-bold ph-bell"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="securityAlerts">3</div>
-                        <div class="text-base text-t-medium font-syne mb-3">Active Alerts</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-yellow-500 dark:text-yellow-400" id="alertsChange">
-                            <i class="ph-bold ph-warning text-base"></i>
-                            <span>Monitor</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
-            </div>
-        </div>
-
-        <!-- Authentication Settings -->
-        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
-            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
-                        <i class="ph-bold ph-lock text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-t-bright font-syne">Authentication Settings</h3>
-                        <p class="text-t-medium font-syne text-sm">Configure login policies, password requirements, and multi-factor authentication</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-8">
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                    <!-- Password Policies -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Password Policies</h4>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Minimum Password Length</h5>
-                                    <p class="text-sm text-t-medium font-syne">Require passwords to be at least 8 characters</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Password Complexity</h5>
-                                    <p class="text-sm text-t-medium font-syne">Require uppercase, lowercase, numbers, and symbols</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Password History</h5>
-                                    <p class="text-sm text-t-medium font-syne">Prevent reuse of last 5 passwords</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Password Expiration</h5>
-                                    <p class="text-sm text-t-medium font-syne">Require password change every 90 days</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Multi-Factor Authentication -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Multi-Factor Authentication</h4>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Require 2FA for Admins</h5>
-                                    <p class="text-sm text-t-medium font-syne">Mandatory two-factor authentication for admin accounts</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Optional 2FA for Users</h5>
-                                    <p class="text-sm text-t-medium font-syne">Allow regular users to enable 2FA voluntarily</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">SMS Backup Codes</h5>
-                                    <p class="text-sm text-t-medium font-syne">Generate backup SMS codes for account recovery</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Hardware Keys</h5>
-                                    <p class="text-sm text-t-medium font-syne">Support FIDO2/WebAuthn security keys</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Session Management -->
-        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
-            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
-                        <i class="ph-bold ph-clock text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-t-bright font-syne">Session Management</h3>
-                        <p class="text-t-medium font-syne text-sm">Control session timeouts, concurrent sessions, and device management</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-8">
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                    <!-- Session Policies -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Session Policies</h4>
-
-                        <div class="space-y-4">
-                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Session Timeout (minutes)</label>
-                                <input type="number" value="30" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne">
-                            </div>
-
-                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Maximum Concurrent Sessions</label>
-                                <input type="number" value="5" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne">
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Remember Me Option</h5>
-                                    <p class="text-sm text-t-medium font-syne">Allow users to stay logged in for extended periods</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Force Logout on Password Change</h5>
-                                    <p class="text-sm text-t-medium font-syne">End all sessions when password is changed</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Active Sessions -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Active Sessions</h4>
-
-                        <div class="space-y-4 max-h-96 overflow-y-auto">
-                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                            <i class="ph-bold ph-circle text-white text-xs"></i>
-                                        </div>
-                                        <div>
-                                            <h5 class="font-semibold text-t-bright font-syne">Current Session</h5>
-                                            <p class="text-sm text-t-medium font-syne">Chrome on Windows • Awka, NG</p>
-                                        </div>
-                                    </div>
-                                    <span class="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">Active</span>
-                                </div>
-                                <div class="text-xs text-t-muted font-syne">Started 2 hours ago</div>
-                            </div>
-
-                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                                            <i class="ph-bold ph-circle text-white text-xs"></i>
-                                        </div>
-                                        <div>
-                                            <h5 class="font-semibold text-t-bright font-syne">Mobile Session</h5>
-                                            <p class="text-sm text-t-medium font-syne">Safari on iPhone • Awka, NG</p>
-                                        </div>
-                                    </div>
-                                    <button class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-semibold rounded-lg transition-all duration-medium">
-                                        Revoke
-                                    </button>
-                                </div>
-                                <div class="text-xs text-t-muted font-syne">Started 1 day ago</div>
-                            </div>
-
-                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                                            <i class="ph-bold ph-circle text-white text-xs"></i>
-                                        </div>
-                                        <div>
-                                            <h5 class="font-semibold text-t-bright font-syne">Work Session</h5>
-                                            <p class="text-sm text-t-medium font-syne">Firefox on Linux • Remote</p>
-                                        </div>
-                                    </div>
-                                    <button class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-semibold rounded-lg transition-all duration-medium">
-                                        Revoke
-                                    </button>
-                                </div>
-                                <div class="text-xs text-t-muted font-syne">Started 3 days ago</div>
-                            </div>
-                        </div>
-
-                        <button class="w-full inline-flex items-center justify-center space-x-3 px-6 py-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne border border-red-500/20">
-                            <i class="ph-bold ph-sign-out text-lg"></i>
-                            <span>Revoke All Sessions</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Security Monitoring -->
-        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
-            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
-                <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
-                        <i class="ph-bold ph-activity text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-bold text-t-bright font-syne">Security Monitoring</h3>
-                        <p class="text-t-medium font-syne text-sm">Configure alerts, logging, and automated security responses</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-8">
-                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                    <!-- Alert Settings -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Alert Settings</h4>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Failed Login Alerts</h5>
-                                    <p class="text-sm text-t-medium font-syne">Notify on multiple failed attempts</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Suspicious IP Alerts</h5>
-                                    <p class="text-sm text-t-medium font-syne">Alert on unrecognized IP addresses</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Security Policy Changes</h5>
-                                    <p class="text-sm text-t-medium font-syne">Notify on policy modifications</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Logging Settings -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Logging Settings</h4>
-
-                        <div class="space-y-4">
-                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Log Retention (days)</label>
-                                <input type="number" value="90" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne">
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Detailed Audit Logs</h5>
-                                    <p class="text-sm text-t-medium font-syne">Log all user actions and changes</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">IP Address Logging</h5>
-                                    <p class="text-sm text-t-medium font-syne">Track and log all IP addresses</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Automated Responses -->
-                    <div class="space-y-6">
-                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Automated Responses</h4>
-
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Auto Block Suspicious IPs</h5>
-                                    <p class="text-sm text-t-medium font-syne">Automatically block detected threats</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Force Password Reset</h5>
-                                    <p class="text-sm text-t-medium font-syne">Require reset on security breach</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-
-                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
-                                <div>
-                                    <h5 class="font-semibold text-t-bright font-syne">Email Notifications</h5>
-                                    <p class="text-sm text-t-medium font-syne">Send security alerts via email</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <button class="w-full inline-flex items-center justify-center space-x-3 px-6 py-4 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne">
-                            <i class="ph-bold ph-floppy-disk text-lg"></i>
-                            <span>Save Security Settings</span>
-                        </button>
-                    </div>
-                </div>
+                <button id="confirmDisableMfaBtn"
+                    class="mt-6 w-full py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">
+                    Remove MFA Protection
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Custom CSS for enhanced animations and effects -->
-<style>
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.4s ease-out forwards;
-}
-
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-/* Enhanced scrollbar */
-.overflow-x-auto::-webkit-scrollbar,
-.overflow-y-auto::-webkit-scrollbar {
-  width: 8px;
-}
-
-.overflow-x-auto::-webkit-scrollbar-track,
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: var(--base-tint);
-  border-radius: 4px;
-}
-
-.overflow-x-auto::-webkit-scrollbar-thumb,
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 4px;
-}
-
-.overflow-x-auto::-webkit-scrollbar-thumb:hover,
-.overflow-y-auto::-webkit-scrollbar-thumb:hover {
-  background: var(--secondary);
-}
-
-/* Enhanced focus states */
-.focus\:ring-accent:focus {
-  --tw-ring-color: var(--accent);
-}
-
-/* Smooth transitions for all interactive elements */
-button, input, select, .cursor-pointer {
-  transition: all var(--_animspeed-medium) var(--_animbezier);
-}
-
-/* Enhanced hover effects */
-.hover\:glow:hover {
-  animation: glow 0.6s ease-out;
-}
-</style>
-
 <script>
-// Security Settings Page
-function initSecuritySettings() {
-    loadSecurityData();
-    setupSecurityEventListeners();
-}
+    function initSecuritySettings() {
+        console.log("🔒 Initializing Security Settings...");
+        checkMfaStatus();
 
-async function loadSecurityData() {
-    try {
-        const response = await fetch('/api/admin/security/settings');
-        if (response.ok) {
-            const data = await response.json();
-            updateSecurityStats(data.stats);
-            updateSecuritySettings(data.settings);
-        } else {
-            showFallbackSecurityData();
+        const toggleBtn = document.getElementById('toggleMfaBtn');
+        const setupWizard = document.getElementById('mfaSetupWizard');
+        const disableSection = document.getElementById('mfaDisableSection');
+        const cancelBtn = document.getElementById('cancelMfaBtn');
+
+        toggleBtn.addEventListener('click', () => {
+            if (toggleBtn.textContent.includes('Setup')) {
+                startMfaSetup();
+            } else {
+                disableSection.classList.remove('hidden');
+                setupWizard.classList.add('hidden');
+            }
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            setupWizard.classList.add('hidden');
+            checkMfaStatus();
+        });
+
+        document.getElementById('confirmMfaBtn').addEventListener('click', enableMfa);
+        document.getElementById('confirmDisableMfaBtn').addEventListener('click', disableMfa);
+    }
+
+    async function checkMfaStatus() {
+        try {
+            const res = await fetch('/api/auth/me');
+            const user = await res.json();
+
+            const badge = document.getElementById('mfaBadge');
+            const desc = document.getElementById('mfaDescription');
+            const btn = document.getElementById('toggleMfaBtn');
+            const disableSection = document.getElementById('mfaDisableSection');
+
+            if (user.totp_enabled) {
+                badge.textContent = 'PROTECTED';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-green-100 text-green-800';
+                desc.textContent = 'MFA is active on your account.';
+                btn.textContent = 'Disable MFA';
+                btn.classList.remove('bg-indigo-600');
+                btn.classList.add('bg-red-50', 'text-red-600', 'border', 'border-red-200');
+            } else {
+                badge.textContent = 'UNPROTECTED';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 text-red-800';
+                desc.textContent = 'MFA is not enabled. Setup MFA now to secure your account.';
+                btn.textContent = 'Setup MFA';
+                btn.classList.add('bg-indigo-600', 'text-white');
+                btn.classList.remove('bg-red-50', 'text-red-600');
+            }
+            btn.classList.remove('hidden');
+            disableSection.classList.add('hidden');
+        } catch (e) {
+            console.error("Failed to check status", e);
         }
-    } catch (error) {
-        console.error('Error loading security data:', error);
-        showFallbackSecurityData();
-    }
-}
-
-function updateSecurityStats(stats) {
-    document.getElementById('securityScore').textContent = stats.securityScore || 92;
-    document.getElementById('activePolicies').textContent = stats.activePolicies || 15;
-    document.getElementById('twoFactorUsers').textContent = stats.twoFactorUsers || 8;
-    document.getElementById('securityAlerts').textContent = stats.securityAlerts || 3;
-}
-
-function updateSecuritySettings(settings) {
-    // Update form fields with current settings
-    console.log('Updating security settings:', settings);
-}
-
-function setupSecurityEventListeners() {
-    // Save settings button
-    const saveBtn = document.querySelector('button:has(span:contains("Save Security Settings"))');
-    if (saveBtn) {
-        saveBtn.onclick = () => {
-            saveSecuritySettings();
-        };
     }
 
-    // Revoke all sessions button
-    const revokeBtn = document.querySelector('button:has(span:contains("Revoke All Sessions"))');
-    if (revokeBtn) {
-        revokeBtn.onclick = () => {
-            revokeAllSessions();
-        };
+    async function startMfaSetup() {
+        const wizard = document.getElementById('mfaSetupWizard');
+        const qrImg = document.getElementById('mfaQrImg');
+
+        try {
+            const res = await fetch('/api/auth/mfa/setup', { method: 'POST' });
+            const data = await res.json();
+
+            qrImg.src = data.qr_code_uri;
+            wizard.classList.remove('hidden');
+            document.getElementById('mfaDisableSection').classList.add('hidden');
+        } catch (e) {
+            alert('Failed to start setup');
+        }
     }
 
-    // Individual session revoke buttons
-    document.querySelectorAll('button:has-text("Revoke")').forEach(btn => {
-        btn.onclick = (e) => {
-            const sessionInfo = e.target.closest('.p-4').querySelector('h5').textContent;
-            revokeSession(sessionInfo);
-        };
-    });
-}
+    async function enableMfa() {
+        const code = document.getElementById('mfaVerifyCode').value;
+        if (code.length < 6) return;
 
-function saveSecuritySettings() {
-    showNotification('Security settings saved successfully!', 'success');
-}
+        try {
+            const res = await fetch('/api/auth/mfa/enable', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
 
-function revokeAllSessions() {
-    if (confirm('Are you sure you want to revoke all active sessions? This will log out all users.')) {
-        showNotification('All sessions have been revoked', 'success');
+            if (res.ok) {
+                alert('MFA enabled successfully!');
+                document.getElementById('mfaSetupWizard').classList.add('hidden');
+                checkMfaStatus();
+            } else {
+                const err = await res.json();
+                alert(err.detail || 'Failed to verify code');
+            }
+        } catch (e) {
+            alert('Connection error');
+        }
     }
-}
 
-function revokeSession(sessionInfo) {
-    if (confirm(`Revoke session: ${sessionInfo}?`)) {
-        showNotification(`Session "${sessionInfo}" has been revoked`, 'success');
+    async function disableMfa() {
+        const code = document.getElementById('mfaDisableCode').value;
+        if (code.length < 6) return;
+
+        try {
+            const res = await fetch('/api/auth/mfa/disable', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            });
+
+            if (res.ok) {
+                alert('MFA disabled.');
+                document.getElementById('mfaDisableSection').classList.add('hidden');
+                checkMfaStatus();
+            } else {
+                const err = await res.json();
+                alert(err.detail || 'Invalid code');
+            }
+        } catch (e) {
+            alert('Connection error');
+        }
     }
-}
 
-function showFallbackSecurityData() {
-    // Show sample data when API is not available
-    updateSecurityStats({
-        securityScore: 92,
-        activePolicies: 15,
-        twoFactorUsers: 8,
-        securityAlerts: 3
-    });
-}
-
-// Initialize when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSecuritySettings);
-} else {
-    initSecuritySettings();
-}
-
-function showNotification(message, type = 'info') {
-    // TODO: Implement notification system
-    console.log(`${type.toUpperCase()}: ${message}`);
-}
+    // Global scope for AdminApp to call
+    window.initSecuritySettings = initSecuritySettings;
 </script>

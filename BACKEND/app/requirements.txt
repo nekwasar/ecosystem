@@ -17,3 +17,5 @@ user-agents==2.2.0
 apscheduler==3.11.1
 psycopg2-binary==2.9.9
 sib-api-v3-sdk
+pyotp==2.9.0
+qrcode==7.4.2

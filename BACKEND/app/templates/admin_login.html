@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,19 +15,23 @@
             border: 1px solid var(--stroke-elements);
             border-radius: var(--_radius-xl);
         }
+
         .login-form {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
+
         .form-group {
             display: flex;
             flex-direction: column;
         }
+
         .form-group label {
             margin-bottom: 0.5rem;
             font-weight: 700;
         }
+
         .form-group input {
             padding: 0.75rem;
             border: 1px solid var(--stroke-elements);
@@ -34,6 +39,7 @@
             background: var(--base-tint);
             color: var(--t-bright);
         }
+
         .login-btn {
             padding: 0.75rem;
             background: linear-gradient(135deg, var(--accent), var(--secondary));
@@ -44,6 +50,7 @@
             font-weight: 700;
             margin-top: 1rem;
         }
+
         .error-message {
             color: #ff6b6b;
             background: rgba(255, 107, 107, 0.1);
@@ -54,19 +61,36 @@
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <h2 style="text-align: center; margin-bottom: 2rem;">Admin Login</h2>
         <form class="login-form" id="loginForm">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+            <div id="credentialsSection">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+
+            <div id="mfaSection" style="display: none;">
+                <p style="font-size: 0.9rem; color: var(--t-medium); margin-bottom: 1rem;">
+                    Please enter the 6-digit code from your authenticator app.
+                </p>
+                <div class="form-group">
+                    <label for="mfaCode">MFA Code</label>
+                    <input type="text" id="mfaCode" name="mfaCode" pattern="[0-9]*" inputmode="numeric" maxlength="6">
+                </div>
+                <button type="button" id="mfaBtn" class="login-btn">Verify & Continue</button>
+                <button type="button" id="backBtn"
+                    style="background: transparent; color: var(--t-medium); border: 1px solid var(--stroke-elements); margin-top: 0.5rem;"
+                    class="login-btn">Back</button>
             </div>
-            <button type="submit" class="login-btn">Login</button>
         </form>
         <div id="errorMessage" class="error-message"></div>
     </div>
@@ -75,59 +99,89 @@
         const loginForm = document.getElementById('loginForm');
         const errorMessage = document.getElementById('errorMessage');
 
+        let pendingMfaToken = null;
+
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            console.log('🚀 LOGIN ATTEMPT - Username:', username, 'Password length:', password.length);
-
             try {
-                console.log('📡 SENDING LOGIN REQUEST - URL: /api/auth/login');
                 const response = await fetch('/api/auth/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        username: username,
-                        password: password
-                    })
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username, password })
                 });
 
-                console.log('📡 LOGIN RESPONSE - Status:', response.status, 'OK:', response.ok);
-                console.log('📡 LOGIN RESPONSE - Headers:', [...response.headers.entries()]);
+                const data = await response.json();
 
                 if (response.ok) {
-                    const data = await response.json();
-                    console.log('✅ LOGIN SUCCESS - Token received');
-                    console.log('🔐 TOKEN PREVIEW:', data.access_token.substring(0, 20) + '...');
-                    console.log('🔐 TOKEN LENGTH:', data.access_token.length);
-                    console.log('🔐 TOKEN TYPE:', data.token_type);
-                    
-                    localStorage.setItem('token', data.access_token);
-                    console.log('💾 TOKEN STORED - Loading dashboard with JavaScript');
-                    
-                    // Load dashboard content with JavaScript instead of page redirect
-                    loadDashboardWithToken(data.access_token);
+                    if (data.mfa_required) {
+                        pendingMfaToken = data.mfa_token;
+                        document.getElementById('credentialsSection').style.display = 'none';
+                        document.getElementById('mfaSection').style.display = 'block';
+                        showError('MFA required. Check your app.', 'success');
+                    } else {
+                        handleLoginSuccess(data);
+                    }
                 } else {
-                    const error = await response.json();
-                    console.log('❌ LOGIN FAILED - Status:', response.status);
-                    console.log('❌ LOGIN ERROR DETAIL:', error.detail);
-                    showError(error.detail || 'Login failed');
+                    showError(data.detail || 'Login failed');
                 }
             } catch (error) {
-                console.error('💥 LOGIN EXCEPTION:', error);
-                console.error('💥 ERROR TYPE:', error.constructor.name);
-                console.error('💥 ERROR MESSAGE:', error.message);
                 showError('Network error. Please try again.');
             }
         });
 
-        function showError(message) {
+        document.getElementById('mfaBtn').addEventListener('click', async () => {
+            const code = document.getElementById('mfaCode').value;
+            if (!code || code.length < 6) {
+                showError('Enter 6-digit code');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/verify-mfa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${pendingMfaToken}`
+                    },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    handleLoginSuccess(data);
+                } else {
+                    showError(data.detail || 'MFA failed');
+                }
+            } catch (error) {
+                showError('MFA connection error');
+            }
+        });
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            document.getElementById('credentialsSection').style.display = 'block';
+            document.getElementById('mfaSection').style.display = 'none';
+            pendingMfaToken = null;
+        });
+
+        function handleLoginSuccess(data) {
+            if (data.access_token) {
+                localStorage.setItem('token', data.access_token);
+            }
+            showError('Login successful! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = '/admin/dashboard';
+            }, 1000);
+        }
+
+        function showError(message, type = 'error') {
             errorMessage.textContent = message;
             errorMessage.style.display = 'block';
+            errorMessage.style.background = type === 'success' ? 'rgba(75, 181, 67, 0.1)' : 'rgba(255, 107, 107, 0.1)';
+            errorMessage.style.color = type === 'success' ? '#4bb543' : '#ff6b6b';
             setTimeout(() => {
                 errorMessage.style.display = 'none';
             }, 5000);
@@ -154,4 +208,5 @@
         }
     </script>
 </body>
+
 </html>
