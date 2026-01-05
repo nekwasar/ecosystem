@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from pathlib import Path
 import uvicorn
 import hashlib
+import traceback
 from sqlalchemy.orm import Session
 
 from database import create_tables, SessionLocal, get_db
@@ -22,7 +23,7 @@ from scheduler import init_scheduler, start_scheduler, stop_scheduler
 from models.user import AdminUser
 
 # Configure logging
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Create FastAPI app

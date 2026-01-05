@@ -180,13 +180,17 @@ class NewsletterService:
     async def process_scheduled_campaigns(self):
         """Find and send campaigns scheduled for 'now' or in the past that haven't sent yet"""
         now = datetime.now(timezone.utc)
+        logger.info(f"--- Scheduler Check started at {now} ---")
         
         # Get all campaigns with status 'scheduled'
         scheduled_campaigns = self.db.query(NewsletterCampaign).filter(
             NewsletterCampaign.status == "scheduled"
         ).all()
         
-        logger.info(f"Found {len(scheduled_campaigns)} campaigns in 'scheduled' status.")
+        if scheduled_campaigns:
+            logger.info(f"Checking {len(scheduled_campaigns)} campaigns in 'scheduled' status.")
+        else:
+            logger.debug("No campaigns in 'scheduled' status.")
         
         for campaign in scheduled_campaigns:
             if not campaign.scheduled_at:
@@ -264,6 +268,14 @@ class NewsletterService:
                          query = query.filter(NewsletterSubscriber.is_confirmed == val)
 
             subscribers = query.all()
+            logger.info(f"Campaign {campaign_id}: Found {len(subscribers)} subscribers to send to.")
+            
+            if not subscribers:
+                logger.warning(f"Campaign {campaign_id} has no eligible subscribers. Marking as sent with 0 recipients.")
+                campaign.status = "sent"
+                campaign.recipient_count = 0
+                self.db.commit()
+                return
             
             # Fetch Custom Sender Settings if available
             settings = self.get_settings()
@@ -279,7 +291,7 @@ class NewsletterService:
                 display_name = sub.name if sub.name else "Subscriber"
                 content_html = content_html.replace("{{name}}", display_name).replace("{{email}}", sub.email)
                 
-                email_service.send_transactional_email(
+                res = email_service.send_transactional_email(
                     to_email=sub.email,
                     subject=campaign.subject,
                     html_content=content_html,
@@ -287,14 +299,17 @@ class NewsletterService:
                     tags=[f"campaign_{campaign.id}"],
                     sender=sender_config
                 )
-                sent_count += 1
+                if res:
+                    sent_count += 1
+                else:
+                    logger.error(f"Failed to send campaign email to {sub.email}")
             
             # Finalize status
             campaign.status = "sent"
             campaign.sent_at = datetime.now(timezone.utc)
             campaign.recipient_count = sent_count
             self.db.commit()
-            logger.info(f"Campaign {campaign.id} successfully sent to {sent_count} recipients.")
+            logger.info(f"Campaign {campaign.id} processing finished. Successfully sent: {sent_count}/{len(subscribers)}")
             
         except Exception as e:
             logger.error(f"Campaign send failed: {e}")
@@ -394,7 +409,9 @@ class NewsletterService:
             logger.warning(f"Template {template_id} not found for sending to {subscriber.email}")
             return
 
-        unsubscribe_url = f"https://nekwasar.com/api/newsletter/unsubscribe?email={subscriber.email}"
+        settings = self.get_settings()
+        site_url = settings.get("site_url", "https://nekwasar.com")
+        unsubscribe_url = f"{site_url}/api/newsletter/unsubscribe?email={subscriber.email}"
         
         # Render
         subject = template.subject_template
@@ -422,7 +439,8 @@ class NewsletterService:
         """Generate weekly newsletter content from recent posts"""
         try:
             # Get recent posts from the last week
-            week_ago = datetime.now() - timedelta(days=7)
+            now_utc = datetime.now(timezone.utc)
+            week_ago = now_utc - timedelta(days=7)
             recent_posts = self.db.query(BlogPost).filter(
                 BlogPost.published_at >= week_ago,
                 BlogPost.is_featured == True

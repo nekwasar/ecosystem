@@ -104,6 +104,11 @@ def init_scheduler():
     print("- Weekly newsletter scheduled for every Monday at 9 AM")
     print("- Daily cleanup scheduled for every day at 2 AM")
     print("- Scheduled campaigns check set for every minute")
+    
+    # Log registered jobs for verification
+    for job in scheduler.get_jobs():
+        next_run = getattr(job, 'next_run_time', 'Unknown')
+        logger.info(f"Registered Job: {job.id} - Next run: {next_run}")
 
 def start_scheduler():
     """Start the scheduler"""
