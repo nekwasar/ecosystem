@@ -542,13 +542,14 @@
             document.getElementById('emptyState').classList.add('hidden');
 
             allAutomations.forEach(auto => {
-                const tpl = allTemplates.find(t => t.id === auto.template_id);
-                const tplName = tpl ? tpl.name : `Template #${auto.template_id} (Unresolved)`;
+                // Use loose equality (==) just in case types mismatch (string vs int)
+                const tpl = allTemplates.find(t => t.id == auto.template_id);
+                const tplName = tpl ? tpl.name : (auto.template_id ? `Template #${auto.template_id} (Unresolved)` : 'No Template Set');
 
                 // Icon Logic
                 let triggerIcon = 'ph-bold ph-robot';
                 let triggerColor = 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400';
-                let triggerName = auto.trigger_type;
+                let triggerName = auto.trigger_type || 'Unknown Trigger';
 
                 if (auto.trigger_type === 'welcome') {
                     triggerIcon = 'ph-bold ph-user-plus';

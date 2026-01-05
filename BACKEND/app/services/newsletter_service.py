@@ -586,12 +586,8 @@ class NewsletterService:
             # Deactivate existing automations of same type if we want single-active rule per type logic?
             # For 'welcome', typically only one is active.
             if trigger_type == 'welcome':
-                existing = self.db.query(NewsletterAutomation).filter(
-                    NewsletterAutomation.trigger_type == 'welcome',
-                    NewsletterAutomation.is_active == True
-                ).all()
-                for e in existing:
-                    e.is_active = False
+                # Removed logic that deactivates existing automations to allow for series/sequences.
+                pass
             
             auto = NewsletterAutomation(
                 name=name,

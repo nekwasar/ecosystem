@@ -570,6 +570,8 @@ async def get_automations(db: Session = Depends(get_db)):
                     "name": a.name,
                     "trigger_type": a.trigger_type,
                     "template_id": a.template_id,
+                    "subject": a.subject,
+                    "sender_name": a.sender_name,
                     "delay_hours": a.delay_hours,
                     "is_active": a.is_active
                 } for a in automations
