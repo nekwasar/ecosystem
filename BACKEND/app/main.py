@@ -115,19 +115,38 @@ app.mount("/static", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), nam
 # Mount blog assets (css, js, img)
 app.mount("/blog", StaticFiles(directory=str(BLOG_DIR)), name="blog-static")
 
-# Add custom exception handler for 401/403 errors to show custom 403 page
-from fastapi.responses import HTMLResponse
-from fastapi.exception_handlers import http_exception_handler
-from routes.admin import templates
-
-async def custom_403_handler(request: Request, exc: HTTPException):
-    """Custom handler for 401/403 errors to show custom 403 page"""
+# Global Error Handlers
+@app.exception_handler(HTTPException)
+async def custom_http_exception_handler(request: Request, exc: HTTPException):
+    """Domain-aware HTTP Exception handler"""
+    host = request.headers.get("host", "").lower()
+    is_blog = host == "blog.nekwasar.com" or "blog" in host
+    
+    # 1. Handle 404 Not Found
+    if exc.status_code == 404:
+        if is_blog:
+            return blog_templates.TemplateResponse("404.html", {
+                "request": request,
+                "current_year": datetime.utcnow().year,
+                "post_data": DEFAULT_POST_DATA
+            }, status_code=404)
+        
+    # 2. Handle 403/401 Forbidden
     if exc.status_code in [403, 401]:
-        return templates.TemplateResponse("admin_403_error.html", {"request": request})
-    # Fall back to default handler for other HTTP errors
-    return await http_exception_handler(request, exc)
+        if is_blog:
+            return blog_templates.TemplateResponse("403.html", {
+                "request": request,
+                "current_year": datetime.utcnow().year,
+                "post_data": DEFAULT_POST_DATA
+            }, status_code=exc.status_code)
+        
+        # Fallback for Admin
+        if "/admin" in request.url.path or host == "api.nekwasar.com":
+            from routes.admin import templates as admin_templates
+            return admin_templates.TemplateResponse("admin_403_error.html", {"request": request}, status_code=exc.status_code)
 
-app.add_exception_handler(HTTPException, custom_403_handler)
+    # Use default handler for everything else
+    return await http_exception_handler(request, exc)
 
 # Global exception handler for validation errors
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
