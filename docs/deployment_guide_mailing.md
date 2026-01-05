@@ -104,8 +104,19 @@ Use the new admin interface at `/admin/newsletter/templates` to create and manag
 - **Edit**: Modify existing templates.
 - **Placeholders**: Use `{{ content }}` and `{{ unsubscribe_url }}` in your HTML.
 
+## 9. Mailing Policy & Triggers
+
+As of January 2026, the mailing system follows a **"Manual First"** policy to prevent unwanted automated sends:
+
+-   **No Hardcoded Weekly Updates**: The background scheduler (`scheduler.py`) no longer contains a hardcoded job to send weekly summaries.
+-   **No Default Publication Alerts**: Approving or publishing a blog post in the CMS does **not** automatically trigger an email blast.
+-   **Sending Emails**: All subscriber communications must be explicitly initiated via:
+    1.  **Campaigns**: Manually created, designed, and sent/scheduled from the Admin Campaign dashboard.
+    2.  **Automations**: Specific, user-defined rules (such as Welcome Emails for new subscribers) configured in the Automation management page.
+
 ## Troubleshooting
 
 -   **"Database column does not exist"**: Run step 4 (`update_db_schema.py`) again.
 -   **"Email not sent"**: Check `BREVO_API_KEY` in `.env`. Ensure your Brevo daily quota (300 emails) is not exceeded.
 -   **"ModuleNotFoundError: sib_api_v3_sdk"**: Re-run step 3 (pip install).
+-   **"Newsletter not sending on Monday"**: This is intended behavior. Weekly newsletters must now be created as manual campaigns or scheduled explicitly in the admin panel.

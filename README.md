@@ -51,8 +51,10 @@ The platform is divided into three primary functional domains:
 ## 📈 Key Features
 
 - **Unique Engagement**: Fingerprint-based likes, comments, and views to ensure authentic metrics.
-- **Admin Dashboard**: Advanced content management system for blog posts and contact messages.
-- **SEO First**: Dynamic meta-tags, OpenGraph support, and high-performance core web vitals.
+- **Admin Dashboard**: Advanced CMS with WYSIWYG editing, workflow management, and analytics.
+- **Enhanced Security**: Two-Factor Authentication (MFA/TOTP), account lockout protection, and role-based access control.
+- **Newsletter & Automation**: Integrated Brevo mailing system for manual campaigns and targeted automation workflows.
+- **SEO First**: Dynamic meta-tags, OpenGraph support, and high-performance Core Web Vitals.
 
 ---
 *Built for the next generation of innovators. © 2026 NekwasaR.*
