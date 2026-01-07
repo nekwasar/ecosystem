@@ -1949,7 +1949,8 @@
         });
 
         // Load the template when the page loads
-        window.addEventListener('DOMContentLoaded', async () => {
+        // Load the template when the page loads
+        async function initEditor() {
             try {
                 // NEW: If in edit mode, load post data first
                 if (isEditMode && postIdParam) {
@@ -1987,7 +1988,14 @@
                     </div>
                 `;
             }
-        });
+        }
+
+        // Initialize immediately if document is aready loaded (SPA context)
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            setTimeout(initEditor, 100); // Small delay to ensure all scripts are evaluated
+        } else {
+            window.addEventListener('DOMContentLoaded', initEditor);
+        }
 
         // ---------------------------------------------------------
         // BLOCK EDITING LOGIC (Context Menu & Insertion)
