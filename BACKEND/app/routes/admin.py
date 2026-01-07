@@ -41,6 +41,12 @@ async def admin_dashboard(request: Request):
 # Removed redundant explicit routes for partials. 
 # These are now handled by the dynamic route below serving admin_base.html.
 
+# Standalone Editor Route - Must be before the generic section/page route
+@router.get("/admin/blog/editor", response_class=HTMLResponse)
+async def admin_blog_editor_page(request: Request):
+    """Serve standalone blog editor page"""
+    return templates.TemplateResponse("admin_blog_editor.html", {"request": request})
+
 @router.get("/admin/{section}/{page}", response_class=HTMLResponse)
 async def admin_section_page(request: Request, section: str, page: str):
     """Serve admin section pages dynamically - Authentication handled by JavaScript"""
