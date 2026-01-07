@@ -936,7 +936,15 @@
                             finalHtml = editingPostData.content;
                         }
                     } else {
+                        // Use saved content but ensure we update dynamic fields if they are missing or outdated
                         finalHtml = editingPostData.content;
+                    }
+
+                    // Perform data injection for title if not present or generic
+                    if (editingPostData.title) {
+                        // Replace generic title in H1 tag
+                        finalHtml = finalHtml.replace(/<h1[^>]*>(.*?)<\/h1>/i, `<h1>${editingPostData.title}</h1>`);
+                        console.log('[EDIT MODE] Injected post title:', editingPostData.title);
                     }
                 } else if (isEditMode) {
                     console.warn('[EDIT MODE] Edit mode detected but no content to inject');
