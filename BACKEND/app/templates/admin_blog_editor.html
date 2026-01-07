@@ -760,6 +760,10 @@
         <button class="editor-btn success" id="savePreviewBtn" style="display: none;">
             👁️ Save & Preview
         </button>
+        <!-- NEW: Schedule button -->
+        <button class="editor-btn secondary" id="scheduleBtn">
+            📅 Schedule
+        </button>
         <button class="editor-btn primary" id="publishBtn">
             🚀 Publish
         </button>
@@ -3126,8 +3130,42 @@
 
         // Update publish button to open publish wizard
         document.getElementById('publishBtn').addEventListener('click', () => {
+            console.log('Publish button clicked');
+            // Reset button text to default
+            const confirmBtn = document.getElementById('publishConfirmBtn');
+            if (confirmBtn) {
+                confirmBtn.textContent = 'Confirm & Publish';
+                confirmBtn.classList.remove('primary');
+                confirmBtn.classList.add('success');
+            }
             openPublishWizard();
         });
+
+        // NEW: Schedule Button Handler
+        const scheduleBtn = document.getElementById('scheduleBtn');
+        if (scheduleBtn) {
+            scheduleBtn.addEventListener('click', () => {
+                console.log('Schedule button clicked');
+                openPublishWizard();
+
+                // Focus on date field
+                setTimeout(() => {
+                    const dateInput = document.getElementById('publishDate');
+                    if (dateInput) {
+                        dateInput.focus();
+                        dateInput.showPicker(); // Try to open the native picker
+                    }
+                }, 300);
+
+                // Change confirm button text to indicate scheduling
+                const confirmBtn = document.getElementById('publishConfirmBtn');
+                if (confirmBtn) {
+                    confirmBtn.textContent = 'Confirm Schedule';
+                    confirmBtn.classList.remove('success');
+                    confirmBtn.classList.add('primary');
+                }
+            });
+        }
     </script>
 </body>
 

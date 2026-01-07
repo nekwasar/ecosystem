@@ -22,7 +22,10 @@ templates = Jinja2Templates(directory=str(templates_dir))
 @router.get("/", response_model=list[BlogPost])
 async def get_blog_posts(limit: int = 10, db: Session = Depends(get_db)):
     """Get latest blog posts for homepage"""
-    posts = db.query(BlogPostModel).order_by(BlogPostModel.published_at.desc()).limit(limit).all()
+    from datetime import datetime
+    posts = db.query(BlogPostModel).filter(
+        BlogPostModel.published_at <= datetime.utcnow()
+    ).order_by(BlogPostModel.published_at.desc()).limit(limit).all()
     return posts
 
 @router.get("/tags")
@@ -59,8 +62,11 @@ async def get_blog_tags(db: Session = Depends(get_db)):
 @router.get("/{post_id}", response_model=BlogPost)
 async def get_blog_post(post_id: int, db: Session = Depends(get_db)):
     """Get single blog post with comments"""
+    from datetime import datetime
     post = db.query(BlogPostModel).filter(BlogPostModel.id == post_id).first()
-    if not post:
+    
+    # Hide scheduled posts
+    if not post or (post.published_at and post.published_at > datetime.utcnow()):
         raise HTTPException(404, "Blog post not found")
 
     return post

@@ -461,7 +461,10 @@ async def blog_post_by_slug(request: Request, slug: str, db: Session = Depends(g
 
     # Look up post by slug
     post = db.query(BlogPost).filter(BlogPost.slug == slug).first()
-    if not post:
+    
+    # Check if post exists and is published (scheduled posts are hidden)
+    # Note: Use utcnow() to match server time
+    if not post or (post.published_at and post.published_at > datetime.utcnow()):
         raise HTTPException(status_code=404, detail="Post not found")
 
     # Determine which template to use
