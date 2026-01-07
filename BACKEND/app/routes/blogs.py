@@ -8,6 +8,7 @@ from database import get_db
 from models.blog import BlogPost as BlogPostModel, BlogComment, BlogLike, TemporalUser as TemporalUserModel, BlogView
 from schemas import BlogPost, BlogPostCreate, Comment, CommentCreate, Like, LikeCreate, TemporalUser, TemporalUserCreate, ViewCreate
 import logging
+from datetime import datetime, timezone
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -22,9 +23,8 @@ templates = Jinja2Templates(directory=str(templates_dir))
 @router.get("/", response_model=list[BlogPost])
 async def get_blog_posts(limit: int = 10, db: Session = Depends(get_db)):
     """Get latest blog posts for homepage"""
-    from datetime import datetime
     posts = db.query(BlogPostModel).filter(
-        BlogPostModel.published_at <= datetime.utcnow()
+        BlogPostModel.published_at <= datetime.now(timezone.utc)
     ).order_by(BlogPostModel.published_at.desc()).limit(limit).all()
     return posts
 
@@ -62,12 +62,20 @@ async def get_blog_tags(db: Session = Depends(get_db)):
 @router.get("/{post_id}", response_model=BlogPost)
 async def get_blog_post(post_id: int, db: Session = Depends(get_db)):
     """Get single blog post with comments"""
-    from datetime import datetime
     post = db.query(BlogPostModel).filter(BlogPostModel.id == post_id).first()
     
     # Hide scheduled posts
-    if not post or (post.published_at and post.published_at > datetime.utcnow()):
+    if not post:
         raise HTTPException(404, "Blog post not found")
+        
+    if post.published_at:
+        now_utc = datetime.now(timezone.utc)
+        published_at = post.published_at
+        if published_at.tzinfo is None:
+            published_at = published_at.replace(tzinfo=timezone.utc)
+            
+        if published_at > now_utc:
+             raise HTTPException(404, "Blog post not found")
 
     return post
 

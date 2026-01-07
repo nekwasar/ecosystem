@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -463,9 +463,20 @@ async def blog_post_by_slug(request: Request, slug: str, db: Session = Depends(g
     post = db.query(BlogPost).filter(BlogPost.slug == slug).first()
     
     # Check if post exists and is published (scheduled posts are hidden)
-    # Note: Use utcnow() to match server time
-    if not post or (post.published_at and post.published_at > datetime.utcnow()):
+    if not post:
         raise HTTPException(status_code=404, detail="Post not found")
+        
+    if post.published_at:
+        # Handle timezone comparison safely
+        now_utc = datetime.now(timezone.utc)
+        published_at = post.published_at
+        
+        # Ensure published_at is timezone-aware for comparison
+        if published_at.tzinfo is None:
+            published_at = published_at.replace(tzinfo=timezone.utc)
+            
+        if published_at > now_utc:
+             raise HTTPException(status_code=404, detail="Post not found")
 
     # Determine which template to use
     template_map = {
