@@ -3002,15 +3002,33 @@
                 console.log('[Publish] Post published successfully:', result);
 
                 // Success - navigate to the post's slug URL on the blog subdomain
-                const message = isEditMode
-                    ? 'Post updated and published successfully!'
-                    : 'Post published successfully!';
+
+                // Detect if it was scheduled for future
+                const publishedDate = new Date(postData.published_at);
+                const isScheduled = publishedDate > new Date();
+
+                let message;
+                if (isScheduled) {
+                    message = isEditMode
+                        ? 'Post updated and scheduled successfully for ' + publishedDate.toLocaleString()
+                        : 'Post scheduled successfully! It will go live on ' + publishedDate.toLocaleString();
+                } else {
+                    message = isEditMode
+                        ? 'Post updated and published successfully!'
+                        : 'Post published successfully!';
+                }
+
                 alert(message);
                 closePublishWizard();
 
                 if (result.slug) {
-                    // Redirect to the actual blog subdomain instead of the current domain (which is likely api.nekwasar.com)
-                    window.location.href = `https://blog.nekwasar.com/${result.slug}`;
+                    if (isScheduled) {
+                        // Redirect to admin list because live link would be 404
+                        window.location.href = '/admin/blog/posts';
+                    } else {
+                        // Redirect to the actual blog subdomain instead of the current domain (which is likely api.nekwasar.com)
+                        window.location.href = `https://blog.nekwasar.com/${result.slug}`;
+                    }
                 } else {
                     window.location.href = '/admin/blog/posts';
                 }
