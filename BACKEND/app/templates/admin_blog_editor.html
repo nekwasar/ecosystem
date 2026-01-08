@@ -2948,7 +2948,13 @@
                     excerpt: document.getElementById('publishExcerpt').value.trim(),
                     tags: [document.getElementById('publishTags').value].filter(tag => tag), // Get single selected tag as array
                     author: document.getElementById('publishAuthor').value.trim(),
-                    published_at: document.getElementById('publishDate').value || new Date().toISOString(),
+                    published_at: (() => {
+                        const dateVal = document.getElementById('publishDate').value;
+                        if (dateVal) {
+                            return new Date(dateVal).toISOString();
+                        }
+                        return new Date().toISOString();
+                    })(),
                     featured_image: document.getElementById('publishImage').value.trim(),
                     template_type: templateParam || 'template1',
                     is_featured: publishState.includeOnHomepage || false
@@ -3003,27 +3009,12 @@
 
                 // Success - navigate to the post's slug URL on the blog subdomain
 
-                // Detect if it was scheduled for future
-                // We use the raw input value to safe-guard against timezone shifts during object creation if possible
-                const rawDateInput = document.getElementById('publishDate').value;
-                const publishedDate = new Date(postData.published_at);
-                const now = new Date();
-
-                // Compare timestamps to avoid object equality weirdness
-                const isScheduled = publishedDate.getTime() > now.getTime();
-
-                console.log('[PUBLISH DEBUG]', {
-                    input: rawDateInput,
-                    postDataDate: postData.published_at,
-                    parsedDate: publishedDate.toLocaleString(),
-                    now: now.toLocaleString(),
-                    isScheduled: isScheduled,
-                    diff: publishedDate.getTime() - now.getTime()
-                });
+                // Use Backend Logic for Truth
+                const isScheduled = result.is_scheduled;
+                const dateStr = new Date(postData.published_at).toLocaleString();
 
                 let message;
                 const statusStr = isScheduled ? 'SCHEDULED' : 'PUBLISHED';
-                const dateStr = publishedDate.toLocaleString();
 
                 message = `Operation Complete!\nStatus: ${statusStr}\nDate: ${dateStr}`;
 

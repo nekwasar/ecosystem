@@ -477,16 +477,23 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
 async def create_blog_post(post_data: dict, current_user = Depends(get_current_active_user), db: Session = Depends(get_db)):
     """Create a new blog post"""
     from models.blog import BlogPost
-    from datetime import datetime
+    from datetime import datetime, timezone
 
     try:
         # Set published_at if provided, otherwise leave as None for drafts
         published_at = None
         if post_data.get("published_at"):
             try:
-                published_at = datetime.fromisoformat(post_data["published_at"].replace('Z', '+00:00'))
-            except:
-                published_at = datetime.utcnow()
+                # Expecting ISO format with timezone (e.g. from JS toISOString())
+                # If naive, we assume UTC to avoid errors, but clients should send aware
+                val = post_data["published_at"].replace('Z', '+00:00')
+                published_at = datetime.fromisoformat(val)
+                if published_at.tzinfo is None:
+                    published_at = published_at.replace(tzinfo=timezone.utc)
+            except Exception as e:
+                # CRITICAL: Do not fallback to now() if user provided a specific date
+                auth_logger.error(f"Date parse error for {post_data['published_at']}: {e}")
+                raise HTTPException(status_code=400, detail=f"Invalid date format: {e}")
 
         new_post = BlogPost(
             title=post_data.get("title", ""),
@@ -507,7 +514,23 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
         db.commit()
         db.refresh(new_post)
 
-        return {"success": True, "post_id": new_post.id, "slug": new_post.slug}
+        # Calculate if scheduled
+        is_scheduled = False
+        if new_post.published_at:
+             # Ensure correct comparison
+             pub_compare = new_post.published_at
+             if pub_compare.tzinfo is None:
+                 pub_compare = pub_compare.replace(tzinfo=timezone.utc)
+             
+             is_scheduled = pub_compare > datetime.now(timezone.utc)
+
+        return {
+            "success": True, 
+            "post_id": new_post.id, 
+            "slug": new_post.slug,
+            "is_scheduled": is_scheduled,
+            "published_at": new_post.published_at.isoformat() if new_post.published_at else None
+        }
     except Exception as e:
         auth_logger.error(f"❌ Error creating blog post: {e}")
         db.rollback()
@@ -581,6 +604,7 @@ async def save_blog_draft(draft_data: dict, current_user = Depends(get_current_a
 async def update_blog_post(post_id: int, post_data: dict, current_user = Depends(get_current_active_user), db: Session = Depends(get_db)):
     """Update a blog post"""
     from models.blog import BlogPost
+    from datetime import datetime, timezone
 
     try:
         post = db.query(BlogPost).filter(BlogPost.id == post_id).first()
@@ -590,11 +614,39 @@ async def update_blog_post(post_id: int, post_data: dict, current_user = Depends
         # Update fields
         for field in ["title", "content", "excerpt", "template_type", "featured_image", "video_url", "tags", "section", "slug", "priority", "is_featured", "published_at"]:
             if field in post_data:
-                setattr(post, field, post_data[field])
+                # Special handling for published_at to ensure tz awareness
+                if field == "published_at" and post_data[field]:
+                    try:
+                        val = post_data[field].replace('Z', '+00:00')
+                        dt = datetime.fromisoformat(val)
+                        if dt.tzinfo is None:
+                            dt = dt.replace(tzinfo=timezone.utc)
+                        setattr(post, field, dt)
+                    except Exception as e:
+                        auth_logger.error(f"Date update error for {post_data[field]}: {e}")
+                        raise HTTPException(status_code=400, detail=f"Invalid date format: {e}")
+                else:
+                    setattr(post, field, post_data[field])
 
         db.commit()
+        db.refresh(post)
 
-        return {"success": True}
+        # Calculate if scheduled
+        is_scheduled = False
+        if post.published_at:
+             pub_compare = post.published_at
+             if pub_compare.tzinfo is None:
+                 pub_compare = pub_compare.replace(tzinfo=timezone.utc)
+             
+             is_scheduled = pub_compare > datetime.now(timezone.utc)
+
+        return {
+            "success": True, 
+            "post_id": post.id, 
+            "slug": post.slug,
+            "is_scheduled": is_scheduled,
+            "published_at": post.published_at.isoformat() if post.published_at else None
+        }
     except Exception as e:
         auth_logger.error(f"❌ Error updating blog post: {e}")
         db.rollback()
