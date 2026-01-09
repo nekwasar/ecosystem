@@ -3010,16 +3010,32 @@
                 // Success - navigate to the post's slug URL on the blog subdomain
 
                 // Use Backend Logic for Truth
+                // Use Backend Logic for Truth
                 const isScheduled = result.is_scheduled;
-                const dateStr = new Date(postData.published_at).toLocaleString();
 
                 let message;
                 const statusStr = isScheduled ? 'SCHEDULED' : 'PUBLISHED';
+                // Display in user's local timezone
+                const dateStr = new Date(postData.published_at).toLocaleString();
+                const serverNowStr = result.server_now ? new Date(result.server_now).toLocaleString() : 'Unknown';
 
-                message = `Operation Complete!\nStatus: ${statusStr}\nDate: ${dateStr}`;
+                // Calculate difference in minutes for feedback
+                const pubDateObj = new Date(postData.published_at);
+                const nowDateObj = new Date(); // Browser time
+                const diffMins = ((pubDateObj - nowDateObj) / 1000 / 60).toFixed(1);
+
+                message = `Operation Complete!\nStatus: ${statusStr}`;
+                message += `\n\nTarget Date: ${dateStr}`;
 
                 if (isScheduled) {
+                    message += `\n(Approx ${diffMins} mins from now)`;
                     message += `\n\nYour post will go live automatically at the scheduled time.`;
+                } else if (!isScheduled && diffMins > 0) {
+                    // Special case: Frontend thinks it's future, Backend thinks it's past
+                    message += `\n\nWARNING: Timezone Mismatch Detected.`;
+                    message += `\nBrowser thinks this is ${diffMins} mins in future.`;
+                    message += `\nServer thinks this is already passed.`;
+                    message += `\nServer Time: ${serverNowStr}`;
                 }
 
                 alert(message);

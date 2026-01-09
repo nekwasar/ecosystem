@@ -529,7 +529,8 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
             "post_id": new_post.id, 
             "slug": new_post.slug,
             "is_scheduled": is_scheduled,
-            "published_at": new_post.published_at.isoformat() if new_post.published_at else None
+            "published_at": new_post.published_at.isoformat() if new_post.published_at else None,
+            "server_now": datetime.now(timezone.utc).isoformat()
         }
     except Exception as e:
         auth_logger.error(f"❌ Error creating blog post: {e}")
@@ -645,7 +646,8 @@ async def update_blog_post(post_id: int, post_data: dict, current_user = Depends
             "post_id": post.id, 
             "slug": post.slug,
             "is_scheduled": is_scheduled,
-            "published_at": post.published_at.isoformat() if post.published_at else None
+            "published_at": post.published_at.isoformat() if post.published_at else None,
+            "server_now": datetime.now(timezone.utc).isoformat()
         }
     except Exception as e:
         auth_logger.error(f"❌ Error updating blog post: {e}")
