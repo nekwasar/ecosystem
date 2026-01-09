@@ -8,7 +8,7 @@ sys.path.append(os.path.join(os.getcwd(), 'app'))
 
 # Use raw connection to avoid ORM model conflict headaches in this inspection script
 from app.core.config import settings
-DATA_URL = settings.DATABASE_URL
+DATA_URL = settings.database_url
 
 engine = create_engine(DATA_URL)
 print(f"SERVER TIME (UTC): {datetime.now(timezone.utc)}")
