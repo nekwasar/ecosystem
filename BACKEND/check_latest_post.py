@@ -1,11 +1,12 @@
-from app.database import SessionLocal
-from app.models.blog import BlogPost
-from datetime import datetime, timezone
 import sys
 import os
 
-# Add the parent directory to sys.path to allow imports from 'app'
-sys.path.append(os.getcwd())
+# Add the 'app' directory to sys.path
+sys.path.append(os.path.join(os.getcwd(), 'app'))
+
+from app.database import SessionLocal
+from app.models.blog import BlogPost
+from datetime import datetime, timezone
 
 db = SessionLocal()
 print(f"SERVER TIME (UTC): {datetime.now(timezone.utc)}")
