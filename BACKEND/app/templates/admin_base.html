@@ -97,6 +97,7 @@
 
             /* Admin-specific variables using site theme */
             --admin-sidebar-width: 280px;
+            --admin-sidebar-collapsed-width: 80px;
             --admin-header-height: 70px;
             --admin-radius-sm: var(--_radius-s);
             --admin-radius-md: var(--_radius-m);
@@ -233,6 +234,7 @@
         }
 
         /* Sidebar */
+        /* Sidebar */
         .admin-sidebar {
             width: var(--admin-sidebar-width);
             background: var(--base);
@@ -243,49 +245,43 @@
             height: 100vh;
             overflow-y: auto;
             z-index: 1000;
-            transition: transform 0.3s ease;
+            transition: width 0.3s ease, transform 0.3s ease;
         }
 
-        .admin-sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-
-        .sidebar-header {
-            padding: 1.5rem;
+        .admin-sidebar-header {
+            padding: 0 1.5rem;
+            height: 70px;
+            /* var(--admin-header-height) */
             border-bottom: 1px solid var(--stroke-elements);
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: space-between;
         }
 
-        .sidebar-logo {
-            font: normal 700 1.65rem/1.2 var(--_font-accent);
-            color: var(--t-accent);
-            background: var(--t-accent);
-            background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .sidebar-toggle {
-            margin-left: auto;
-            background: none;
-            border: none;
-            color: var(--t-medium);
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: var(--_radius-s);
-            transition: all var(--_animspeed-medium) var(--_animbezier);
-            display: none;
-        }
-
-        .sidebar-toggle:hover {
-            background: var(--stroke-elements);
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.25rem;
             color: var(--t-bright);
         }
 
-        .sidebar-collapsed .sidebar-toggle {
-            display: block;
+        .brand-text {
+            font-family: var(--_font-accent);
+            font-weight: 700;
+        }
+
+        body.sidebar-collapsed .brand-logo {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .admin-sidebar-header {
+            padding: 0;
+            justify-content: center;
+        }
+
+        .sidebar-collapsed .sidebar-toggle-btn {
+            display: flex;
         }
 
         .sidebar-nav {
@@ -380,51 +376,15 @@
         }
 
         /* Main Content */
+        /* Main Content */
         .admin-main {
             flex: 1;
             margin-left: var(--admin-sidebar-width);
             transition: margin-left 0.3s ease;
+            width: calc(100% - var(--admin-sidebar-width));
         }
 
-        .admin-main.sidebar-collapsed {
-            margin-left: 0;
-        }
-
-        .sidebar-collapsed {
-            position: relative;
-        }
-
-        .sidebar-collapsed .admin-sidebar {
-            transform: translateX(-100%);
-        }
-
-        /* Hamburger menu button for collapsed sidebar */
-        .hamburger-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--t-medium);
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: var(--_radius-s);
-            transition: all var(--_animspeed-medium) var(--_animbezier);
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 1001;
-            background: var(--base);
-            border: 1px solid var(--stroke-elements);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .hamburger-btn:hover {
-            background: var(--base-tint);
-            color: var(--t-bright);
-        }
-
-        .sidebar-collapsed .hamburger-btn {
-            display: block;
-        }
+        /* desktop rules updated above */
 
         /* Header */
         .admin-header {
@@ -462,15 +422,14 @@
             color: var(--t-bright);
         }
 
-        .sidebar-collapsed .mobile-menu-btn {
-            display: block;
-        }
+        /* Removed incorrect rule that showed mobile menu btn on desktop collapse */
 
         .header-title {
             font: normal 700 1.65rem/1.2 var(--_font-accent);
             color: var(--t-accent);
             background: var(--t-accent);
             background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -502,23 +461,30 @@
             color: var(--t-bright);
         }
 
+        .user-menu-container {
+            position: relative;
+        }
+
         .user-menu {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             cursor: pointer;
-            padding: 0.5rem;
-            border-radius: var(--_radius-s);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--_radius-m);
             transition: all var(--_animspeed-medium) var(--_animbezier);
+            border: 1px solid transparent;
         }
 
-        .user-menu:hover {
-            background: var(--stroke-elements);
+        .user-menu:hover,
+        .user-menu.active {
+            background: var(--base-tint);
+            border-color: var(--stroke-elements);
         }
 
         .user-avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--accent);
             background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
@@ -528,21 +494,87 @@
             justify-content: center;
             color: var(--t-opp-bright);
             font: normal 700 1.6rem/1 var(--_font-default);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .user-info {
             display: flex;
             flex-direction: column;
+            line-height: 1.2;
         }
 
         .user-name {
-            font: normal 600 1.05rem/1.2 var(--_font-default);
+            font: normal 600 0.95rem/1.2 var(--_font-default);
             color: var(--t-bright);
         }
 
         .user-role {
-            font: normal 400 0.9rem/1.2 var(--_font-default);
+            font: normal 400 0.8rem/1.2 var(--_font-default);
             color: var(--t-medium);
+        }
+
+        /* User Dropdown */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 200px;
+            background: var(--base);
+            border: 1px solid var(--stroke-elements);
+            border-radius: var(--_radius-m);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--t-medium);
+            border-radius: var(--_radius-s);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background: var(--base-tint);
+            color: var(--t-bright);
+        }
+
+        .dropdown-item.danger {
+            color: #ef4444;
+        }
+
+        .dropdown-item.danger:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .dropdown-item.danger:hover {
+                background: rgba(239, 68, 68, 0.1);
+                color: #ef4444;
+            }
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--stroke-elements);
+            margin: 0.5rem 0;
         }
 
         /* Content Area */
@@ -580,7 +612,9 @@
             color: var(--t-accent);
             background: var(--t-accent);
             background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+            background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
         }
@@ -657,68 +691,83 @@
         }
 
         /* Collapsed Sidebar Styles */
-        body.sidebar-collapsed {
-            --admin-sidebar-width: 80px;
-        }
+        /* Sidebar Collapse Logic (Desktop Only) */
+        @media (min-width: 1025px) {
+            body.sidebar-collapsed {
+                --admin-sidebar-width: 80px;
+            }
 
-        body.sidebar-collapsed .nav-section-label,
-        body.sidebar-collapsed .nav-item-label,
-        body.sidebar-collapsed .brand-text,
-        body.sidebar-collapsed .nav-section-toggle,
-        body.sidebar-collapsed .sidebar-footer {
-            display: none !important;
-        }
+            body.sidebar-collapsed .nav-section-label,
+            body.sidebar-collapsed .nav-item-label,
+            body.sidebar-collapsed .brand-text,
+            body.sidebar-collapsed .nav-section-toggle,
+            body.sidebar-collapsed .sidebar-footer {
+                display: none !important;
+            }
 
-        body.sidebar-collapsed .admin-sidebar-header {
-            padding: 0 1rem;
-            justify-content: center;
-        }
+            body.sidebar-collapsed .admin-sidebar-header {
+                padding: 0 1rem;
+                justify-content: center;
+            }
 
-        body.sidebar-collapsed .nav-section-header,
-        body.sidebar-collapsed .nav-item {
-            padding: 0.75rem;
-            justify-content: center;
-            margin-right: 0.5rem;
-            margin-left: 0.5rem;
-            border-radius: var(--_radius-s);
-        }
+            body.sidebar-collapsed .nav-section-header,
+            body.sidebar-collapsed .nav-item {
+                padding: 0.75rem;
+                justify-content: center;
+                margin-right: 0.5rem;
+                margin-left: 0.5rem;
+                border-radius: var(--_radius-s);
+            }
 
-        body.sidebar-collapsed .brand-logo {
-            margin-right: 0;
-            font-size: 1.5rem;
-        }
+            body.sidebar-collapsed .brand-logo {
+                display: none !important;
+            }
 
-        body.sidebar-collapsed .nav-section {
-            margin-bottom: 8px;
-            /* Compact spacing */
-        }
+            body.sidebar-collapsed .sidebar-toggle-btn {
+                margin: 0;
+                transform: rotate(180deg);
+                width: 40px;
+                height: 40px;
+                background: var(--base-tint);
+                color: var(--t-bright);
+            }
 
-        body.sidebar-collapsed .nav-section.collapsed .nav-section-children {
-            /* Force show children properly on hover or keep hidden? 
-               For now let's just keep the simplified icon-only view */
-        }
+            body.sidebar-collapsed .nav-section {
+                margin-bottom: 8px;
+            }
 
-        /* Hover Tooltips for Collapsed Mode */
-        body.sidebar-collapsed .nav-item {
-            position: relative;
-        }
+            /* Hover Tooltips for Collapsed Mode */
+            body.sidebar-collapsed .nav-item {
+                position: relative;
+            }
 
-        body.sidebar-collapsed .nav-item:hover::after {
-            content: attr(title);
-            position: absolute;
-            left: 100%;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--base-opp);
-            color: var(--t-opp-bright);
-            padding: 4px 8px;
-            border-radius: 4px;
-            white-space: nowrap;
-            font-size: 12px;
-            z-index: 1000;
-            margin-left: 10px;
-            pointer-events: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            body.sidebar-collapsed .nav-item:hover::after {
+                content: attr(title);
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                background: var(--base-opp);
+                color: var(--t-opp-bright);
+                padding: 4px 8px;
+                border-radius: 4px;
+                white-space: nowrap;
+                font-size: 12px;
+                z-index: 1000;
+                margin-left: 10px;
+                pointer-events: none;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            body.sidebar-collapsed .admin-main {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+
+            body.sidebar-collapsed .admin-sidebar {
+                width: 80px;
+                transform: none;
+            }
         }
 
         .loading-text {
@@ -727,9 +776,12 @@
         }
 
         /* Responsive */
+        /* Responsive */
         @media (max-width: 1024px) {
             .admin-sidebar {
                 transform: translateX(-100%);
+                width: 280px !important;
+                /* Force width on mobile */
             }
 
             .admin-sidebar.mobile-open {
@@ -737,23 +789,16 @@
             }
 
             .admin-main {
-                margin-left: 0;
+                margin-left: 0 !important;
+                width: 100% !important;
             }
 
             .mobile-menu-btn {
                 display: block;
             }
 
-            .admin-sidebar {
-                transform: translateX(-100%);
-            }
-
-            .admin-sidebar.mobile-open {
-                transform: translateX(0);
-            }
-
-            .admin-main {
-                margin-left: 0;
+            .sidebar-toggle-btn {
+                display: none;
             }
         }
 
@@ -820,16 +865,11 @@
 
 <body>
     <div class="admin-layout">
-        <!-- Hamburger Menu Button (shown when sidebar collapsed) -->
-        <button class="hamburger-btn" id="hamburgerBtn">
-            <i class="ph-bold ph-list"></i>
-        </button>
-
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="admin-sidebar-header">
                 <div class="brand-logo">
-                    <i class="ph-bold ph-planet"></i>
+                    <i class="ph-bold ph-planet" style="color: var(--accent);"></i>
                     <div class="brand-text">NekwasaR<span class="brand-text-accent">Admin</span></div>
                 </div>
                 <button class="sidebar-toggle-btn" onclick="toggleGlobalSidebar()" title="Toggle Sidebar">
@@ -865,13 +905,32 @@
                         </button>
                     </div>
 
-                    <div class="user-menu" id="userMenu">
-                        <div class="user-avatar">A</div>
-                        <div class="user-info">
-                            <div class="user-name">Admin User</div>
-                            <div class="user-role">Administrator</div>
+                    <div class="user-menu-container">
+                        <div class="user-menu" id="userMenu" onclick="toggleUserDropdown(event)">
+                            <div class="user-avatar" id="headerUserInitial">U</div>
+                            <div class="user-info">
+                                <div class="user-name" id="headerUserName">Loading...</div>
+                                <div class="user-role" id="headerUserRole">...</div>
+                            </div>
+                            <i class="ph-bold ph-caret-down" id="userMenuCaret"></i>
                         </div>
-                        <i class="ph-bold ph-caret-down"></i>
+
+                        <!-- Dropdown -->
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="dropdown-item" onclick="alert('Profile management coming soon!')">
+                                <i class="ph-bold ph-user-circle"></i>
+                                <span>My Profile</span>
+                            </div>
+                            <div class="dropdown-item" onclick="alert('Settings coming soon!')">
+                                <i class="ph-bold ph-gear"></i>
+                                <span>Settings</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item danger" onclick="logoutGlobal()">
+                                <i class="ph-bold ph-sign-out"></i>
+                                <span>Sign Out</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -1282,12 +1341,6 @@
                     this.toggleTheme();
                 };
 
-                // User menu
-                document.getElementById('userMenu').onclick = () => {
-                    // Show logout option
-                    this.showUserMenu();
-                };
-
                 // Handle browser back/forward
                 window.onpopstate = (event) => {
                     if (event.state) {
@@ -1347,10 +1400,7 @@
             }
 
             showUserMenu() {
-                // Simple logout confirmation
-                if (confirm('Do you want to logout?')) {
-                    this.logout();
-                }
+                // Now handled by toggleUserDropdown
             }
 
             async logout() {
@@ -1368,12 +1418,49 @@
                 } catch (error) {
                     console.error('Logout error:', error);
                 } finally {
-                    // Clear local token and redirect
                     localStorage.removeItem('token');
                     window.location.href = '/admin';
                 }
             }
         }
+
+        // Global Logout Function
+        async function logoutGlobal() {
+            if (window.adminApp) {
+                await window.adminApp.logout();
+            } else {
+                localStorage.removeItem('token');
+                window.location.href = '/admin';
+            }
+        }
+
+        // User Dropdown Logic
+        function toggleUserDropdown(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            const menu = document.getElementById('userMenu');
+            dropdown.classList.toggle('show');
+            menu.classList.toggle('active');
+
+            // Rotate caret
+            const caret = document.getElementById('userMenuCaret');
+            if (dropdown.classList.contains('show')) {
+                caret.style.transform = 'rotate(180deg)';
+            } else {
+                caret.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('userDropdown');
+            const menu = document.getElementById('userMenu');
+            if (dropdown && dropdown.classList.contains('show') && !menu.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+                menu.classList.remove('active');
+                document.getElementById('userMenuCaret').style.transform = 'rotate(0deg)';
+            }
+        });
 
         // Initialize admin app when DOM is ready
         document.addEventListener('DOMContentLoaded', async () => {
@@ -1419,6 +1506,19 @@
 
                 const authData = await response.json();
                 console.log('✅ AUTH CHECK SUCCESS - User authenticated:', authData.user.username);
+
+                // Populate User Info
+                const userName = authData.user.username || 'Admin';
+                const isSuperUser = authData.user.is_superuser;
+
+                const nameEl = document.getElementById('headerUserName');
+                const initialEl = document.getElementById('headerUserInitial');
+                const roleEl = document.getElementById('headerUserRole');
+
+                if (nameEl) nameEl.textContent = userName;
+                if (initialEl) initialEl.textContent = userName.charAt(0).toUpperCase();
+                if (roleEl) roleEl.textContent = isSuperUser ? 'Super Admin' : 'Editor';
+
                 setupSessionTimeout();
 
             } catch (error) {
