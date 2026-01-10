@@ -479,7 +479,7 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
                 "totalPosts": total_posts,
                 "publishedCount": published_count,
                 "draftCount": draft_count,
-                "scheduledCount": scheduled_count
+                "scheduledCount": 0
             },
             "categories": [
                 {"id": cat[0], "name": cat[0], "count": cat[1]}
