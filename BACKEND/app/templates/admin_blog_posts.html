@@ -1430,8 +1430,6 @@
     document.getElementById('publishedCount').textContent = stats.publishedCount || 0;
     document.getElementById('draftCount').textContent = stats.draftCount || 0;
     // Use the backend-provided scheduled count
-    const schedCount = stats.scheduledCount !== undefined ? stats.scheduledCount : 0;
-    document.getElementById('scheduledCount').textContent = schedCount;
     document.getElementById('totalPostsCount').textContent = stats.totalPosts || 0;
 
     // Update categories and tags trees
