@@ -368,6 +368,7 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
     from sqlalchemy import func
 
     try:
+        from datetime import datetime, timezone
         # Get all posts with basic info
         posts_query = db.query(BlogPost).order_by(BlogPost.published_at.desc().nullslast())
         posts = posts_query.all()
