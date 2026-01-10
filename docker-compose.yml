@@ -22,10 +22,7 @@ services:
       - db
     ports:
       - "8000:8000"
-    volumes:
       - ./BACKEND/uploads:/app/BACKEND/uploads
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - SECRET_KEY=${SECRET_KEY}
@@ -33,7 +30,6 @@ services:
       - API_PORT=8000
       - BREVO_API_KEY=${BREVO_API_KEY}
       - SENDER_EMAIL=${SENDER_EMAIL}
-      - TZ=Europe/London
 
 volumes:
   postgres_data:

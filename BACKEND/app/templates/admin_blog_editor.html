@@ -2157,10 +2157,8 @@
                             <input type="text" id="publishAuthor" class="publish-input" placeholder="NekwasaR"
                                 value="NekwasaR">
                         </div>
-                        <div class="publish-field">
-                            <label for="publishDate">Publish Date</label>
-                            <input type="datetime-local" id="publishDate" class="publish-input" required>
-                        </div>
+                        <!-- Date selection removed - always publishes immediately -->
+                        <input type="hidden" id="publishDate">
                         <div class="publish-field">
                             <label for="publishImage">Featured Image URL</label>
                             <input type="url" id="publishImage" class="publish-input"
@@ -2859,9 +2857,9 @@
                 document.getElementById('publishSlug').value = slug;
             }
 
-            // NEW: Auto-populate publish date with current local date/time
+            // NEW: Auto-populate publish date with current local date/time (Always Immediate)
             const publishDateInput = document.getElementById('publishDate');
-            if (publishDateInput && !publishDateInput.value) {
+            if (publishDateInput) {
                 // Get current date/time in user's local timezone
                 const now = new Date();
 
@@ -2875,7 +2873,7 @@
                 const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
                 publishDateInput.value = localDateTime;
 
-                console.log('[PUBLISH] Auto-populated date/time:', localDateTime, 'Timezone:', Intl.DateTimeFormat().resolvedOptions().timeZone);
+                console.log('[PUBLISH] Immediate publish enforced. Date:', localDateTime);
             }
         }
 

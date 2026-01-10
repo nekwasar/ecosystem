@@ -258,13 +258,7 @@
                 <span class="retro-tree-count" id="draftCount">0</span>
               </div>
             </div>
-            <div class="retro-tree-item" data-filter="status-scheduled" onclick="navigateToFolder('status-scheduled')">
-              <div class="retro-tree-content">
-                <i class="retro-tree-icon">⏰</i>
-                <span class="retro-tree-text">SCHEDULED</span>
-                <span class="retro-tree-count" id="scheduledCount">0</span>
-              </div>
-            </div>
+            <!-- Scheduled removed -->
           </div>
         </div>
       </div>
@@ -1579,21 +1573,12 @@
   function renderListView(posts) {
     const container = document.getElementById('postsList');
     container.innerHTML = posts.map(post => {
-      const isScheduled = post.status === 'scheduled' || post.isScheduled;
-      const isDraft = post.status === 'draft' || post.isDraft;
-      let statusIcon = '✅';
-      let statusText = 'PUBLISHED';
-      let statusClass = 'status-published';
-
       if (isDraft) {
         statusIcon = '📝';
         statusText = 'DRAFT';
         statusClass = 'status-draft';
-      } else if (isScheduled) {
-        statusIcon = '⏰';
-        statusText = 'SCHEDULED';
-        statusClass = 'status-scheduled';
       }
+      // Scheduled check removed - treated as published
 
       // Format dates
       const modifiedDate = post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : '-';
@@ -1610,7 +1595,7 @@
             <label class="retro-checkbox-label"></label>
           </div>
           <div class="retro-col-title">
-            <div class="retro-post-icon">${isDraft ? '📄' : (isScheduled ? '⏰' : '📰')}</div>
+            <div class="retro-post-icon">${isDraft ? '📄' : '📰'}</div>
             <div class="retro-post-info">
               <span class="retro-post-title">${escapeHtml(post.title)}</span>
               <div class="retro-post-meta">

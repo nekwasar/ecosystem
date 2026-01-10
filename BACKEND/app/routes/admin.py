@@ -381,20 +381,11 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
         # Count draft posts (where published_at is None)
         draft_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.is_(None)).scalar() or 0
 
-        # Calculate published vs scheduled based on current time
-        now_utc = datetime.now(timezone.utc)
-        
-        # Published: published_at IS NOT NULL AND published_at <= now
-        published_count = db.query(func.count(BlogPost.id)).filter(
-            BlogPost.published_at.isnot(None),
-            BlogPost.published_at <= now_utc
-        ).scalar() or 0
+        # Count published posts (where published_at is not None)
+        published_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.isnot(None)).scalar() or 0
 
-        # Scheduled: published_at IS NOT NULL AND published_at > now
-        scheduled_count = db.query(func.count(BlogPost.id)).filter(
-            BlogPost.published_at.isnot(None),
-            BlogPost.published_at > now_utc
-        ).scalar() or 0
+        # Scheduled count always 0
+        scheduled_count = 0
 
         # Get categories with counts (using 'section' field instead of missing 'category')
         categories = db.query(
@@ -449,10 +440,6 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
                 status = "draft"
                 is_published = False
                 is_scheduled = False
-            elif published_at > now_utc:
-                status = "scheduled"
-                is_published = False # Not yet live
-                is_scheduled = True
             else:
                 status = "published"
                 is_published = True
