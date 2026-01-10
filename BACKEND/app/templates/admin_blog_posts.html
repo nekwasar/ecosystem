@@ -287,7 +287,7 @@
       <!-- Status Bar -->
       <div class="retro-status-bar">
         <div class="retro-status-left">
-          <span id="itemsCount">24 items</span>
+          <span id="itemsCount">0 items</span>
           <span id="selectedItemsInfo">0 selected</span>
         </div>
         <div class="retro-status-right">
@@ -2129,44 +2129,22 @@
   }
 
   function showFallbackPostsData() {
-    // Show sample data when API is not available
+    // Show error notification instead of sample data
+    showNotification('Failed to load blog posts. Please check API connection.', 'error');
+
+    // Set empty state
     updateSidebarCounts({
       stats: {
-        totalPosts: 24,
-        publishedCount: 18,
-        draftCount: 4,
-        scheduledCount: 2
+        totalPosts: 0,
+        publishedCount: 0,
+        draftCount: 0,
+        scheduledCount: 0
       },
       categories: [],
       tags: []
     });
 
-    // Sample posts
-    allPosts = [
-      {
-        id: '1',
-        title: 'Getting Started with React',
-        excerpt: 'Learn the basics of React development',
-        status: 'published',
-        author: 'NekwasaR',
-        category: 'Technology',
-        updatedAt: '2024-01-15T10:30:00Z',
-        contentLength: 2456,
-        views: 1250
-      },
-      {
-        id: '2',
-        title: 'Advanced CSS Techniques',
-        excerpt: 'Master modern CSS with these advanced techniques',
-        status: 'draft',
-        author: 'NekwasaR',
-        category: 'Design',
-        updatedAt: '2024-01-14T09:15:00Z',
-        contentLength: 1890,
-        views: 0
-      }
-    ];
-
+    allPosts = [];
     renderCurrentView();
   }
 
