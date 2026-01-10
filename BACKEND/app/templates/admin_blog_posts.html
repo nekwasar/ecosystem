@@ -267,7 +267,7 @@
       <div class="retro-sidebar-footer">
         <div class="retro-stats-item">
           <span class="retro-stats-label">TOTAL POSTS:</span>
-          <span class="retro-stats-value" id="totalPostsCount">24</span>
+          <span class="retro-stats-value" id="totalPostsCount">0</span>
         </div>
         <div class="retro-stats-item">
           <span class="retro-stats-label">SELECTED:</span>
@@ -1616,7 +1616,8 @@
                 ${formatFileSize(post.contentLength || 0)}
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
   }
 
 
@@ -2083,15 +2084,7 @@
       .replace(/'/g, '&#039;');
   }
 
-  function escapeHtml(text) {
-    if (!text) return '';
-    return String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+
 
   function formatFileSize(bytes) {
     if (bytes === 0) return '0 B';
