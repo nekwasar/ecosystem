@@ -626,6 +626,101 @@
             }
         }
 
+        .brand-text-accent {
+            color: var(--accent);
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--t-muted);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+            margin-left: auto;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: var(--base-tint);
+            color: var(--t-bright);
+        }
+
+        .sidebar-collapsed .sidebar-toggle-btn {
+            transform: rotate(180deg);
+            margin: 0 auto;
+        }
+
+        /* Collapsed Sidebar Styles */
+        body.sidebar-collapsed {
+            --admin-sidebar-width: 80px;
+        }
+
+        body.sidebar-collapsed .nav-section-label,
+        body.sidebar-collapsed .nav-item-label,
+        body.sidebar-collapsed .brand-text,
+        body.sidebar-collapsed .nav-section-toggle,
+        body.sidebar-collapsed .sidebar-footer {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .admin-sidebar-header {
+            padding: 0 1rem;
+            justify-content: center;
+        }
+
+        body.sidebar-collapsed .nav-section-header,
+        body.sidebar-collapsed .nav-item {
+            padding: 0.75rem;
+            justify-content: center;
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
+            border-radius: var(--_radius-s);
+        }
+
+        body.sidebar-collapsed .brand-logo {
+            margin-right: 0;
+            font-size: 1.5rem;
+        }
+
+        body.sidebar-collapsed .nav-section {
+            margin-bottom: 8px;
+            /* Compact spacing */
+        }
+
+        body.sidebar-collapsed .nav-section.collapsed .nav-section-children {
+            /* Force show children properly on hover or keep hidden? 
+               For now let's just keep the simplified icon-only view */
+        }
+
+        /* Hover Tooltips for Collapsed Mode */
+        body.sidebar-collapsed .nav-item {
+            position: relative;
+        }
+
+        body.sidebar-collapsed .nav-item:hover::after {
+            content: attr(title);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--base-opp);
+            color: var(--t-opp-bright);
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            font-size: 12px;
+            z-index: 1000;
+            margin-left: 10px;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
         .loading-text {
             color: var(--t-medium);
             font: normal 400 1.05rem/1.2 var(--_font-default);
@@ -732,10 +827,13 @@
 
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-logo">NekwasaR</div>
-                <button class="sidebar-toggle" id="sidebarToggle">
-                    <i class="ph-bold ph-x"></i>
+            <div class="admin-sidebar-header">
+                <div class="brand-logo">
+                    <i class="ph-bold ph-planet"></i>
+                    <div class="brand-text">NekwasaR<span class="brand-text-accent">Admin</span></div>
+                </div>
+                <button class="sidebar-toggle-btn" onclick="toggleGlobalSidebar()" title="Toggle Sidebar">
+                    <i class="ph-bold ph-caret-double-left"></i>
                 </button>
             </div>
 
@@ -808,6 +906,26 @@
 
     <!-- Admin JavaScript -->
     <script>
+        // Global Sidebar Toggle Logic
+        function toggleGlobalSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+            const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+            localStorage.setItem('adminSidebarCollapsed', isCollapsed);
+        }
+
+        // Initialize State on Load
+        (function () {
+            const savedState = localStorage.getItem('adminSidebarCollapsed');
+            if (savedState === 'true') {
+                document.body.classList.add('sidebar-collapsed');
+            }
+        })();
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const adminSidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+
         // Navigation Configuration
         const navigationConfig = {
             overview: {
@@ -922,7 +1040,6 @@
             constructor() {
                 this.currentSection = 'overview';
                 this.currentPage = 'home';
-                this.sidebarCollapsed = false;
                 this.theme = localStorage.getItem('admin-theme') || 'light';
                 this.init();
             }
@@ -971,6 +1088,7 @@
                     item.dataset.section = sectionKey;
                     item.dataset.page = pageKey;
                     item.onclick = () => this.navigateTo(sectionKey, pageKey);
+                    item.title = page.label; // Add title for tooltip in collapsed mode
 
                     item.innerHTML = `
                         <i class="ph-bold ${page.icon} nav-item-icon"></i>
@@ -1154,19 +1272,6 @@
             }
 
             setupEventListeners() {
-                // Sidebar toggle
-                document.getElementById('sidebarToggle').onclick = () => {
-                    this.toggleSidebar();
-                };
-
-                // Hamburger menu button
-                const hamburgerBtn = document.getElementById('hamburgerBtn');
-                if (hamburgerBtn) {
-                    hamburgerBtn.onclick = () => {
-                        this.toggleSidebar();
-                    };
-                }
-
                 // Mobile menu
                 document.getElementById('mobileMenuBtn').onclick = () => {
                     this.toggleMobileSidebar();
@@ -1189,23 +1294,6 @@
                         this.navigateTo(event.state.section, event.state.page);
                     }
                 };
-            }
-
-            toggleSidebar() {
-                this.sidebarCollapsed = !this.sidebarCollapsed;
-                const sidebar = document.getElementById('adminSidebar');
-                const main = document.getElementById('adminMain');
-                const layout = document.querySelector('.admin-layout');
-
-                if (this.sidebarCollapsed) {
-                    sidebar.classList.add('collapsed');
-                    main.classList.add('sidebar-collapsed');
-                    layout.classList.add('sidebar-collapsed');
-                } else {
-                    sidebar.classList.remove('collapsed');
-                    main.classList.remove('sidebar-collapsed');
-                    layout.classList.remove('sidebar-collapsed');
-                }
             }
 
             toggleMobileSidebar() {

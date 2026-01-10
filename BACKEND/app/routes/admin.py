@@ -378,10 +378,23 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
         # Count published posts (where published_at is not None)
         published_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.isnot(None)).scalar() or 0
 
-        # Count draft posts (where published_at is None) - this is the key fix
+        # Count draft posts (where published_at is None)
         draft_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.is_(None)).scalar() or 0
 
-        scheduled_count = 0  # Placeholder for future implementation
+        # Calculate published vs scheduled based on current time
+        now_utc = datetime.now(timezone.utc)
+        
+        # Published: published_at IS NOT NULL AND published_at <= now
+        published_count = db.query(func.count(BlogPost.id)).filter(
+            BlogPost.published_at.isnot(None),
+            BlogPost.published_at <= now_utc
+        ).scalar() or 0
+
+        # Scheduled: published_at IS NOT NULL AND published_at > now
+        scheduled_count = db.query(func.count(BlogPost.id)).filter(
+            BlogPost.published_at.isnot(None),
+            BlogPost.published_at > now_utc
+        ).scalar() or 0
 
         # Get categories with counts (using 'section' field instead of missing 'category')
         categories = db.query(
@@ -422,10 +435,28 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
             ]
 
         posts_data = []
+        now_utc = datetime.now(timezone.utc)
+        
         for post in posts:
-            # Determine status based on published_at field
-            is_published = getattr(post, "published_at", None) is not None
-            status = "published" if is_published else "draft"
+            # Determine status based on published_at field and current time
+            published_at = getattr(post, "published_at", None)
+            
+            # Ensure published_at is aware if it exists
+            if published_at and published_at.tzinfo is None:
+                published_at = published_at.replace(tzinfo=timezone.utc)
+            
+            if published_at is None:
+                status = "draft"
+                is_published = False
+                is_scheduled = False
+            elif published_at > now_utc:
+                status = "scheduled"
+                is_published = False # Not yet live
+                is_scheduled = True
+            else:
+                status = "published"
+                is_published = True
+                is_scheduled = False
             
             # For drafts, ensure they have a proper slug (may be generated during save)
             slug = getattr(post, "slug", None)
@@ -448,7 +479,9 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
                 "views": getattr(post, "view_count", 0) or 0,
                 "slug": slug,
                 "template_type": post.template_type,
-                "isDraft": not is_published,  # Add explicit draft flag
+                "template_type": post.template_type,
+                "isDraft": status == "draft",
+                "isScheduled": status == "scheduled",
                 "publishedAt": post.published_at.isoformat() if getattr(post, "published_at", None) else None
             }
             posts_data.append(post_data)

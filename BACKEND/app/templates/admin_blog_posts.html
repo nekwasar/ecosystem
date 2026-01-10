@@ -62,7 +62,10 @@
     <div class="retro-title-bar">
       <div class="retro-title-left">
         <div class="retro-title-icon">📁</div>
-        <h2 class="retro-title">BLOG POSTS EXPLORER v2.1</h2>
+        <div class="retro-sidebar-toggle-wrapper">
+          <button class="retro-sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">«</button>
+        </div>
+        <h2 class="retro-title">BLOG POSTS EXPLORER <span class="retro-version">v2.1</span></h2>
       </div>
       <div class="retro-title-right">
         <button class="retro-window-btn retro-minimize" title="Minimize"
@@ -107,6 +110,66 @@
       <button class="retro-toolbar-btn" onclick="showProperties()">PROPERTIES</button>
     </div>
   </div>
+
+  <style>
+    /* Collapsed Sidebar Styles */
+    .retro-posts-container.sidebar-collapsed .retro-sidebar {
+      width: 50px !important;
+      min-width: 50px !important;
+      overflow: hidden;
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-tree-text,
+    .retro-posts-container.sidebar-collapsed .retro-tree-count,
+    .retro-posts-container.sidebar-collapsed .retro-tree-arrow,
+    .retro-posts-container.sidebar-collapsed .retro-panel-title,
+    .retro-posts-container.sidebar-collapsed .retro-sidebar-footer {
+      display: none !important;
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-tree-content {
+      justify-content: center;
+      padding: 8px 0;
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-tree-icon {
+      margin-right: 0;
+      font-size: 20px;
+    }
+
+    .retro-sidebar-toggle-wrapper {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .retro-sidebar-toggle {
+      background: transparent;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      cursor: pointer;
+      font-family: inherit;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .retro-sidebar-toggle:hover {
+      background: rgba(0, 255, 0, 0.2);
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-sidebar-toggle {
+      transform: rotate(180deg);
+    }
+
+    /* Adjust version display */
+    .retro-version {
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+  </style>
 
   <!-- Retro Navigation Bar -->
   <div class="retro-nav-bar">
@@ -1154,6 +1217,16 @@
       border-bottom: 1px solid #00ff00;
     }
 
+    /* Mobile sidebar behavior */
+    .retro-sidebar.collapsed {
+      display: none;
+    }
+
+    .retro-sidebar-toggle {
+      display: block;
+      /* Show on mobile */
+    }
+
     .retro-list-header,
     .retro-post-item {
       grid-template-columns: 25px minmax(200px, 1fr) 100px 120px 60px;
@@ -1233,7 +1306,29 @@
     setupContextMenu();
     setupKeyboardShortcuts();
     setupWindowState();
+    setupKeyboardShortcuts();
+    setupWindowState();
     updateWindowButtons();
+    loadSidebarState(); // Load saved sidebar preference
+  }
+
+  function loadSidebarState() {
+    const isCollapsed = localStorage.getItem('blogSidebarCollapsed') === 'true';
+    if (isCollapsed) {
+      document.getElementById('postsExplorer').classList.add('sidebar-collapsed');
+      const toggleBtn = document.querySelector('.retro-sidebar-toggle');
+      if (toggleBtn) toggleBtn.innerHTML = '»';
+    }
+  }
+
+  function toggleSidebar() {
+    const container = document.getElementById('postsExplorer');
+    container.classList.toggle('sidebar-collapsed');
+    const isCollapsed = container.classList.contains('sidebar-collapsed');
+    localStorage.setItem('blogSidebarCollapsed', isCollapsed);
+
+    const toggleBtn = document.querySelector('.retro-sidebar-toggle');
+    if (toggleBtn) toggleBtn.innerHTML = isCollapsed ? '»' : '«';
   }
 
   async function loadPostsData() {
@@ -1338,7 +1433,9 @@
     document.getElementById('allPostsCount').textContent = stats.totalPosts || 0;
     document.getElementById('publishedCount').textContent = stats.publishedCount || 0;
     document.getElementById('draftCount').textContent = stats.draftCount || 0;
-    document.getElementById('scheduledCount').textContent = stats.scheduledCount || 0;
+    // Use the backend-provided scheduled count
+    const schedCount = stats.scheduledCount !== undefined ? stats.scheduledCount : 0;
+    document.getElementById('scheduledCount').textContent = schedCount;
     document.getElementById('totalPostsCount').textContent = stats.totalPosts || 0;
 
     // Update categories and tags trees
@@ -1479,21 +1576,52 @@
 
   function renderListView(posts) {
     const container = document.getElementById('postsList');
-    container.innerHTML = posts.map(post => `
-        <div class="retro-post-item ${selectedItems.has(post.id) ? 'selected' : ''}" data-post-id="${post.id}" onclick="selectItem('${post.id}', event)" ondblclick="openPost('${post.id}')" oncontextmenu="showContextMenu(event, '${post.id}')">
-            <div>
-                <input type="checkbox" class="retro-checkbox" ${selectedItems.has(post.id) ? 'checked' : ''} onchange="toggleSelection('${post.id}', event); event.stopPropagation();" onclick="event.stopPropagation()">
+    container.innerHTML = posts.map(post => {
+      const isScheduled = post.status === 'scheduled' || post.isScheduled;
+      const isDraft = post.status === 'draft' || post.isDraft;
+      let statusIcon = '✅';
+      let statusText = 'PUBLISHED';
+      let statusClass = 'status-published';
+
+      if (isDraft) {
+        statusIcon = '📝';
+        statusText = 'DRAFT';
+        statusClass = 'status-draft';
+      } else if (isScheduled) {
+        statusIcon = '⏰';
+        statusText = 'SCHEDULED';
+        statusClass = 'status-scheduled';
+      }
+
+      // Format dates
+      const modifiedDate = post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : '-';
+
+      return `
+        <div class="retro-post-item ${selectedItems.has(post.id) ? 'selected' : ''}" 
+             onclick="toggleSelection('${post.id}', event)"
+             ondblclick="openPost('${post.id}')"
+             data-id="${post.id}">
+          <div class="retro-col-select">
+            <input type="checkbox" class="retro-checkbox" 
+                   ${selectedItems.has(post.id) ? 'checked' : ''}
+                   onclick="event.stopPropagation(); toggleSelection('${post.id}', event)">
+            <label class="retro-checkbox-label"></label>
+          </div>
+          <div class="retro-col-title">
+            <div class="retro-post-icon">${isDraft ? '📄' : (isScheduled ? '⏰' : '📰')}</div>
+            <div class="retro-post-info">
+              <span class="retro-post-title">${escapeHtml(post.title)}</span>
+              <div class="retro-post-meta">
+                <span class="retro-post-author">${escapeHtml(post.author || 'Unknown')}</span>
+                <span class="retro-post-category">${escapeHtml(post.category || 'General')}</span>
+              </div>
             </div>
-            <div>
-                <i class="retro-tree-icon">📄</i>
-                <div style="display: inline-block; margin-left: 6px; vertical-align: top;">
-                    <div class="retro-post-title">${post.title}</div>
-                    <div class="retro-post-meta">${post.excerpt || 'No excerpt'}</div>
-                </div>
-            </div>
-            <div>
-                <span class="retro-post-status status-${post.status}">${formatStatus(post.status)}</span>
-            </div>
+          </div>
+          <div class="retro-col-status">
+            <span class="retro-post-status ${statusClass}">
+              ${statusIcon} ${statusText}
+            </span>
+          </div>
             <div class="retro-post-modified">
                 ${formatDate(post.updatedAt)}
             </div>
