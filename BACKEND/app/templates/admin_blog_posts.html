@@ -205,7 +205,7 @@
           <div class="retro-tree-content">
             <i class="retro-tree-icon">📄</i>
             <span class="retro-tree-text">ALL POSTS</span>
-            <span class="retro-tree-count" id="allPostsCount">24</span>
+            <span class="retro-tree-count" id="allPostsCount">0</span>
           </div>
         </div>
 
@@ -248,21 +248,21 @@
               <div class="retro-tree-content">
                 <i class="retro-tree-icon">✅</i>
                 <span class="retro-tree-text">PUBLISHED</span>
-                <span class="retro-tree-count" id="publishedCount">18</span>
+                <span class="retro-tree-count" id="publishedCount">0</span>
               </div>
             </div>
             <div class="retro-tree-item" data-filter="status-draft" onclick="navigateToFolder('status-draft')">
               <div class="retro-tree-content">
                 <i class="retro-tree-icon">📝</i>
                 <span class="retro-tree-text">DRAFT</span>
-                <span class="retro-tree-count" id="draftCount">4</span>
+                <span class="retro-tree-count" id="draftCount">0</span>
               </div>
             </div>
             <div class="retro-tree-item" data-filter="status-scheduled" onclick="navigateToFolder('status-scheduled')">
               <div class="retro-tree-content">
                 <i class="retro-tree-icon">⏰</i>
                 <span class="retro-tree-text">SCHEDULED</span>
-                <span class="retro-tree-count" id="scheduledCount">2</span>
+                <span class="retro-tree-count" id="scheduledCount">0</span>
               </div>
             </div>
           </div>
@@ -1295,10 +1295,12 @@
   let searchTerm = '';
   let availablePublishTags = [];
 
-  function initBlogPosts() {
+  window.initBlogPosts = function () {
+    console.log("🚀 initBlogPosts CALLED");
     // Only initialize if we're on the posts page (check for posts container)
     if (!document.getElementById('postsExplorer')) {
-      return; // Skip initialization if not on posts page
+      console.warn("❌ postsExplorer not found, skipping init");
+      return;
     }
 
     loadPostsData();
@@ -2084,6 +2086,26 @@
     if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
 
     return date.toLocaleDateString();
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   function formatFileSize(bytes) {
