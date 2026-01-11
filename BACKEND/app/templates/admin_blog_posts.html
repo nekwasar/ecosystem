@@ -1426,11 +1426,21 @@
       scheduledCount: 0
     };
 
-    document.getElementById('allPostsCount').textContent = stats.totalPosts || 0;
-    document.getElementById('publishedCount').textContent = stats.publishedCount || 0;
-    document.getElementById('draftCount').textContent = stats.draftCount || 0;
-    // Use the backend-provided scheduled count
-    document.getElementById('totalPostsCount').textContent = stats.totalPosts || 0;
+    const setTextContentSafe = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = value;
+      } else {
+        console.warn(`[Sidebar] Element not found: #${id}`);
+      }
+    };
+
+    setTextContentSafe('allPostsCount', stats.totalPosts || 0);
+    setTextContentSafe('publishedCount', stats.publishedCount || 0);
+    setTextContentSafe('draftCount', stats.draftCount || 0);
+    setTextContentSafe('totalPostsCount', stats.totalPosts || 0);
+
+    // Scheduled count is completely removed from UI, so we ignore it here.
 
     // Update categories and tags trees
     renderCategoriesTree(data.categories || []);

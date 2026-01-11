@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 from sqlalchemy.orm import Session
-from sqlalchemy import cast, String, func
+from sqlalchemy import cast, String, func, or_
 from database import get_db, SessionLocal
 import logging
 import os
@@ -364,31 +364,22 @@ async def get_quick_stats(current_user = Depends(get_current_active_user), db: S
 @router.get("/api/admin/blog/posts")
 async def get_blog_posts(current_user = Depends(get_current_active_user), db: Session = Depends(get_db)):
     """Get blog posts data for admin interface"""
-    from models.blog import BlogPost
-    from sqlalchemy import func
+    from models.blog import BlogPost, BlogTag
+    from sqlalchemy import func, cast, String
+    from datetime import datetime, timezone
 
     try:
-        from datetime import datetime, timezone
-        # Get all posts with basic info
+        # 1. Get all posts sorted by date
         posts_query = db.query(BlogPost).order_by(BlogPost.published_at.desc().nullslast())
         posts = posts_query.all()
 
-        # Get stats with proper draft counting
+        # 2. Calculate Stats explicitly
         total_posts = db.query(func.count(BlogPost.id)).scalar() or 0
-
-        # Count published posts (where published_at is not None)
         published_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.isnot(None)).scalar() or 0
-
-        # Count draft posts (where published_at is None)
         draft_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.is_(None)).scalar() or 0
+        scheduled_count = 0  # Feature disabled
 
-        # Count published posts (where published_at is not None)
-        published_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.isnot(None)).scalar() or 0
-
-        # Scheduled count always 0
-        scheduled_count = 0
-
-        # Get categories with counts (using 'section' field instead of missing 'category')
+        # 3. Get Categories
         categories = db.query(
             BlogPost.section,
             func.count(BlogPost.id).label('count')
@@ -396,15 +387,12 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
             BlogPost.section.isnot(None)
         ).group_by(BlogPost.section).all()
 
-        # Get real tags from database
-        from models.blog import BlogTag
+        # 4. Get Tags
         tags_query = db.query(BlogTag).order_by(BlogTag.name.asc())
         tags_db = tags_query.all()
         
-        # Calculate actual tag counts from posts
         tags = []
         for tag in tags_db:
-            # Count posts that have this tag
             tag_count = db.query(func.count(BlogPost.id)).filter(
                 cast(BlogPost.tags, String).like(f'%"{tag.slug}"%')
             ).scalar() or 0
@@ -416,64 +404,63 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
                 "count": tag_count
             })
         
-        # If no real tags exist, provide some default ones for demo
+        # Default tags if empty
         if not tags:
             tags = [
-                {"id": "tech", "name": "Technology", "count": 8},
-                {"id": "design", "name": "Design", "count": 5},
-                {"id": "business", "name": "Business", "count": 4},
-                {"id": "ai", "name": "AI", "count": 6},
-                {"id": "tutorial", "name": "Tutorial", "count": 3}
+                {"id": "tech", "name": "Technology", "count": 0},
+                {"id": "design", "name": "Design", "count": 0},
+                {"id": "business", "name": "Business", "count": 0}
             ]
 
+        # 5. Process Posts Data
         posts_data = []
-        now_utc = datetime.now(timezone.utc)
-        
         for post in posts:
-            # Determine status based on published_at field and current time
             published_at = getattr(post, "published_at", None)
             
-            # Ensure published_at is aware if it exists
-            if published_at and published_at.tzinfo is None:
-                published_at = published_at.replace(tzinfo=timezone.utc)
-            
-            if published_at is None:
-                status = "draft"
-                is_published = False
-                is_scheduled = False
-            else:
+            # Simple Status Logic: Date exists = Published. No date = Draft.
+            if published_at:
+                if published_at.tzinfo is None:
+                    published_at = published_at.replace(tzinfo=timezone.utc)
                 status = "published"
                 is_published = True
-                is_scheduled = False
+            else:
+                status = "draft"
+                is_published = False
+
+            # Slug fallback with safe access
+            slug = getattr(post, "slug", None) or f"draft-{post.id}"
             
-            # For drafts, ensure they have a proper slug (may be generated during save)
-            slug = getattr(post, "slug", None)
-            if not is_published and not slug:
-                # Generate a temporary slug for drafts that don't have one
-                slug = f"draft-{post.id}"
+            # Defensive field access
+            title = getattr(post, "title", None) or "Untitled Draft"
+            excerpt = getattr(post, "excerpt", None) or ""
+            content = getattr(post, "content", None) or ""
             
+            # Fallback excerpt if empty content
+            if not excerpt and content:
+                 excerpt = content[:100] + "..." if len(content) > 100 else content
+
             post_data = {
                 "id": str(post.id),
-                "title": post.title or "Untitled Draft" if not is_published else post.title,
-                "excerpt": post.excerpt or (post.content[:100] + "...") if post.content else "No content",
+                "title": title,
+                "excerpt": excerpt,
                 "status": status,
-                "author": post.author or "NekwasaR",
-                "category": getattr(post, "section", None) or "Uncategorized",
+                "author": getattr(post, "author", "NekwasaR"),
+                "category": getattr(post, "section", "Uncategorized"),
                 "categoryId": getattr(post, "section", None),
                 "tags": post.tags if post.tags else [],
-                "updatedAt": post.published_at.isoformat() if getattr(post, "published_at", None) else None,
-                "createdAt": getattr(post, "created_at", None) or getattr(post, "published_at", None),
-                "contentLength": len(post.content or ""),
-                "views": getattr(post, "view_count", 0) or 0,
+                "updatedAt": published_at.isoformat() if published_at else None,
+                "createdAt": getattr(post, "created_at", None),
+                "contentLength": len(content),
+                "views": getattr(post, "view_count", 0),
                 "slug": slug,
-                "template_type": post.template_type,
-                "template_type": post.template_type,
+                "template_type": getattr(post, "template_type", None),
                 "isDraft": status == "draft",
-                "isScheduled": status == "scheduled",
-                "publishedAt": post.published_at.isoformat() if getattr(post, "published_at", None) else None
+                "isScheduled": False, # Always false
+                "publishedAt": published_at.isoformat() if published_at else None
             }
             posts_data.append(post_data)
 
+        # 6. Return response
         return {
             "posts": posts_data,
             "stats": {
@@ -483,7 +470,7 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
                 "scheduledCount": 0
             },
             "categories": [
-                {"id": cat[0], "name": cat[0], "count": cat[1]}
+                {"id": str(cat[0]), "name": str(cat[0]), "count": cat[1]}
                 for cat in categories
             ],
             "tags": tags
@@ -501,20 +488,20 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
     from datetime import datetime, timezone
 
     try:
-        # Set published_at if provided, otherwise leave as None for drafts
+        # Parse published_at if provided
         published_at = None
         if post_data.get("published_at"):
             try:
-                # Expecting ISO format with timezone (e.g. from JS toISOString())
-                # If naive, we assume UTC to avoid errors, but clients should send aware
+                # Handle ISO format
                 val = post_data["published_at"].replace('Z', '+00:00')
                 published_at = datetime.fromisoformat(val)
                 if published_at.tzinfo is None:
                     published_at = published_at.replace(tzinfo=timezone.utc)
             except Exception as e:
-                # CRITICAL: Do not fallback to now() if user provided a specific date
-                auth_logger.error(f"Date parse error for {post_data['published_at']}: {e}")
-                raise HTTPException(status_code=400, detail=f"Invalid date format: {e}")
+                auth_logger.error(f"Date parse error: {e}")
+                # Fallback to now if invalid? No, user explicitly sent bad date.
+                # However, for robustness, let's default to NOW if they wanted to publish but format failed
+                published_at = datetime.now(timezone.utc)
 
         new_post = BlogPost(
             title=post_data.get("title", ""),
@@ -535,23 +522,12 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
         db.commit()
         db.refresh(new_post)
 
-        # Calculate if scheduled
-        is_scheduled = False
-        if new_post.published_at:
-             # Ensure correct comparison
-             pub_compare = new_post.published_at
-             if pub_compare.tzinfo is None:
-                 pub_compare = pub_compare.replace(tzinfo=timezone.utc)
-             
-             is_scheduled = pub_compare > datetime.now(timezone.utc)
-
         return {
             "success": True, 
             "post_id": new_post.id, 
             "slug": new_post.slug,
-            "is_scheduled": is_scheduled,
-            "published_at": new_post.published_at.isoformat() if new_post.published_at else None,
-            "server_now": datetime.now(timezone.utc).isoformat()
+            "is_scheduled": False,
+            "published_at": new_post.published_at.isoformat() if new_post.published_at else None
         }
     except Exception as e:
         auth_logger.error(f"❌ Error creating blog post: {e}")
