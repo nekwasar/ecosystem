@@ -64,16 +64,6 @@ templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 # Blog templates & statics
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-logger.info(f"📂 DEBUG: PROJECT_ROOT = {PROJECT_ROOT}")
-PORTFOLIO_DIR = PROJECT_ROOT / "portfolio"
-logger.info(f"📂 DEBUG: Portfolio Dir = {PORTFOLIO_DIR}")
-logger.info(f"📂 DEBUG: Portfolio Dir Exists? = {PORTFOLIO_DIR.exists()}")
-if PORTFOLIO_DIR.exists():
-     logger.info(f"📂 DEBUG: Portfolio Contents: {[p.name for p in PORTFOLIO_DIR.iterdir()]}")
-     css_dir = PORTFOLIO_DIR / "css"
-     if css_dir.exists():
-         logger.info(f"📂 DEBUG: CSS Dir Contents: {[p.name for p in css_dir.iterdir()]}")
-
 BLOG_DIR = PROJECT_ROOT / "blog"
 blog_templates = Jinja2Templates(directory=str(BLOG_DIR / "templates"))
 
@@ -108,6 +98,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files for admin interface
+app.mount("/static", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), name="static")
+
+# Mount blog assets (css, js, img)
+app.mount("/blog", StaticFiles(directory=str(BLOG_DIR)), name="blog-static")
+
 # Include routers
 app.include_router(contacts_router, prefix="/api/contacts", tags=["contacts"])
 app.include_router(blogs_router, prefix="/api/blogs", tags=["blogs"])
@@ -119,22 +115,7 @@ app.include_router(analytics_router, prefix="/api/analytics", tags=["analytics"]
 app.include_router(content_router, prefix="/api/content", tags=["content"])
 app.include_router(admin_router, tags=["admin"])
 
-# Mount static files for admin interface
-app.mount("/static", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), name="static")
 
-# Mount blog assets (css, js, img)
-app.mount("/blog", StaticFiles(directory=str(BLOG_DIR)), name="blog-static")
-
-# DEBUG ROUTE for CSS (User Request)
-@app.get("/debug/css/main.css")
-async def debug_main_css():
-    """Temporary route to debug CSS loading"""
-    file_path = PROJECT_ROOT / "portfolio" / "css" / "main.css"
-    logger.info(f"🔍 DEBUG ROUTE: Serving CSS from {file_path}")
-    if not file_path.exists():
-        logger.error(f"❌ DEBUG ROUTE: File not found at {file_path}")
-        raise HTTPException(status_code=404, detail="CSS file not found on disk")
-    return FileResponse(str(file_path), media_type="text/css")
 
 # Global Error Handlers
 @app.exception_handler(HTTPException)
