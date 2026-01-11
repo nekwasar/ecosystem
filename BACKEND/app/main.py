@@ -64,6 +64,16 @@ templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 # Blog templates & statics
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+logger.info(f"📂 DEBUG: PROJECT_ROOT = {PROJECT_ROOT}")
+PORTFOLIO_DIR = PROJECT_ROOT / "portfolio"
+logger.info(f"📂 DEBUG: Portfolio Dir = {PORTFOLIO_DIR}")
+logger.info(f"📂 DEBUG: Portfolio Dir Exists? = {PORTFOLIO_DIR.exists()}")
+if PORTFOLIO_DIR.exists():
+     logger.info(f"📂 DEBUG: Portfolio Contents: {[p.name for p in PORTFOLIO_DIR.iterdir()]}")
+     css_dir = PORTFOLIO_DIR / "css"
+     if css_dir.exists():
+         logger.info(f"📂 DEBUG: CSS Dir Contents: {[p.name for p in css_dir.iterdir()]}")
+
 BLOG_DIR = PROJECT_ROOT / "blog"
 blog_templates = Jinja2Templates(directory=str(BLOG_DIR / "templates"))
 
