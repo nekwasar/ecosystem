@@ -125,6 +125,17 @@ app.mount("/static", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), nam
 # Mount blog assets (css, js, img)
 app.mount("/blog", StaticFiles(directory=str(BLOG_DIR)), name="blog-static")
 
+# DEBUG ROUTE for CSS (User Request)
+@app.get("/debug/css/main.css")
+async def debug_main_css():
+    """Temporary route to debug CSS loading"""
+    file_path = PROJECT_ROOT / "portfolio" / "css" / "main.css"
+    logger.info(f"🔍 DEBUG ROUTE: Serving CSS from {file_path}")
+    if not file_path.exists():
+        logger.error(f"❌ DEBUG ROUTE: File not found at {file_path}")
+        raise HTTPException(status_code=404, detail="CSS file not found on disk")
+    return FileResponse(str(file_path), media_type="text/css")
+
 # Global Error Handlers
 @app.exception_handler(HTTPException)
 async def custom_http_exception_handler(request: Request, exc: HTTPException):
