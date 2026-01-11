@@ -2999,7 +2999,16 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Failed to publish: ${response.status}`);
+                    let errorMsg = `Failed to publish: ${response.status}`;
+                    try {
+                        const errorData = await response.json();
+                        if (errorData.detail) {
+                            errorMsg = errorData.detail;
+                        }
+                    } catch (e) {
+                        // ignore JSON parse error
+                    }
+                    throw new Error(errorMsg);
                 }
 
                 const result = await response.json();

@@ -7,7 +7,7 @@
   <title>{% block title %}{{ post_data.title if post_data else 'NekwasaR Blog - Professional Insights & Innovation' }}{%
     endblock %}</title>
   <meta name="description"
-    content="{% block description %}{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights, analysis, and storytelling from NekwasaR.' }}{% endblock %}">
+    content="{% block description %}{{ (post_data.excerpt or '')|truncate(160) if post_data else 'Professional insights, analysis, and storytelling from NekwasaR.' }}{% endblock %}">
   <meta name="author" content="{{ post_data.author if post_data else 'NekwasaR' }}">
 
   <!-- Canonical URL -->

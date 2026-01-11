@@ -511,12 +511,21 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
              slug = re.sub(r'[^a-z0-9-]+', '-', title.lower()).strip('-')
         
         slug = slug[:255]
+
+        # STRICT VALIDATION (User Request)
+        # Ensure Excerpt and Tags are provided
+        content = post_data.get("content", "")
+        excerpt = post_data.get("excerpt")
+        tags = post_data.get("tags")
+        
+        if not excerpt or not tags:
+            raise HTTPException(status_code=400, detail="Post info (excerpt and tags) must be provided first before publish")
         
         # 3. Create Post Object
         new_post = BlogPost(
             title=title,
-            content=post_data.get("content", ""),
-            excerpt=post_data.get("excerpt", "")[:5000] if post_data.get("excerpt") else None,
+            content=content,
+            excerpt=excerpt[:5000],
             template_type=post_data.get("template_type", "template1")[:50],
             featured_image=post_data.get("featured_image", "")[:500] if post_data.get("featured_image") else None,
             video_url=post_data.get("video_url", "")[:500] if post_data.get("video_url") else None,
