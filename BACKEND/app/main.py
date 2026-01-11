@@ -467,16 +467,14 @@ async def blog_post_by_slug(request: Request, slug: str, db: Session = Depends(g
         raise HTTPException(status_code=404, detail="Post not found")
         
     if post.published_at:
-        # Handle timezone comparison safely
-        now_utc = datetime.now(timezone.utc)
-        published_at = post.published_at
-        
-        # Ensure published_at is timezone-aware for comparison
-        if published_at.tzinfo is None:
-            published_at = published_at.replace(tzinfo=timezone.utc)
-            
-        if published_at > now_utc:
-             raise HTTPException(status_code=404, detail="Post not found")
+        # Status Logic: If it has a published_at date, it is PUBLISHED.
+        # We process 'scheduled' posts as published immediately if they have a date,
+        # or we rely on the specific 'is_scheduled' field if we implement it later.
+        # For now: robustness = visibility.
+        pass
+    else:
+        # No date = Draft
+        raise HTTPException(status_code=404, detail="Post not found")
 
     # Determine which template to use
     template_map = {
