@@ -486,9 +486,11 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
     """Create a new blog post"""
     from models.blog import BlogPost
     from datetime import datetime, timezone
+    from sqlalchemy.exc import IntegrityError
+    import re
 
     try:
-        # Parse published_at if provided
+        # 1. Parse published_at
         published_at = None
         if post_data.get("published_at"):
             try:
@@ -499,27 +501,46 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
                     published_at = published_at.replace(tzinfo=timezone.utc)
             except Exception as e:
                 auth_logger.error(f"Date parse error: {e}")
-                # Fallback to now if invalid? No, user explicitly sent bad date.
-                # However, for robustness, let's default to NOW if they wanted to publish but format failed
                 published_at = datetime.now(timezone.utc)
-
+        
+        # 2. Prepare Data & Truncate Strings
+        title = post_data.get("title", "")[:255]
+        slug = post_data.get("slug")
+        if not slug:
+             # Generate basic slug from title
+             slug = re.sub(r'[^a-z0-9-]+', '-', title.lower()).strip('-')
+        
+        slug = slug[:255]
+        
+        # 3. Create Post Object
         new_post = BlogPost(
-            title=post_data.get("title", ""),
+            title=title,
             content=post_data.get("content", ""),
-            excerpt=post_data.get("excerpt"),
-            template_type=post_data.get("template_type"),
-            featured_image=post_data.get("featured_image"),
-            video_url=post_data.get("video_url"),
+            excerpt=post_data.get("excerpt", "")[:5000] if post_data.get("excerpt") else None,
+            template_type=post_data.get("template_type", "template1")[:50],
+            featured_image=post_data.get("featured_image", "")[:500] if post_data.get("featured_image") else None,
+            video_url=post_data.get("video_url", "")[:500] if post_data.get("video_url") else None,
             tags=post_data.get("tags"),
-            section=post_data.get("section", "others"),
-            slug=post_data.get("slug"),
+            section=post_data.get("section", "others")[:20],
+            slug=slug,
             priority=post_data.get("priority", 0),
             is_featured=post_data.get("is_featured", False),
-            published_at=published_at
+            published_at=published_at,
+            author=current_user.username[:255] if current_user.username else "NekwasaR"
         )
 
         db.add(new_post)
-        db.commit()
+        
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            # Handle duplicate slug by appending random suffix
+            import uuid
+            new_post.slug = f"{slug}-{str(uuid.uuid4())[:6]}"[:255]
+            db.add(new_post)
+            db.commit()
+
         db.refresh(new_post)
 
         return {
@@ -531,8 +552,11 @@ async def create_blog_post(post_data: dict, current_user = Depends(get_current_a
         }
     except Exception as e:
         auth_logger.error(f"❌ Error creating blog post: {e}")
+        auth_logger.error(f"❌ Exception type: {type(e).__name__}")
+        import traceback
+        auth_logger.error(f"❌ Traceback: {traceback.format_exc()}")
         db.rollback()
-        raise HTTPException(status_code=500, detail="Failed to create blog post")
+        raise HTTPException(status_code=500, detail=f"Failed to create blog post: {str(e)}")
 
 @router.post("/admin/api/blog/drafts")
 async def save_blog_draft(draft_data: dict, current_user = Depends(get_current_active_user), db: Session = Depends(get_db)):
