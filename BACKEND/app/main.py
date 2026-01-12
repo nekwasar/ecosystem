@@ -105,6 +105,14 @@ app.mount("/assets", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), nam
 # Mount blog assets (css, js, img)
 app.mount("/blog", StaticFiles(directory=str(BLOG_DIR)), name="blog-static")
 
+# Shortcuts / Aliases
+@app.get("/2025_nekwasar_dp")
+async def get_nekwasar_dp():
+    file_path = PROJECT_ROOT / "portfolio/img/avatars/mypics.jpg"
+    if not file_path.exists():
+        return Response(status_code=404)
+    return FileResponse(file_path)
+
 # Include routers
 app.include_router(contacts_router, prefix="/api/contacts", tags=["contacts"])
 app.include_router(blogs_router, prefix="/api/blogs", tags=["blogs"])
