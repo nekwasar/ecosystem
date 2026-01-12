@@ -19,6 +19,7 @@ Base = declarative_base()
 # Import essential models to ensure tables are created
 # This must be after Base is defined to avoid circular imports
 from models.blog import BlogPost, BlogComment, BlogLike, TemporalUser, BlogView
+from models.author import BlogAuthor
 
 # Create tables
 def create_tables():

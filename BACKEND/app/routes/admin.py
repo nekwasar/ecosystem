@@ -47,6 +47,11 @@ async def admin_blog_editor_page(request: Request):
     """Serve standalone blog editor page"""
     return templates.TemplateResponse("admin_blog_editor.html", {"request": request})
 
+@router.get("/admin/blog/authors", response_class=HTMLResponse)
+async def admin_blog_authors_page(request: Request):
+    """Serve blog authors management page"""
+    return templates.TemplateResponse("admin_blog_authors.html", {"request": request})
+
 @router.get("/admin/{section}/{page}", response_class=HTMLResponse)
 async def admin_section_page(request: Request, section: str, page: str):
     """Serve admin section pages dynamically - Authentication handled by JavaScript"""
@@ -1055,3 +1060,109 @@ async def get_posts_by_section(section: str, limit: int = 10, db: Session = Depe
     except Exception as e:
         auth_logger.error(f"❌ Error getting posts by section: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to fetch posts: {str(e)}")
+# --- AUTHOR API ROUTES ---
+@router.get("/admin/api/authors")
+async def get_all_authors(db: Session = Depends(get_db)):
+    from models.author import BlogAuthor
+    return db.query(BlogAuthor).order_by(BlogAuthor.created_at.desc()).all()
+
+@router.get("/admin/api/authors/{author_id}")
+async def get_one_author(author_id: int, db: Session = Depends(get_db)):
+    from models.author import BlogAuthor
+    auth = db.query(BlogAuthor).filter(BlogAuthor.id == author_id).first()
+    if not auth: raise HTTPException(404, "Author not found")
+    return auth
+
+from pydantic import BaseModel
+from typing import Optional, List
+
+class AuthorSchema(BaseModel):
+    name: str
+    username: str
+    bio: Optional[str] = None
+    avatar_image: Optional[str] = None
+    cover_image: Optional[str] = None
+    expert_tags: Optional[List[str]] = []
+
+@router.post("/admin/api/authors")
+async def create_author(data: AuthorSchema, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    from models.author import BlogAuthor
+    if db.query(BlogAuthor).filter(BlogAuthor.username == data.username).first():
+        raise HTTPException(400, "Username already exists")
+    
+    new_author = BlogAuthor(**data.dict())
+    db.add(new_author)
+    db.commit()
+    return new_author
+
+@router.put("/admin/api/authors/{author_id}")
+async def update_author(author_id: int, data: AuthorSchema, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    from models.author import BlogAuthor
+    auth = db.query(BlogAuthor).filter(BlogAuthor.id == author_id).first()
+    if not auth: raise HTTPException(404, "Author not found")
+    
+    for k,v in data.dict().items():
+        setattr(auth, k, v)
+    
+    db.commit()
+    return auth
+
+# --- PUBLIC AUTHOR ROUTE ---
+@router.get("/author/{username}", response_class=HTMLResponse)
+async def public_author_profile(username: str, request: Request, db: Session = Depends(get_db)):
+    """Serve public author profile page"""
+    from models.author import BlogAuthor
+    from models.blog import BlogPost
+    from datetime import datetime
+    
+    author = db.query(BlogAuthor).filter(BlogAuthor.username == username).first()
+    
+    # If author not found in Author table, check if they have posts (legacy fallback)
+    # But user asked strictly for the new system.
+    if not author:
+        # Fallback to 404
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+
+    # Get posts by this author key (assuming posts use username in author field)
+    posts = db.query(BlogPost).filter(
+        BlogPost.author == author.username,
+        BlogPost.published_at.isnot(None)
+    ).order_by(BlogPost.published_at.desc()).all()
+
+    return templates.TemplateResponse("blog_author_profile.html", {
+        "request": request,
+        "author": author,
+        "posts": posts,
+        "post_data": {"title": author.name + " - Author Profile"}, # Context for base template
+        "current_year": datetime.utcnow().year
+    })
+
+# --- PUBLIC AUTHOR ROUTE ---
+@router.get("/author/{username}", response_class=HTMLResponse)
+async def public_author_profile(username: str, request: Request, db: Session = Depends(get_db)):
+    """Serve public author profile page"""
+    from models.author import BlogAuthor
+    from models.blog import BlogPost
+    from datetime import datetime
+    
+    author = db.query(BlogAuthor).filter(BlogAuthor.username == username).first()
+    
+    # If author not found in Author table, check if they have posts (legacy fallback)
+    # But user asked strictly for the new system.
+    if not author:
+        # Fallback to 404
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+
+    # Get posts by this author key (assuming posts use username in author field)
+    posts = db.query(BlogPost).filter(
+        BlogPost.author == author.username,
+        BlogPost.published_at.isnot(None)
+    ).order_by(BlogPost.published_at.desc()).all()
+
+    return templates.TemplateResponse("blog_author_profile.html", {
+        "request": request,
+        "author": author,
+        "posts": posts,
+        "post_data": {"title": author.name + " - Author Profile"}, # Context for base template
+        "current_year": datetime.utcnow().year
+    })

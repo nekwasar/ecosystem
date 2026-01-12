@@ -1,0 +1,276 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<!-- Authors Explorer - Same Retro Style as Blog Posts -->
+<div class="retro-posts-container" id="authorsExplorer">
+    <div class="retro-header">
+        <div class="retro-title-bar">
+            <div class="retro-title-left">
+                <div class="retro-title-icon">👥</div>
+                <h2 class="retro-title">AUTHOR PROFILES <span class="retro-version">v1.0</span></h2>
+            </div>
+        </div>
+        <div class="retro-menu-bar">
+            <div class="retro-menu-item active">FILE</div>
+            <div class="retro-menu-item">EDIT</div>
+            <div class="retro-menu-item">VIEW</div>
+            <div class="retro-menu-item">HELP</div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="retro-toolbar">
+        <div class="retro-toolbar-section">
+            <button class="retro-toolbar-btn" onclick="openAuthorEditor()">NEW AUTHOR</button>
+            <button class="retro-toolbar-btn" onclick="refreshAuthors()">REFRESH</button>
+        </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div class="retro-main-panel">
+        <!-- List View -->
+        <div class="retro-content-area" id="authorsList"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; padding: 1rem;">
+            <!-- Author Cards will be rendered here -->
+            <div class="loading-state">Loading authors...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Author Editor Modal -->
+<div id="authorEditorModal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center">
+    <div class="bg-gray-900 border border-green-500 w-full max-w-2xl p-6 rounded-lg shadow-2xl relative">
+        <button onclick="closeAuthorEditor()" class="absolute top-4 right-4 text-green-500 hover:text-white">✕</button>
+
+        <h2 class="text-xl font-bold text-green-500 mb-6 font-mono">> EDIT AUTHOR PROFILE</h2>
+
+        <form id="authorForm" onsubmit="saveAuthor(event)" class="space-y-4 font-mono text-green-400">
+            <input type="hidden" id="authorId">
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs uppercase mb-1">Full Name</label>
+                    <input type="text" id="authorName" required
+                        class="w-full bg-black border border-green-700 p-2 text-white focus:border-green-400 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase mb-1">Username (URL Slug)</label>
+                    <input type="text" id="authorUsername" required
+                        class="w-full bg-black border border-green-700 p-2 text-white focus:border-green-400 outline-none"
+                        placeholder="e.g. nekwasar">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs uppercase mb-1">Bio</label>
+                <textarea id="authorBio" rows="4"
+                    class="w-full bg-black border border-green-700 p-2 text-white focus:border-green-400 outline-none"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs uppercase mb-1">Avatar URL</label>
+                    <input type="text" id="authorAvatar"
+                        class="w-full bg-black border border-green-700 p-2 text-white focus:border-green-400 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase mb-1">Cover Image URL</label>
+                    <input type="text" id="authorCover"
+                        class="w-full bg-black border border-green-700 p-2 text-white focus:border-green-400 outline-none">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs uppercase mb-1">Expert Tags (comma separated)</label>
+                <input type="text" id="authorTags"
+                    class="w-full bg-black border border-green-700 p-2 text-white focus:border-green-400 outline-none"
+                    placeholder="Technology, AI, Design">
+            </div>
+
+            <div class="pt-4 flex justify-end gap-3">
+                <button type="button" onclick="closeAuthorEditor()"
+                    class="px-4 py-2 border border-green-700 hover:bg-green-900 text-green-400">CANCEL</button>
+                <button type="submit" class="px-6 py-2 bg-green-700 hover:bg-green-600 text-black font-bold">SAVE
+                    PROFILE</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Minimized CSS for Retro Look (borrowed from blog posts) */
+    .retro-posts-container {
+        height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+        background: #000;
+        color: #00ff00;
+        font-family: 'Courier New', monospace;
+    }
+
+    .retro-header,
+    .retro-toolbar,
+    .retro-main-panel {
+        border-bottom: 1px solid #005500;
+    }
+
+    .retro-header {
+        padding: 10px;
+        background: #001100;
+    }
+
+    .retro-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .retro-toolbar {
+        padding: 8px;
+        background: #000;
+        display: flex;
+        gap: 10px;
+    }
+
+    .retro-toolbar-btn {
+        background: #002200;
+        border: 1px solid #00ff00;
+        color: #00ff00;
+        padding: 5px 10px;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+    }
+
+    .retro-toolbar-btn:hover {
+        background: #00ff00;
+        color: #000;
+    }
+
+    /* Author Card */
+    .author-card {
+        border: 1px solid #00ff00;
+        padding: 1rem;
+        background: #000500;
+        position: relative;
+        transition: all 0.2s;
+    }
+
+    .author-card:hover {
+        box-shadow: 0 0 10px #00ff00;
+        transform: translateY(-2px);
+    }
+</style>
+
+<script>
+    async function refreshAuthors() {
+        const list = document.getElementById('authorsList');
+        list.innerHTML = '<div class="text-green-500">Loading...</div>';
+
+        try {
+            const res = await fetch('/admin/api/authors');
+            if (!res.ok) throw new Error("Failed to load");
+            const authors = await res.json();
+
+            list.innerHTML = '';
+            if (authors.length === 0) {
+                list.innerHTML = '<div class="text-gray-500 p-4">No authors found. Create one!</div>';
+                return;
+            }
+
+            authors.forEach(author => {
+                const card = document.createElement('div');
+                card.className = 'author-card';
+                card.innerHTML = `
+                <div class="flex items-center gap-4 mb-4">
+                    <img src="${author.avatar_image || 'https://via.placeholder.com/50'}" class="w-12 h-12 rounded-full border border-green-500 object-cover">
+                    <div>
+                        <h3 class="font-bold text-lg">${author.name}</h3>
+                        <div class="text-xs opacity-70">@${author.username}</div>
+                    </div>
+                </div>
+                <div class="text-sm opacity-80 mb-4 line-clamp-2 h-10">${author.bio || 'No bio provided'}</div>
+                <div class="flex justify-between items-center mt-2 border-t border-green-900 pt-2">
+                    <span class="text-xs bg-green-900 px-2 py-1 rounded">${(author.expert_tags || []).length} Tags</span>
+                    <button onclick="editAuthor(${author.id})" class="text-xs uppercase hover:underline cursor-pointer">[EDIT]</button>
+                    <a href="/author/${author.username}" target="_blank" class="text-xs uppercase hover:underline cursor-pointer">[VIEW]</a>
+                </div>
+            `;
+                list.appendChild(card);
+            });
+
+        } catch (e) {
+            list.innerHTML = '<div class="text-red-500">Error loading authors</div>';
+            console.error(e);
+        }
+    }
+
+    function openAuthorEditor() {
+        document.getElementById('authorForm').reset();
+        document.getElementById('authorId').value = '';
+        document.getElementById('authorEditorModal').classList.remove('hidden');
+    }
+
+    function closeAuthorEditor() {
+        document.getElementById('authorEditorModal').classList.add('hidden');
+    }
+
+    async function editAuthor(id) {
+        // In a real app we'd fetch details, for now just show empty editor
+        // Ideally we would fetch /admin/api/authors/{id}
+        // I will implement the fetch for edit
+        try {
+            const res = await fetch(`/admin/api/authors/${id}`);
+            const author = await res.json();
+
+            document.getElementById('authorId').value = author.id;
+            document.getElementById('authorName').value = author.name;
+            document.getElementById('authorUsername').value = author.username;
+            document.getElementById('authorBio').value = author.bio || '';
+            document.getElementById('authorAvatar').value = author.avatar_image || '';
+            document.getElementById('authorCover').value = author.cover_image || '';
+            document.getElementById('authorTags').value = (author.expert_tags || []).join(', ');
+
+            document.getElementById('authorEditorModal').classList.remove('hidden');
+        } catch (e) {
+            alert("Failed to load author details");
+        }
+    }
+
+    async function saveAuthor(e) {
+        e.preventDefault();
+        const id = document.getElementById('authorId').value;
+        const data = {
+            name: document.getElementById('authorName').value,
+            username: document.getElementById('authorUsername').value,
+            bio: document.getElementById('authorBio').value,
+            avatar_image: document.getElementById('authorAvatar').value,
+            cover_image: document.getElementById('authorCover').value,
+            expert_tags: document.getElementById('authorTags').value.split(',').map(t => t.trim()).filter(t => t)
+        };
+
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/admin/api/authors/${id}` : '/admin/api/authors';
+
+        try {
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                closeAuthorEditor();
+                refreshAuthors();
+            } else {
+                alert("Error saving author");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Network error");
+        }
+    }
+
+    // Init
+    document.addEventListener('DOMContentLoaded', refreshAuthors);
+</script>
+{% endblock %}
