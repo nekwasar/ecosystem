@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse, Response
 from fastapi.templating import Jinja2Templates
 from fastapi.exceptions import RequestValidationError
+from fastapi.exception_handlers import http_exception_handler
 from fastapi.responses import JSONResponse
 from pathlib import Path
 import uvicorn

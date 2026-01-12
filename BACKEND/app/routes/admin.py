@@ -369,17 +369,20 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
     from datetime import datetime, timezone
 
     try:
+        auth_logger.info("🔍 STARTING get_blog_posts")
         # 1. Get all posts sorted by date
         posts_query = db.query(BlogPost).order_by(BlogPost.published_at.desc().nullslast())
         posts = posts_query.all()
 
         # 2. Calculate Stats explicitly
+        auth_logger.info("🔍 CALCULATING STATS")
         total_posts = db.query(func.count(BlogPost.id)).scalar() or 0
         published_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.isnot(None)).scalar() or 0
         draft_count = db.query(func.count(BlogPost.id)).filter(BlogPost.published_at.is_(None)).scalar() or 0
         scheduled_count = 0  # Feature disabled
 
         # 3. Get Categories
+        auth_logger.info("🔍 GETTING CATEGORIES")
         categories = db.query(
             BlogPost.section,
             func.count(BlogPost.id).label('count')
@@ -388,6 +391,7 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
         ).group_by(BlogPost.section).all()
 
         # 4. Get Tags
+        auth_logger.info("🔍 GETTING TAGS")
         tags_query = db.query(BlogTag).order_by(BlogTag.name.asc())
         tags_db = tags_query.all()
         
@@ -413,6 +417,7 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
             ]
 
         # 5. Process Posts Data
+        auth_logger.info("🔍 PROCESSING POSTS DATA")
         posts_data = []
         for post in posts:
             published_at = getattr(post, "published_at", None)
@@ -461,6 +466,7 @@ async def get_blog_posts(current_user = Depends(get_current_active_user), db: Se
             posts_data.append(post_data)
 
         # 6. Return response
+        auth_logger.info("✅ RETURNING RESPONSE")
         return {
             "posts": posts_data,
             "stats": {
