@@ -1582,6 +1582,12 @@
     const container = document.getElementById('postsList');
     container.innerHTML = posts.map(post => {
       const isDraft = post.status === 'draft';
+
+      // Default to Published
+      let statusIcon = '✅';
+      let statusText = 'PUBLISHED';
+      let statusClass = 'status-published';
+
       if (isDraft) {
         statusIcon = '📝';
         statusText = 'DRAFT';
