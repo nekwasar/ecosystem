@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - NekwasaR</title>
-    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
     <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/bold/style.css">
@@ -342,6 +343,7 @@
         }
     </style>
 </head>
+
 <body class="dashboard-wrapper">
     <!-- Sidebar -->
     <aside class="dashboard-sidebar">
@@ -417,7 +419,8 @@
             </div>
 
             <!-- Dashboard overview content -->
-            <div class="text-slate-500">Welcome to your admin dashboard. Use the sidebar to navigate between different sections.</div>
+            <div class="text-slate-500">Welcome to your admin dashboard. Use the sidebar to navigate between different
+                sections.</div>
         </section>
 
         <!-- Analytics Section -->
@@ -780,26 +783,26 @@
         // Theme switcher functionality
         const themeBtn = document.getElementById('adminThemeSwitcher');
 
-        function getCurrentTheme(){
+        function getCurrentTheme() {
             let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
             localStorage.getItem('admin.theme') ? theme = localStorage.getItem('admin.theme') : null;
             return theme;
         }
 
-        function loadTheme(theme){
+        function loadTheme(theme) {
             const root = document.querySelector(':root');
-            if(theme === "light"){
-                if(themeBtn) themeBtn.innerHTML = '<i class="ph-bold ph-moon-stars"></i>';
+            if (theme === "light") {
+                if (themeBtn) themeBtn.innerHTML = '<i class="ph-bold ph-moon-stars"></i>';
             } else {
-                if(themeBtn) themeBtn.innerHTML = '<i class="ph-bold ph-sun"></i>';
+                if (themeBtn) themeBtn.innerHTML = '<i class="ph-bold ph-sun"></i>';
             }
-            if(root) root.setAttribute('color-scheme', `${theme}`);
+            if (root) root.setAttribute('color-scheme', `${theme}`);
         };
 
-        if(themeBtn) {
+        if (themeBtn) {
             themeBtn.addEventListener('click', () => {
                 let theme = getCurrentTheme();
-                if(theme === 'dark'){
+                if (theme === 'dark') {
                     theme = 'light';
                 } else {
                     theme = 'dark';
@@ -810,11 +813,12 @@
         }
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             checkAuth();
             loadOverview();
             loadTheme(getCurrentTheme());
         });
     </script>
 </body>
+
 </html>

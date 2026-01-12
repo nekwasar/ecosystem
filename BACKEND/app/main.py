@@ -98,8 +98,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files for admin interface
-app.mount("/static", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), name="static")
+# Mount static files for admin interface (Renamed to /assets to bypass Nginx static trap)
+app.mount("/assets", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), name="static")
 
 # Mount blog assets (css, js, img)
 app.mount("/blog", StaticFiles(directory=str(BLOG_DIR)), name="blog-static")

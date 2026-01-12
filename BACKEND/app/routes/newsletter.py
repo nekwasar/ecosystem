@@ -741,7 +741,7 @@ async def upload_image(file: UploadFile = File(...)):
             
         # Return URL (assuming /static mount)
         # We need to know the domain, but relative URL /static/... usually works for frontend
-        return {"success": True, "url": f"/static/newsletter_uploads/{safe_name}"}
+        return {"success": True, "url": f"/assets/newsletter_uploads/{safe_name}"}
     except Exception as e:
         print(f"Upload failed: {e}")
         return {"success": False, "error": str(e)}
