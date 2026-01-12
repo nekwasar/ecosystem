@@ -1581,6 +1581,7 @@
   function renderListView(posts) {
     const container = document.getElementById('postsList');
     container.innerHTML = posts.map(post => {
+      const isDraft = post.status === 'draft';
       if (isDraft) {
         statusIcon = '📝';
         statusText = 'DRAFT';
