@@ -47,10 +47,7 @@ async def admin_blog_editor_page(request: Request):
     """Serve standalone blog editor page"""
     return templates.TemplateResponse("admin_blog_editor.html", {"request": request})
 
-@router.get("/admin/blog/authors", response_class=HTMLResponse)
-async def admin_blog_authors_page(request: Request):
-    """Serve blog authors management page"""
-    return templates.TemplateResponse("admin_blog_authors.html", {"request": request})
+
 
 @router.get("/admin/{section}/{page}", response_class=HTMLResponse)
 async def admin_section_page(request: Request, section: str, page: str):
