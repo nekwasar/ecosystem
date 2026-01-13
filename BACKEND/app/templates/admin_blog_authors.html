@@ -234,8 +234,17 @@
         const tableBody = document.getElementById('authorsTableBody');
 
         try {
-            const res = await fetch('/admin/api/authors');
-            if (!res.ok) throw new Error("Network response was not ok");
+            const token = localStorage.getItem('token');
+            const res = await fetch('/admin/api/authors', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`Server returned ${res.status}: ${text.substring(0, 100)}`);
+            }
             authors = await res.json();
             renderAuthors();
         } catch (e) {
