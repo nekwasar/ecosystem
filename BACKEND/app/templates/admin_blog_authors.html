@@ -92,7 +92,7 @@
 
         <!-- Modal Form -->
         <div class="flex-1 overflow-y-auto p-6 space-y-6">
-            <form id="authorForm" onsubmit="saveAuthor(event)">
+            <form id="authorForm" onsubmit="return false">
                 <input type="hidden" id="authorId">
 
                 <!-- Avatar Upload Preview -->
@@ -170,7 +170,7 @@
                 class="px-5 py-2.5 rounded-lg text-sm font-bold text-t-muted hover:text-t-bright hover:bg-base-tint transition-colors">
                 Cancel
             </button>
-            <button onclick="document.getElementById('authorForm').dispatchEvent(new Event('submit'))"
+            <button onclick="saveAuthor()"
                 class="px-6 py-2.5 bg-gradient-to-r from-accent to-secondary text-white rounded-lg text-sm font-bold shadow-lg shadow-accent/20 hover:shadow-accent/40 hover:-translate-y-0.5 transition-all">
                 Save Profile
             </button>
@@ -363,8 +363,8 @@
         updatePreview();
     }
 
-    async function saveAuthor(e) {
-        e.preventDefault();
+    async function saveAuthor() {
+        // e.preventDefault() is removed because we removed the event
         const id = document.getElementById('authorId').value;
         const data = {
             name: document.getElementById('authorName').value,
