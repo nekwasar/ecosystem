@@ -20,6 +20,16 @@ router = APIRouter()
 templates_dir = Path(__file__).parent.parent / "templates"
 templates = Jinja2Templates(directory=str(templates_dir))
 
+# Blog Templates directory (../../blog/templates relative to app/routes/admin.py)
+# structure: BACKEND/app/routes/admin.py
+# parent -> routes
+# parent.parent -> app
+# parent.parent.parent -> BACKEND
+# parent.parent.parent.parent -> root
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+BLOG_TEMPLATE_DIR = PROJECT_ROOT / "blog" / "templates"
+blog_templates = Jinja2Templates(directory=str(BLOG_TEMPLATE_DIR))
+
 # Custom 403 error handler
 @router.get("/admin/403", response_class=HTMLResponse)
 async def admin_403_error(request: Request):
@@ -1117,8 +1127,12 @@ async def public_author_profile(username: str, request: Request, db: Session = D
     # If author not found in Author table, check if they have posts (legacy fallback)
     # But user asked strictly for the new system.
     if not author:
-        # Fallback to 404
-        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+        # Custom Author Not Found Page
+        return blog_templates.TemplateResponse("author_404.html", {
+            "request": request, 
+            "username": username,
+            "post_data": {"title": "Author Not Found"}
+        }, status_code=404)
 
     # Get posts by this author key (assuming posts use username in author field)
     posts = db.query(BlogPost).filter(
@@ -1126,40 +1140,12 @@ async def public_author_profile(username: str, request: Request, db: Session = D
         BlogPost.published_at.isnot(None)
     ).order_by(BlogPost.published_at.desc()).all()
 
-    return templates.TemplateResponse("blog_author_profile.html", {
+    return blog_templates.TemplateResponse("blog_author_profile.html", {
         "request": request,
         "author": author,
         "posts": posts,
-        "post_data": {"title": author.name + " - Author Profile"}, # Context for base template
+        "post_data": {"title": author.name + " - Author Profile"},
         "current_year": datetime.utcnow().year
     })
 
 # --- PUBLIC AUTHOR ROUTE ---
-@router.get("/author/{username}", response_class=HTMLResponse)
-async def public_author_profile(username: str, request: Request, db: Session = Depends(get_db)):
-    """Serve public author profile page"""
-    from models.author import BlogAuthor
-    from models.blog import BlogPost
-    from datetime import datetime
-    
-    author = db.query(BlogAuthor).filter(BlogAuthor.username == username).first()
-    
-    # If author not found in Author table, check if they have posts (legacy fallback)
-    # But user asked strictly for the new system.
-    if not author:
-        # Fallback to 404
-        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
-
-    # Get posts by this author key (assuming posts use username in author field)
-    posts = db.query(BlogPost).filter(
-        BlogPost.author == author.username,
-        BlogPost.published_at.isnot(None)
-    ).order_by(BlogPost.published_at.desc()).all()
-
-    return templates.TemplateResponse("blog_author_profile.html", {
-        "request": request,
-        "author": author,
-        "posts": posts,
-        "post_data": {"title": author.name + " - Author Profile"}, # Context for base template
-        "current_year": datetime.utcnow().year
-    })
