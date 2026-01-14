@@ -7,107 +7,173 @@
 {% block content %}
 <div class="author-profile-page pt-24 pb-12">
     <!-- Hero Section -->
-    <div class="container mx-auto px-4">
-        <div class="relative rounded-3xl overflow-hidden bg-surface-1 border border-stroke-secondary shadow-2xl">
-            <!-- Cover Image -->
-            <div class="h-48 md:h-64 lg:h-80 w-full overflow-hidden relative">
-                {% if author.cover_image %}
-                <img src="{{ author.cover_image }}" alt="Cover" class="w-full h-full object-cover">
-                {% else %}
-                <div class="w-full h-full bg-gradient-to-r from-accent to-secondary opacity-50"></div>
-                {% endif %}
-                <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+    <div class="container mx-auto px-4 max-w-6xl">
+        <!-- Cover Banner -->
+        <div class="w-full h-64 md:h-96 rounded-3xl overflow-hidden relative shadow-2xl mb-24">
+            {% if author.cover_image %}
+            <img src="{{ author.cover_image }}" alt="Cover" class="w-full h-full object-cover">
+            {% else %}
+            <div class="w-full h-full bg-surface-1 border-b border-stroke-secondary"></div>
+            {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-base/90"></div>
+        </div>
+
+        <!-- Float Profile Info -->
+        <div
+            class="relative -mt-48 md:-mt-64 px-4 md:px-12 flex flex-col md:flex-row items-end md:items-start gap-8 md:gap-12">
+
+            <!-- Avatar (Huge, No Gradient) -->
+            <div class="relative shrink-0">
+                <div
+                    class="w-48 h-48 md:w-80 md:h-80 rounded-3xl overflow-hidden bg-base border-4 border-base shadow-2xl">
+                    <img src="{{ author.avatar_image or 'https://ui-avatars.com/api/?name=' + author.name }}"
+                        alt="{{ author.name }}" class="w-full h-full object-cover">
+                </div>
             </div>
 
-            <!-- Profile Content -->
-            <div
-                class="relative px-6 pb-6 -mt-16 md:-mt-20 flex flex-col items-center md:items-start md:flex-row gap-6">
-                <!-- Avatar -->
-                <div class="relative group">
-                    <div
-                        class="absolute -inset-1 bg-gradient-to-r from-accent to-secondary rounded-full blur opacity-75 group-hover:opacity-100 transition duration-500 animate-pulse">
-                    </div>
-                    <img src="{{ author.avatar_image or 'https://ui-avatars.com/api/?name=' + author.name }}"
-                        alt="{{ author.name }}"
-                        class="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-surface-1 object-cover shadow-xl">
+            <!-- Identity info -->
+            <div class="flex-1 w-full pt-4 md:py-12 text-center md:text-left">
+                <!-- Name & Username -->
+                <h1 class="text-4xl md:text-7xl font-bold font-syne text-t-bright mb-2 tracking-tight leading-none">
+                    {{ author.name }}
+                </h1>
+                <div
+                    class="inline-block px-3 py-1 rounded-lg bg-base-shade border border-stroke-secondary text-accent font-mono text-sm mb-6">
+                    @{{ author.username }}
                 </div>
 
-                <!-- Info -->
-                <div class="flex-1 text-center md:text-left pt-2 md:pt-20">
-                    <h1 class="text-3xl md:text-5xl font-bold text-feature font-heading mb-2">{{ author.name }}</h1>
-                    <p class="text-primary/70 font-mono text-sm mb-4">@{{ author.username }}</p>
+                <!-- Bio -->
+                <div
+                    class="prose prose-lg prose-invert text-t-muted mb-8 max-w-2xl mx-auto md:mx-0 font-outfit leading-relaxed">
+                    {{ author.bio or "No additional bio data verified." }}
+                </div>
 
-                    <div class="max-w-2xl prose prose-invert mb-6 text-primary/90">
-                        {{ author.bio or "No bio provided." }}
-                    </div>
+                <!-- Expertise Tags (Large) -->
+                {% if author.expert_tags %}
+                <div class="flex flex-wrap gap-2 justify-center md:justify-start mb-8">
+                    {% for tag in author.expert_tags %}
+                    <span
+                        class="px-4 py-2 rounded-xl bg-surface-1 border border-stroke-secondary text-sm font-bold text-t-bright hover:border-accent transition-colors">
+                        #{{ tag }}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
 
-                    <!-- Tags & Socials -->
-                    <div class="flex flex-wrap gap-4 items-center justify-center md:justify-start">
-                        {% for tag in author.expert_tags or [] %}
-                        <span
-                            class="px-3 py-1 rounded-full text-xs font-bold border border-accent/30 text-accent bg-accent/10 backdrop-blur-md">
-                            {{ tag }}
-                        </span>
-                        {% endfor %}
+                <!-- Connection & Library Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+
+                    <!-- Socials Block -->
+                    {% if author.social_links %}
+                    <div class="bg-surface-1 rounded-2xl p-6 border border-stroke-secondary">
+                        <h3
+                            class="text-sm font-bold uppercase tracking-wider text-t-muted mb-4 flex items-center gap-2">
+                            <i class="ph-bold ph-link"></i> Connect
+                        </h3>
+                        <div class="flex flex-wrap gap-3">
+                            {% for social in author.social_links %}
+                            <a href="{{ social.url }}" target="_blank" rel="noopener noreferrer"
+                                class="flex items-center gap-2 px-4 py-2 rounded-lg bg-base text-t-bright hover:bg-accent hover:text-white transition-all font-bold text-sm border border-stroke-elements">
+                                {% if social.platform == 'twitter' %}<i class="ph-bold ph-x-logo"></i>
+                                {% elif social.platform == 'github' %}<i class="ph-bold ph-github-logo"></i>
+                                {% elif social.platform == 'linkedin' %}<i class="ph-bold ph-linkedin-logo"></i>
+                                {% elif social.platform == 'instagram' %}<i class="ph-bold ph-instagram-logo"></i>
+                                {% elif social.platform == 'youtube' %}<i class="ph-bold ph-youtube-logo"></i>
+                                {% else %}<i class="ph-bold ph-globe"></i>{% endif %}
+                                <span class="capitalize">{{ social.platform }}</span>
+                            </a>
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endif %}
+
+                    <!-- Books Block -->
+                    {% if author.books %}
+                    <div class="bg-surface-1 rounded-2xl p-6 border border-stroke-secondary">
+                        <h3
+                            class="text-sm font-bold uppercase tracking-wider text-t-muted mb-4 flex items-center gap-2">
+                            <i class="ph-bold ph-books"></i> Authored Books
+                        </h3>
+                        <div class="space-y-3">
+                            {% for book in author.books %}
+                            <a href="{{ book.link }}" target="_blank"
+                                class="flex items-center gap-4 group p-3 rounded-xl hover:bg-base transition-colors">
+                                <div
+                                    class="w-12 h-16 bg-base-shade rounded overflow-hidden shrink-0 border border-stroke-elements">
+                                    {% if book.cover %}
+                                    <img src="{{ book.cover }}" class="w-full h-full object-cover">
+                                    {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-t-muted"><i
+                                            class="ph-bold ph-book"></i></div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <div class="font-bold text-t-bright group-hover:text-accent transition-colors">{{
+                                        book.title }}</div>
+                                    <div class="text-xs text-t-muted">View Publication <i
+                                            class="ph-bold ph-arrow-up-right inline-block text-[10px]"></i></div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Posts Grid -->
-    <div class="container mx-auto px-4 mt-16">
-        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2">
-            <span class="w-2 h-8 bg-accent rounded-full"></span>
-            Latest Articles
+    <div class="container mx-auto px-4 mt-24 max-w-6xl">
+        <h2 class="text-3xl font-bold font-syne mb-12 flex items-center gap-3">
+            <span class="w-3 h-3 bg-accent rounded-full"></span>
+            Authored Articles
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for post in posts %}
             <article
-                class="group relative flex flex-col bg-surface-1 rounded-2xl overflow-hidden border border-stroke-primary hover:border-accent/50 transition-all duration-300 hover:shadow-2xl hover:shadow-accent/10">
-                <!-- Image -->
-                <a href="/{{ post.slug }}" class="aspect-video overflow-hidden block relative">
+                class="group relative flex flex-col bg-surface-1 rounded-3xl overflow-hidden border border-stroke-primary hover:border-accent/50 transition-all duration-300 hover:shadow-2xl hover:shadow-accent/5">
+                <!-- Standard Post Card Content (Reused) -->
+                <a href="/{{ post.slug }}" class="aspect-[4/3] overflow-hidden block relative">
                     {% if post.featured_image %}
                     <img src="{{ post.featured_image }}" alt="{{ post.title }}"
-                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     {% else %}
                     <div class="w-full h-full bg-surface-2 flex items-center justify-center text-primary/20">
                         <i class="ph ph-image text-4xl"></i>
                     </div>
                     {% endif %}
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    </div>
                 </a>
 
-                <!-- Content -->
-                <div class="p-6 flex flex-col flex-1">
-                    <div class="flex items-center gap-3 text-xs font-medium text-accent mb-3">
-                        <span class="uppercase tracking-wider">{{ post.section|replace('_', ' ') }}</span>
-                        <span class="w-1 h-1 rounded-full bg-primary/40"></span>
-                        <span class="text-primary/60">{{ post.published_at.strftime('%b %d, %Y') if post.published_at
-                            else 'Draft' }}</span>
+                <div class="p-8 flex flex-col flex-1">
+                    <div class="flex items-center gap-3 text-xs font-bold font-mono text-accent mb-4">
+                        <span class="uppercase">{{ post.section|replace('_', ' ') }}</span>
+                        <span class="w-1 h-1 rounded-full bg-t-muted"></span>
+                        <span class="text-t-muted">{{ post.published_at.strftime('%b %d, %Y') if post.published_at else
+                            'Draft' }}</span>
                     </div>
 
-                    <h3 class="text-xl font-bold mb-3 leading-tight group-hover:text-accent transition-colors">
+                    <h3
+                        class="text-xl font-bold font-syne mb-3 leading-tight group-hover:text-accent transition-colors">
                         <a href="/{{ post.slug }}">{{ post.title }}</a>
                     </h3>
 
-                    <p class="text-sm text-primary/70 line-clamp-3 mb-4 flex-1">
+                    <p class="text-sm text-t-muted line-clamp-3 mb-6 flex-1">
                         {{ post.excerpt }}
                     </p>
 
                     <a href="/{{ post.slug }}"
-                        class="inline-flex items-center gap-2 text-sm font-bold text-accent group-hover:gap-3 transition-all">
-                        Read Article <i class="ph ph-arrow-right"></i>
+                        class="inline-flex items-center gap-2 text-sm font-bold text-t-bright group-hover:text-accent transition-colors">
+                        Read Now <i class="ph-bold ph-arrow-right"></i>
                     </a>
                 </div>
             </article>
             {% else %}
-            <div class="col-span-full py-12 text-center text-primary/50">
-                <i class="ph ph-files text-4xl mb-4"></i>
-                <p>No articles published yet.</p>
+            <div class="col-span-full py-24 text-center text-t-muted">
+                <i class="ph-duotone ph-files text-5xl mb-4 opacity-50"></i>
+                <p class="font-mono text-lg">No articles discovered in the archives.</p>
             </div>
             {% endfor %}
         </div>

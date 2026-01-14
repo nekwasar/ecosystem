@@ -1,5 +1,5 @@
-<!-- Futuristic Author Management System -->
-<div class="author-system-container h-full flex flex-col overflow-hidden relative">
+<!-- Futuristic Author Management System (v2.0 - List View) -->
+<div class="author-system-container h-full flex flex-col relative overflow-hidden">
 
     <!-- Background Elements -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden">
@@ -7,419 +7,430 @@
         <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-secondary/5 rounded-full blur-[100px]"></div>
     </div>
 
-    <!-- Header Section -->
+    <!-- Toolbar -->
     <header
-        class="relative z-10 px-8 py-6 flex items-center justify-between border-b border-stroke-elements bg-base/80 backdrop-blur-md">
+        class="relative z-20 px-6 py-4 flex items-center justify-between border-b border-stroke-elements bg-base/80 backdrop-blur-md">
         <div class="flex items-center gap-4">
-            <div
-                class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent to-secondary flex items-center justify-center shadow-lg shadow-accent/20">
-                <i class="ph-bold ph-users-three text-2xl text-white"></i>
-            </div>
-            <div>
-                <h1 class="text-2xl font-bold font-syne text-t-bright tracking-tight">Author Database</h1>
-                <p class="text-sm text-t-muted font-mono">Manage identity profiles & credentials</p>
+            <h1 class="text-xl font-bold font-syne text-t-bright tracking-tight">Identity Database</h1>
+
+            <div class="h-6 w-px bg-stroke-elements"></div>
+
+            <div id="selectionActions" class="hidden flex items-center gap-2">
+                <span class="text-xs font-mono text-t-muted" id="selectionCount">0 selected</span>
+                <button onclick="deleteSelected()"
+                    class="px-3 py-1.5 rounded bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white text-xs font-bold transition-colors border border-red-500/20">
+                    TERMINATE
+                </button>
             </div>
         </div>
 
         <div class="flex items-center gap-3">
             <div class="relative group">
-                <input type="text" id="authorSearch" placeholder="Search operatives..."
-                    class="pl-10 pr-4 py-2.5 bg-base-shade border border-stroke-controls rounded-lg text-sm text-t-bright focus:border-accent focus:ring-1 focus:ring-accent outline-none w-64 transition-all">
-                <i
-                    class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-t-muted group-focus-within:text-accent transition-colors"></i>
+                <input type="text" id="authorSearch" placeholder="Search entries..."
+                    class="pl-9 pr-4 py-2 bg-base-shade border border-stroke-controls rounded-lg text-sm text-t-bright focus:border-accent outline-none w-56 transition-all font-mono">
+                <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-t-muted"></i>
             </div>
 
             <button onclick="openAuthorEditor()"
-                class="flex items-center gap-2 px-5 py-2.5 bg-accent text-white rounded-lg font-bold text-sm tracking-wide hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-accent/25 group">
-                <i class="ph-bold ph-plus group-hover:rotate-90 transition-transform"></i>
-                <span>NEW OPERATIVE</span>
+                class="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg font-bold text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-accent/20">
+                <i class="ph-bold ph-plus"></i>
+                <span>NEW IDENTITY</span>
             </button>
         </div>
     </header>
 
-    <!-- Main Content Grid -->
-    <main
-        class="flex-1 overflow-y-auto p-8 relative z-10 scrollbar-thin scrollbar-thumb-stroke-elements scrollbar-track-transparent">
-        <!-- Table View -->
-        <div class="bg-base-shade/30 rounded-xl border border-stroke-elements overflow-hidden backdrop-blur-sm">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr
-                        class="border-b border-stroke-elements bg-base/50 text-t-muted text-xs uppercase tracking-wider">
-                        <th class="p-4 font-bold w-16">Image</th>
-                        <th class="p-4 font-bold">Identity</th>
-                        <th class="p-4 font-bold">Specializations</th>
-                        <th class="p-4 font-bold text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="authorsTableBody" class="text-sm">
-                    <!-- Rows injected here -->
+    <!-- List View -->
+    <main class="flex-1 overflow-y-auto relative z-10" id="authorListContainer">
+        <!-- Header Row -->
+        <div
+            class="grid grid-cols-[auto_auto_1fr_2fr_auto] gap-4 px-6 py-3 border-b border-stroke-elements bg-base-shade/50 text-xs font-bold text-t-muted uppercase tracking-wider sticky top-0 z-10 backdrop-blur-sm">
+            <div class="w-5 flex items-center"><input type="checkbox" onchange="toggleSelectAll(this)"
+                    class="accent-accent"></div>
+            <div class="w-12">Avatar</div>
+            <div>Identity</div>
+            <div>Credentials</div>
+            <div class="text-right">Action</div>
+        </div>
 
-                </tbody>
-            </table>
+        <!-- Data Rows injected here -->
+        <div id="authorsList" class="divide-y divide-stroke-elements">
+            <div class="p-10 text-center text-t-muted font-mono opacity-50">
+                <i class="ph-duotone ph-spinner-gap text-2xl animate-spin mb-2"></i>
+                <div>SYNCING DATABASE...</div>
+            </div>
         </div>
     </main>
 </div>
 
-<!-- Editor Modal Overlay -->
+<!-- Context Menu -->
+<div id="contextMenu" class="fixed z-50 bg-base border border-stroke-elements rounded-lg shadow-2xl py-1 w-48 hidden">
+    <button onclick="contextEdit()"
+        class="w-full text-left px-4 py-2 text-sm text-t-bright hover:bg-accent hover:text-white flex items-center gap-2">
+        <i class="ph-bold ph-pencil-simple"></i> Edit Profile
+    </button>
+    <button onclick="contextView()"
+        class="w-full text-left px-4 py-2 text-sm text-t-bright hover:bg-accent hover:text-white flex items-center gap-2">
+        <i class="ph-bold ph-eye"></i> View Public
+    </button>
+    <div class="h-px bg-stroke-elements my-1"></div>
+    <button onclick="contextDelete()"
+        class="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-500 hover:text-white flex items-center gap-2">
+        <i class="ph-bold ph-trash"></i> Delete
+    </button>
+</div>
+
+<!-- Editor Modal -->
 <div id="authorModal" class="fixed inset-0 z-[100] hidden">
-    <!-- Backdrop -->
-    <div class="absolute inset-0 bg-base/90 backdrop-blur-sm transition-opacity opacity-0" id="modalBackdrop"
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity opacity-0" id="modalBackdrop"
         onclick="closeAuthorEditor()"></div>
 
-    <!-- Modal Panel -->
-    <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-base border-l border-stroke-elements shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col"
+    <div class="absolute right-0 top-0 bottom-0 w-full max-w-2xl bg-base border-l border-stroke-elements shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col"
         id="modalPanel">
 
-        <!-- Modal Header -->
         <div class="px-6 py-5 border-b border-stroke-elements flex items-center justify-between bg-base-shade/50">
             <div>
-                <h2 class="text-xl font-bold font-syne text-t-bright" id="modalTitle">New Operative</h2>
-                <p class="text-xs text-t-muted font-mono uppercase tracking-wider">Identity Configuration</p>
+                <h2 class="text-xl font-bold font-syne text-t-bright" id="modalTitle">Configure Identity</h2>
+                <p class="text-xs text-t-muted font-mono uppercase tracking-wider">Secure Profile Management</p>
             </div>
             <button onclick="closeAuthorEditor()"
-                class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-base-tint text-t-muted hover:text-t-bright transition-colors">
-                <i class="ph-bold ph-x"></i>
+                class="w-8 h-8 rounded-full hover:bg-base-tint flex items-center justify-center transition-colors">
+                <i class="ph-bold ph-x text-t-muted"></i>
             </button>
         </div>
 
-        <!-- Modal Form -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <div class="flex-1 overflow-y-auto p-8">
             <form id="authorForm" onsubmit="return false">
                 <input type="hidden" id="authorId">
 
-                <!-- Avatar Upload Preview -->
-                <div class="flex flex-col items-center gap-4 mb-8">
-                    <div class="relative group w-32 h-32">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-tr from-accent to-secondary rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity">
+                <!-- Basic Info -->
+                <div class="grid grid-cols-[auto_1fr] gap-8 mb-8">
+                    <div class="flex flex-col items-center gap-3">
+                        <img id="avatarPreview" src=""
+                            class="w-32 h-32 rounded-2xl object-cover bg-base-shade border border-stroke-elements">
+                        <input type="text" id="authorAvatar" placeholder="Avatar URL" onchange="updatePreview()"
+                            class="w-32 text-xs bg-base-shade border border-stroke-controls rounded px-2 py-1 outline-none focus:border-accent">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Full Name</label>
+                                <input type="text" id="authorName" oninput="updatePreview()"
+                                    class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Username</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-t-muted text-xs">@</span>
+                                    <input type="text" id="authorUsername"
+                                        class="w-full pl-7 pr-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none font-mono text-sm">
+                                </div>
+                            </div>
                         </div>
-                        <img id="avatarPreview" src="https://ui-avatars.com/api/?name=New+User&background=random"
-                            class="w-full h-full rounded-full object-cover border-4 border-base-shade shadow-xl relative z-10 transition-transform group-hover:scale-105">
-
-                        <div class="absolute bottom-0 right-0 z-20 bg-base border border-stroke-elements p-2 rounded-full shadow-lg group-hover:bg-accent group-hover:text-white transition-colors cursor-pointer"
-                            title="Paste URL to change">
-                            <i class="ph-bold ph-camera"></i>
+                        <div>
+                            <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Bio</label>
+                            <textarea id="authorBio" rows="3"
+                                class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Cover Image URL</label>
+                            <input type="text" id="authorCover"
+                                class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Expert Tags (comma
+                                separated)</label>
+                            <input type="text" id="authorTags"
+                                class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none">
                         </div>
                     </div>
                 </div>
 
-                <!-- Input Group -->
-                <div class="space-y-4">
-                    <div class="form-group">
-                        <label class="text-xs font-bold text-t-muted uppercase tracking-wider mb-1.5 block">Full
-                            Name</label>
-                        <input type="text" id="authorName" required oninput="updatePreview()"
-                            class="w-full px-4 py-3 bg-base-shade border border-stroke-controls rounded-lg text-t-bright focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-t-placeholder/50">
-                    </div>
+                <div class="h-px bg-stroke-elements my-6"></div>
 
-                    <div class="form-group">
-                        <label class="text-xs font-bold text-t-muted uppercase tracking-wider mb-1.5 block">Codename
-                            (Username)</label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-t-muted">@</span>
-                            <input type="text" id="authorUsername" required
-                                class="w-full pl-8 pr-4 py-3 bg-base-shade border border-stroke-controls rounded-lg text-t-bright focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all font-mono text-sm">
-                        </div>
+                <!-- Connect Module -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg font-syne text-t-bright">Connect Module</h3>
+                        <button onclick="addSocialRow()"
+                            class="text-xs bg-base-shade hover:bg-accent hover:text-white px-2 py-1 rounded transition-colors">+
+                            Add Link</button>
                     </div>
-
-                    <div class="form-group">
-                        <label class="text-xs font-bold text-t-muted uppercase tracking-wider mb-1.5 block">Bio
-                            Data</label>
-                        <textarea id="authorBio" rows="4"
-                            class="w-full px-4 py-3 bg-base-shade border border-stroke-controls rounded-lg text-t-bright focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all resize-none"></textarea>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="form-group">
-                            <label
-                                class="text-xs font-bold text-t-muted uppercase tracking-wider mb-1.5 block">Images</label>
-                            <input type="text" id="authorAvatar" placeholder="Avatar URL" onchange="updatePreview()"
-                                class="w-full px-4 py-2 bg-base-shade border border-stroke-controls rounded-lg text-sm text-t-bright focus:border-accent outline-none">
-                        </div>
-                        <div class="form-group">
-                            <label
-                                class="text-xs font-bold text-t-muted uppercase tracking-wider mb-1.5 block">&nbsp;</label>
-                            <input type="text" id="authorCover" placeholder="Cover URL"
-                                class="w-full px-4 py-2 bg-base-shade border border-stroke-controls rounded-lg text-sm text-t-bright focus:border-accent outline-none">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label
-                            class="text-xs font-bold text-t-muted uppercase tracking-wider mb-1.5 block">Specializations</label>
-                        <input type="text" id="authorTags" placeholder="e.g. AI, Cybersec, Design"
-                            class="w-full px-4 py-3 bg-base-shade border border-stroke-controls rounded-lg text-t-bright focus:border-accent outline-none transition-all">
-                        <p class="text-[10px] text-t-muted mt-1 text-right">Comma separated values</p>
+                    <div id="socialsContainer" class="space-y-2">
+                        <!-- Dynamic Rows -->
                     </div>
                 </div>
+
+                <div class="h-px bg-stroke-elements my-6"></div>
+
+                <!-- Library Module -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg font-syne text-t-bright">Library Module (Books)</h3>
+                        <button onclick="addBookRow()"
+                            class="text-xs bg-base-shade hover:bg-accent hover:text-white px-2 py-1 rounded transition-colors">+
+                            Add Book</button>
+                    </div>
+                    <div id="booksContainer" class="space-y-4">
+                        <!-- Dynamic Rows -->
+                    </div>
+                </div>
+
             </form>
         </div>
 
-        <!-- Modal Footer -->
         <div
             class="p-6 border-t border-stroke-elements bg-base-shade/30 flex justify-end gap-3 sticky bottom-0 backdrop-blur-md">
-            <button type="button" onclick="closeAuthorEditor()"
-                class="px-5 py-2.5 rounded-lg text-sm font-bold text-t-muted hover:text-t-bright hover:bg-base-tint transition-colors">
-                Cancel
-            </button>
+            <button onclick="closeAuthorEditor()"
+                class="px-5 py-2 rounded text-sm font-bold text-t-muted hover:text-t-bright hover:bg-base-tint transition-colors">Cancel</button>
             <button onclick="saveAuthor()"
-                class="px-6 py-2.5 bg-gradient-to-r from-accent to-secondary text-white rounded-lg text-sm font-bold shadow-lg shadow-accent/20 hover:shadow-accent/40 hover:-translate-y-0.5 transition-all">
-                Save Profile
-            </button>
+                class="px-6 py-2 bg-accent text-white rounded text-sm font-bold shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all">Save
+                Identity</button>
         </div>
     </div>
 </div>
 
-<style>
-    /* Custom Scrollbar */
-    .scrollbar-thin::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .scrollbar-thin::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-        background: var(--stroke-elements);
-        border-radius: 6px;
-    }
-
-    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-        background: var(--t-muted);
-    }
-
-    /* Card Hover Effects */
-    .author-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .author-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.2);
-    }
-
-    .author-card::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: inherit;
-        padding: 1px;
-        background: linear-gradient(135deg, var(--stroke-elements), transparent);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        pointer-events: none;
-    }
-
-    .author-card:hover::before {
-        background: linear-gradient(135deg, var(--accent), var(--secondary));
-    }
-</style>
-
 <script>
-    // State
     let authors = [];
+    let selectedIds = new Set();
+    let contextTargetId = null;
 
+    // --- Loading & Rendering ---
     async function loadAuthors() {
-        const tableBody = document.getElementById('authorsTableBody');
-
+        const list = document.getElementById('authorsList');
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('/admin/api/authors', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(`Server returned ${res.status}: ${text.substring(0, 100)}`);
-            }
+            const res = await fetch('/admin/api/authors', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (!res.ok) throw new Error("API Error");
             authors = await res.json();
-            renderAuthors();
+            renderList();
         } catch (e) {
-            console.error("Failed to load authors:", e);
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="p-8 text-center text-red-500">
-                        <i class="ph-bold ph-warning-circle text-2xl mb-2"></i>
-                        <p>Database Connection Failed</p>
-                    </td>
-                </tr>
-            `;
+            console.error(e);
+            list.innerHTML = `<div class="p-8 text-center text-red-500">System Malfunction: Database Link Failed</div>`;
         }
     }
 
-    function renderAuthors() {
-        const tableBody = document.getElementById('authorsTableBody');
-        const searchTerm = document.getElementById('authorSearch').value.toLowerCase();
+    function renderList() {
+        const list = document.getElementById('authorsList');
+        const search = document.getElementById('authorSearch').value.toLowerCase();
+        selectedIds.clear();
+        updateSelectionUI();
 
-        const filtered = authors.filter(a =>
-            a.name.toLowerCase().includes(searchTerm) ||
-            a.username.toLowerCase().includes(searchTerm)
-        );
+        const filtered = authors.filter(a => a.name.toLowerCase().includes(search) || a.username.includes(search));
 
         if (filtered.length === 0) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="p-12 text-center text-t-muted">
-                        <i class="ph-duotone ph-ghost text-3xl mb-2 opacity-50"></i>
-                        <p>No operatives match query</p>
-                    </td>
-                </tr>
-            `;
+            list.innerHTML = `<div class="p-8 text-center text-t-muted font-mono">No identities found in registry.</div>`;
             return;
         }
 
-        tableBody.innerHTML = filtered.map(author => `
-            <tr class="border-b border-stroke-elements hover:bg-base-shade transition-colors">
-                <td class="p-4">
-                    <div class="relative w-10 h-10">
-                        <img src="${author.avatar_image || 'https://ui-avatars.com/api/?name=' + author.name}" 
-                             class="w-full h-full rounded-full object-cover border border-stroke-elements">
+        list.innerHTML = filtered.map(a => `
+            <div class="grid grid-cols-[auto_auto_1fr_2fr_auto] gap-4 px-6 py-3 items-center hover:bg-base-shade transition-colors group cursor-default"
+                 oncontextmenu="showContext(event, ${a.id})">
+                <div class="w-5 flex items-center">
+                    <input type="checkbox" onchange="toggleSelect(${a.id})" class="accent-accent author-checkbox">
+                </div>
+                <div class="w-12 h-12">
+                    <img src="${a.avatar_image || 'https://ui-avatars.com/api/?name=' + a.name}" class="w-full h-full rounded object-cover bg-surface-2">
+                </div>
+                <div>
+                    <div class="font-bold text-t-bright text-sm">${a.name}</div>
+                    <div class="font-mono text-xs text-t-muted">@${a.username}</div>
+                </div>
+                <div>
+                     <div class="flex flex-wrap gap-1">
+                        ${(a.expert_tags || []).slice(0, 3).map(t => `<span class="px-1.5 py-0.5 rounded bg-base-shade border border-stroke-elements text-[10px] text-t-muted uppercase font-bold">${t}</span>`).join('')}
                     </div>
-                </td>
-                <td class="p-4">
-                    <div>
-                        <div class="font-bold text-t-bright font-syne">${author.name}</div>
-                        <div class="text-xs text-t-muted font-mono">@${author.username}</div>
-                    </div>
-                </td>
-                <td class="p-4">
-                    <div class="flex flex-wrap gap-1">
-                        ${(author.expert_tags || []).slice(0, 3).map(tag => `
-                            <span class="px-2 py-0.5 rounded bg-base-shade text-[10px] font-bold text-t-muted border border-stroke-elements">
-                                ${tag}
-                            </span>
-                        `).join('')}
-                    </div>
-                </td>
-                <td class="p-4 text-right">
-                    <div class="flex items-center justify-end gap-2">
-                        <a href="/author/${author.username}" target="_blank" 
-                           class="w-8 h-8 rounded-lg bg-base-shade hover:bg-accent hover:text-white text-t-muted flex items-center justify-center transition-all"
-                           title="View Public Profile">
-                            <i class="ph-bold ph-arrow-square-out"></i>
-                        </a>
-                        <button onclick="editAuthor(${author.id})" 
-                                class="w-8 h-8 rounded-lg bg-base-shade hover:bg-accent hover:text-white text-t-muted flex items-center justify-center transition-all"
-                                title="Edit Identity">
-                            <i class="ph-bold ph-pencil-simple"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
+                </div>
+                <div class="text-right opacity-100">
+                    <button onclick="editAuthor(${a.id})" class="w-8 h-8 rounded hover:bg-base-tint text-t-muted hover:text-accent transition-colors"><i class="ph-bold ph-pencil-simple"></i></button>
+                    <a href="/author/${a.username}" target="_blank" class="w-8 h-8 rounded hover:bg-base-tint text-t-muted hover:text-accent inline-flex items-center justify-center transition-colors"><i class="ph-bold ph-arrow-square-out"></i></a>
+                </div>
+            </div>
         `).join('');
     }
 
-    // Modal Logic
-    const modal = document.getElementById('authorModal');
-    const backdrop = document.getElementById('modalBackdrop');
-    const panel = document.getElementById('modalPanel');
+    // --- Dynamic Fields ---
+    function addSocialRow(data = {}) {
+        const div = document.createElement('div');
+        div.className = "flex gap-2 items-center";
+        div.innerHTML = `
+            <select class="social-platform w-32 bg-base-shade border border-stroke-controls rounded px-2 py-1.5 text-xs text-t-bright outline-none">
+                <option value="twitter">X (Twitter)</option>
+                <option value="github">GitHub</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="instagram">Instagram</option>
+                <option value="youtube">YouTube</option>
+                <option value="website">Website</option>
+            </select>
+            <input type="text" class="social-url flex-1 bg-base-shade border border-stroke-controls rounded px-2 py-1.5 text-xs text-t-bright outline-none" placeholder="URL">
+            <button onclick="this.parentElement.remove()" class="w-6 h-6 flex items-center justify-center text-t-muted hover:text-red-500"><i class="ph-bold ph-trash"></i></button>
+        `;
+        document.getElementById('socialsContainer').appendChild(div);
+        if (data.platform) div.querySelector('.social-platform').value = data.platform;
+        if (data.url) div.querySelector('.social-url').value = data.url;
+    }
 
+    function addBookRow(data = {}) {
+        const div = document.createElement('div');
+        div.className = "grid grid-cols-[auto_1fr] gap-3 p-3 bg-base-shade/50 rounded border border-stroke-elements relative group";
+        div.innerHTML = `
+            <div class="w-16 h-24 bg-base-shade rounded border border-stroke-elements flex items-center justify-center overflow-hidden">
+                <img src="" class="book-cover-preview w-full h-full object-cover hidden">
+                <i class="ph-duotone ph-book text-2xl text-t-muted book-icon"></i>
+            </div>
+            <div class="space-y-2">
+                <input type="text" class="book-title w-full bg-base border border-stroke-controls rounded px-2 py-1 text-xs text-t-bright outline-none" placeholder="Book Title">
+                <input type="text" class="book-link w-full bg-base border border-stroke-controls rounded px-2 py-1 text-xs text-t-bright outline-none" placeholder="Purchase Link">
+                <input type="text" onchange="previewBookCover(this)" class="book-cover w-full bg-base border border-stroke-controls rounded px-2 py-1 text-xs text-t-muted outline-none" placeholder="Cover Image URL">
+            </div>
+            <button onclick="this.parentElement.remove()" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-t-muted hover:text-red-500"><i class="ph-bold ph-trash"></i></button>
+        `;
+        document.getElementById('booksContainer').appendChild(div);
+        if (data.title) div.querySelector('.book-title').value = data.title;
+        if (data.link) div.querySelector('.book-link').value = data.link;
+        if (data.cover) {
+            const input = div.querySelector('.book-cover');
+            input.value = data.cover;
+            previewBookCover(input);
+        }
+    }
+
+    function previewBookCover(input) {
+        const container = input.closest('.grid').querySelector('.w-16');
+        const img = container.querySelector('img');
+        const icon = container.querySelector('i');
+        if (input.value) {
+            img.src = input.value;
+            img.classList.remove('hidden');
+            icon.classList.add('hidden');
+        } else {
+            img.classList.add('hidden');
+            icon.classList.remove('hidden');
+        }
+    }
+
+    // --- Editor Logic ---
     function openAuthorEditor() {
+        // Reset
         document.getElementById('authorForm').reset();
         document.getElementById('authorId').value = '';
-        document.getElementById('avatarPreview').src = 'https://ui-avatars.com/api/?name=New+Operative&background=random';
-        document.getElementById('modalTitle').textContent = 'New Operative';
+        document.getElementById('avatarPreview').src = 'https://ui-avatars.com/api/?name=New+Identity&background=random';
+        document.getElementById('socialsContainer').innerHTML = '';
+        document.getElementById('booksContainer').innerHTML = '';
+        document.getElementById('modalTitle').textContent = 'New Identity';
 
-        modal.classList.remove('hidden');
-        // Animation
+        // Show
+        document.getElementById('authorModal').classList.remove('hidden');
         requestAnimationFrame(() => {
-            backdrop.classList.remove('opacity-0');
-            panel.classList.remove('translate-x-full');
+            document.getElementById('modalBackdrop').classList.remove('opacity-0');
+            document.getElementById('modalPanel').classList.remove('translate-x-full');
         });
     }
 
     function closeAuthorEditor() {
-        backdrop.classList.add('opacity-0');
-        panel.classList.add('translate-x-full');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
+        document.getElementById('modalBackdrop').classList.add('opacity-0');
+        document.getElementById('modalPanel').classList.add('translate-x-full');
+        setTimeout(() => document.getElementById('authorModal').classList.add('hidden'), 300);
     }
 
     function updatePreview() {
         const url = document.getElementById('authorAvatar').value;
-        const name = document.getElementById('authorName').value || 'User';
-        document.getElementById('avatarPreview').src = url || `https://ui-avatars.com/api/?name=${name}&background=random`;
+        const name = document.getElementById('authorName').value;
+        document.getElementById('avatarPreview').src = url || `https://ui-avatars.com/api/?name=${name || 'User'}&background=random`;
     }
 
-    async function editAuthor(id) {
-        const author = authors.find(a => a.id === id);
-        if (!author) return;
+    function editAuthor(id) {
+        const a = authors.find(x => x.id === id);
+        if (!a) return;
 
         openAuthorEditor();
-        document.getElementById('modalTitle').textContent = 'Edit Operative';
-        document.getElementById('authorId').value = author.id;
-        document.getElementById('authorName').value = author.name;
-        document.getElementById('authorUsername').value = author.username;
-        document.getElementById('authorBio').value = author.bio || '';
-        document.getElementById('authorAvatar').value = author.avatar_image || '';
-        document.getElementById('authorCover').value = author.cover_image || '';
-        document.getElementById('authorTags').value = (author.expert_tags || []).join(', ');
+        document.getElementById('modalTitle').textContent = 'Edit Identity';
+        document.getElementById('authorId').value = a.id;
+        document.getElementById('authorName').value = a.name;
+        document.getElementById('authorUsername').value = a.username;
+        document.getElementById('authorBio').value = a.bio || '';
+        document.getElementById('authorAvatar').value = a.avatar_image || '';
+        document.getElementById('authorCover').value = a.cover_image || '';
+        document.getElementById('authorTags').value = (a.expert_tags || []).join(', ');
+
+        // Load Repeaters
+        (a.social_links || []).forEach(addSocialRow);
+        (a.books || []).forEach(addBookRow);
 
         updatePreview();
     }
 
     async function saveAuthor() {
-        // e.preventDefault() is removed because we removed the event
         const id = document.getElementById('authorId').value;
+        const socials = Array.from(document.querySelectorAll('#socialsContainer > div')).map(row => ({
+            platform: row.querySelector('.social-platform').value,
+            url: row.querySelector('.social-url').value
+        })).filter(s => s.url); // Only save if URL exists
+
+        const books = Array.from(document.querySelectorAll('#booksContainer > div')).map(row => ({
+            title: row.querySelector('.book-title').value,
+            link: row.querySelector('.book-link').value,
+            cover: row.querySelector('.book-cover').value
+        })).filter(b => b.title);
+
         const data = {
             name: document.getElementById('authorName').value,
             username: document.getElementById('authorUsername').value,
             bio: document.getElementById('authorBio').value,
             avatar_image: document.getElementById('authorAvatar').value,
             cover_image: document.getElementById('authorCover').value,
-            expert_tags: document.getElementById('authorTags').value.split(',').map(t => t.trim()).filter(t => t)
+            expert_tags: document.getElementById('authorTags').value.split(',').map(s => s.trim()).filter(s => s),
+            social_links: socials,
+            books: books
         };
 
         const method = id ? 'PUT' : 'POST';
         const url = id ? `/admin/api/authors/${id}` : '/admin/api/authors';
+        const token = localStorage.getItem('token');
 
         try {
-            const token = localStorage.getItem('token');
             const res = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
+                method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(data)
             });
-
             if (res.ok) {
                 closeAuthorEditor();
                 loadAuthors();
             } else {
-                let errorMessage;
-                try {
-                    const err = await res.json();
-                    errorMessage = err.detail || err.message || JSON.stringify(err);
-                } catch (jsonError) {
-                    const text = await res.text();
-                    console.error("Non-JSON Error Response:", text);
-                    errorMessage = `Server Error (${res.status}): ${text.substring(0, 50)}...`;
-                }
-                alert("Failed: " + errorMessage);
+                alert("Save Failed: " + (await res.text()));
             }
         } catch (e) {
-            console.error("System Error:", e);
             alert("System Error: " + e.message);
         }
     }
 
-    // Search Listeners
-    document.getElementById('authorSearch').addEventListener('input', renderAuthors);
+    // --- Context Menu & Selection ---
+    function showContext(e, id) {
+        e.preventDefault();
+        contextTargetId = id;
+        const menu = document.getElementById('contextMenu');
+        menu.style.left = e.clientX + 'px';
+        menu.style.top = e.clientY + 'px';
+        menu.classList.remove('hidden');
+    }
+
+    function contextEdit() { editAuthor(contextTargetId); hideContext(); }
+    function contextView() {
+        const a = authors.find(x => x.id === contextTargetId);
+        if (a) window.open('/author/' + a.username, '_blank');
+        hideContext();
+    }
+    function contextDelete() { /* TODO: Implement Delete API */ alert("Delete not implemented in this demo."); hideContext(); }
+
+    function hideContext() { document.getElementById('contextMenu').classList.add('hidden'); }
+
+    // Clicking outside closes context menu
+    document.addEventListener('click', hideContext);
+
+    // Search Listener
+    document.getElementById('authorSearch').addEventListener('input', renderList);
 
     // Initial Load
-    document.addEventListener('DOMContentLoaded', loadAuthors);
+    loadAuthors();
 
-    // Esc to close
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeAuthorEditor();
-    });
+    function updateSelectionUI() {/* Placeholder for bulk actions */ }
 </script>

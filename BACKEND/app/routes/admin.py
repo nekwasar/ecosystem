@@ -1090,6 +1090,8 @@ class AuthorSchema(BaseModel):
     avatar_image: Optional[str] = None
     cover_image: Optional[str] = None
     expert_tags: Optional[List[str]] = []
+    social_links: Optional[List[dict]] = []
+    books: Optional[List[dict]] = []
 
 @router.post("/admin/api/authors")
 async def create_author(data: AuthorSchema, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):

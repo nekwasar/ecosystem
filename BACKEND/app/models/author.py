@@ -12,7 +12,10 @@ class BlogAuthor(Base):
     cover_image = Column(String(500)) # URL to profile cover/banner
     
     # Social Media
-    social_links = Column(JSON)  # {"twitter": "url", "linkedin": "url", ...}
+    social_links = Column(JSON)  # [{"platform": "twitter", "url": "...", "icon": "ph-x-logo"}]
+    
+    # Books / Publications
+    books = Column(JSON) # [{"title": "Title", "cover": "url", "link": "url"}]
     
     # Meta
     expert_tags = Column(JSON) # ["Tech", "AI", "Design"] - specialization tags
