@@ -59,10 +59,6 @@ async def admin_blog_editor_page(request: Request):
 
 
 
-@router.get("/admin/{section}/{page}", response_class=HTMLResponse)
-async def admin_section_page(request: Request, section: str, page: str):
-    """Serve admin section pages dynamically - Authentication handled by JavaScript"""
-    return templates.TemplateResponse("admin_base.html", {"request": request})
 
 # API endpoints for dynamic page loading - PROTECTED
 @router.get("/templates/{template_name}")
@@ -1151,3 +1147,9 @@ async def public_author_profile(username: str, request: Request, db: Session = D
     })
 
 # --- PUBLIC AUTHOR ROUTE ---
+
+# Generic Admin Page Route (Must be last)
+@router.get("/admin/{section}/{page}", response_class=HTMLResponse)
+async def admin_section_page(request: Request, section: str, page: str):
+    """Serve admin section pages dynamically - Authentication handled by JavaScript"""
+    return templates.TemplateResponse("admin_base.html", {"request": request})
