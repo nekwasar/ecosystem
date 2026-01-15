@@ -1125,6 +1125,11 @@ async def delete_author(author_id: int, db: Session = Depends(get_db), current_u
 @router.get("/author/{username}", response_class=HTMLResponse)
 async def public_author_profile(username: str, request: Request, db: Session = Depends(get_db)):
     """Serve public author profile page"""
+    from fastapi.responses import RedirectResponse
+    host = request.headers.get("host", "").lower()
+    if "api.nekwasar.com" in host:
+        return RedirectResponse(url=f"https://blog.nekwasar.com/author/{username}")
+
     from models.author import BlogAuthor
     from models.blog import BlogPost
     from datetime import datetime
