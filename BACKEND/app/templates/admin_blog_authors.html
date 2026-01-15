@@ -432,5 +432,40 @@
     // Initial Load
     loadAuthors();
 
-    function updateSelectionUI() {/* Placeholder for bulk actions */ }
+    function toggleSelect(id) {
+        if (selectedIds.has(id)) selectedIds.delete(id);
+        else selectedIds.add(id);
+        updateSelectionUI();
+    }
+
+    function toggleSelectAll(checkbox) {
+        const checkboxes = document.querySelectorAll('.author-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = checkbox.checked;
+            // Extract ID from onchange="toggleSelect(ID)" string or parent row logic
+            // Hacky extraction from onclick attribute context or data attribute
+            // Better: update logic in renderList to add data-id to checkbox
+            const row = cb.closest('[oncontextmenu]');
+            // The row doesn't have ID easily accessible unless parsed from HTML or context menu arg
+            // Let's rely on finding the ID via regex from the onchange attribute for now to be safe without full DOM rework
+            const idMatch = cb.getAttribute('onchange').match(/\d+/);
+            if (idMatch) {
+                const id = parseInt(idMatch[0]);
+                if (checkbox.checked) selectedIds.add(id);
+                else selectedIds.delete(id);
+            }
+        });
+        updateSelectionUI();
+    }
+
+    function updateSelectionUI() {
+        const container = document.getElementById('selectionActions');
+        const countSpan = document.getElementById('selectionCount');
+        if (selectedIds.size > 0) {
+            container.classList.remove('hidden');
+            countSpan.textContent = `${selectedIds.size} selected`;
+        } else {
+            container.classList.add('hidden');
+        }
+    }
 </script>
