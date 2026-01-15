@@ -1112,6 +1112,15 @@ async def update_author(author_id: int, data: AuthorSchema, db: Session = Depend
     db.commit()
     return auth
 
+@router.delete("/admin/api/authors/{author_id}")
+async def delete_author(author_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    from models.author import BlogAuthor
+    auth = db.query(BlogAuthor).filter(BlogAuthor.id == author_id).first()
+    if not auth: raise HTTPException(404, "Author not found")
+    db.delete(auth)
+    db.commit()
+    return {"message": "Author deleted"}
+
 # --- PUBLIC AUTHOR ROUTE ---
 @router.get("/author/{username}", response_class=HTMLResponse)
 async def public_author_profile(username: str, request: Request, db: Session = Depends(get_db)):

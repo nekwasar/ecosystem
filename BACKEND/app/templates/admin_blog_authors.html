@@ -419,7 +419,49 @@
         if (a) window.open('/author/' + a.username, '_blank');
         hideContext();
     }
-    function contextDelete() { /* TODO: Implement Delete API */ alert("Delete not implemented in this demo."); hideContext(); }
+    async function deleteSelected() {
+        if (!confirm(`Delete ${selectedIds.size} identities? This cannot be undone.`)) return;
+
+        const token = localStorage.getItem('token');
+        const ids = Array.from(selectedIds);
+
+        let successCount = 0;
+        for (const id of ids) {
+            try {
+                const res = await fetch(`/admin/api/authors/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    successCount++;
+                    selectedIds.delete(id);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        loadAuthors();
+        alert(`Terminated ${successCount} identities.`);
+    }
+
+    function contextDelete() {
+        const a = authors.find(x => x.id === contextTargetId);
+        if (!a) return hideContext();
+
+        if (confirm(`Permanently terminate identity: ${a.name}?`)) {
+            // Fake adding to selection to reuse logic or just call API directly
+            const token = localStorage.getItem('token');
+            fetch(`/admin/api/authors/${a.id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            }).then(res => {
+                if (res.ok) loadAuthors();
+                else alert("Termination failed.");
+            });
+        }
+        hideContext();
+    }
 
     function hideContext() { document.getElementById('contextMenu').classList.add('hidden'); }
 
