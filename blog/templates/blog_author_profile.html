@@ -7,183 +7,143 @@
 {% block content %}
 <div class="author-profile-page w-full min-h-screen bg-base pb-24">
 
-    <!-- Ultra-Wide Banner Section -->
-    <div class="relative w-full h-[55vh] md:h-[65vh] overflow-hidden group">
+    <!-- Banner Section -->
+    <div class="relative w-full h-[55vh] overflow-hidden group">
         {% if author.cover_image %}
         <img src="{{ author.cover_image }}" alt="Cover"
-            class="w-full h-full object-cover transition-transform duration-[20s] ease-linear group-hover:scale-110">
+            class="w-full h-full object-cover transition-transform duration-[30s] ease-linear group-hover:scale-105">
         {% else %}
-        <div
-            class="w-full h-full bg-gradient-to-br from-surface-1 via-base-shade to-surface-2 animate-gradient flex items-center justify-center">
-            <span class="text-9xl opacity-5 font-syne font-bold">{{ author.name[0] }}</span>
+        <div class="w-full h-full bg-surface-1 flex items-center justify-center">
+            <div class="w-full h-full bg-gradient-to-r from-surface-1 to-surface-2 opacity-50"></div>
         </div>
         {% endif %}
-
         <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-base via-base/50 to-transparent"></div>
-        <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-base to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-base via-transparent to-transparent opacity-90"></div>
     </div>
 
-    <!-- Centered Profile Content -->
-    <div class="container mx-auto px-4 relative -mt-40 md:-mt-52 z-10 flex flex-col items-center">
+    <!-- Profile Header (Right Aligned) -->
+    <div class="container mx-auto px-6 md:px-12 relative -mt-32 md:-mt-40 z-20 flex flex-col items-end">
 
-        <!-- Massive Avatar -->
-        <div class="relative mb-10 group">
-            <div
-                class="absolute -inset-1 bg-gradient-to-br from-accent to-secondary rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000">
+        <!-- Identity Row: Name + Avatar -->
+        <div class="flex flex-col-reverse md:flex-row items-end gap-6 md:gap-10 text-right">
+
+            <!-- Context (Name & Socials) -->
+            <div class="mb-2 md:mb-6">
+                <!-- Name (Reduced Size) -->
+                <h1 class="text-4xl md:text-5xl font-bold font-syne text-t-bright tracking-tight mb-3 drop-shadow-xl">
+                    {{ author.name }}
+                </h1>
+
+                <div class="flex items-center justify-end gap-3 text-base font-mono text-accent">
+                    <span class="opacity-50">//</span> @{{ author.username }}
+                </div>
             </div>
-            <div
-                class="w-56 h-56 md:w-80 md:h-80 rounded-full border-[6px] border-base bg-base shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden relative">
-                <img src="{{ author.avatar_image or 'https://ui-avatars.com/api/?name=' + author.name }}"
-                    alt="{{ author.name }}" class="w-full h-full object-cover">
+
+            <!-- Avatar (Rightmost, Rounded Square) -->
+            <div class="shrink-0 relative group">
+                <!-- Decoration -->
+                <div class="absolute -right-4 -top-4 w-24 h-24 border-t-2 border-r-2 border-accent/50 rounded-tr-3xl">
+                </div>
+
+                <div
+                    class="w-48 h-48 md:w-64 md:h-64 bg-base rounded-[2rem] p-2 shadow-2xl relative z-10 rotate-2 transition-transform duration-500 group-hover:rotate-0">
+                    <img src="{{ author.avatar_image or 'https://ui-avatars.com/api/?name=' + author.name }}"
+                        alt="{{ author.name }}" class="w-full h-full object-cover rounded-[1.5rem]">
+                </div>
             </div>
-            <!-- Status Indicator -->
-            <div class="absolute bottom-6 right-6 w-8 h-8 bg-green-500 border-4 border-base rounded-full"
-                title="Verified Author"></div>
         </div>
 
-        <!-- Identity & Bio -->
-        <div class="text-center max-w-4xl mx-auto mb-16">
-            <h1 class="text-5xl md:text-8xl font-black font-syne text-t-bright mb-4 tracking-tight leading-[0.9]">
-                {{ author.name }}
-            </h1>
+        <!-- Bio & Tags (Right Aligned) -->
+        <div class="mt-8 max-w-3xl text-right flex flex-col items-end">
+            <!-- Bio (Increased Size) -->
+            <div class="prose prose-xl md:prose-2xl text-t-muted font-outfit leading-relaxed text-right mb-8">
+                {{ author.bio or "A dedicated creator sharing insights and stories." }}
+            </div>
 
-            <div class="flex flex-wrap gap-3 justify-center items-center mb-8">
+            <!-- Tags (Slightly larger) -->
+            {% if author.expert_tags %}
+            <div class="flex flex-wrap justify-end gap-3 mb-8">
+                {% for tag in author.expert_tags %}
                 <span
-                    class="px-4 py-1.5 rounded-full bg-base-shade border border-stroke-elements text-accent font-mono text-sm tracking-wider uppercase">
-                    @{{ author.username }}
-                </span>
-                {% for tag in author.expert_tags or [] %}
-                <span
-                    class="px-4 py-1.5 rounded-full bg-surface-1 border border-stroke-elements text-t-muted text-sm font-bold">
+                    class="px-4 py-1.5 rounded-lg bg-surface-1 border border-stroke-secondary text-base font-bold text-t-bright uppercase tracking-wide">
                     {{ tag }}
                 </span>
                 {% endfor %}
             </div>
-
-            <div class="prose prose-xl prose-invert mx-auto text-t-muted font-outfit leading-relaxed">
-                {{ author.bio or "This author prefers to let their work speak for itself." }}
-            </div>
-        </div>
-
-        <!-- Modules Grid (Centered) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl mb-24">
-
-            <!-- Connect Module -->
-            {% if author.social_links %}
-            <div
-                class="bg-surface-1/50 backdrop-blur-sm p-8 rounded-3xl border border-stroke-elements hover:border-accent/30 transition-colors">
-                <h3
-                    class="text-xs font-bold uppercase tracking-[0.2em] text-t-muted mb-6 flex items-center justify-center gap-2">
-                    <span class="w-8 h-px bg-stroke-elements"></span> Connect <span
-                        class="w-8 h-px bg-stroke-elements"></span>
-                </h3>
-                <div class="flex flex-wrap justify-center gap-4">
-                    {% for social in author.social_links %}
-                    <a href="{{ social.url }}" target="_blank"
-                        class="w-14 h-14 flex items-center justify-center rounded-2xl bg-base border border-stroke-controls text-2xl text-t-muted hover:text-white hover:bg-accent hover:scale-110 transition-all shadow-lg hover:shadow-accent/25">
-                        {% if social.platform == 'twitter' %}<i class="ph-bold ph-x-logo"></i>
-                        {% elif social.platform == 'github' %}<i class="ph-bold ph-github-logo"></i>
-                        {% elif social.platform == 'linkedin' %}<i class="ph-bold ph-linkedin-logo"></i>
-                        {% elif social.platform == 'instagram' %}<i class="ph-bold ph-instagram-logo"></i>
-                        {% elif social.platform == 'youtube' %}<i class="ph-bold ph-youtube-logo"></i>
-                        {% else %}<i class="ph-bold ph-globe"></i>{% endif %}
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
             {% endif %}
 
-            <!-- Library Module -->
-            {% if author.books %}
-            <div
-                class="bg-surface-1/50 backdrop-blur-sm p-8 rounded-3xl border border-stroke-elements hover:border-accent/30 transition-colors">
-                <h3
-                    class="text-xs font-bold uppercase tracking-[0.2em] text-t-muted mb-6 flex items-center justify-center gap-2">
-                    <span class="w-8 h-px bg-stroke-elements"></span> Publications <span
-                        class="w-8 h-px bg-stroke-elements"></span>
-                </h3>
-                <div class="space-y-4">
-                    {% for book in author.books %}
-                    <a href="{{ book.link }}" target="_blank"
-                        class="flex items-center gap-4 group bg-base p-4 rounded-2xl border border-stroke-elements hover:border-accent hover:shadow-lg transition-all">
-                        <div
-                            class="w-12 h-16 bg-base-shade rounded-lg overflow-hidden shrink-0 shadow-sm group-hover:shadow transition-all">
-                            {% if book.cover %}
-                            <img src="{{ book.cover }}" class="w-full h-full object-cover">
-                            {% else %}
-                            <div class="w-full h-full flex items-center justify-center text-t-muted"><i
-                                    class="ph-bold ph-book"></i></div>
-                            {% endif %}
-                        </div>
-                        <div class="text-left">
-                            <div
-                                class="font-bold text-t-bright text-lg leading-tight group-hover:text-accent transition-colors">
-                                {{ book.title }}</div>
-                            <div class="text-xs text-accent mt-1 uppercase tracking-wider font-bold">Read <i
-                                    class="ph-bold ph-arrow-right inline-block ml-1"></i></div>
-                        </div>
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-
-        </div>
-
-        <!-- Articles Section -->
-        <div class="w-full max-w-7xl">
-            <h2 class="text-4xl md:text-5xl font-black font-syne text-center mb-16 text-t-bright">
-                Articles
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-                {% for post in posts %}
-                <article class="group flex flex-col">
-                    <a href="/{{ post.slug }}"
-                        class="block w-full aspect-[4/3] rounded-[2rem] overflow-hidden mb-6 relative">
-                        {% if post.featured_image %}
-                        <img src="{{ post.featured_image }}" alt="{{ post.title }}"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                        {% else %}
-                        <div class="w-full h-full bg-surface-2 flex items-center justify-center text-primary/20">
-                            <i class="ph ph-image text-5xl"></i>
-                        </div>
-                        {% endif %}
-                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500">
-                        </div>
-
-                        <div
-                            class="absolute top-4 right-4 px-4 py-2 bg-base/90 backdrop-blur-md rounded-full text-xs font-bold font-mono text-accent">
-                            {{ post.published_at.strftime('%b %Y') if post.published_at else 'DRAFT' }}
-                        </div>
-                    </a>
-
-                    <div class="px-2">
-                        <div class="text-xs font-bold uppercase tracking-widest text-t-muted mb-3">
-                            {{ post.section|replace('_', ' ') }}
-                        </div>
-                        <h3
-                            class="text-2xl md:text-3xl font-bold font-syne leading-tight mb-4 group-hover:text-accent transition-colors">
-                            <a href="/{{ post.slug }}">{{ post.title }}</a>
-                        </h3>
-                        <p class="text-t-muted line-clamp-3 mb-4 text-lg">
-                            {{ post.excerpt }}
-                        </p>
-                        <a href="/{{ post.slug }}"
-                            class="inline-flex items-center gap-2 text-sm font-bold text-t-bright uppercase tracking-wide group-hover:gap-4 transition-all">
-                            Read Story <i class="ph-bold ph-arrow-right"></i>
-                        </a>
-                    </div>
-                </article>
-                {% else %}
-                <div class="col-span-full text-center py-24 opacity-50">
-                    <p class="text-2xl font-syne">No stories told yet.</p>
-                </div>
+            <!-- Connect / Books Row (Aligned Right) -->
+            <div class="flex flex-wrap justify-end gap-6 items-center">
+                {% if author.social_links %}
+                {% for social in author.social_links %}
+                <a href="{{ social.url }}" target="_blank"
+                    class="w-12 h-12 rounded-xl bg-surface-1 border border-stroke-elements flex items-center justify-center text-xl text-t-muted hover:text-white hover:bg-accent transition-colors">
+                    {% if social.platform == 'twitter' %}<i class="ph-bold ph-x-logo"></i>
+                    {% elif social.platform == 'github' %}<i class="ph-bold ph-github-logo"></i>
+                    {% else %}<i class="ph-bold ph-link"></i>{% endif %}
+                </a>
                 {% endfor %}
+                {% endif %}
+
+                {% if author.books %}
+                <div class="flex items-center gap-3 pl-6 border-l border-stroke-elements h-12">
+                    <span class="text-sm font-bold uppercase text-t-muted block">Publications:</span>
+                    {% for book in author.books %}
+                    <a href="{{ book.link }}" target="_blank" title="{{ book.title }}"
+                        class="w-10 h-14 bg-base-shade rounded border border-stroke-elements overflow-hidden hover:scale-110 transition-transform shadow-sm">
+                        {% if book.cover %}<img src="{{ book.cover }}" class="w-full h-full object-cover">{% else %}<i
+                            class="ph-bold ph-book"></i>{% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
         </div>
-
     </div>
+
+
+    <!-- Article Grid (Centered) -->
+    <div class="container mx-auto px-4 mt-32 max-w-7xl">
+        <div class="flex items-center gap-6 mb-12">
+            <div class="h-px bg-stroke-elements flex-1"></div>
+            <h2 class="text-3xl font-bold font-syne uppercase tracking-wider text-t-muted">Archive</h2>
+            <div class="h-px bg-stroke-elements flex-1"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {% for post in posts %}
+            <article class="group flex flex-col bg-transparent">
+                <a href="/{{ post.slug }}"
+                    class="block w-full aspect-[16/10] rounded-2xl overflow-hidden mb-5 relative bg-surface-1 shadow-lg group-hover:shadow-xl transition-all">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image }}"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    {% endif %}
+                    <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl"></div>
+                </a>
+
+                <div>
+                    <div class="flex items-center gap-3 text-sm font-bold text-accent mb-2 font-mono">
+                        <span>{{ post.published_at.strftime('%Y.%m.%d') if post.published_at else 'DRAFT' }}</span>
+                        <span class="w-1.5 h-1.5 bg-current rounded-full"></span>
+                        <span class="uppercase">{{ post.section|replace('_', ' ') }}</span>
+                    </div>
+
+                    <h3
+                        class="text-2xl font-bold font-syne leading-tight mb-3 group-hover:text-accent transition-colors">
+                        <a href="/{{ post.slug }}">{{ post.title }}</a>
+                    </h3>
+
+                    <p class="text-base text-t-muted line-clamp-3 leading-relaxed">
+                        {{ post.excerpt }}
+                    </p>
+                </div>
+            </article>
+            {% else %}
+            <div class="col-span-full text-center py-12 text-t-muted opacity-50">Nothing here yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}
