@@ -8,7 +8,7 @@
 <div class="author-profile-page w-full min-h-screen bg-base pb-24">
 
     <!-- Banner Section -->
-    <div class="relative w-full h-[55vh] overflow-hidden group">
+    <div class="relative w-full h-[75vh] overflow-hidden group">
         {% if author.cover_image %}
         <img src="{{ author.cover_image }}" alt="Cover"
             class="w-full h-full object-cover transition-transform duration-[30s] ease-linear group-hover:scale-105">
@@ -17,8 +17,7 @@
             <div class="w-full h-full bg-gradient-to-r from-surface-1 to-surface-2 opacity-50"></div>
         </div>
         {% endif %}
-        <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t from-base via-transparent to-transparent opacity-90"></div>
+        <!-- Removed overlay -->
     </div>
 
     <!-- Profile Header (Right Aligned) -->
