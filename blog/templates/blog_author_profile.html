@@ -5,6 +5,7 @@
 %}
 
 {% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
     /* Editorial Layout Utilities */
     .text-vertical {
@@ -20,6 +21,10 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+
+    .font-pacifico {
+        font-family: 'Pacifico', cursive;
+    }
 </style>
 
 <div class="author-profile-page w-full min-h-screen bg-[#f8fafc] text-[#0f172a] pb-24 font-outfit">
@@ -33,7 +38,7 @@
             <div class="flex flex-col gap-8 pb-4">
                 <div class="flex items-center gap-4 mb-2">
                     <div class="h-px bg-black w-12"></div>
-                    <span class="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Contributor Profile</span>
+                    <span class="text-sm font-black uppercase tracking-[0.2em] text-gray-400">Contributor Profile</span>
                 </div>
 
                 <h1
@@ -42,13 +47,13 @@
                 </h1>
 
                 <div class="flex flex-wrap items-center gap-6 mt-4">
-                    <div class="px-4 py-1 border border-black rounded-full font-mono text-sm">
+                    <div class="px-5 py-2 border-2 border-black rounded-full font-mono text-lg font-bold">
                         @{{ author.username }}
                     </div>
                     {% if author.expert_tags %}
-                    <div class="flex gap-2">
+                    <div class="flex gap-3">
                         {% for tag in author.expert_tags %}
-                        <span class="text-sm font-bold text-gray-500">#{{ tag }}</span>
+                        <span class="text-lg font-black text-gray-600 uppercase tracking-wide">#{{ tag }}</span>
                         {% endfor %}
                     </div>
                     {% endif %}
@@ -84,7 +89,7 @@
                 Biography
             </h2>
 
-            <div class="prose prose-xl font-outfit text-gray-800 leading-relaxed mb-12">
+            <div class="prose prose-xl font-pacifico text-gray-800 leading-relaxed mb-12">
                 {{ author.bio or "This author focuses on delivering high-quality content without a detailed biography
                 provided." }}
             </div>
