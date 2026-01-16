@@ -509,7 +509,7 @@
             First</h3>
         </div>
         <div class="hidden md:block w-[1px] h-10 bg-white/10"></div>
-        <p class="text-[1.5rem] font-medium text-t-medium leading-relaxed tracking-wide">
+        <p class="text-base md:text-[1.5rem] font-medium text-t-medium leading-relaxed tracking-wide">
           We use strictly necessary cookies to ensure the absolute best experience.
           Visit our <a href="/privacy"
             class="text-accent hover:text-accent/80 transition-colors font-bold underline underline-offset-8">Privacy
@@ -518,7 +518,7 @@
       </div>
       <div class="w-full md:w-auto shrink-0">
         <button id="acceptCookies"
-          class="w-full md:w-auto px-12 py-5 bg-accent text-white text-lg font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_12px_30px_rgba(var(--accent-rgb),0.3)] tracking-widest">
+          class="w-full md:w-auto px-8 py-3 md:px-12 md:py-5 bg-accent text-white text-base md:text-lg font-bold rounded-xl md:rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_12px_30px_rgba(var(--accent-rgb),0.3)] tracking-widest">
           Accept & Enter
         </button>
       </div>
@@ -615,11 +615,12 @@
         if (!slideIn || !form) return;
 
         // --- 1. Behavioral Check ---
-        // Don't show if on homepage OR already subscribed/closed
+        // Don't show if on homepage, author page, OR already subscribed/closed
         const isHome = window.location.pathname === '/' || window.location.pathname === '';
+        const isAuthorPage = window.location.pathname.startsWith('/author/');
         const hasInteracted = localStorage.getItem('nekwasar_newsletter_interacted');
 
-        if (isHome || hasInteracted) return;
+        if (isHome || isAuthorPage || hasInteracted) return;
 
         // --- 2. Scroll Trigger ---
         let triggered = false;

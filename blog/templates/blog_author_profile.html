@@ -52,9 +52,11 @@
                         @{{ author.username }}
                     </div>
                     {% if author.expert_tags %}
-                    <div class="flex gap-3">
+                    <div class="flex flex-wrap gap-2 md:gap-3">
                         {% for tag in author.expert_tags %}
-                        <span class="text-lg font-black text-gray-600 uppercase tracking-wide">#{{ tag }}</span>
+                        <span
+                            class="text-sm md:text-lg font-black text-gray-600 uppercase tracking-wide bg-gray-100 rounded px-2 py-1">#{{
+                            tag }}</span>
                         {% endfor %}
                     </div>
                     {% endif %}
