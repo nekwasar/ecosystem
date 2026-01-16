@@ -270,15 +270,17 @@
             <select class="social-platform bg-surface-1 border border-stroke-elements text-t-bright text-xs rounded px-2 py-2 w-32 focus:border-accent outline-none font-bold uppercase">
                 ${options}
             </select>
-        if (data.platform) div.querySelector('.social-platform').value = data.platform;
-        if (data.url) div.querySelector('.social-url').value = data.url;
+            <input type="text" class="social-url flex-1 bg-surface-1 border border-stroke-elements text-t-bright text-xs rounded px-3 py-2 focus:border-accent outline-none font-mono" placeholder="https://..." value="${data.url || ''}">
+            <button onclick="this.parentElement.remove()" class="text-red-500 hover:bg-red-500/10 p-1.5 rounded transition-colors"><i class="ph-bold ph-trash"></i></button>
+        `;
+        container.appendChild(div);
     }
 
     function addBookRow(data = {}) {
         const div = document.createElement('div');
         div.className = "grid grid-cols-[auto_1fr] gap-3 p-3 bg-base-shade/50 rounded border border-stroke-elements relative group";
         div.innerHTML = `
-            < div class="w-16 h-24 bg-base-shade rounded border border-stroke-elements flex items-center justify-center overflow-hidden" >
+            <div class="w-16 h-24 bg-base-shade rounded border border-stroke-elements flex items-center justify-center overflow-hidden">
                 <img src="" class="book-cover-preview w-full h-full object-cover hidden">
                 <i class="ph-duotone ph-book text-2xl text-t-muted book-icon"></i>
             </div>
