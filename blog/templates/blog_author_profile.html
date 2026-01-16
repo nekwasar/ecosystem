@@ -31,18 +31,19 @@
 
     <!-- Hero Section: The Identity Block -->
     <!-- Grid: Left (Name), MIddle (Empty/Line), Right (Avatar) -->
-    <div class="w-full pt-32 pb-12 border-b border-gray-200">
-        <div class="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-[1.5fr_1px_1fr] gap-12 items-end">
+    <div class="w-full pt-12 lg:pt-32 pb-12 border-b border-gray-200">
+        <div
+            class="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-[1.5fr_1px_1fr] gap-8 lg:gap-12 items-end">
 
-            <!-- Left: Typography Core -->
-            <div class="flex flex-col gap-8 pb-4">
+            <!-- Left: Typography Core (Order 2 on Mobile) -->
+            <div class="flex flex-col gap-6 lg:gap-8 pb-4 order-2 lg:order-1">
                 <div class="flex items-center gap-4 mb-2">
                     <div class="h-px bg-black w-12"></div>
                     <span class="text-sm font-black uppercase tracking-[0.2em] text-gray-400">Contributor Profile</span>
                 </div>
 
                 <h1
-                    class="text-6xl md:text-8xl lg:text-[7rem] font-bold font-syne leading-[0.85] tracking-tighter text-black">
+                    class="text-5xl md:text-8xl lg:text-[7rem] font-bold font-syne leading-[0.9] lg:leading-[0.85] tracking-tighter text-black">
                     {{ author.name }}
                 </h1>
 
@@ -61,10 +62,10 @@
             </div>
 
             <!-- Middle: Divider (Desktop Only) -->
-            <div class="hidden lg:block h-full bg-gray-200"></div>
+            <div class="hidden lg:block h-full bg-gray-200 order-last lg:order-2"></div>
 
-            <!-- Right: The Portait & Socials -->
-            <div class="relative w-full max-w-md ml-auto lg:mr-0 flex flex-col gap-6">
+            <!-- Right: The Portait & Socials (Order 1 on Mobile) -->
+            <div class="relative w-full max-w-md mx-auto lg:mr-0 flex flex-col gap-6 order-1 lg:order-3">
                 <div
                     class="aspect-[3/4] bg-gray-200 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700 ease-out shadow-2xl">
                     <img src="{{ author.avatar_image or 'https://ui-avatars.com/api/?name=' + author.name }}"
