@@ -244,7 +244,7 @@
             left: 0;
             height: 100vh;
             overflow-y: auto;
-            z-index: 1000;
+            z-index: 1050;
             transition: width 0.3s ease, transform 0.3s ease;
         }
 
@@ -810,6 +810,46 @@
             .sidebar-toggle-btn {
                 display: none;
             }
+
+            .mobile-close-btn {
+                display: block;
+            }
+        }
+
+        /* Mobile Overlay */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            /* Below sidebar (1050), above header (999) */
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .mobile-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-close-btn {
+            display: none;
+            /* Hidden by default (desktop) */
+            background: none;
+            border: none;
+            color: var(--t-muted);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            margin-left: auto;
         }
 
         @media (max-width: 768px) {
@@ -875,6 +915,9 @@
 
 <body>
     <div class="admin-layout">
+        <!-- Mobile Overlay -->
+        <div id="mobileOverlay" class="mobile-overlay"></div>
+
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="admin-sidebar-header">
@@ -883,6 +926,10 @@
                     <div class="brand-text"> <span class="brand-text-accent">Admin</span></div>
                 </div>
                 <button class="sidebar-toggle-btn" onclick="toggleGlobalSidebar()" title="Toggle Sidebar">
+                    <i class="ph-bold ph-caret-double-left"></i>
+                </button>
+                <!-- Mobile Close Button -->
+                <button class="mobile-close-btn" id="mobileCloseBtn" title="Close Menu">
                     <i class="ph-bold ph-caret-double-left"></i>
                 </button>
             </div>
@@ -1347,6 +1394,22 @@
                     this.toggleMobileSidebar();
                 };
 
+                // Mobile Overlay Click
+                const overlay = document.getElementById('mobileOverlay');
+                if (overlay) {
+                    overlay.onclick = () => {
+                        this.toggleMobileSidebar();
+                    };
+                }
+
+                // Mobile Close Button
+                const closeBtn = document.getElementById('mobileCloseBtn');
+                if (closeBtn) {
+                    closeBtn.onclick = () => {
+                        this.toggleMobileSidebar();
+                    }
+                }
+
                 // Theme toggle
                 document.getElementById('themeToggle').onclick = () => {
                     this.toggleTheme();
@@ -1362,7 +1425,9 @@
 
             toggleMobileSidebar() {
                 const sidebar = document.getElementById('adminSidebar');
+                const overlay = document.getElementById('mobileOverlay');
                 sidebar.classList.toggle('mobile-open');
+                if (overlay) overlay.classList.toggle('show');
             }
 
             toggleTheme() {
