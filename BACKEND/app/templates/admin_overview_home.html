@@ -57,45 +57,47 @@
 
 <div
     class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
-    <div class="p-6 md:p-8 lg:p-12">
+    <div class="p-4 md:p-6 lg:p-12">
         <!-- Page Header -->
         <div
-            class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            class="text-center mb-8 md:mb-12 p-6 md:p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse">
             </div>
             <div class="relative z-10">
                 <h1
-                    class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">
+                    class="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">
                     Dashboard Overview</h1>
-                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Monitor your blog's performance and key
+                <p class="text-base md:text-xl lg:text-2xl opacity-90 font-syne font-light">Monitor your blog's
+                    performance and key
                     metrics at a glance</p>
-                <div class="mt-8 flex justify-center">
+                <div class="mt-6 md:mt-8 flex justify-center">
                     <div
-                        class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full">
+                        class="w-16 md:w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full">
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- KPI Cards Row -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-8 mb-8 md:mb-12">
             <!-- Total Posts Card -->
             <div
-                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-6 md:p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
                 <div
                     class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
                 </div>
-                <div class="relative z-10 flex items-center space-x-6">
+                <div class="relative z-10 flex items-center space-x-4 md:space-x-6">
                     <div
-                        class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-xl md:text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
                         <i class="ph-bold ph-article"></i>
                     </div>
                     <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalPosts">--</div>
-                        <div class="text-base text-t-medium font-syne mb-3">Total Posts</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400"
+                        <div class="text-2xl md:text-3xl font-bold text-t-bright font-syne mb-1" id="totalPosts">--
+                        </div>
+                        <div class="text-sm md:text-base text-t-medium font-syne mb-2 md:mb-3">Total Posts</div>
+                        <div class="flex items-center space-x-2 text-xs md:text-sm font-semibold text-green-500 dark:text-green-400"
                             id="postsChange">
-                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <i class="ph-bold ph-trend-up text-sm md:text-base"></i>
                             <span>+12%</span>
                             <span class="text-t-muted font-syne">vs last month</span>
                         </div>
@@ -108,21 +110,22 @@
 
             <!-- Total Comments Card -->
             <div
-                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-6 md:p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
                 <div
                     class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
                 </div>
-                <div class="relative z-10 flex items-center space-x-6">
+                <div class="relative z-10 flex items-center space-x-4 md:space-x-6">
                     <div
-                        class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-xl md:text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
                         <i class="ph-bold ph-chat-circle"></i>
                     </div>
                     <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalComments">--</div>
-                        <div class="text-base text-t-medium font-syne mb-3">Total Comments</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400"
+                        <div class="text-2xl md:text-3xl font-bold text-t-bright font-syne mb-1" id="totalComments">--
+                        </div>
+                        <div class="text-sm md:text-base text-t-medium font-syne mb-2 md:mb-3">Total Comments</div>
+                        <div class="flex items-center space-x-2 text-xs md:text-sm font-semibold text-green-500 dark:text-green-400"
                             id="commentsChange">
-                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <i class="ph-bold ph-trend-up text-sm md:text-base"></i>
                             <span>+8%</span>
                             <span class="text-t-muted font-syne">vs last month</span>
                         </div>
@@ -135,21 +138,23 @@
 
             <!-- Newsletter Subscribers Card -->
             <div
-                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-6 md:p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
                 <div
                     class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
                 </div>
-                <div class="relative z-10 flex items-center space-x-6">
+                <div class="relative z-10 flex items-center space-x-4 md:space-x-6">
                     <div
-                        class="w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-xl md:text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
                         <i class="ph-bold ph-users"></i>
                     </div>
                     <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalSubscribers">--</div>
-                        <div class="text-base text-t-medium font-syne mb-3">Newsletter Subscribers</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400"
+                        <div class="text-2xl md:text-3xl font-bold text-t-bright font-syne mb-1" id="totalSubscribers">
+                            --</div>
+                        <div class="text-sm md:text-base text-t-medium font-syne mb-2 md:mb-3">Newsletter Subscribers
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs md:text-sm font-semibold text-green-500 dark:text-green-400"
                             id="subscribersChange">
-                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <i class="ph-bold ph-trend-up text-sm md:text-base"></i>
                             <span>+15%</span>
                             <span class="text-t-muted font-syne">vs last month</span>
                         </div>
@@ -162,21 +167,22 @@
 
             <!-- Total Views Card -->
             <div
-                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-6 md:p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
                 <div
                     class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
                 </div>
-                <div class="relative z-10 flex items-center space-x-6">
+                <div class="relative z-10 flex items-center space-x-4 md:space-x-6">
                     <div
-                        class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-xl md:text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
                         <i class="ph-bold ph-eye"></i>
                     </div>
                     <div class="flex-1">
-                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalViews">--</div>
-                        <div class="text-base text-t-medium font-syne mb-3">Total Views</div>
-                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400"
+                        <div class="text-2xl md:text-3xl font-bold text-t-bright font-syne mb-1" id="totalViews">--
+                        </div>
+                        <div class="text-sm md:text-base text-t-medium font-syne mb-2 md:mb-3">Total Views</div>
+                        <div class="flex items-center space-x-2 text-xs md:text-sm font-semibold text-green-500 dark:text-green-400"
                             id="viewsChange">
-                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <i class="ph-bold ph-trend-up text-sm md:text-base"></i>
                             <span>+25%</span>
                             <span class="text-t-muted font-syne">vs last month</span>
                         </div>
@@ -189,26 +195,27 @@
         </div>
 
         <!-- Charts Row -->
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-12">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
             <!-- Traffic Overview Chart -->
             <div
                 class="xl:col-span-2 bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
                 <div
-                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
-                    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-6 md:p-8 border-b border-stroke-elements">
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-4 xl:space-y-0">
                         <div class="flex items-center space-x-4">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
-                                <i class="ph-bold ph-bar-chart text-xl"></i>
+                                class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                                <i class="ph-bold ph-bar-chart text-lg md:text-xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-t-bright font-syne">Traffic Overview</h3>
-                                <p class="text-t-medium font-syne text-sm">Website traffic and visitor analytics</p>
+                                <h3 class="text-xl md:text-2xl font-bold text-t-bright font-syne">Traffic Overview</h3>
+                                <p class="text-t-medium font-syne text-xs md:text-sm">Website traffic and visitor
+                                    analytics</p>
                             </div>
                         </div>
-                        <div class="flex space-x-3">
+                        <div class="flex space-x-3 bg-base-tint/50 p-1 rounded-xl">
                             <select
-                                class="inline-flex items-center justify-center space-x-3 px-6 py-3 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm"
+                                class="inline-flex items-center justify-center space-x-3 px-4 py-2 bg-transparent text-t-bright font-semibold outline-none font-syne text-xs md:text-sm w-full xl:w-auto"
                                 id="trafficPeriod">
                                 <option value="7d">Last 7 days</option>
                                 <option value="30d">Last 30 days</option>
@@ -217,9 +224,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-8">
-                    <div class="h-80 relative">
-                        <canvas id="trafficChart" width="400" height="200"></canvas>
+                <div class="p-4 md:p-8">
+                    <div class="h-60 md:h-80 relative w-full">
+                        <canvas id="trafficChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -228,39 +235,41 @@
             <div
                 class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
                 <div
-                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
-                    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-6 md:p-8 border-b border-stroke-elements">
+                    <div class="flex flex-col space-y-4">
+                        <!-- Removed flex-row for simpler stacking on smallest screens -->
                         <div class="flex items-center space-x-4">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
-                                <i class="ph-bold ph-star text-xl"></i>
+                                class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                                <i class="ph-bold ph-star text-lg md:text-xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-t-bright font-syne">Popular Content</h3>
-                                <p class="text-t-medium font-syne text-sm">Top performing blog posts</p>
+                                <h3 class="text-xl md:text-2xl font-bold text-t-bright font-syne">Popular Content</h3>
+                                <p class="text-t-medium font-syne text-xs md:text-sm">Top performing blog posts</p>
                             </div>
                         </div>
-                        <div class="flex space-x-3">
+                        <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+                            <!-- Scrollable filter buttons on mobile -->
                             <button
-                                class="inline-flex items-center justify-center space-x-3 px-6 py-3 bg-accent/10 hover:bg-accent/20 text-accent font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm active"
+                                class="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 bg-accent/10 hover:bg-accent/20 text-accent font-semibold rounded-lg shadow-sm font-syne text-xs active"
                                 data-filter="views">
-                                <span>By Views</span>
+                                <span>Views</span>
                             </button>
                             <button
-                                class="inline-flex items-center justify-center space-x-3 px-6 py-3 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm"
+                                class="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-lg shadow-sm font-syne text-xs"
                                 data-filter="comments">
-                                <span>By Comments</span>
+                                <span>Comments</span>
                             </button>
                             <button
-                                class="inline-flex items-center justify-center space-x-3 px-6 py-3 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm"
+                                class="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-lg shadow-sm font-syne text-xs"
                                 data-filter="likes">
-                                <span>By Likes</span>
+                                <span>Likes</span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="p-8">
-                    <div class="space-y-4 max-h-80 overflow-y-auto" id="popularContent">
+                <div class="p-4 md:p-8">
+                    <div class="space-y-4 max-h-60 md:max-h-80 overflow-y-auto" id="popularContent">
                         <!-- Content items will be populated here -->
                     </div>
                 </div>
@@ -268,32 +277,32 @@
         </div>
 
         <!-- Bottom Row -->
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
             <!-- Recent Activity -->
             <div
                 class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
                 <div
-                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-6 md:p-8 border-b border-stroke-elements">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div
-                                class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
-                                <i class="ph-bold ph-activity text-xl"></i>
+                                class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                                <i class="ph-bold ph-activity text-lg md:text-xl"></i>
                             </div>
                             <div>
-                                <h3 class="text-2xl font-bold text-t-bright font-syne">Recent Activity</h3>
-                                <p class="text-t-medium font-syne text-sm">Latest system events and user actions</p>
+                                <h3 class="text-xl md:text-2xl font-bold text-t-bright font-syne">Recent Activity</h3>
+                                <p class="text-t-medium font-syne text-xs md:text-sm">Latest actions</p>
                             </div>
                         </div>
                         <a href="#"
-                            class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm">
-                            <span>View All</span>
-                            <i class="ph-bold ph-arrow-right text-sm"></i>
+                            class="inline-flex items-center justify-center space-x-2 px-3 py-1.5 md:px-4 md:py-2 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-xs md:text-sm">
+                            <span>All</span>
+                            <i class="ph-bold ph-arrow-right text-xs"></i>
                         </a>
                     </div>
                 </div>
-                <div class="p-8">
-                    <div class="space-y-4 max-h-96 overflow-y-auto" id="recentActivity">
+                <div class="p-4 md:p-8">
+                    <div class="space-y-4 max-h-60 md:max-h-96 overflow-y-auto" id="recentActivity">
                         <!-- Activity items will be populated here -->
                     </div>
                 </div>
@@ -303,30 +312,31 @@
             <div
                 class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
                 <div
-                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-6 md:p-8 border-b border-stroke-elements">
                     <div class="flex items-center space-x-4">
                         <div
-                            class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
-                            <i class="ph-bold ph-gauge text-xl"></i>
+                            class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-gauge text-lg md:text-xl"></i>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-bold text-t-bright font-syne">Quick Stats</h3>
-                            <p class="text-t-medium font-syne text-sm">System performance and health metrics</p>
+                            <h3 class="text-xl md:text-2xl font-bold text-t-bright font-syne">Quick Stats</h3>
+                            <p class="text-t-medium font-syne text-xs md:text-sm">System performance metrics</p>
                         </div>
                     </div>
                 </div>
-                <div class="p-8">
-                    <div class="grid grid-cols-1 gap-6">
+                <div class="p-4 md:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
                             <div class="flex items-center space-x-4">
                                 <div
-                                    class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center text-white shadow-lg">
+                                    class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center text-white shadow-lg">
                                     <i class="ph-bold ph-magnifying-glass text-lg"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="searchQueries">--
+                                    <div class="text-xl md:text-2xl font-bold text-t-bright font-syne mb-1"
+                                        id="searchQueries">--
                                     </div>
-                                    <div class="text-sm text-t-medium font-syne">Search Queries Today</div>
+                                    <div class="text-xs md:text-sm text-t-medium font-syne">Search Queries</div>
                                 </div>
                             </div>
                         </div>
@@ -334,13 +344,14 @@
                         <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
                             <div class="flex items-center space-x-4">
                                 <div
-                                    class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center text-white shadow-lg">
+                                    class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center text-white shadow-lg">
                                     <i class="ph-bold ph-clock text-lg"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="avgResponseTime">
+                                    <div class="text-xl md:text-2xl font-bold text-t-bright font-syne mb-1"
+                                        id="avgResponseTime">
                                         --ms</div>
-                                    <div class="text-sm text-t-medium font-syne">Avg Response Time</div>
+                                    <div class="text-xs md:text-sm text-t-medium font-syne">Avg Response</div>
                                 </div>
                             </div>
                         </div>
@@ -348,12 +359,13 @@
                         <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
                             <div class="flex items-center space-x-4">
                                 <div
-                                    class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-lg flex items-center justify-center text-white shadow-lg">
+                                    class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-lg flex items-center justify-center text-white shadow-lg">
                                     <i class="ph-bold ph-shield-check text-lg"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="uptime">--%</div>
-                                    <div class="text-sm text-t-medium font-syne">System Uptime</div>
+                                    <div class="text-xl md:text-2xl font-bold text-t-bright font-syne mb-1" id="uptime">
+                                        --%</div>
+                                    <div class="text-xs md:text-sm text-t-medium font-syne">System Uptime</div>
                                 </div>
                             </div>
                         </div>
@@ -361,12 +373,13 @@
                         <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
                             <div class="flex items-center space-x-4">
                                 <div
-                                    class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white shadow-lg">
+                                    class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white shadow-lg">
                                     <i class="ph-bold ph-database text-lg"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="dbSize">--MB</div>
-                                    <div class="text-sm text-t-medium font-syne">Database Size</div>
+                                    <div class="text-xl md:text-2xl font-bold text-t-bright font-syne mb-1" id="dbSize">
+                                        --MB</div>
+                                    <div class="text-xs md:text-sm text-t-medium font-syne">DB Size</div>
                                 </div>
                             </div>
                         </div>

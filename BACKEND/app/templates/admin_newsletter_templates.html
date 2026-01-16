@@ -181,9 +181,10 @@
             </div>
 
             <!-- Modal Body -->
-            <div class="flex-1 flex overflow-hidden">
+            <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
                 <!-- Sidebar -->
-                <div class="w-80 modal-sidebar p-6 overflow-y-auto">
+                <div
+                    class="w-full md:w-80 modal-sidebar p-6 overflow-y-auto border-b md:border-b-0 md:border-r border-stroke-elements shrink-0">
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium theme-text-sub mb-1">Name</label>
@@ -212,7 +213,7 @@
                 </div>
 
                 <!-- Editor -->
-                <div class="flex-1 flex flex-col bg-[#1e1e1e]">
+                <div class="flex-1 flex flex-col bg-[#1e1e1e] min-h-[300px]">
                     <div
                         class="px-4 py-2 text-xs text-gray-400 border-b border-gray-700 flex justify-between bg-[#252526]">
                         <span>HTML Source Code</span>

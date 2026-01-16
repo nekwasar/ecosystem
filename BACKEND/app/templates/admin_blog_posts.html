@@ -1200,6 +1200,7 @@
   }
 
   /* Responsive Design */
+  /* Responsive Design */
   @media (max-width: 768px) {
     .retro-main-panel {
       flex-direction: column;
@@ -1209,6 +1210,9 @@
       width: 100%;
       border-right: none;
       border-bottom: 1px solid #00ff00;
+      max-height: 200px;
+      /* Limit height when expanded on mobile */
+      overflow-y: auto;
     }
 
     /* Mobile sidebar behavior */
@@ -1218,13 +1222,22 @@
 
     .retro-sidebar-toggle {
       display: block;
-      /* Show on mobile */
     }
 
+    /* Compact list for tablet/mobile */
     .retro-list-header,
     .retro-post-item {
-      grid-template-columns: 25px minmax(200px, 1fr) 100px 120px 60px;
-      font-size: 9px;
+      /* Checkbox | Title | Status | Date | Actions (Size hidden) */
+      grid-template-columns: 30px minmax(150px, 1fr) 80px 80px 50px;
+      font-size: 10px;
+      gap: 4px;
+      padding: 6px;
+    }
+
+    /* Hide Size on tablet/mobile */
+    .retro-col-size,
+    .retro-post-size {
+      display: none !important;
     }
 
     .retro-nav-bar {
@@ -1233,7 +1246,13 @@
     }
 
     .retro-search-input {
-      width: 150px;
+      width: 100%;
+      /* Full width search */
+    }
+
+    .retro-nav-controls {
+      width: 100%;
+      justify-content: space-between;
     }
 
     #propertiesShell {
@@ -1245,37 +1264,35 @@
       grid-template-columns: 1fr;
       gap: 4px;
     }
-
-    .property-label {
-      font-size: 11px;
-    }
-
-    .property-value {
-      font-size: 13px;
-    }
   }
 
 
-  /* Additional responsive breakpoint for very small screens */
+  /* Very small screens (Mobile Portrait) */
   @media (max-width: 480px) {
 
     .retro-list-header,
     .retro-post-item {
-      grid-template-columns: 20px minmax(150px, 1fr) 80px 100px 50px;
-      font-size: 8px;
-      gap: 4px;
-      padding: 4px 6px;
-    }
-
-    .retro-post-title {
+      /* Checkbox | Title | Actions */
+      /* Status and Date hidden to save space */
+      grid-template-columns: 30px 1fr 40px;
       font-size: 10px;
     }
 
-    .retro-post-meta,
+    /* Hide Status and Date on small mobile */
+    .retro-col-status,
     .retro-post-status,
-    .retro-post-modified,
-    .retro-post-size {
-      font-size: 8px;
+    .retro-col-modified,
+    .retro-post-modified {
+      display: none !important;
+    }
+
+    .retro-post-title {
+      font-size: 11px;
+    }
+
+    /* Make actions easier to tap */
+    .retro-post-actions {
+      justify-content: center;
     }
   }
 </style>

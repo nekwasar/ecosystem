@@ -422,7 +422,11 @@
             color: var(--t-bright);
         }
 
-        /* Removed incorrect rule that showed mobile menu btn on desktop collapse */
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
 
         .header-title {
             font: normal 700 1.65rem/1.2 var(--_font-accent);
@@ -629,6 +633,12 @@
             border-radius: var(--_radius-l);
             border: 1px solid var(--stroke-elements);
             min-height: 600px;
+        }
+
+        /* Mobile Menu Button - Ensure icon is visible */
+        .mobile-menu-btn i {
+            font-size: 24px;
+            display: block;
         }
 
         /* Loading States */

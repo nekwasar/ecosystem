@@ -205,19 +205,19 @@
                     </div>
                     <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                         <button
-                            class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne"
+                            class="inline-flex items-center justify-center space-x-3 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne text-sm md:text-base"
                             id="createCampaignBtn">
                             <i class="ph-bold ph-plus text-lg"></i>
                             <span>Create Campaign</span>
                         </button>
                         <button
-                            class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne"
+                            class="inline-flex items-center justify-center space-x-3 px-6 py-3 md:px-8 md:py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne text-sm md:text-base"
                             id="openSettingsBtn" onclick="openSettings()">
                             <i class="ph-bold ph-gear text-lg"></i>
                             <span>Settings</span>
                         </button>
                         <button
-                            class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne"
+                            class="inline-flex items-center justify-center space-x-3 px-6 py-3 md:px-8 md:py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne text-sm md:text-base"
                             id="openAutomationsBtn" onclick="openAutomations()">
                             <i class="ph-bold ph-robot text-lg"></i>
                             <span>Automations</span>
@@ -319,13 +319,13 @@
                                 class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
                                 Type</th>
                             <th
-                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne hidden md:table-cell">
                                 Recipients</th>
                             <th
-                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne hidden md:table-cell">
                                 Sent</th>
                             <th
-                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne hidden md:table-cell">
                                 Open Rate</th>
                             <th
                                 class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
@@ -403,14 +403,15 @@
             class="bg-base dark:bg-base border border-stroke-elements rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden theme-card">
 
             <!-- Wizard Header -->
-            <div class="px-8 py-5 border-b border-stroke-elements bg-base-tint flex justify-between items-center">
+            <div
+                class="px-4 py-4 md:px-8 md:py-5 border-b border-stroke-elements bg-base-tint flex justify-between items-center">
                 <div>
-                    <h3 class="text-xl font-bold text-t-bright font-syne">Create Campaign</h3>
-                    <p class="text-sm text-t-medium">Step <span id="currentStepNum">1</span> of 4: <span
+                    <h3 class="text-lg md:text-xl font-bold text-t-bright font-syne">Create Campaign</h3>
+                    <p class="text-xs md:text-sm text-t-medium">Step <span id="currentStepNum">1</span> of 4: <span
                             id="currentStepName">Setup</span></p>
                 </div>
                 <button onclick="closeWizard()" class="text-t-medium hover:text-t-bright p-2">
-                    <i class="ph-bold ph-x text-xl"></i>
+                    <i class="ph-bold ph-x text-lg md:text-xl"></i>
                 </button>
             </div>
 
@@ -424,7 +425,7 @@
             <div class="flex-1 overflow-hidden relative">
 
                 <!-- STEP 1: SETUP -->
-                <div id="step1" class="wizard-step absolute inset-0 p-8 overflow-y-auto">
+                <div id="step1" class="wizard-step absolute inset-0 p-4 md:p-8 overflow-y-auto">
                     <div class="max-w-2xl mx-auto space-y-6">
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-t-bright">Campaign Name (Internal)</label>
@@ -611,11 +612,12 @@
             </div>
 
             <!-- Wizard Footer -->
-            <div class="px-8 py-5 border-t border-stroke-elements bg-base flex justify-between items-center">
+            <div
+                class="px-4 py-4 md:px-8 md:py-5 border-t border-stroke-elements bg-base flex justify-between items-center">
                 <button onclick="prevStep()" id="prevBtn"
-                    class="px-6 py-2 border border-stroke-controls rounded-lg text-t-medium hover:text-t-bright disabled:opacity-30 disabled:cursor-not-allowed">Previous</button>
+                    class="px-4 py-2 md:px-6 md:py-2 border border-stroke-controls rounded-lg text-t-medium hover:text-t-bright disabled:opacity-30 disabled:cursor-not-allowed text-sm md:text-base">Previous</button>
                 <button onclick="nextStep()" id="nextBtn"
-                    class="px-6 py-2 bg-t-bright text-base-opp font-bold rounded-lg hover:bg-t-bright/90">Next
+                    class="px-4 py-2 md:px-6 md:py-2 bg-t-bright text-base-opp font-bold rounded-lg hover:bg-t-bright/90 text-sm md:text-base">Next
                     Step</button>
             </div>
         </div>
@@ -1326,11 +1328,11 @@
                     ${formatType(campaign.templateType || 'standard')}
                 </span>
             </td>
-            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">${formatNumber(campaign.recipientCount || 0)}</td>
-            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap hidden md:table-cell">${formatNumber(campaign.recipientCount || 0)}</td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap hidden md:table-cell">
                 ${campaign.status === 'scheduled' && campaign.scheduledAt ? formatDate(campaign.scheduledAt, true) : (campaign.sentAt ? formatDate(campaign.sentAt, true) : '-')}
             </td>
-            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap">${campaign.openRate || 0}%</td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap hidden md:table-cell">${campaign.openRate || 0}%</td>
             <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4">
                 <div class="flex items-center space-x-1">
                     <button class="w-6 h-6 bg-accent/10 hover:bg-accent/20 text-accent rounded flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Edit Campaign" onclick="editCampaign('${campaign.id}')">
