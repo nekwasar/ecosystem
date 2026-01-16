@@ -250,21 +250,26 @@
 
     // --- Dynamic Fields ---
     function addSocialRow(data = {}) {
+        const container = document.getElementById('socialsContainer');
         const div = document.createElement('div');
-        div.className = "flex gap-2 items-center";
+        div.className = "flex gap-2 items-center bg-base p-2 rounded border border-stroke-elements";
+
+        // Curated platform list
+        const platforms = ['twitter', 'github', 'linkedin', 'instagram', 'youtube', 'facebook', 'medium', 'tiktok', 'website', 'email', 'discord', 'reddit', 'threads', 'patreon', 'stackoverflow'];
+
+        let options = platforms.map(p =>
+            `<option value="${p}" ${data.platform === p ? 'selected' : ''}>${p.charAt(0).toUpperCase() + p.slice(1)}</option>`
+        ).join('');
+
+        // Add custom option in case it's not in the list
+        if (data.platform && !platforms.includes(data.platform)) {
+            options += `<option value="${data.platform}" selected>${data.platform}</option>`;
+        }
+
         div.innerHTML = `
-            <select class="social-platform w-32 bg-base-shade border border-stroke-controls rounded px-2 py-1.5 text-xs text-t-bright outline-none">
-                <option value="twitter">X (Twitter)</option>
-                <option value="github">GitHub</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="instagram">Instagram</option>
-                <option value="youtube">YouTube</option>
-                <option value="website">Website</option>
+            <select class="social-platform bg-surface-1 border border-stroke-elements text-t-bright text-xs rounded px-2 py-2 w-32 focus:border-accent outline-none font-bold uppercase">
+                ${options}
             </select>
-            <input type="text" class="social-url flex-1 bg-base-shade border border-stroke-controls rounded px-2 py-1.5 text-xs text-t-bright outline-none" placeholder="URL">
-            <button onclick="this.parentElement.remove()" class="w-6 h-6 flex items-center justify-center text-t-muted hover:text-red-500"><i class="ph-bold ph-trash"></i></button>
-        `;
-        document.getElementById('socialsContainer').appendChild(div);
         if (data.platform) div.querySelector('.social-platform').value = data.platform;
         if (data.url) div.querySelector('.social-url').value = data.url;
     }
@@ -273,7 +278,7 @@
         const div = document.createElement('div');
         div.className = "grid grid-cols-[auto_1fr] gap-3 p-3 bg-base-shade/50 rounded border border-stroke-elements relative group";
         div.innerHTML = `
-            <div class="w-16 h-24 bg-base-shade rounded border border-stroke-elements flex items-center justify-center overflow-hidden">
+            < div class="w-16 h-24 bg-base-shade rounded border border-stroke-elements flex items-center justify-center overflow-hidden" >
                 <img src="" class="book-cover-preview w-full h-full object-cover hidden">
                 <i class="ph-duotone ph-book text-2xl text-t-muted book-icon"></i>
             </div>

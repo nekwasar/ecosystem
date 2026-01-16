@@ -63,10 +63,10 @@
             <!-- Middle: Divider (Desktop Only) -->
             <div class="hidden lg:block h-full bg-gray-200"></div>
 
-            <!-- Right: The Portait -->
-            <div class="relative w-full max-w-md ml-auto lg:mr-0">
+            <!-- Right: The Portait & Socials -->
+            <div class="relative w-full max-w-md ml-auto lg:mr-0 flex flex-col gap-6">
                 <div
-                    class="aspect-[3/4] bg-gray-200 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700 ease-out">
+                    class="aspect-[3/4] bg-gray-200 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700 ease-out shadow-2xl">
                     <img src="{{ author.avatar_image or 'https://ui-avatars.com/api/?name=' + author.name }}"
                         alt="{{ author.name }}" class="w-full h-full object-cover">
                     <!-- Corner accent -->
@@ -74,6 +74,31 @@
                         <i class="ph-bold ph-arrow-down-right text-2xl"></i>
                     </div>
                 </div>
+
+                <!-- Socials (Visible & Big) -->
+                {% if author.social_links %}
+                <div class="flex flex-wrap gap-3 justify-end lg:justify-start">
+                    {% for social in author.social_links %}
+                    <a href="{{ social.url }}" target="_blank"
+                        class="w-12 h-12 border-2 border-black rounded-lg flex items-center justify-center text-xl hover:bg-black hover:text-white transition-all shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
+                        title="{{ social.platform }}">
+                        {% if social.platform == 'twitter' or social.platform == 'x' %}<i class="ph-bold ph-x-logo"></i>
+                        {% elif social.platform == 'github' %}<i class="ph-bold ph-github-logo"></i>
+                        {% elif social.platform == 'linkedin' %}<i class="ph-bold ph-linkedin-logo"></i>
+                        {% elif social.platform == 'instagram' %}<i class="ph-bold ph-instagram-logo"></i>
+                        {% elif social.platform == 'facebook' %}<i class="ph-bold ph-facebook-logo"></i>
+                        {% elif social.platform == 'youtube' %}<i class="ph-bold ph-youtube-logo"></i>
+                        {% elif social.platform == 'medium' %}<i class="ph-bold ph-medium-logo"></i>
+                        {% elif social.platform == 'tiktok' %}<i class="ph-bold ph-tiktok-logo"></i>
+                        {% elif social.platform == 'reddit' %}<i class="ph-bold ph-reddit-logo"></i>
+                        {% elif social.platform == 'discord' %}<i class="ph-bold ph-discord-logo"></i>
+                        {% elif social.platform == 'email' %}<i class="ph-bold ph-envelope"></i>
+                        {% else %}<i class="ph-bold ph-link"></i>{% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <!-- Floating geometric accent -->
                 <div class="absolute -top-6 -right-6 w-24 h-24 border-2 border-black/10 -z-10 rounded-full"></div>
             </div>
@@ -94,23 +119,7 @@
                 provided." }}
             </div>
 
-            <!-- Social Links (Minimal List) -->
-            {% if author.social_links %}
-            <div class="flex flex-col gap-4">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Connect</span>
-                <div class="flex flex-wrap gap-4">
-                    {% for social in author.social_links %}
-                    <a href="{{ social.url }}" target="_blank"
-                        class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center text-gray-500 hover:border-black hover:text-black hover:scale-110 transition-all bg-white">
-                        {% if social.platform == 'twitter' %}<i class="ph-bold ph-x-logo"></i>
-                        {% elif social.platform == 'github' %}<i class="ph-bold ph-github-logo"></i>
-                        {% elif social.platform == 'linkedin' %}<i class="ph-bold ph-linkedin-logo"></i>
-                        {% else %}<i class="ph-bold ph-link"></i>{% endif %}
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
+            <!-- Social Links moved to under Author Avatar -->
 
             <!-- Published Books (Mini Shelf) -->
             {% if author.books %}
