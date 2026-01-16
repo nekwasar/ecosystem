@@ -833,7 +833,7 @@
         const templateParam = urlParams.get('template') || 'template1';
         // FIXED: Support both 'edit' and 'post_id' parameters (blog posts page uses 'edit')
         const postIdParam = urlParams.get('edit') || urlParams.get('post_id');
-        const isEditMode = !!postIdParam; // Flag for edit mode
+        let isEditMode = !!postIdParam; // Flag for edit mode
 
         // Get the template container element
         const templateContainer = document.getElementById('templateContainer');
@@ -1768,17 +1768,17 @@
         }
 
         // Function to save draft
-        async function saveDraft() {
+        async function saveDraft(isAutoSave = false) {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('You need to be logged in to save drafts.');
+                if (!isAutoSave) alert('You need to be logged in to save drafts.');
                 return;
             }
 
             // Get the current content from the template container and sanitize it
             const content = sanitizeContent(templateContainer);
             if (!content || content.trim() === '') {
-                alert('Cannot save empty draft.');
+                if (!isAutoSave) alert('Cannot save empty draft.');
                 return;
             }
 
@@ -1808,7 +1808,8 @@
             // NEW: If editing, include the post ID
             if (isEditMode && editingPostData) {
                 draftData.id = editingPostData.id;
-                console.log('[EDIT MODE] Updating existing post:', editingPostData.id);
+                // Don't log every auto-save to keep console clean
+                if (!isAutoSave) console.log('[EDIT MODE] Updating existing post:', editingPostData.id);
             }
 
             // Get the save draft button element
@@ -1816,17 +1817,21 @@
 
             try {
                 // Show loading state
-                const originalBtnText = saveDraftBtn.textContent;
-                saveDraftBtn.textContent = '💾 Saving...';
-                saveDraftBtn.disabled = true;
+                if (!isAutoSave) {
+                    const originalBtnText = saveDraftBtn.textContent;
+                    saveDraftBtn.textContent = '💾 Saving...';
+                    saveDraftBtn.disabled = true;
+                } else {
+                    // Subtle indicator for auto-save
+                    saveDraftBtn.textContent = '💾 Saving...';
+                    saveDraftBtn.style.opacity = '0.7';
+                }
 
                 // NEW: Use PUT for updates, POST for new drafts
                 const method = (isEditMode && editingPostData) ? 'PUT' : 'POST';
                 const url = (isEditMode && editingPostData)
                     ? `/admin/api/blog/posts/${editingPostData.id}`
                     : '/admin/api/blog/drafts';
-
-                console.log(`[SAVE] ${method} ${url}`);
 
                 // Send draft data to the backend
                 const response = await fetch(url, {
@@ -1843,28 +1848,66 @@
                 }
 
                 const result = await response.json();
-                console.log('Draft saved successfully:', result);
 
-                // Show success message
-                const message = isEditMode
-                    ? 'Post updated successfully!'
-                    : 'Draft saved successfully! Post ID: ' + result.post_id;
-                alert(message);
+                // Update editor state to prevent duplicate drafts
+                if (!isEditMode && result.post_id) {
+                    if (!isAutoSave) console.log('[SAVE] Switching to edit mode for ID:', result.post_id);
+                    isEditMode = true;
+                    editingPostData = {
+                        id: result.post_id,
+                        title: draftData.title,
+                        template_type: draftData.template_type,
+                        content: draftData.content
+                    };
+
+                    // Update URL without reloading so refresh keeps us on this post
+                    const newUrl = new URL(window.location);
+                    newUrl.searchParams.set('edit', result.post_id);
+                    window.history.pushState({}, '', newUrl);
+                } else if (isEditMode && editingPostData) {
+                    // Update local data
+                    editingPostData.title = draftData.title;
+                    editingPostData.content = draftData.content;
+                }
+
+                // Handle success feedback
+                if (!isAutoSave) {
+                    alert('Draft saved successfully!');
+                } else {
+                    console.log('Autosaved.');
+                    // Flash success on button
+                    const originalText = '💾 Save Draft'; // Assuming this is the default text
+                    saveDraftBtn.textContent = '✅ Saved';
+                    setTimeout(() => {
+                        saveDraftBtn.textContent = originalText;
+                        saveDraftBtn.style.opacity = '1';
+                    }, 2000);
+                }
 
             } catch (error) {
                 console.error('Error saving draft:', error);
-                alert('Failed to save draft: ' + error.message);
+                if (!isAutoSave) alert('Failed to save draft: ' + error.message);
             } finally {
-                // Restore button state
-                saveDraftBtn.textContent = '💾 Save Draft';
-                saveDraftBtn.disabled = false;
+                // Restore button state if manual save
+                if (!isAutoSave) {
+                    saveDraftBtn.textContent = '💾 Save Draft';
+                    saveDraftBtn.disabled = false;
+                }
             }
         }
 
         // Button event handlers
         document.getElementById('saveDraftBtn').addEventListener('click', () => {
-            saveDraft();
+            saveDraft(false);
         });
+
+        // Initialize Auto-Save (Runs every 30 seconds)
+        // Only starts if we are already in edit mode (have an ID) or after first manual save
+        setInterval(() => {
+            if (isEditMode && editingPostData) {
+                saveDraft(true);
+            }
+        }, 30000); // 30 seconds
 
         // NEW: Save & Preview button handler
         document.getElementById('savePreviewBtn').addEventListener('click', async () => {
