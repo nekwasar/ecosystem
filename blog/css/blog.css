@@ -207,7 +207,12 @@ html {
 }
 
 body {
-  font: normal 400 var(--_size)/1.6 var(--_font-default);
+  /* font: normal 400 var(--_size)/1.6 var(--_font-default); */
+  font-family: var(--_font-default);
+  font-size: var(--_size);
+  line-height: 1.6;
+  font-weight: 400;
+  font-style: normal;
   text-rendering: optimizeLegibility;
   background-color: var(--base);
   color: var(--t-medium);
