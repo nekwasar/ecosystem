@@ -286,7 +286,8 @@
   <link rel="icon" href="https://nekwasar.com/icon" sizes="any">
 </head>
 
-<body class="bg-base text-t-medium font-inter" data-use-routing="{% block routing_flag %}true{% endblock %}">
+<body class="bg-base text-t-medium {% block body_font %}font-inter{% endblock %}"
+  data-use-routing="{% block routing_flag %}true{% endblock %}">
   {% include 'includes/navbar.html' %}
 
   <main id="route-container" class="relative min-h-screen" data-fluid="{% block fluid_layout %}false{% endblock %}">
