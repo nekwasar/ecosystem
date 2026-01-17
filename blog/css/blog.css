@@ -798,6 +798,12 @@ section[id^="route-"] .route-title {
   color: inherit;
 }
 
+/* Utility: Orbitron Font Override */
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif !important;
+  --_font-default: 'Orbitron', sans-serif !important;
+}
+
 .card-link:hover .card-image img {
   transform: scale(1.05);
 }
