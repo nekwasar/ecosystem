@@ -235,10 +235,14 @@ Transforming Our World | NekwasaR Blog{% endif %}{% endblock %}
                 <!-- Meta Information -->
                 <div
                     class="flex flex-wrap items-center gap-4 sm:gap-6 text-white/90 text-base sm:text-lg lg:text-xl no-edit">
-                    <span class="flex items-center gap-3 sm:gap-4">
-                        <i class="ph-bold ph-user text-lg sm:text-xl lg:text-2xl"></i>
-                        By {% if post_data %}{{ post_data.author }}{% else %}NekwasaR{% endif %}
-                    </span>
+                    <a href="/author/{{ post_data.author | lower | replace(' ', '-') if post_data and post_data.author else 'nekwasar' }}"
+                        class="flex items-center gap-3 sm:gap-4 hover:text-purple-400 transition-colors group">
+                        <i
+                            class="ph-bold ph-user text-lg sm:text-xl lg:text-2xl group-hover:scale-110 transition-transform"></i>
+                        <span
+                            class="underline decoration-2 underline-offset-4 decoration-purple-500/50 group-hover:decoration-purple-500 transition-all">By
+                            {% if post_data %}{{ post_data.author }}{% else %}NekwasaR{% endif %}</span>
+                    </a>
                     <span class="text-white/60 hidden sm:inline text-lg sm:text-xl lg:text-2xl">•</span>
                     <span class="flex items-center gap-3 sm:gap-4">
                         <i class="ph-bold ph-calendar text-lg sm:text-xl lg:text-2xl"></i>
@@ -765,7 +769,27 @@ Transforming Our World | NekwasaR Blog{% endif %}{% endblock %}
 </section>
 {% else %}
 <!-- RENDER SAVED CONTENT DIRECTLY (Matches Editor Exactly) -->
-{{ post_data.content | safe }}
+<div id="blog-content-area" class="blog-content-wrapper">
+    {{ post_data.content | safe }}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const contentArea = document.getElementById('blog-content-area');
+        if (contentArea) {
+            const links = contentArea.getElementsByTagName('a');
+            for (let link of links) {
+                // Check if link is external (starts with http and not same domain)
+                if (link.href && link.href.startsWith('http') && link.hostname !== window.location.hostname) {
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                    // Optional: Visual cue for external links
+                    // link.classList.add('external-link'); 
+                }
+            }
+        }
+    });
+</script>
 {% endif %}
 
 {% endblock %}
