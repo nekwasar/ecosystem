@@ -89,9 +89,9 @@ async def get_product_detail(
 @router.post("/{id}/request-access")
 async def request_access(
     id: int,
+    request: Request,
     linkedin_profile: str = Body(..., embed=True),
     message: str = Body(None, embed=True),
-    request: Request,
     db: Session = Depends(get_db)
 ):
     """Submit application to view a high-ticket item"""
