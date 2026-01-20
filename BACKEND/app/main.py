@@ -123,6 +123,10 @@ app.include_router(newsletter_router, prefix="/api/newsletter", tags=["newslette
 app.include_router(analytics_router, prefix="/api/analytics", tags=["analytics"])
 app.include_router(content_router, prefix="/api/content", tags=["content"])
 app.include_router(admin_router, tags=["admin"])
+app.include_router(store_admin_router, prefix="/api/admin/store", tags=["store-admin"])
+app.include_router(store_front_router, prefix="/api/store/products", tags=["store-front"])
+app.include_router(store_checkout_router, prefix="/api/store/checkout", tags=["store-checkout"])
+app.include_router(store_auth_router, prefix="/api/auth", tags=["store-auth"])
 
 
 

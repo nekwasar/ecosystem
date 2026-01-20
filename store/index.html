@@ -1,388 +1,256 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NekwasaR Store - Coming Soon</title>
-
-    <!-- Primary Meta Tags -->
-    <title>NekwasaR Store - Coming Soon</title>
-    <meta name="title" content="NekwasaR Store - Premium Products & Services">
+    <title>Store | NekwasaR - Digital Assets & Innovations</title>
     <meta name="description"
-        content="Get ready for exclusive tech products, premium services, and innovative solutions from NekwasaR. Coming soon to revolutionize your digital experience.">
-    <meta name="author" content="NekwasaR">
-    <meta name="keywords"
-        content="nekwasar store, tech products, premium services, coming soon, innovation, digital solutions">
+        content="Premium digital resources, apps, templates, and enterprise assets curated by NekwasaR.">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://store.nekwasar.com/">
-    <meta property="og:title" content="NekwasaR Store - Coming Soon">
-    <meta property="og:description" content="Exclusive tech products and premium services coming soon from NekwasaR.">
-    <meta property="og:image" content="https://nekwasar.com/icon">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://store.nekwasar.com/">
-    <meta name="twitter:title" content="NekwasaR Store - Coming Soon">
-    <meta name="twitter:description" content="Exclusive tech products and premium services coming soon from NekwasaR.">
-    <meta name="twitter:image" content="https://nekwasar.com/icon">
-
-    <!-- Fonts and Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/bold/style.css">
-
-    <!-- Favicon -->
-    <link rel="icon" href="https://nekwasar.com/icon" sizes="any">
-    <link rel="apple-touch-icon" href="https://nekwasar.com/icon">
-
-    <!-- Tailwind CSS -->
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        'accent': 'var(--accent)',
-                        'secondary': 'var(--secondary)',
-                        'primary': 'var(--primary)',
-                        'dark': 'var(--dark)',
-                        'light': 'var(--light)',
-                        't-medium': 'var(--t-medium)'
-                    },
                     fontFamily: {
-                        'orbitron': ['Orbitron', 'sans-serif']
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#8b5cf6', // Violet 500
+                        secondary: '#ec4899', // Pink 500
+                        dark: '#0f172a', // Slate 900
                     }
                 }
             }
         }
     </script>
 
-    <!-- Custom CSS for theme matching -->
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+
     <style>
-        :root {
-            --accent: #ff6b35;
-            --secondary: #f7931e;
-            --primary: #1a1a1a;
-            --dark: #111111;
-            --light: #ffffff;
-            --t-medium: #888888;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        body {
-            background: linear-gradient(135deg, var(--dark) 0%, #2a2a2a 100%);
-            color: var(--light);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        ::-webkit-scrollbar-track {
+            background: transparent;
         }
 
-        .coming-soon-container {
-            text-align: center;
-            max-width: 800px;
-            padding: 2rem;
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
         }
 
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: var(--t-medium);
-            margin-bottom: 2rem;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .coming-soon-title {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .description {
-            font-size: 1.3rem;
-            line-height: 1.6;
-            margin-bottom: 3rem;
-            color: var(--light);
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 107, 53, 0.2);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .feature-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--light);
-        }
-
-        .feature-description {
-            color: var(--t-medium);
-            line-height: 1.5;
-        }
-
-        .cta-section {
-            margin-top: 3rem;
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(45deg, var(--accent), var(--secondary));
-            color: var(--light);
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .social-link {
-            color: var(--t-medium);
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
-        }
-
-        .social-link:hover {
-            color: var(--accent);
-        }
-
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .particle:nth-child(1) {
-            width: 4px;
-            height: 4px;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .particle:nth-child(2) {
-            width: 6px;
-            height: 6px;
-            top: 20%;
-            left: 80%;
-            animation-delay: 1s;
-        }
-
-        .particle:nth-child(3) {
-            width: 3px;
-            height: 3px;
-            top: 60%;
-            left: 20%;
-            animation-delay: 2s;
-        }
-
-        .particle:nth-child(4) {
-            width: 5px;
-            height: 5px;
-            top: 80%;
-            left: 70%;
-            animation-delay: 3s;
-        }
-
-        .particle:nth-child(5) {
-            width: 4px;
-            height: 4px;
-            top: 40%;
-            left: 50%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-                opacity: 0.5;
-            }
-
-            50% {
-                transform: translateY(-20px);
-                opacity: 1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .coming-soon-title {
-                font-size: 2.5rem;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 
-<body>
-    <!-- Particles Background -->
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
+<body class="bg-gray-50 dark:bg-[#050B14] text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
+
+    <!-- Navigation (Simplified for Store) -->
+    <nav class="fixed w-full z-50 glass-card border-b border-gray-200 dark:border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="/"
+                    class="font-display font-bold text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+                    NEKWASAR
+                </a>
+
+                <div class="flex items-center gap-6">
+                    <button class="relative p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full transition"
+                        onclick="toggleCart()">
+                        <i class="ph ph-shopping-cart text-xl"></i>
+                        <span id="cart-count"
+                            class="absolute top-0 right-0 bg-secondary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+                    </button>
+
+                    <div id="auth-section">
+                        <!-- Dynamic Auth Buttons injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- Main Content -->
-    <div class="coming-soon-container">
-        <!-- Logo -->
-        <div class="logo">NekwasaR</div>
-        <div class="subtitle">Store</div>
+    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
-        <!-- Coming Soon Title -->
-        <h1 class="coming-soon-title">COMING SOON</h1>
-
-        <!-- Description -->
-        <p class="description">
-            Get ready for an exclusive collection of premium tech products, innovative services, and cutting-edge
-            solutions.
-            We're crafting something extraordinary that will revolutionize your digital experience.
-        </p>
-
-        <!-- Features -->
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="ph-bold ph-cpu"></i>
-                </div>
-                <h3 class="feature-title">Premium Tech Products</h3>
-                <p class="feature-description">
-                    Exclusive access to cutting-edge technology products designed for innovators and tech enthusiasts.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="ph-bold ph-users"></i>
-                </div>
-                <h3 class="feature-title">Expert Consultations</h3>
-                <p class="feature-description">
-                    One-on-one sessions with NekwasaR for personalized tech guidance and strategic planning.
-                </p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="ph-bold ph-rocket"></i>
-                </div>
-                <h3 class="feature-title">Innovation Hub</h3>
-                <p class="feature-description">
-                    Access to beta products, early releases, and exclusive previews of upcoming innovations.
-                </p>
-            </div>
-        </div>
-
-        <!-- CTA Section -->
-        <div class="cta-section">
-            <p class="text-lg mb-6 text-gray-300">
-                Want to be the first to know when we launch? Stay connected!
+        <!-- Hero -->
+        <div class="text-center mb-16 space-y-4">
+            <h1 class="text-4xl md:text-5xl font-display font-bold mb-2">
+                Digital <span class="text-primary">Assets</span> & <span class="text-secondary">Code</span>
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
+                Premium templates, apps, and enterprise acquisitions. Curated for builders.
             </p>
-            <a href="https://nekwasar.com" class="cta-button">
-                <span>Visit Portfolio</span>
-                <i class="ph-bold ph-arrow-right"></i>
-            </a>
         </div>
 
-        <!-- Social Links -->
-        <div class="social-links">
-            <a href="https://www.reddit.com/user/nekwasar/" class="social-link" target="_blank">
-                <i class="ph-bold ph-reddit-logo"></i>
-            </a>
-            <a href="https://www.facebook.com/nekwasar" class="social-link" target="_blank">
-                <i class="ph-bold ph-facebook-logo"></i>
-            </a>
-            <a href="https://www.instagram.com/nekwasar" class="social-link" target="_blank">
-                <i class="ph-bold ph-instagram-logo"></i>
-            </a>
-            <a href="https://wa.me/2348164806578" class="social-link" target="_blank">
-                <i class="ph-bold ph-whatsapp-logo"></i>
-            </a>
-            <a href="https://x.com/nekwasar" class="social-link" target="_blank">
-                <i class="ph-bold ph-x-logo"></i>
-            </a>
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-3 justify-center mb-12">
+            <button
+                class="px-4 py-2 rounded-full bg-primary text-white text-sm font-medium shadow-lg shadow-primary/25">All</button>
+            <button
+                class="px-4 py-2 rounded-full bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition text-sm font-medium border border-gray-200 dark:border-white/10">Templates</button>
+            <button
+                class="px-4 py-2 rounded-full bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition text-sm font-medium border border-gray-200 dark:border-white/10">Software</button>
+            <button
+                class="px-4 py-2 rounded-full bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition text-sm font-medium border border-gray-200 dark:border-white/10 text-amber-500 border-amber-500/30">
+                <i class="ph-fill ph-lock-key mr-1"></i> Reserved
+            </button>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Loading Skeletons -->
+            <div class="glass-card rounded-2xl p-4 h-96 animate-pulse">
+                <div class="bg-gray-200 dark:bg-white/5 h-48 rounded-xl w-full mb-4"></div>
+                <div class="h-6 bg-gray-200 dark:bg-white/5 rounded w-3/4 mb-2"></div>
+                <div class="h-4 bg-gray-200 dark:bg-white/5 rounded w-1/2"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modals -->
+    <!-- 1. Auth Modal -->
+    <div id="auth-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="glass-card w-full max-w-md p-8 rounded-2xl relative">
+            <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 text-gray-500 hover:text-white"><i
+                    class="ph ph-x text-xl"></i></button>
+
+            <h2 class="text-2xl font-bold mb-6 text-center">Sign In</h2>
+
+            <div class="space-y-4">
+                <a href="/api/auth/login/google"
+                    class="flex items-center justify-center gap-3 w-full bg-white text-gray-900 font-medium py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="G">
+                    Continue with Google
+                </a>
+
+                <div class="relative py-2">
+                    <div class="absolute inset-0 flex items-center"><span
+                            class="w-full border-t border-gray-200 dark:border-white/10"></span></div>
+                    <div class="relative flex justify-center text-xs uppercase"><span
+                            class="bg-gray-50 dark:bg-[#0f172a] px-2 text-gray-500">or</span></div>
+                </div>
+
+                <form id="magic-link-form" class="space-y-3">
+                    <input type="email" placeholder="name@company.com"
+                        class="w-full bg-transparent border border-gray-300 dark:border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition"
+                        required>
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-primary to-secondary text-white font-medium py-3 rounded-xl shadow-lg shadow-primary/25 hover:opacity-90 transition">
+                        Send Magic Link
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NMQQKYTCKV"></script>
+    <!-- 2. Access Request Modal -->
+    <div id="access-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4">
+        <div class="glass-card w-full max-w-xl p-8 rounded-2xl relative border-l-4 border-amber-500">
+            <button onclick="closeModal('access-modal')"
+                class="absolute top-4 right-4 text-gray-500 hover:text-white"><i class="ph ph-x text-xl"></i></button>
+
+            <div class="flex items-center gap-4 mb-6">
+                <div class="p-3 bg-amber-500/20 rounded-lg text-amber-500">
+                    <i class="ph-fill ph-lock-key text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold">Reserve Access Application</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">For enterprise assets & acquisitions</p>
+                </div>
+            </div>
+
+            <form class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Business Email Verification</label>
+                    <div class="flex gap-2">
+                        <input type="email" value="user@current-session.com" disabled
+                            class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-gray-400 cursor-not-allowed">
+                        <span class="text-green-500 flex items-center gap-1 text-sm"><i
+                                class="ph-fill ph-check-circle"></i> Verified</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Professional Profile (LinkedIn/GitHub)</label>
+                    <input type="url" placeholder="https://linkedin.com/in/..."
+                        class="w-full bg-transparent border border-gray-300 dark:border-white/20 rounded-lg px-4 py-3 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition"
+                        required>
+                    <p class="text-xs text-gray-500 mt-2">We manually verify all applications to ensure serious
+                        inquiries only.</p>
+                </div>
+
+                <div class="flex items-start gap-3 bg-white/5 p-4 rounded-lg">
+                    <input type="checkbox" id="nda-agree" class="mt-1 accent-amber-500">
+                    <label for="nda-agree" class="text-sm text-gray-400 leading-relaxed">
+                        I agree to the <a href="#" class="text-amber-500 hover:underline">Non-Disclosure Agreement</a>.
+                        I understand that financial data shared upon approval is confidential.
+                    </label>
+                </div>
+
+                <button type="button"
+                    class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-3 rounded-xl transition">
+                    Submit Application
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-NMQQKYTCKV');
+        // Store Logic Placeholder
+        function toggleCart() {
+            // TODO: Open sidebar cart
+            alert("Cart logic in progress");
+        }
+
+        function openAuthModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('auth-modal').classList.add('flex');
+        }
+
+        function openAccessModal() {
+            document.getElementById('access-modal').classList.remove('hidden');
+            document.getElementById('access-modal').classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
     </script>
+    <script src="/store/js/store-client.js" defer></script>
 </body>
 
 </html>

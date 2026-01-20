@@ -1,6 +1,31 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, func
 from database import Base
 
+from datetime import datetime
+
+class User(Base):
+    """
+    Standard User for the Platform / Store.
+    Supports OAuth (Google) and Magic Link (Passwordless).
+    """
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    name = Column(String(255), nullable=True)
+    avatar_url = Column(String(500), nullable=True)
+    
+    # Auth Providers
+    google_id = Column(String(255), unique=True, index=True, nullable=True)
+    linkedin_id = Column(String(255), unique=True, index=True, nullable=True)
+    
+    # Store Profile
+    business_email = Column(String(255), nullable=True) # For vetting
+    is_verified_buyer = Column(Boolean, default=False)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_login = Column(DateTime, nullable=True)
+
 class AdminUser(Base):
     __tablename__ = "admin_users"
 

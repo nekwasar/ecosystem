@@ -15,6 +15,10 @@ from .blogs import router as blogs_router
 from .products import router as products_router
 from .auth import router as auth_router
 from .admin import router as admin_router
+from .store_admin import router as store_admin_router
+from .store_front import router as store_front_router
+from .store_checkout import router as store_checkout_router
+from .store_auth import router as store_auth_router
 from .search import router as search_router
 from .newsletter import router as newsletter_router
 from .analytics import router as analytics_router
