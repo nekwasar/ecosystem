@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
-from models.product import Product
+from models.product import LegacyProduct as Product
 from schemas import Product, ProductCreate
 
 router = APIRouter()

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, DECIMAL
 from database import Base
 
-class Product(Base):
+class LegacyProduct(Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, index=True)

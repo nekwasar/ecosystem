@@ -1,6 +1,6 @@
 from .contact import Contact, ContactMessage
 from .blog import BlogPost, BlogComment, BlogLike
-from .product import Product as SimpleProduct # Legacy
+from .product import LegacyProduct as SimpleProduct # Legacy
 from .store import (
     Product, ProductCategory, ProductMedia, ProductAccessRequest,
     Order, OrderItem, OrderMessage, Subscription,
