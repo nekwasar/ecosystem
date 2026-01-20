@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Body
+from fastapi import APIRouter, Depends, HTTPException, Body, Request
 from sqlalchemy.orm import Session
 from database import get_db
 from models.store import Order, OrderItem, Product, OrderStatus, BillingScheme
@@ -30,7 +30,7 @@ async def create_payment_intent(
     3. Handles Mixed Bags (Subscription + One-Time).
     4. Returns Client Secret.
     """
-    if not settings.STRIPE_SECRET_KEY:
+    if not settings.stripe_secret_key:
         raise HTTPException(500, "Payment gateway configuration missing")
     
     # Identify User
@@ -41,7 +41,7 @@ async def create_payment_intent(
     token = request.cookies.get("store_session")
     if token:
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+            payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
             user_id = payload.get("sub")
             # Fetch email for receipt
             from models.user import User
@@ -50,7 +50,7 @@ async def create_payment_intent(
         except:
             pass # Invalid session -> Guest Checkout
 
-    stripe.api_key = settings.STRIPE_SECRET_KEY
+    stripe.api_key = settings.stripe_secret_key
     
     line_items = []
     has_subscription = False
@@ -96,8 +96,8 @@ async def create_payment_intent(
             line_items=line_items,
             mode=mode,
             payment_method_types=["card"],
-            success_url=f"{settings.DOMAIN}/store/success?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"{settings.DOMAIN}/store/cart",
+            success_url=f"{settings.domain}/store/success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{settings.domain}/store/cart",
             automatic_tax={"enabled": True}, # STRIPE TAX ENABLED
             
             # User Linking
@@ -125,7 +125,7 @@ async def stripe_webhook(request: Request):
     
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+            payload, sig_header, settings.stripe_webhook_secret
         )
     except Exception:
          raise HTTPException(400, "Invalid signature")

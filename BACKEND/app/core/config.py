@@ -47,6 +47,10 @@ class Settings(BaseSettings):
     # Payment
     stripe_secret_key: Optional[str] = None
     stripe_publishable_key: Optional[str] = None
+    stripe_webhook_secret: Optional[str] = None
+
+    # App Domain (for redirects)
+    domain: str = "http://localhost:3000"
 
     class Config:
         env_file = ".env"
