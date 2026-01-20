@@ -16,7 +16,8 @@ from sqlalchemy.orm import Session
 from database import create_tables, SessionLocal, get_db
 from routes import (
     contacts_router, blogs_router, products_router, auth_router, 
-    admin_router, search_router, newsletter_router, analytics_router, content_router
+    admin_router, search_router, newsletter_router, analytics_router, content_router,
+    store_admin_router, store_front_router, store_checkout_router, store_auth_router
 )
 from core.config import settings
 from core.limiter import limiter
