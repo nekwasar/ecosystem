@@ -37,9 +37,9 @@ async def create_product(
     db.add(db_product)
     
     # 3. (Optional) Sync with Stripe immediately if keys are set
-    if settings.STRIPE_SECRET_KEY and product.billing_scheme == BillingScheme.RECURRING:
+    if settings.stripe_secret_key and product.billing_scheme == BillingScheme.RECURRING:
         try:
-            stripe.api_key = settings.STRIPE_SECRET_KEY
+            stripe.api_key = settings.stripe_secret_key
             # simplify for demo: create Product -> create Price
             stripe_prod = stripe.Product.create(name=product.name)
             stripe_price = stripe.Price.create(

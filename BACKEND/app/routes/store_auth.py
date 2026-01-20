@@ -15,9 +15,9 @@ import json
 router = APIRouter()
 
 # --- GOOGLE OAUTH CONFIG ---
-GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
-GOOGLE_CLIENT_SECRET = settings.GOOGLE_CLIENT_SECRET
-GOOGLE_REDIRECT_URI = f"{settings.DOMAIN}/api/auth/callback/google"
+GOOGLE_CLIENT_ID = settings.google_client_id
+GOOGLE_CLIENT_SECRET = settings.google_client_secret
+GOOGLE_REDIRECT_URI = f"{settings.domain}/api/auth/callback/google"
 
 @router.get("/login/google")
 async def login_google():
@@ -104,7 +104,7 @@ async def send_magic_link(
     
     # Generate Token
     token = create_store_token(user.id, expires_delta=timedelta(minutes=15))
-    link = f"{settings.DOMAIN}/api/auth/magic-login?token={token}"
+    link = f"{settings.domain}/api/auth/magic-login?token={token}"
     
     # Send Email
     await email_service.send_email_background(
@@ -120,7 +120,7 @@ async def send_magic_link(
 async def magic_login(token: str):
     """Verify magic link token and set session cookie"""
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         user_id = payload.get("sub")
         
         response = Response(status_code=302)
@@ -142,7 +142,7 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(401, "Not logged in")
         
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         user_id = payload.get("sub")
         user = db.query(User).filter(User.id == user_id).first()
         return {
@@ -163,5 +163,5 @@ def create_store_token(user_id: int, expires_delta: timedelta = None):
     else:
         expire = datetime.utcnow() + timedelta(days=30)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt

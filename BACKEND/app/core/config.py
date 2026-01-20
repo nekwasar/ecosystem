@@ -52,6 +52,11 @@ class Settings(BaseSettings):
     # App Domain (for redirects)
     domain: str = "http://localhost:3000"
 
+    # Social Auth
+    google_client_id: Optional[str] = None
+    google_client_secret: Optional[str] = None
+    google_redirect_uri: Optional[str] = None
+
     class Config:
         env_file = ".env"
         case_sensitive = False
