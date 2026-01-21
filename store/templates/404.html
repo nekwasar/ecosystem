@@ -1,0 +1,64 @@
+{% extends "base_store.html" %}
+
+{% block title %}404 - Reality Not Found | NekwasaR Store{% endblock %}
+
+{% block content %}
+<div class="relative min-h-[80vh] flex items-center justify-center overflow-hidden py-20">
+    <!-- Animated Background Elements -->
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-accent/10 blur-[120px] rounded-full animate-pulse"></div>
+    <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-secondary/10 blur-[120px] rounded-full animate-pulse"
+        style="animation-delay: 2s;"></div>
+
+    <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
+        <!-- Error Code with Glitch Effect -->
+        <div class="relative inline-block mb-8">
+            <h1
+                class="text-[12rem] md:text-[18rem] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-t-bright to-transparent opacity-20 select-none">
+                404
+            </h1>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <i class="ph-bold ph-ghost text-8xl md:text-9xl text-accent animate-bounce"></i>
+            </div>
+        </div>
+
+        <!-- Message -->
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold font-syne text-t-bright mb-6 tracking-tight uppercase">
+                Lost in the Matrix?
+            </h2>
+            <p class="text-xl md:text-2xl text-t-medium leading-relaxed mb-12 font-medium tracking-wide">
+                The asset you are looking for has been moved, archived, or never existed in this repository.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <a href="/store"
+                    class="group relative px-10 py-5 bg-accent text-white rounded-2xl font-bold text-lg tracking-widest uppercase overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(139,92,246,0.3)]">
+                    <span class="relative z-10 flex items-center gap-3 font-syne">
+                        <i class="ph-bold ph-house"></i>
+                        Return Home
+                    </span>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full duration-1000 transition-transform">
+                    </div>
+                </a>
+
+                <button onclick="window.history.back()"
+                    class="px-10 py-5 border border-white/10 dark:border-white/5 bg-white/5 backdrop-blur-md text-t-bright rounded-2xl font-bold text-lg tracking-widest uppercase hover:bg-white/10 transition-all active:scale-95 font-syne">
+                    Go Back
+                </button>
+            </div>
+        </div>
+
+        <!-- Decorative Tags -->
+        <div class="mt-20 flex flex-wrap justify-center gap-4 opacity-50">
+            <span
+                class="px-4 py-2 border border-stroke-elements rounded-full text-xs font-mono lowercase">#out_of_stock</span>
+            <span
+                class="px-4 py-2 border border-stroke-elements rounded-full text-xs font-mono lowercase">#void_exception</span>
+            <span
+                class="px-4 py-2 border border-stroke-elements rounded-full text-xs font-mono lowercase">#disconnected</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

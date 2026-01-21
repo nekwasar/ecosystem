@@ -140,6 +140,7 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     """Domain-aware HTTP Exception handler"""
     host = request.headers.get("host", "").lower()
     is_blog = host == "blog.nekwasar.com" or "blog" in host
+    is_store = host == "store.nekwasar.com" or "store" in host
     
     # 1. Handle 404 Not Found
     if exc.status_code == 404:
@@ -149,6 +150,11 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
                 "current_year": datetime.utcnow().year,
                 "post_data": DEFAULT_POST_DATA
             }, status_code=404)
+        elif is_store:
+            return store_templates.TemplateResponse("404.html", {
+                "request": request,
+                "current_year": datetime.utcnow().year
+            }, status_code=404)
         
     # 2. Handle 403/401 Forbidden
     if exc.status_code in [403, 401]:
@@ -157,6 +163,11 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
                 "request": request,
                 "current_year": datetime.utcnow().year,
                 "post_data": DEFAULT_POST_DATA
+            }, status_code=exc.status_code)
+        elif is_store:
+            return store_templates.TemplateResponse("403.html", {
+                "request": request,
+                "current_year": datetime.utcnow().year
             }, status_code=exc.status_code)
         
         # Fallback for Admin
@@ -252,15 +263,12 @@ async def root(request: Request):
         
     # 3. Store Domain
     if host == "store.nekwasar.com":
-        store_path = PROJECT_ROOT / "store" / "index.html"
-        
-        # Define Store Templates Directory (Lazy load reference)
-        # We will assume a `store/templates` dir exists or we serve static files for now and move to Jinja later.
-        # Ideally, we should register a new Jinja template dir for Store if we want server-side hydration.
-        # But for now, sticking to the file-serving plan for the index, and mapped routes for others.
-        
-        return FileResponse(str(store_path))
-    
+        # Serves store/templates/index.html
+        return store_templates.TemplateResponse(
+            "index.html",
+            {"request": request, "current_year": datetime.utcnow().year}
+        )
+
     # 3b. Store Sub-Routes (Handled via specific endpoints below, this root handler is just for "/")
     pass
             
