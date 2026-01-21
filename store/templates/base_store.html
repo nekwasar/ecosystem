@@ -18,7 +18,7 @@
     <!-- Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Tailwind Config (Adapted from Blog for consistency) -->
+    <!-- Tailwind Config (Adapted from Portfolio for consistency) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -31,86 +31,80 @@
                         display: ['Orbitron', 'sans-serif'], // Portfolio Signature
                     },
                     colors: {
-                        // Inheriting Blog/Portfolio System
-                        base: '#0f172a', // Dark Slate
-                        'base-tint': '#1e293b',
-                        'base-shade': '#020617',
-                        accent: '#8b5cf6', // Violet
-                        secondary: '#ec4899', // Pink
-                        't-bright': '#f8fafc',
-                        't-medium': '#cbd5e1',
-                        't-muted': '#64748b',
-                        'stroke-elements': 'rgba(255,255,255,0.1)',
-                    },
-                    backgroundImage: {
-                        'gradient-glow': 'conic-gradient(from 180deg at 50% 50%, #1e293b 0deg, #0f172a 180deg, #1e293b 360deg)',
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.3s ease-out',
-                        'slide-up': 'slideUp 0.5s ease-out',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        }
+                        base: 'var(--base)',
+                        'base-tint': 'var(--base-tint)',
+                        'base-shade': 'var(--base-shade)',
+                        accent: 'var(--accent)',
+                        secondary: 'var(--secondary)',
+                        't-bright': 'var(--t-bright)',
+                        't-medium': 'var(--t-medium)',
+                        't-muted': 'var(--t-muted)',
+                        'stroke-elements': 'var(--stroke-elements)',
                     }
                 }
             }
         }
     </script>
 
-    <!-- Global Styles -->
+    <!-- Global Styles & Portfolio Theme Variables -->
     <style>
-        /* Custom Scrollbar */
+        :root {
+            /* dark color scheme (default) */
+            --base: #111111;
+            --base-tint: #161616;
+            --base-shade: #000000;
+            --accent: #8b5cf6;
+            /* Keeping a strong accent for store */
+            --secondary: #ec4899;
+            --stroke-elements: rgba(255, 255, 255, 0.08);
+            --t-bright: #e9e9f1;
+            --t-medium: #C7C6D3;
+            --t-muted: #A1A1AF;
+        }
+
+        [color-scheme=light] {
+            --base: #e6ebf4;
+            --base-tint: #ebf0f7;
+            --base-shade: #bdc1c8;
+            --accent: #6d28d9;
+            --secondary: #db2777;
+            --stroke-elements: rgba(0, 0, 0, 0.1);
+            --t-bright: #22232c;
+            --t-medium: #424550;
+            --t-muted: #666a79;
+        }
+
+        /* Custom Scrollbar (Portfolio style) */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--base);
+            background: var(--base-shade);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+            background: var(--accent);
+            border-radius: 10px;
         }
 
         body {
-            background-color: #0f172a;
-            /* Fallback */
-            color: #cbd5e1;
+            background-color: var(--base);
+            color: var(--t-medium);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
+            background: rgba(var(--base-rgb, 30, 41, 59), 0.7);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--stroke-elements);
         }
 
         .gradient-text {
-            background: linear-gradient(to right, #8b5cf6, #ec4899);
+            background: linear-gradient(to right, var(--accent), var(--secondary));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        /* Portfolio Grid Card Hover Effects */
-        .product-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px -5px rgba(139, 92, 246, 0.15);
-            border-color: rgba(139, 92, 246, 0.3);
         }
     </style>
 
@@ -134,8 +128,7 @@
 
             <!-- Nav -->
             <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
-                <a href="https://nekwasar.com" class="text-t-muted hover:text-white transition-colors">Back to
-                    Portfolio</a>
+                <a href="https://nekwasar.com" class="text-t-muted hover:text-white transition-colors">Portfolio</a>
                 <a href="/catalog" class="text-t-bright hover:text-accent transition-colors">Catalog</a>
                 <a href="/enterprise" class="text-t-muted hover:text-white transition-colors">Enterprise</a>
                 <a href="/blog" class="text-t-muted hover:text-white transition-colors">Blog</a>
@@ -143,8 +136,9 @@
 
             <!-- Actions -->
             <div class="flex items-center gap-4">
-                <!-- Theme Toggle -->
-                <button class="p-2 text-t-muted hover:text-t-bright transition-colors" title="Toggle theme">
+                <!-- Theme Toggle (Functional) -->
+                <button id="theme-toggle" class="p-2 text-t-muted hover:text-t-bright transition-colors"
+                    title="Toggle theme">
                     <i class="ph ph-moon-stars text-xl"></i>
                 </button>
 
@@ -261,7 +255,7 @@
                     <div class="absolute inset-0 flex items-center"><span
                             class="w-full border-t border-stroke-elements"></span></div>
                     <div class="relative flex justify-center text-xs uppercase"><span
-                            class="bg-[#1e293b] px-2 text-t-muted">or use email</span></div>
+                            class="bg-base-tint px-2 text-t-muted">or use email</span></div>
                 </div>
 
                 <form id="magic-link-form" class="space-y-3">
@@ -278,6 +272,42 @@
 
     <!-- Scripts -->
     <script>
+        // Theme Toggle Logic
+        const themeBtn = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+
+        function getCurrentTheme() {
+            let theme = 'dark';
+            if (localStorage.getItem('store.theme')) {
+                theme = localStorage.getItem('store.theme');
+            } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+                theme = 'light';
+            }
+            return theme;
+        }
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                root.setAttribute('color-scheme', 'light');
+                root.classList.add('light'); // For Tailwind
+                themeBtn.innerHTML = '<i class="ph ph-sun text-xl"></i>';
+            } else {
+                root.setAttribute('color-scheme', 'dark');
+                root.classList.remove('light');
+                themeBtn.innerHTML = '<i class="ph ph-moon-stars text-xl"></i>';
+            }
+            localStorage.setItem('store.theme', theme);
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const newTheme = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        // Initialize Theme
+        applyTheme(getCurrentTheme());
+
+        // Modal Helpers
         function toggleCart() { alert("Cart Logic In Progress"); }
         function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); document.getElementById('auth-modal').classList.add('flex'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }

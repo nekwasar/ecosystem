@@ -140,7 +140,6 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     """Domain-aware HTTP Exception handler"""
     host = request.headers.get("host", "").lower()
     is_blog = host == "blog.nekwasar.com" or "blog" in host
-    is_store = host == "store.nekwasar.com" or "store" in host
     
     # 1. Handle 404 Not Found
     if exc.status_code == 404:
@@ -150,11 +149,6 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
                 "current_year": datetime.utcnow().year,
                 "post_data": DEFAULT_POST_DATA
             }, status_code=404)
-        elif is_store:
-            return store_templates.TemplateResponse("404.html", {
-                "request": request,
-                "current_year": datetime.utcnow().year
-            }, status_code=404)
         
     # 2. Handle 403/401 Forbidden
     if exc.status_code in [403, 401]:
@@ -163,11 +157,6 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
                 "request": request,
                 "current_year": datetime.utcnow().year,
                 "post_data": DEFAULT_POST_DATA
-            }, status_code=exc.status_code)
-        elif is_store:
-            return store_templates.TemplateResponse("403.html", {
-                "request": request,
-                "current_year": datetime.utcnow().year
             }, status_code=exc.status_code)
         
         # Fallback for Admin
@@ -433,7 +422,8 @@ async def serve_sitemap(request: Request, db: Session = Depends(get_db)):
 @app.get("/latest/", response_class=HTMLResponse)
 async def blog_latest(request: Request):
     host = request.headers.get("host", "").lower()
-    if host != "blog.nekwasar.com":
+    host = request.headers.get("host", "").lower()
+    if host != "blog.nekwasar.com" and host != "store.nekwasar.com" and host != "localhost:8000":
         return RedirectResponse(url=f"https://blog.nekwasar.com/latest")
     return blog_templates.TemplateResponse(
         "page_section.html",
@@ -444,7 +434,8 @@ async def blog_latest(request: Request):
 @app.get("/popular/", response_class=HTMLResponse)
 async def blog_popular(request: Request):
     host = request.headers.get("host", "").lower()
-    if host != "blog.nekwasar.com":
+    host = request.headers.get("host", "").lower()
+    if host != "blog.nekwasar.com" and host != "store.nekwasar.com" and host != "localhost:8000":
         return RedirectResponse(url=f"https://blog.nekwasar.com/popular")
     return blog_templates.TemplateResponse(
         "page_section.html",
@@ -455,7 +446,7 @@ async def blog_popular(request: Request):
 @app.get("/others/", response_class=HTMLResponse)
 async def blog_others(request: Request):
     host = request.headers.get("host", "").lower()
-    if host != "blog.nekwasar.com":
+    if host != "blog.nekwasar.com" and host != "store.nekwasar.com" and host != "localhost:8000":
         return RedirectResponse(url=f"https://blog.nekwasar.com/others")
     return blog_templates.TemplateResponse(
         "page_section.html",
@@ -466,7 +457,7 @@ async def blog_others(request: Request):
 @app.get("/featured/", response_class=HTMLResponse)
 async def blog_featured(request: Request):
     host = request.headers.get("host", "").lower()
-    if host != "blog.nekwasar.com":
+    if host != "blog.nekwasar.com" and host != "store.nekwasar.com" and host != "localhost:8000":
         return RedirectResponse(url=f"https://blog.nekwasar.com/featured")
     return blog_templates.TemplateResponse(
         "page_section.html",
@@ -477,7 +468,7 @@ async def blog_featured(request: Request):
 @app.get("/topics/", response_class=HTMLResponse)
 async def blog_topics(request: Request):
     host = request.headers.get("host", "").lower()
-    if host != "blog.nekwasar.com":
+    if host != "blog.nekwasar.com" and host != "store.nekwasar.com" and host != "localhost:8000":
         return RedirectResponse(url=f"https://blog.nekwasar.com/topics")
     return blog_templates.TemplateResponse(
         "page_section.html",
@@ -488,8 +479,16 @@ async def blog_topics(request: Request):
 @app.get("/privacy/", response_class=HTMLResponse)
 async def blog_privacy(request: Request):
     host = request.headers.get("host", "").lower()
-    if host != "blog.nekwasar.com" and host != "localhost:8000":
+    allowed_hosts = ["blog.nekwasar.com", "store.nekwasar.com", "localhost:8000"]
+    if host not in allowed_hosts:
         return RedirectResponse(url=f"https://blog.nekwasar.com/privacy")
+    
+    # Store should probably have its own privacy page if requested, but for now we just don't redirect
+    if host == "store.nekwasar.com":
+        # Redirect store/privacy to blog/privacy for now or serve a specific template
+        # For now, let's just let it be handled by the blog template if accessed via store
+        pass
+
     return blog_templates.TemplateResponse(
         "privacy.html",
         {"request": request, "current_year": datetime.utcnow().year, "post_data": DEFAULT_POST_DATA}
@@ -499,12 +498,90 @@ async def blog_privacy(request: Request):
 @app.get("/terms/", response_class=HTMLResponse)
 async def blog_terms(request: Request):
     host = request.headers.get("host", "").lower()
-    if host != "blog.nekwasar.com" and host != "localhost:8000":
+    allowed_hosts = ["blog.nekwasar.com", "store.nekwasar.com", "localhost:8000"]
+    if host not in allowed_hosts:
         return RedirectResponse(url=f"https://blog.nekwasar.com/terms")
+    
     return blog_templates.TemplateResponse(
         "privacy.html",
         {"request": request, "current_year": datetime.utcnow().year, "post_data": DEFAULT_POST_DATA}
     )
+
+# --- STORE FRONTEND ROUTES ---
+@app.get("/product/{slug}", response_class=HTMLResponse)
+async def store_product_detail(request: Request, slug: str, db: Session = Depends(get_db)):
+    """Serve Store Product Detail Page"""
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com":
+        # Fallback or 404 if not on store domain
+        raise HTTPException(status_code=404)
+        
+    from models.store import Product
+    product = db.query(Product).filter(Product.slug == slug).first()
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    return store_templates.TemplateResponse(
+        "product.html",
+        {"request": request, "product": product, "current_year": datetime.utcnow().year}
+    )
+
+@app.get("/catalog", response_class=HTMLResponse)
+@app.get("/catalog/", response_class=HTMLResponse)
+async def store_catalog(request: Request):
+    """Serve Store Catalog/Marketplace Page"""
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com":
+        return RedirectResponse("https://store.nekwasar.com/catalog")
+        
+    return store_templates.TemplateResponse(
+        "catalog.html",
+        {"request": request, "current_year": datetime.utcnow().year}
+    )
+
+@app.get("/enterprise", response_class=HTMLResponse)
+@app.get("/enterprise/", response_class=HTMLResponse)
+async def store_enterprise(request: Request):
+    """Serve Enterprise Solutions Page"""
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com":
+         return RedirectResponse("https://store.nekwasar.com/enterprise")
+         
+    return store_templates.TemplateResponse(
+        "enterprise.html",
+        {"request": request, "current_year": datetime.utcnow().year}
+    )
+
+@app.get("/account", response_class=HTMLResponse)
+@app.get("/account/", response_class=HTMLResponse)
+async def store_account_root(request: Request):
+    """Redirect root account to dashboard"""
+    return RedirectResponse("/account/dashboard")
+
+@app.get("/account/dashboard", response_class=HTMLResponse)
+async def store_account_dashboard(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/dashboard.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "dashboard"})
+
+@app.get("/account/licenses", response_class=HTMLResponse)
+async def store_account_licenses(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/licenses.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "licenses"})
+
+@app.get("/account/orders", response_class=HTMLResponse)
+async def store_account_orders(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/orders.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "orders"})
+
+@app.get("/account/settings", response_class=HTMLResponse)
+async def store_account_settings(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/settings.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "settings"})
 
 # Dynamic blog post route
 @app.get("/{slug}", response_class=HTMLResponse)
@@ -519,7 +596,10 @@ async def blog_post_by_slug(request: Request, slug: str, db: Session = Depends(g
             return FileResponse(str(portfolio_file))
             
     # 2. Anti-Leakage: Redirect to blog subdomain if NOT accessed through it
-    if host != "blog.nekwasar.com" and host != "localhost:8000":
+    host = request.headers.get("host", "").lower()
+    allowed_hosts = ["blog.nekwasar.com", "store.nekwasar.com", "localhost:8000"]
+    
+    if host not in allowed_hosts:
         return RedirectResponse(url=f"https://blog.nekwasar.com/{slug}")
         
     # 3. Serve individual blog posts by slug
@@ -601,81 +681,6 @@ async def blog_template2(request: Request):
         {"request": request, "current_year": datetime.utcnow().year, "post_data": DEFAULT_POST_DATA}
     )
 
-# --- STORE FRONTEND ROUTES ---
-@app.get("/product/{slug}", response_class=HTMLResponse)
-async def store_product_detail(request: Request, slug: str, db: Session = Depends(get_db)):
-    """Serve Store Product Detail Page"""
-    host = request.headers.get("host", "").lower()
-    if host != "store.nekwasar.com":
-        # Fallback or 404 if not on store domain
-        raise HTTPException(status_code=404)
-        
-    from models.store import Product
-    product = db.query(Product).filter(Product.slug == slug).first()
-    
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-
-    return store_templates.TemplateResponse(
-        "product.html",
-        {"request": request, "product": product, "current_year": datetime.utcnow().year}
-    )
-
-@app.get("/catalog", response_class=HTMLResponse)
-@app.get("/catalog/", response_class=HTMLResponse)
-async def store_catalog(request: Request):
-    """Serve Store Catalog/Marketplace Page"""
-    host = request.headers.get("host", "").lower()
-    if host != "store.nekwasar.com":
-        return RedirectResponse("https://store.nekwasar.com/catalog")
-        
-    return store_templates.TemplateResponse(
-        "catalog.html",
-        {"request": request, "current_year": datetime.utcnow().year}
-    )
-
-@app.get("/enterprise", response_class=HTMLResponse)
-@app.get("/enterprise/", response_class=HTMLResponse)
-async def store_enterprise(request: Request):
-    """Serve Enterprise Solutions Page"""
-    host = request.headers.get("host", "").lower()
-    if host != "store.nekwasar.com":
-         return RedirectResponse("https://store.nekwasar.com/enterprise")
-         
-    return store_templates.TemplateResponse(
-        "enterprise.html",
-        {"request": request, "current_year": datetime.utcnow().year}
-    )
-
-@app.get("/account", response_class=HTMLResponse)
-@app.get("/account/", response_class=HTMLResponse)
-async def store_account_root(request: Request):
-    """Redirect root account to dashboard"""
-    return RedirectResponse("/account/dashboard")
-
-@app.get("/account/dashboard", response_class=HTMLResponse)
-async def store_account_dashboard(request: Request):
-    host = request.headers.get("host", "").lower()
-    if host != "store.nekwasar.com": raise HTTPException(404)
-    return store_templates.TemplateResponse("account/dashboard.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "dashboard"})
-
-@app.get("/account/licenses", response_class=HTMLResponse)
-async def store_account_licenses(request: Request):
-    host = request.headers.get("host", "").lower()
-    if host != "store.nekwasar.com": raise HTTPException(404)
-    return store_templates.TemplateResponse("account/licenses.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "licenses"})
-
-@app.get("/account/orders", response_class=HTMLResponse)
-async def store_account_orders(request: Request):
-    host = request.headers.get("host", "").lower()
-    if host != "store.nekwasar.com": raise HTTPException(404)
-    return store_templates.TemplateResponse("account/orders.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "orders"})
-
-@app.get("/account/settings", response_class=HTMLResponse)
-async def store_account_settings(request: Request):
-    host = request.headers.get("host", "").lower()
-    if host != "store.nekwasar.com": raise HTTPException(404)
-    return store_templates.TemplateResponse("account/settings.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "settings"})
 
 @app.get("/template3", response_class=HTMLResponse)
 @app.get("/template3/", response_class=HTMLResponse)
