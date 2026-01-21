@@ -1,0 +1,47 @@
+{% extends "account/base.html" %}
+
+{% block dashboard_content %}
+<div class="flex justify-between items-center mb-6">
+    <h2 class="font-display font-bold text-3xl text-t-bright">License Vault</h2>
+</div>
+
+<!-- Empty State for Now (Logic to be hydrated later) -->
+<div
+    class="glass-panel rounded-2xl border border-stroke-elements p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
+    <div class="w-20 h-20 bg-base-tint rounded-full flex items-center justify-center mb-6">
+        <i class="ph-duotone ph-key text-4xl text-t-muted"></i>
+    </div>
+    <h3 class="font-display font-bold text-xl text-t-bright mb-2">No Active Licenses</h3>
+    <p class="text-t-muted max-w-md mx-auto">Your software license keys and download links will appear here after
+        purchase.</p>
+</div>
+
+<!-- Example of what it looks like (Hidden for production until data exists) -->
+<!--
+    <div class="space-y-4">
+        <div class="glass-panel p-6 rounded-2xl border border-stroke-elements flex flex-col md:flex-row gap-6 md:items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-accent/20 rounded-xl flex items-center justify-center text-accent">
+                    <i class="ph-bold ph-cube text-2xl"></i>
+                </div>
+                <div>
+                     <h3 class="font-bold text-t-bright text-lg">Fintech Starter Kit</h3>
+                     <p class="text-xs text-t-muted font-mono bg-base-shade px-2 py-1 rounded inline-block mt-1">v2.4.0 • Enterprise License</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-2 min-w-[300px]">
+                <label class="text-[10px] uppercase font-bold text-t-muted tracking-wide">License Key</label>
+                <div class="flex gap-2">
+                    <input type="text" value="NEK-8821-X992-MM21" readonly class="bg-base-shade border border-stroke-elements rounded-lg px-3 py-2 text-sm font-mono text-t-bright w-full focus:outline-none">
+                    <button class="p-2 bg-base-tint hover:bg-white/10 rounded-lg text-t-bright transition-colors" title="Copy"><i class="ph-bold ph-copy"></i></button>
+                </div>
+            </div>
+
+            <button class="px-6 py-3 bg-white/5 hover:bg-white/10 text-t-bright font-bold rounded-xl border border-stroke-elements transition-colors flex items-center gap-2">
+                <i class="ph-bold ph-download-simple"></i> Download
+            </button>
+        </div>
+    </div>
+    -->
+{% endblock %}

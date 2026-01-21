@@ -1,0 +1,40 @@
+{% extends "account/base.html" %}
+
+{% block dashboard_content %}
+<h2 class="font-display font-bold text-3xl text-t-bright">Overview</h2>
+
+<!-- Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div
+        class="glass-panel p-6 rounded-2xl border border-stroke-elements group hover:border-accent/50 transition-colors">
+        <h3 class="text-t-muted text-xs font-bold uppercase tracking-wider mb-2">Active Licenses</h3>
+        <div class="text-3xl font-display font-bold text-t-bright group-hover:text-accent transition-colors">0</div>
+    </div>
+    <div
+        class="glass-panel p-6 rounded-2xl border border-stroke-elements group hover:border-accent/50 transition-colors">
+        <h3 class="text-t-muted text-xs font-bold uppercase tracking-wider mb-2">Total Orders</h3>
+        <div class="text-3xl font-display font-bold text-t-bright group-hover:text-accent transition-colors">0</div>
+    </div>
+    <div
+        class="glass-panel p-6 rounded-2xl border border-stroke-elements group hover:border-accent/50 transition-colors">
+        <h3 class="text-t-muted text-xs font-bold uppercase tracking-wider mb-2">Enterprise Status</h3>
+        <div class="text-3xl font-display font-bold text-t-muted text-lg group-hover:text-amber-500 transition-colors">
+            Unverified</div>
+    </div>
+</div>
+
+<!-- Recent Activity / Empty State -->
+<div
+    class="glass-panel rounded-2xl border border-stroke-elements p-12 text-center h-96 flex flex-col items-center justify-center">
+    <div class="w-20 h-20 bg-base-tint rounded-full flex items-center justify-center mb-6 animate-pulse">
+        <i class="ph-duotone ph-shopping-bag-open text-4xl text-t-muted"></i>
+    </div>
+    <h3 class="font-display font-bold text-xl text-t-bright mb-2">Start Building</h3>
+    <p class="text-t-muted max-w-md mx-auto mb-8">You haven't purchased any templates or assets yet. Browse
+        availability?</p>
+    <a href="/catalog"
+        class="px-8 py-3 bg-accent hover:bg-accent/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-accent/20">
+        Browse Catalog
+    </a>
+</div>
+{% endblock %}

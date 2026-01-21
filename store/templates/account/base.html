@@ -1,0 +1,58 @@
+{% extends "base_store.html" %}
+
+{% block title %}My Account | NekwasaR Store{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="flex flex-col md:flex-row gap-8 items-start">
+        <!-- Sidebar Navigation -->
+        <aside
+            class="w-full md:w-64 flex-shrink-0 glass-panel rounded-2xl p-6 border border-stroke-elements sticky top-24">
+            <!-- User Profile Snippet (Mock) -->
+            <div class="flex items-center gap-4 mb-8 pb-8 border-b border-stroke-elements">
+                <div
+                    class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-white font-bold text-xl uppercase">
+                    <!-- Initials Mock -->
+                    U
+                </div>
+                <div class="overflow-hidden">
+                    <h4 class="font-bold text-t-bright truncate">User Account</h4>
+                    <p class="text-xs text-t-muted truncate">user@example.com</p>
+                </div>
+            </div>
+
+            <nav class="space-y-1">
+                <a href="/account/dashboard"
+                    class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 transition-colors {{ 'bg-base-tint text-t-bright font-bold shadow-inner border border-stroke-elements/50' if active_tab == 'dashboard' else 'hover:bg-white/5 text-t-muted hover:text-t-bright font-medium' }}">
+                    <i class="{{ 'ph-fill' if active_tab == 'dashboard' else 'ph-bold' }} ph-squares-four"></i>
+                    Dashboard
+                </a>
+                <a href="/account/licenses"
+                    class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 transition-colors {{ 'bg-base-tint text-t-bright font-bold shadow-inner border border-stroke-elements/50' if active_tab == 'licenses' else 'hover:bg-white/5 text-t-muted hover:text-t-bright font-medium' }}">
+                    <i class="{{ 'ph-fill' if active_tab == 'licenses' else 'ph-bold' }} ph-key"></i> License Keys
+                </a>
+                <a href="/account/orders"
+                    class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 transition-colors {{ 'bg-base-tint text-t-bright font-bold shadow-inner border border-stroke-elements/50' if active_tab == 'orders' else 'hover:bg-white/5 text-t-muted hover:text-t-bright font-medium' }}">
+                    <i class="{{ 'ph-fill' if active_tab == 'orders' else 'ph-bold' }} ph-receipt"></i> Order History
+                </a>
+                <a href="/account/settings"
+                    class="w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 transition-colors {{ 'bg-base-tint text-t-bright font-bold shadow-inner border border-stroke-elements/50' if active_tab == 'settings' else 'hover:bg-white/5 text-t-muted hover:text-t-bright font-medium' }}">
+                    <i class="{{ 'ph-fill' if active_tab == 'settings' else 'ph-bold' }} ph-gear"></i> Settings
+                </a>
+
+                <div class="pt-8 mt-8 border-t border-stroke-elements">
+                    <button
+                        class="w-full text-left px-4 py-3 rounded-xl hover:bg-red-500/10 text-red-500 hover:text-red-400 font-medium flex items-center gap-3 transition-colors">
+                        <i class="ph-bold ph-sign-out"></i> Sign Out
+                    </button>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Dashboard Area -->
+        <div class="flex-grow space-y-8 animate-fade-in">
+            {% block dashboard_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
