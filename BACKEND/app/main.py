@@ -67,7 +67,10 @@ templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 # Blog templates & statics
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BLOG_DIR = PROJECT_ROOT / "blog"
+STORE_DIR = PROJECT_ROOT / "store"
+
 blog_templates = Jinja2Templates(directory=str(BLOG_DIR / "templates"))
+store_templates = Jinja2Templates(directory=str(STORE_DIR / "templates"))
 
 # Add strftime filter to blog templates
 from jinja2 import Environment, PackageLoader, select_autoescape
@@ -250,8 +253,16 @@ async def root(request: Request):
     # 3. Store Domain
     if host == "store.nekwasar.com":
         store_path = PROJECT_ROOT / "store" / "index.html"
-        if store_path.exists():
-            return FileResponse(str(store_path))
+        
+        # Define Store Templates Directory (Lazy load reference)
+        # We will assume a `store/templates` dir exists or we serve static files for now and move to Jinja later.
+        # Ideally, we should register a new Jinja template dir for Store if we want server-side hydration.
+        # But for now, sticking to the file-serving plan for the index, and mapped routes for others.
+        
+        return FileResponse(str(store_path))
+    
+    # 3b. Store Sub-Routes (Handled via specific endpoints below, this root handler is just for "/")
+    pass
             
     # 4. Admin/API Domain
     if host == "api.nekwasar.com":
@@ -365,8 +376,44 @@ async def serve_sitemap(request: Request, db: Session = Depends(get_db)):
         lines.append('</urlset>')
         return Response(content="\n".join(lines), media_type="application/xml")
 
-    # 2. Handle Portfolio & Store Static Sitemaps
-    folder = "portfolio" if host == "nekwasar.com" or host == "localhost:8000" else "store" if host == "store.nekwasar.com" else "portfolio"
+    # 2. Handle Dynamic Store Sitemap
+    if host == "store.nekwasar.com":
+        from models.store import Product
+        
+        # Get all active products
+        products = db.query(Product).filter(Product.is_active == True).all()
+        
+        lines = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        ]
+        
+        # Static Store Pages
+        lines.append('  <url>')
+        lines.append('    <loc>https://store.nekwasar.com/</loc>')
+        lines.append('    <changefreq>daily</changefreq>')
+        lines.append('    <priority>1.0</priority>')
+        lines.append('  </url>')
+        
+        # Dynamic Products
+        for prod in products:
+            lastmod = prod.created_at.strftime('%Y-%m-%d') if prod.created_at else datetime.utcnow().strftime('%Y-%m-%d')
+            # Assuming product URLs are /product/{slug} or just /{slug} depending on frontend routing. 
+            # Based on standard e-com patterns, let's assume /product/{slug} for safety, or check standard.
+            # However, looking at the blog, it uses /{slug}. Let's assume store might use /product/{slug}.
+            # Let's check routes. But for now, I'll use /product/{slug} which is safer for stores.
+            lines.append('  <url>')
+            lines.append(f'    <loc>https://store.nekwasar.com/product/{prod.slug}</loc>')
+            lines.append(f'    <lastmod>{lastmod}</lastmod>')
+            lines.append('    <changefreq>weekly</changefreq>')
+            lines.append('    <priority>0.8</priority>')
+            lines.append('  </url>')
+            
+        lines.append('</urlset>')
+        return Response(content="\n".join(lines), media_type="application/xml")
+
+    # 3. Handle Portfolio Static Sitemap
+    folder = "portfolio" if host == "nekwasar.com" or host == "localhost:8000" else "portfolio"
     path = PROJECT_ROOT / folder / "sitemap.xml"
     if path.is_file(): 
         return FileResponse(str(path))
@@ -545,6 +592,82 @@ async def blog_template2(request: Request):
         "template2-banner-video.html",
         {"request": request, "current_year": datetime.utcnow().year, "post_data": DEFAULT_POST_DATA}
     )
+
+# --- STORE FRONTEND ROUTES ---
+@app.get("/product/{slug}", response_class=HTMLResponse)
+async def store_product_detail(request: Request, slug: str, db: Session = Depends(get_db)):
+    """Serve Store Product Detail Page"""
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com":
+        # Fallback or 404 if not on store domain
+        raise HTTPException(status_code=404)
+        
+    from models.store import Product
+    product = db.query(Product).filter(Product.slug == slug).first()
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    return store_templates.TemplateResponse(
+        "product.html",
+        {"request": request, "product": product, "current_year": datetime.utcnow().year}
+    )
+
+@app.get("/catalog", response_class=HTMLResponse)
+@app.get("/catalog/", response_class=HTMLResponse)
+async def store_catalog(request: Request):
+    """Serve Store Catalog/Marketplace Page"""
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com":
+        return RedirectResponse("https://store.nekwasar.com/catalog")
+        
+    return store_templates.TemplateResponse(
+        "catalog.html",
+        {"request": request, "current_year": datetime.utcnow().year}
+    )
+
+@app.get("/enterprise", response_class=HTMLResponse)
+@app.get("/enterprise/", response_class=HTMLResponse)
+async def store_enterprise(request: Request):
+    """Serve Enterprise Solutions Page"""
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com":
+         return RedirectResponse("https://store.nekwasar.com/enterprise")
+         
+    return store_templates.TemplateResponse(
+        "enterprise.html",
+        {"request": request, "current_year": datetime.utcnow().year}
+    )
+
+@app.get("/account", response_class=HTMLResponse)
+@app.get("/account/", response_class=HTMLResponse)
+async def store_account_root(request: Request):
+    """Redirect root account to dashboard"""
+    return RedirectResponse("/account/dashboard")
+
+@app.get("/account/dashboard", response_class=HTMLResponse)
+async def store_account_dashboard(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/dashboard.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "dashboard"})
+
+@app.get("/account/licenses", response_class=HTMLResponse)
+async def store_account_licenses(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/licenses.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "licenses"})
+
+@app.get("/account/orders", response_class=HTMLResponse)
+async def store_account_orders(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/orders.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "orders"})
+
+@app.get("/account/settings", response_class=HTMLResponse)
+async def store_account_settings(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("account/settings.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "settings"})
 
 @app.get("/template3", response_class=HTMLResponse)
 @app.get("/template3/", response_class=HTMLResponse)

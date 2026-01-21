@@ -52,40 +52,65 @@ function renderProducts() {
         ? STATE.products
         : STATE.products.filter(p => p.product_type === STATE.filter);
 
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center text-t-muted py-20">No assets found in this category.</div>';
+        return;
+    }
+
     filtered.forEach(p => {
         const card = document.createElement('div');
-        card.className = "glass-card rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary/10 transition group flex flex-col h-full";
+        // New Premium Card Classes
+        card.className = "product-card glass-panel rounded-2xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50";
 
         // Image / Video Logic
-        const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: 'https://placehold.co/600x400/101010/FFF?text=No+Image' };
+        const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
 
         // Price Logic
         let priceTag = `$${p.price}`;
-        let actionBtn = `<button onclick="addToCart(${p.id})" class="w-full bg-white dark:bg-white/10 hover:bg-primary hover:text-white dark:hover:bg-primary transition py-3 rounded-b-xl font-medium border-t border-gray-100 dark:border-white/5">Add to Cart</button>`;
+        let actionBtn = `
+            <button onclick="addToCart(${p.id})" class="w-full bg-base-shade hover:bg-accent text-t-bright hover:text-white transition-all py-4 font-bold border-t border-stroke-elements font-syne uppercase tracking-wider text-sm flex items-center justify-center gap-2 group-hover/btn:gap-3">
+                <i class="ph-bold ph-shopping-cart"></i> Add to Cart
+            </button>`;
 
         if (p.is_private_listing) {
-            priceTag = '<span class="text-amber-500 flex items-center gap-1"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
-            actionBtn = `<button onclick="openAccessModal(${p.id})" class="w-full bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black transition py-3 rounded-b-xl font-medium border-t border-amber-500/20">Request Access</button>`;
+            priceTag = '<span class="text-amber-500 flex items-center gap-1 text-sm font-bold uppercase tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
+            actionBtn = `
+                <button onclick="openAccessModal(${p.id})" class="w-full bg-amber-500/10 hover:bg-amber-500 text-amber-500 hover:text-black transition-all py-4 font-bold border-t border-amber-500/20 font-syne uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+                    <i class="ph-bold ph-key"></i> Request Access
+                </button>`;
         }
 
         if (p.billing_scheme === 'recurring') {
-            priceTag += ` <span class="text-sm opacity-60">/${p.subscription_interval}</span>`;
+            priceTag += ` <span class="text-xs text-t-muted font-normal">/${p.subscription_interval}</span>`;
         }
 
         card.innerHTML = `
-            <div class="relative h-56 bg-gray-100 dark:bg-white/5 overflow-hidden">
-                <img src="${hero.file_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${p.name}">
-                <div class="absolute top-3 right-3 bg-black/60 backdrop-blur text-white text-xs px-2 py-1 rounded-md border border-white/10">
-                    ${p.product_type.replace('_', ' ')}
+            <div class="relative h-64 bg-base-shade overflow-hidden group-hover:opacity-100 transition-all">
+                <img src="${hero.file_url}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700 ease-out" alt="${p.name}" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=Asset'">
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-base to-transparent opacity-90"></div>
+                
+                <div class="absolute top-4 right-4">
+                    <span class="bg-base/80 backdrop-blur border border-stroke-elements text-t-bright text-[10px] font-bold font-syne px-3 py-1 rounded-full uppercase tracking-widest shadow-lg">
+                        ${p.product_type.replace('_', ' ')}
+                    </span>
+                </div>
+
+                <div class="absolute bottom-4 left-6 right-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                     <h3 class="text-xl font-bold font-display text-t-bright leading-tight mb-1 group-hover:text-accent transition-colors">${p.name}</h3>
+                     <div class="text-lg font-syne font-bold text-t-medium">${priceTag}</div>
                 </div>
             </div>
             
-            <div class="p-6 flex-1 flex flex-col">
-                <h3 class="text-xl font-bold font-display mb-2 text-gray-900 dark:text-white leading-tight">${p.name}</h3>
-                <p class="text-gray-500 dark:text-gray-400 text-sm line-clamp-2 mb-4 flex-1">${p.short_description || p.description?.substring(0, 100) || 'No description'}</p>
+            <div class="p-6 flex-1 flex flex-col bg-base-tint/30 relative">
+                <p class="text-t-muted text-sm leading-relaxed line-clamp-3 mb-6 flex-1 font-inter">
+                    ${p.short_description || p.description?.replace(/<[^>]*>?/gm, '').substring(0, 120) + '...' || 'Premium digital asset for professional use.'}
+                </p>
                 
-                <div class="flex items-center justify-between mt-auto">
-                    <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">${priceTag}</div>
+                <!-- Quick Specs (Fake for demo, real in production) -->
+                <div class="flex items-center gap-4 text-xs text-t-muted font-mono mb-4 border-t border-stroke-elements pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                    <span class="flex items-center gap-1"><i class="ph-bold ph-file-code"></i> Source</span>
+                    <span class="flex items-center gap-1"><i class="ph-bold ph-shield-check"></i> Verified</span>
                 </div>
             </div>
             ${actionBtn}

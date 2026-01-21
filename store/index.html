@@ -1,256 +1,132 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+{% extends "base_store.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store | NekwasaR - Digital Assets & Innovations</title>
-    <meta name="description"
-        content="Premium digital resources, apps, templates, and enterprise assets curated by NekwasaR.">
+{% block content %}
+<!-- Hero Section -->
+<div class="relative overflow-hidden py-20 lg:py-32">
+    <!-- Background Glows -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[100px] pointer-events-none"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] pointer-events-none">
+    </div>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap"
-        rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
+        <h1
+            class="font-display font-bold text-4xl md:text-6xl lg:text-7xl mb-6 text-t-bright tracking-tight animate-slide-up">
+            <span class="block">Digital Assets</span>
+            <span class="gradient-text">& Innovations</span>
+        </h1>
+        <p class="font-syne text-lg md:text-xl text-t-muted max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up"
+            style="animation-delay: 0.1s">
+            Premium templates, source code, and enterprise acquisitions. <br class="hidden md:inline">Curated for the
+            builders of tomorrow.
+        </p>
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Orbitron', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#8b5cf6', // Violet 500
-                        secondary: '#ec4899', // Pink 500
-                        dark: '#0f172a', // Slate 900
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- Stripe -->
-    <script src="https://js.stripe.com/v3/"></script>
-
-    <style>
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .dark .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-    </style>
-</head>
-
-<body class="bg-gray-50 dark:bg-[#050B14] text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
-
-    <!-- Navigation (Simplified for Store) -->
-    <nav class="fixed w-full z-50 glass-card border-b border-gray-200 dark:border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <a href="/"
-                    class="font-display font-bold text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-                    NEKWASAR
-                </a>
-
-                <div class="flex items-center gap-6">
-                    <button class="relative p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full transition"
-                        onclick="toggleCart()">
-                        <i class="ph ph-shopping-cart text-xl"></i>
-                        <span id="cart-count"
-                            class="absolute top-0 right-0 bg-secondary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
-                    </button>
-
-                    <div id="auth-section">
-                        <!-- Dynamic Auth Buttons injected here -->
-                    </div>
-                </div>
-            </div>
+        <div class="flex flex-wrap justify-center gap-4 animate-slide-up" style="animation-delay: 0.2s">
+            <a href="#catalog"
+                class="px-8 py-4 bg-accent hover:bg-accent/90 text-white font-syne font-bold rounded-full transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+                Explore Catalog
+            </a>
+            <a href="/enterprise"
+                class="px-8 py-4 bg-transparent border border-stroke-elements hover:border-amber-500 hover:text-amber-500 text-t-medium font-syne font-bold rounded-full transition-all flex items-center gap-2">
+                <i class="ph-fill ph-lock-key"></i>
+                Enterprise Access
+            </a>
         </div>
-    </nav>
+    </div>
+</div>
 
-    <!-- Main Content -->
-    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-
-        <!-- Hero -->
-        <div class="text-center mb-16 space-y-4">
-            <h1 class="text-4xl md:text-5xl font-display font-bold mb-2">
-                Digital <span class="text-primary">Assets</span> & <span class="text-secondary">Code</span>
-            </h1>
-            <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
-                Premium templates, apps, and enterprise acquisitions. Curated for builders.
-            </p>
-        </div>
-
-        <!-- Filters -->
-        <div class="flex flex-wrap gap-3 justify-center mb-12">
+<!-- Filters (Portfolio Style) -->
+<div class="border-y border-stroke-elements bg-base/50 backdrop-blur-sm sticky top-[73px] z-40">
+    <div class="max-w-7xl mx-auto px-6 py-4 overflow-x-auto no-scrollbar">
+        <div class="flex gap-4 min-w-max md:justify-center">
             <button
-                class="px-4 py-2 rounded-full bg-primary text-white text-sm font-medium shadow-lg shadow-primary/25">All</button>
+                class="px-6 py-2 rounded-full bg-accent text-white text-sm font-bold font-syne shadow-lg shadow-accent/20">All
+                Assets</button>
             <button
-                class="px-4 py-2 rounded-full bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition text-sm font-medium border border-gray-200 dark:border-white/10">Templates</button>
+                class="px-6 py-2 rounded-full bg-base-tint border border-stroke-elements hover:border-t-muted text-t-muted hover:text-t-bright text-sm font-bold font-syne transition-all">Templates</button>
             <button
-                class="px-4 py-2 rounded-full bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition text-sm font-medium border border-gray-200 dark:border-white/10">Software</button>
+                class="px-6 py-2 rounded-full bg-base-tint border border-stroke-elements hover:border-t-muted text-t-muted hover:text-t-bright text-sm font-bold font-syne transition-all">SaaS
+                Code</button>
             <button
-                class="px-4 py-2 rounded-full bg-white dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition text-sm font-medium border border-gray-200 dark:border-white/10 text-amber-500 border-amber-500/30">
-                <i class="ph-fill ph-lock-key mr-1"></i> Reserved
+                class="px-6 py-2 rounded-full bg-base-tint border border-stroke-elements hover:border-amber-500/50 text-amber-500 bg-amber-500/10 text-sm font-bold font-syne transition-all flex items-center gap-2">
+                <i class="ph-fill ph-lock-key"></i> Reserved
             </button>
         </div>
+    </div>
+</div>
 
-        <!-- Product Grid -->
-        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Loading Skeletons -->
-            <div class="glass-card rounded-2xl p-4 h-96 animate-pulse">
-                <div class="bg-gray-200 dark:bg-white/5 h-48 rounded-xl w-full mb-4"></div>
-                <div class="h-6 bg-gray-200 dark:bg-white/5 rounded w-3/4 mb-2"></div>
-                <div class="h-4 bg-gray-200 dark:bg-white/5 rounded w-1/2"></div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Modals -->
-    <!-- 1. Auth Modal -->
-    <div id="auth-modal"
-        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="glass-card w-full max-w-md p-8 rounded-2xl relative">
-            <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 text-gray-500 hover:text-white"><i
-                    class="ph ph-x text-xl"></i></button>
-
-            <h2 class="text-2xl font-bold mb-6 text-center">Sign In</h2>
-
-            <div class="space-y-4">
-                <a href="/api/auth/login/google"
-                    class="flex items-center justify-center gap-3 w-full bg-white text-gray-900 font-medium py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="G">
-                    Continue with Google
-                </a>
-
-                <div class="relative py-2">
-                    <div class="absolute inset-0 flex items-center"><span
-                            class="w-full border-t border-gray-200 dark:border-white/10"></span></div>
-                    <div class="relative flex justify-center text-xs uppercase"><span
-                            class="bg-gray-50 dark:bg-[#0f172a] px-2 text-gray-500">or</span></div>
-                </div>
-
-                <form id="magic-link-form" class="space-y-3">
-                    <input type="email" placeholder="name@company.com"
-                        class="w-full bg-transparent border border-gray-300 dark:border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-primary transition"
-                        required>
-                    <button type="submit"
-                        class="w-full bg-gradient-to-r from-primary to-secondary text-white font-medium py-3 rounded-xl shadow-lg shadow-primary/25 hover:opacity-90 transition">
-                        Send Magic Link
-                    </button>
-                </form>
-            </div>
+<!-- Product Grid -->
+<div id="catalog" class="max-w-7xl mx-auto px-6 py-16">
+    <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Javascript will inject products here. -->
+        <div class="col-span-full py-20 text-center animate-pulse">
+            <i class="ph ph-spinner text-4xl text-accent animate-spin mb-4"></i>
+            <p class="font-syne text-t-muted">Loading Curated Assets...</p>
         </div>
     </div>
+</div>
 
-    <!-- 2. Access Request Modal -->
-    <div id="access-modal"
-        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4">
-        <div class="glass-card w-full max-w-xl p-8 rounded-2xl relative border-l-4 border-amber-500">
-            <button onclick="closeModal('access-modal')"
-                class="absolute top-4 right-4 text-gray-500 hover:text-white"><i class="ph ph-x text-xl"></i></button>
+<!-- Access Request Modal (Page Specific) -->
+<div id="access-modal"
+    class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4">
+    <!-- Content same as before, abstracted later if needed -->
+    <div
+        class="glass-panel w-full max-w-xl p-8 rounded-3xl relative border border-amber-500/30 shadow-[0_0_50px_rgba(245,158,11,0.1)]">
+        <div
+            class="absolute -top-1 -left-1 -right-1 h-2 bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-50">
+        </div>
 
-            <div class="flex items-center gap-4 mb-6">
-                <div class="p-3 bg-amber-500/20 rounded-lg text-amber-500">
-                    <i class="ph-fill ph-lock-key text-2xl"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold">Reserve Access Application</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">For enterprise assets & acquisitions</p>
-                </div>
+        <button onclick="closeModal('access-modal')"
+            class="absolute top-6 right-6 text-t-muted hover:text-white transition-colors">
+            <i class="ph ph-x text-2xl"></i>
+        </button>
+
+        <div class="flex items-center gap-4 mb-8">
+            <div
+                class="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20">
+                <i class="ph-fill ph-lock-key text-2xl"></i>
+            </div>
+            <div>
+                <h2 class="font-display font-bold text-2xl text-t-bright">Reserve Access</h2>
+                <p class="text-sm text-t-muted font-medium">For enterprise assets & acquisitions</p>
+            </div>
+        </div>
+
+        <form class="space-y-6 text-left">
+            <div>
+                <label class="block text-xs font-bold text-t-muted uppercase tracking-wider mb-2">Professional
+                    Profile</label>
+                <input type="url" placeholder="https://linkedin.com/in/..."
+                    class="w-full bg-base/50 border border-stroke-elements rounded-xl px-4 py-3.5 text-t-bright focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all font-inter"
+                    required>
             </div>
 
-            <form class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium mb-2">Business Email Verification</label>
-                    <div class="flex gap-2">
-                        <input type="email" value="user@current-session.com" disabled
-                            class="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-gray-400 cursor-not-allowed">
-                        <span class="text-green-500 flex items-center gap-1 text-sm"><i
-                                class="ph-fill ph-check-circle"></i> Verified</span>
-                    </div>
-                </div>
+            <div>
+                <label class="block text-xs font-bold text-t-muted uppercase tracking-wider mb-2">Message
+                    (Optional)</label>
+                <textarea rows="3" placeholder="Tell us about your organization..."
+                    class="w-full bg-base/50 border border-stroke-elements rounded-xl px-4 py-3 text-t-bright focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all font-inter resize-none"></textarea>
+            </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">Professional Profile (LinkedIn/GitHub)</label>
-                    <input type="url" placeholder="https://linkedin.com/in/..."
-                        class="w-full bg-transparent border border-gray-300 dark:border-white/20 rounded-lg px-4 py-3 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition"
-                        required>
-                    <p class="text-xs text-gray-500 mt-2">We manually verify all applications to ensure serious
-                        inquiries only.</p>
-                </div>
+            <div class="flex items-start gap-3 bg-base-shade/50 p-4 rounded-xl border border-stroke-elements">
+                <input type="checkbox" id="nda-agree" class="mt-1 accent-amber-500 w-4 h-4">
+                <label for="nda-agree" class="text-sm text-t-muted leading-relaxed">
+                    I agree to the <a href="#"
+                        class="text-amber-500 hover:text-amber-400 underline decoration-wavy underline-offset-4">Non-Disclosure
+                        Agreement</a>. Financials shared upon approval are confidential.
+                </label>
+            </div>
 
-                <div class="flex items-start gap-3 bg-white/5 p-4 rounded-lg">
-                    <input type="checkbox" id="nda-agree" class="mt-1 accent-amber-500">
-                    <label for="nda-agree" class="text-sm text-gray-400 leading-relaxed">
-                        I agree to the <a href="#" class="text-amber-500 hover:underline">Non-Disclosure Agreement</a>.
-                        I understand that financial data shared upon approval is confidential.
-                    </label>
-                </div>
-
-                <button type="button"
-                    class="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-3 rounded-xl transition">
-                    Submit Application
-                </button>
-            </form>
-        </div>
+            <button type="button"
+                class="w-full bg-amber-500 hover:bg-amber-400 text-black font-syne font-bold text-lg py-4 rounded-xl transition-all shadow-lg shadow-amber-500/20">
+                Submit Application
+            </button>
+        </form>
     </div>
+</div>
+{% endblock %}
 
-    <script>
-        // Store Logic Placeholder
-        function toggleCart() {
-            // TODO: Open sidebar cart
-            alert("Cart logic in progress");
-        }
-
-        function openAuthModal() {
-            document.getElementById('auth-modal').classList.remove('hidden');
-            document.getElementById('auth-modal').classList.add('flex');
-        }
-
-        function openAccessModal() {
-            document.getElementById('access-modal').classList.remove('hidden');
-            document.getElementById('access-modal').classList.add('flex');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-            document.getElementById(id).classList.remove('flex');
-        }
-    </script>
-    <script src="/store/js/store-client.js" defer></script>
-</body>
-
-</html>
+{% block scripts %}
+<script>
+    function openAccessModal() { document.getElementById('access-modal').classList.remove('hidden'); document.getElementById('access-modal').classList.add('flex'); }
+</script>
+{% endblock %}

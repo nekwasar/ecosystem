@@ -1,0 +1,119 @@
+<!-- Tailwind Configuration Script -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    'syne': ['Syne', 'sans-serif'],
+                },
+                colors: {
+                    'base': 'var(--base)',
+                    'base-tint': 'var(--base-tint)',
+                    'base-shade': 'var(--base-shade)',
+                    'accent': 'var(--accent)',
+                    'secondary': 'var(--secondary)',
+                    't-bright': 'var(--t-bright)',
+                    't-medium': 'var(--t-medium)',
+                    't-muted': 'var(--t-muted)',
+                    't-opp-bright': 'var(--t-opp-bright)',
+                    'stroke-elements': 'var(--stroke-elements)',
+                    'gradient-one': 'var(--gradient-one)',
+                    'gradient-two': 'var(--gradient-two)',
+                }
+            }
+        }
+    }
+</script>
+
+<div
+    class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-4 md:p-6 lg:p-12">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold font-syne text-t-bright">Customers</h1>
+                <p class="text-t-medium font-syne">View and manage registered users</p>
+            </div>
+            <button onclick="loadCustomers()"
+                class="px-6 py-3 bg-base-tint border border-stroke-elements text-t-bright font-bold rounded-xl shadow-lg hover:bg-base-shade transition-all duration-medium flex items-center gap-2">
+                <i class="ph-bold ph-arrows-clockwise"></i>
+                <span>Refresh</span>
+            </button>
+        </div>
+
+        <!-- Orders Table Card -->
+        <div
+            class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-stroke-elements bg-base-tint/50">
+                            <th class="p-4 font-syne text-t-bright font-bold">User</th>
+                            <th class="p-4 font-syne text-t-bright font-bold">Email</th>
+                            <th class="p-4 font-syne text-t-bright font-bold">Business Email</th>
+                            <th class="p-4 font-syne text-t-bright font-bold">Verified Buyer</th>
+                            <th class="p-4 font-syne text-t-bright font-bold">Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTableBody">
+                        <!-- Rows will be injected here -->
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-t-muted">Loading customers...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.initStoreCustomers = function () {
+        console.log('🚀 Init Store Customers Triggered');
+        loadCustomers();
+    }
+
+    async function loadCustomers() {
+        const tableBody = document.getElementById('customersTableBody');
+        tableBody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-t-muted animate-pulse">Refreshing customers...</td></tr>`;
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/admin/store/customers', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.detail || 'Failed to fetch customers');
+
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-t-muted">No customers found.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = data.map(u => `
+                <tr class="border-b border-stroke-elements hover:bg-base-tint/30 transition-colors">
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${u.avatar_url || 'https://ui-avatars.com/api/?name=' + u.email}" alt="Avatar" class="w-10 h-10 rounded-full border border-stroke-elements">
+                            <span class="font-bold text-t-bright">${u.name || 'Unknown'}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-t-medium text-sm font-mono">${u.email}</td>
+                    <td class="p-4 text-t-muted text-sm">${u.business_email || '-'}</td>
+                    <td class="p-4">
+                        ${u.is_verified_buyer
+                    ? '<span class="px-3 py-1 bg-green-500/20 text-green-500 rounded-full text-xs font-bold">Verified</span>'
+                    : '<span class="px-3 py-1 bg-gray-500/20 text-gray-500 rounded-full text-xs">Standard</span>'}
+                    </td>
+                    <td class="p-4 text-t-muted text-sm">${new Date(u.created_at).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+
+        } catch (e) {
+            console.error(e);
+            tableBody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-500">Error: ${e.message}</td></tr>`;
+        }
+    }
+</script>

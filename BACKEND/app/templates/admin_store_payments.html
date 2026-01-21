@@ -1,0 +1,259 @@
+<!-- Tailwind Configuration Script -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    'syne': ['Syne', 'sans-serif'],
+                },
+                colors: {
+                    'base': 'var(--base)',
+                    'base-tint': 'var(--base-tint)',
+                    'base-shade': 'var(--base-shade)',
+                    'accent': 'var(--accent)',
+                    'secondary': 'var(--secondary)',
+                    't-bright': 'var(--t-bright)',
+                    't-medium': 'var(--t-medium)',
+                    't-muted': 'var(--t-muted)',
+                    't-opp-bright': 'var(--t-opp-bright)',
+                    'stroke-elements': 'var(--stroke-elements)',
+                    'gradient-one': 'var(--gradient-one)',
+                    'gradient-two': 'var(--gradient-two)',
+                }
+            }
+        }
+    }
+</script>
+
+<div
+    class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-4 md:p-6 lg:p-12">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold font-syne text-t-bright">Payments</h1>
+                <p class="text-t-medium font-syne">Financial Overview & Gateway Settings</p>
+            </div>
+
+            <div class="flex items-center gap-3 bg-base-tint p-2 rounded-xl border border-stroke-elements">
+                <div id="statusIndicator" class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                <span id="statusText" class="text-sm font-bold text-t-medium">Connecting...</span>
+            </div>
+        </div>
+
+        <!-- Balance Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Available Balance -->
+            <div
+                class="relative p-8 bg-gradient-to-br from-accent/10 to-transparent border border-accent/20 rounded-2xl shadow-xl overflow-hidden hover:scale-[1.01] transition-all">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <i class="ph-bold ph-bank text-9xl text-accent"></i>
+                </div>
+                <div class="relative z-10">
+                    <p class="text-t-muted text-sm font-bold uppercase tracking-wider mb-2">Available Balance</p>
+                    <h2 id="balanceAvailable" class="text-4xl md:text-5xl font-bold text-t-bright font-syne italic">--
+                    </h2>
+                    <p class="text-xs text-t-medium mt-2">Ready for payout</p>
+                </div>
+            </div>
+
+            <!-- Pending Balance -->
+            <div
+                class="relative p-8 bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-xl overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-5">
+                    <i class="ph-bold ph-hourglass text-9xl text-t-bright"></i>
+                </div>
+                <div class="relative z-10">
+                    <p class="text-t-muted text-sm font-bold uppercase tracking-wider mb-2">Pending</p>
+                    <h2 id="balancePending" class="text-4xl md:text-5xl font-bold text-t-medium font-syne">--</h2>
+                    <p class="text-xs text-t-muted mt-2">Estimated arrival: 2 days</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Left: Transaction Ledger -->
+            <div class="lg:col-span-2 space-y-8">
+                <div
+                    class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl overflow-hidden">
+                    <div class="p-6 border-b border-stroke-elements bg-base-tint/30 flex justify-between items-center">
+                        <h3 class="text-xl font-bold font-syne text-t-bright">Recent Transactions</h3>
+                        <button onclick="loadPayments()" class="text-sm text-accent hover:underline">Refresh</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="text-xs font-bold text-t-muted uppercase bg-base-tint/50">
+                                <tr>
+                                    <th class="p-4">Amount</th>
+                                    <th class="p-4">Customer</th>
+                                    <th class="p-4">Method</th>
+                                    <th class="p-4">Status</th>
+                                    <th class="p-4">Date</th>
+                                    <th class="p-4 text-right">Receipt</th>
+                                </tr>
+                            </thead>
+                            <tbody id="txTableBody" class="text-sm">
+                                <tr>
+                                    <td colspan="6" class="p-8 text-center text-t-muted">Loading ledger...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Settings & Methods -->
+            <div class="space-y-6">
+                <!-- Payment Methods Config -->
+                <div
+                    class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl p-6">
+                    <h3 class="text-lg font-bold font-syne text-t-bright mb-4">Payment Methods</h3>
+                    <div class="space-y-4">
+                        <div
+                            class="flex items-center justify-between p-3 rounded-lg bg-base-tint/30 border border-stroke-elements">
+                            <div class="flex items-center gap-3">
+                                <i class="ph-bold ph-credit-card text-xl text-accent"></i>
+                                <span class="text-t-bright font-bold">Cards (Stripe)</span>
+                            </div>
+                            <div class="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
+                        </div>
+
+                        <!-- Future Methods (Visual Only) -->
+                        <div
+                            class="flex items-center justify-between p-3 rounded-lg bg-base-tint/30 border border-stroke-elements opacity-50 cursor-not-allowed">
+                            <div class="flex items-center gap-3">
+                                <i class="ph-bold ph-paypal-logo text-xl text-blue-500"></i>
+                                <span class="text-t-medium">PayPal</span>
+                            </div>
+                            <span class="text-xs text-t-muted">Coming Soon</span>
+                        </div>
+
+                        <div
+                            class="flex items-center justify-between p-3 rounded-lg bg-base-tint/30 border border-stroke-elements opacity-50 cursor-not-allowed">
+                            <div class="flex items-center gap-3">
+                                <i class="ph-bold ph-currency-btc text-xl text-orange-500"></i>
+                                <span class="text-t-medium">Crypto</span>
+                            </div>
+                            <span class="text-xs text-t-muted">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Connectivity -->
+                <div
+                    class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl p-6">
+                    <h3 class="text-lg font-bold font-syne text-t-bright mb-4">Gateway Status</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-t-medium">API Connection</span>
+                            <span id="apiStatus" class="font-bold text-t-bright">Checking...</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-t-medium">Environment</span>
+                            <span id="apiMode" class="font-bold text-t-bright">--</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-t-medium">Currency</span>
+                            <span class="font-bold text-t-bright uppercase">USD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    window.initStorePayments = function () {
+        console.log('🚀 Init Store Payments Triggered');
+        loadPayments();
+    }
+
+    async function loadPayments() {
+        const statusEl = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+
+        try {
+            const token = localStorage.getItem('token');
+            const headers = { 'Authorization': `Bearer ${token}` };
+
+            // 1. Fetch Status & Balance
+            const statusRes = await fetch('/api/admin/store/payments/status', { headers });
+            const statusData = await statusRes.json();
+
+            if (statusData.connected) {
+                statusEl.className = 'w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]';
+                statusText.textContent = `Online (${statusData.mode})`;
+
+                document.getElementById('apiStatus').className = 'font-bold text-green-500';
+                document.getElementById('apiStatus').textContent = 'Healthy';
+                document.getElementById('apiMode').textContent = statusData.mode;
+
+                document.getElementById('balanceAvailable').textContent = formatCurrency(statusData.balance.available, statusData.balance.currency);
+                document.getElementById('balancePending').textContent = formatCurrency(statusData.balance.pending, statusData.balance.currency);
+            } else {
+                throw new Error(statusData.error || "Not Connected");
+            }
+
+            // 2. Fetch Transactions
+            const txRes = await fetch('/api/admin/store/payments/transactions', { headers });
+            const txData = await txRes.json();
+            renderTransactions(txData);
+
+        } catch (e) {
+            console.error(e);
+            statusEl.className = 'w-3 h-3 rounded-full bg-red-500 shadow-[0_0_10px_#ef4444]';
+            statusText.textContent = 'Connection Failed';
+
+            document.getElementById('apiStatus').className = 'font-bold text-red-500';
+            document.getElementById('apiStatus').textContent = 'Error';
+
+            document.getElementById('txTableBody').innerHTML = `
+                <tr><td colspan="6" class="p-8 text-center text-red-500">
+                    <div class="flex flex-col items-center gap-2">
+                        <i class="ph-bold ph-warning text-3xl"></i>
+                        <p>Could not connect to Stripe.</p>
+                        <p class="text-xs opacity-70">${e.message}</p>
+                    </div>
+                </td></tr>`;
+        }
+    }
+
+    function renderTransactions(txs) {
+        const tbody = document.getElementById('txTableBody');
+        if (txs.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-t-muted">No transactions found.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = txs.map(tx => {
+            const statusMap = {
+                'succeeded': 'bg-green-500/20 text-green-500',
+                'pending': 'bg-yellow-500/20 text-yellow-500',
+                'failed': 'bg-red-500/20 text-red-500'
+            };
+            const statusClass = statusMap[tx.status] || 'bg-gray-500/20 text-gray-500';
+
+            return `
+            <tr class="border-b border-stroke-elements hover:bg-base-tint/30 transition-colors">
+                <td class="p-4 font-bold text-t-bright font-mono">${formatCurrency(tx.amount, tx.currency)}</td>
+                <td class="p-4 text-t-medium">${tx.customer_email}</td>
+                <td class="p-4 uppercase text-xs font-bold text-t-muted">${tx.payment_method}</td>
+                <td class="p-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass}">${tx.status}</span></td>
+                <td class="p-4 text-t-muted text-sm">${new Date(tx.date * 1000).toLocaleDateString()}</td>
+                <td class="p-4 text-right">
+                    ${tx.receipt_url ? `<a href="${tx.receipt_url}" target="_blank" class="text-accent hover:underline text-xs"><i class="ph-bold ph-receipt"></i> View</a>` : '-'}
+                </td>
+            </tr>
+            `;
+        }).join('');
+    }
+
+    function formatCurrency(amount, currency) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency || 'USD' }).format(amount);
+    }
+</script>

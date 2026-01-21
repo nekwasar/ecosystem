@@ -1,0 +1,213 @@
+<!-- Tailwind Configuration Script -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    'syne': ['Syne', 'sans-serif'],
+                },
+                colors: {
+                    'base': 'var(--base)',
+                    'base-tint': 'var(--base-tint)',
+                    'base-shade': 'var(--base-shade)',
+                    'accent': 'var(--accent)',
+                    'secondary': 'var(--secondary)',
+                    't-bright': 'var(--t-bright)',
+                    't-medium': 'var(--t-medium)',
+                    't-muted': 'var(--t-muted)',
+                    't-opp-bright': 'var(--t-opp-bright)',
+                    'stroke-elements': 'var(--stroke-elements)',
+                    'gradient-one': 'var(--gradient-one)',
+                    'gradient-two': 'var(--gradient-two)',
+                }
+            }
+        }
+    }
+</script>
+
+<div
+    class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-4 md:p-6 lg:p-12">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold font-syne text-t-bright">Categories</h1>
+                <p class="text-t-medium font-syne">Organize your products properly</p>
+            </div>
+            <button onclick="openCreateModal()"
+                class="px-6 py-3 bg-gradient-to-r from-accent to-secondary text-t-opp-bright font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-medium flex items-center gap-2">
+                <i class="ph-bold ph-plus"></i>
+                <span>Add Category</span>
+            </button>
+        </div>
+
+        <!-- Categories Table Card -->
+        <div
+            class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-stroke-elements bg-base-tint/50">
+                            <th class="p-4 font-syne text-t-bright font-bold">ID</th>
+                            <th class="p-4 font-syne text-t-bright font-bold">Name</th>
+                            <th class="p-4 font-syne text-t-bright font-bold">Slug</th>
+                            <th class="p-4 font-syne text-t-bright font-bold text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <!-- Rows will be injected here -->
+                        <tr>
+                            <td colspan="4" class="p-8 text-center text-t-muted">Loading categories...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div id="categoryModal" class="fixed inset-0 z-50 hidden">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+
+    <!-- Modal Content -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div
+            class="bg-base dark:bg-base-tint border border-stroke-elements rounded-2xl shadow-2xl w-full max-w-md transform transition-all scale-100">
+            <div class="p-6 border-b border-stroke-elements flex justify-between items-center">
+                <h2 class="text-2xl font-bold font-syne text-t-bright">Add Category</h2>
+                <button onclick="closeModal()" class="text-t-medium hover:text-accent">
+                    <i class="ph-bold ph-x text-xl"></i>
+                </button>
+            </div>
+
+            <form id="categoryForm" onsubmit="handleCreateCategory(event)" class="p-6 space-y-6">
+                <!-- Name -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Name</label>
+                    <input type="text" name="name" required
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                </div>
+
+                <!-- Slug -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Slug</label>
+                    <input type="text" name="slug" required
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                </div>
+
+                <!-- Description -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Description</label>
+                    <textarea name="description" rows="3"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-4 pt-2">
+                    <button type="button" onclick="closeModal()"
+                        class="px-6 py-2 text-t-medium font-bold hover:text-t-bright">Cancel</button>
+                    <button type="submit"
+                        class="px-8 py-2 bg-accent text-white font-bold rounded-xl shadow-lg hover:bg-accent/90 transition-all">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.initStoreCategories = function () {
+        console.log('🚀 Init Store Categories Triggered');
+        loadCategories();
+    }
+
+    async function loadCategories() {
+        const tableBody = document.getElementById('categoriesTableBody');
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/admin/store/categories', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.detail || 'Failed to fetch categories');
+
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-t-muted">No categories found.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = data.map(c => `
+                <tr class="border-b border-stroke-elements hover:bg-base-tint/30 transition-colors">
+                    <td class="p-4 text-t-muted">#${c.id}</td>
+                    <td class="p-4 font-bold text-t-bright">${c.name}</td>
+                    <td class="p-4 text-t-medium">${c.slug}</td>
+                    <td class="p-4 text-right">
+                        <button class="p-2 text-t-medium hover:text-accent transition-colors"><i class="ph-bold ph-pencil-simple"></i></button>
+                        <button class="p-2 text-t-medium hover:text-red-500 transition-colors" onclick="deleteCategory(${c.id})"><i class="ph-bold ph-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+
+        } catch (e) {
+            console.error(e);
+            tableBody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-500">Error: ${e.message}</td></tr>`;
+        }
+    }
+
+    async function deleteCategory(id) {
+        if (!confirm('Are you sure?')) return;
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch(`/api/admin/store/categories/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error('Failed to delete');
+            loadCategories();
+        } catch (e) {
+            alert(e.message);
+        }
+    }
+
+    function openCreateModal() {
+        document.getElementById('categoryModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('categoryModal').classList.add('hidden');
+        document.getElementById('categoryForm').reset();
+    }
+
+    async function handleCreateCategory(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const payload = Object.fromEntries(formData.entries());
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/admin/store/categories', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || 'Failed to create');
+            }
+
+            alert('Category Created!');
+            closeModal();
+            loadCategories();
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+</script>

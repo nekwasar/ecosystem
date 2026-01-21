@@ -1,0 +1,80 @@
+{% extends "base_store.html" %}
+
+{% block title %}My Account | NekwasaR Store{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12">
+    <div class="flex flex-col md:flex-row gap-8 items-start">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 flex-shrink-0 glass-panel rounded-2xl p-6 border border-stroke-elements">
+            <!-- User Profile Snippet (Mock) -->
+            <div class="flex items-center gap-4 mb-8 pb-8 border-b border-stroke-elements">
+                <div
+                    class="w-12 h-12 rounded-full bg-accent flex items-center justify-center text-white font-bold text-xl">
+                    U</div>
+                <div class="overflow-hidden">
+                    <h4 class="font-bold text-t-bright truncate">User Account</h4>
+                    <p class="text-xs text-t-muted truncate">user@example.com</p>
+                </div>
+            </div>
+
+            <nav class="space-y-1">
+                <button
+                    class="w-full text-left px-4 py-3 rounded-xl bg-base-tint text-t-bright font-bold flex items-center gap-3">
+                    <i class="ph-bold ph-squares-four"></i> Dashboard
+                </button>
+                <button
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 text-t-muted hover:text-t-bright font-medium flex items-center gap-3 transition-colors">
+                    <i class="ph-bold ph-key"></i> License Keys
+                </button>
+                <button
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 text-t-muted hover:text-t-bright font-medium flex items-center gap-3 transition-colors">
+                    <i class="ph-bold ph-receipt"></i> Order History
+                </button>
+                <button
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 text-t-muted hover:text-t-bright font-medium flex items-center gap-3 transition-colors">
+                    <i class="ph-bold ph-gear"></i> Settings
+                </button>
+                <button
+                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-white/5 text-red-500 hover:text-red-400 font-medium flex items-center gap-3 transition-colors mt-8">
+                    <i class="ph-bold ph-sign-out"></i> Sign Out
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Dashboard Area -->
+        <div class="flex-grow space-y-8">
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 rounded-2xl border border-stroke-elements">
+                    <h3 class="text-t-muted text-sm font-bold uppercase tracking-wider mb-2">Active Licenses</h3>
+                    <div class="text-3xl font-display font-bold text-t-bright">0</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-stroke-elements">
+                    <h3 class="text-t-muted text-sm font-bold uppercase tracking-wider mb-2">Total Orders</h3>
+                    <div class="text-3xl font-display font-bold text-t-bright">0</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-stroke-elements">
+                    <h3 class="text-t-muted text-sm font-bold uppercase tracking-wider mb-2">Enterprise Status</h3>
+                    <div class="text-3xl font-display font-bold text-t-muted text-lg">Unverified</div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div
+                class="glass-panel rounded-2xl border border-stroke-elements p-12 text-center h-96 flex flex-col items-center justify-center">
+                <div class="w-20 h-20 bg-base-tint rounded-full flex items-center justify-center mb-6">
+                    <i class="ph-duotone ph-shopping-bag-open text-4xl text-t-muted"></i>
+                </div>
+                <h3 class="font-display font-bold text-xl text-t-bright mb-2">No Active Products</h3>
+                <p class="text-t-muted max-w-md mx-auto mb-8">You haven't purchased any templates or assets yet. Browse
+                    the catalog to get started.</p>
+                <a href="/catalog"
+                    class="px-8 py-3 bg-accent hover:bg-accent/90 text-white font-bold rounded-xl transition-all shadow-lg shadow-accent/20">
+                    Browse Catalog
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

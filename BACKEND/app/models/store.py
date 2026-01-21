@@ -180,3 +180,50 @@ class Subscription(Base):
     current_period_end = Column(DateTime)
     
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class DiscountType(str, enum.Enum):
+    PERCENTAGE = "percentage"
+    FIXED_AMOUNT = "fixed_amount"
+
+class Discount(Base):
+    __tablename__ = "store_discounts"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String(50), unique=True, index=True, nullable=False)
+    description = Column(String(255))
+    
+    discount_type = Column(String(20), default=DiscountType.PERCENTAGE)
+    value = Column(DECIMAL(10, 2), nullable=False) # 10.00 for $10 or 10%
+    
+    # Limitations
+    start_date = Column(DateTime)
+    end_date = Column(DateTime, nullable=True)
+    max_uses = Column(Integer, nullable=True)
+    used_count = Column(Integer, default=0)
+    
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class ShippingZone(Base):
+    __tablename__ = "store_shipping_zones"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), nullable=False) # e.g. "North America", "Europe"
+    countries = Column(JSON) # List of country codes ["US", "CA"]
+    
+    rates = relationship("ShippingRate", back_populates="zone", cascade="all, delete-orphan")
+
+class ShippingRate(Base):
+    __tablename__ = "store_shipping_rates"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    zone_id = Column(Integer, ForeignKey("store_shipping_zones.id"))
+    
+    name = Column(String(100)) # e.g. "Standard Shipping", "Express"
+    price = Column(DECIMAL(10, 2), default=0.00)
+    
+    # Advanced logic placeholders
+    min_order_price = Column(DECIMAL(10, 2), nullable=True)
+    max_order_price = Column(DECIMAL(10, 2), nullable=True)
+    
+    zone = relationship("ShippingZone", back_populates="rates")

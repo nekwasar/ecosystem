@@ -37,3 +37,18 @@ class TOTPSetup(BaseModel):
 
 class TOTPVerify(BaseModel):
     code: str
+
+class UserBase(BaseModel):
+    email: str
+    name: Optional[str] = None
+    avatar_url: Optional[str] = None
+    business_email: Optional[str] = None
+    is_verified_buyer: bool = False
+
+class User(UserBase):
+    id: int
+    created_at: datetime
+    last_login: Optional[datetime] = None
+    
+    class Config:
+        from_attributes = True

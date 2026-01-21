@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Store | NekwasaR - Premium Digital Assets{% endblock %}</title>
+    <meta name="description"
+        content="{% block meta_description %}Premium digital resources, apps, templates, and enterprise assets curated by NekwasaR.{% endblock %}">
+
+    <!-- Fonts: Inter + Syne (Blog) + Orbitron (Portfolio) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;600;700&family=Orbitron:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Tailwind Config (Adapted from Blog for consistency) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'], // Portfolio Signature
+                    },
+                    colors: {
+                        // Inheriting Blog/Portfolio System
+                        base: '#0f172a', // Dark Slate
+                        'base-tint': '#1e293b',
+                        'base-shade': '#020617',
+                        accent: '#8b5cf6', // Violet
+                        secondary: '#ec4899', // Pink
+                        't-bright': '#f8fafc',
+                        't-medium': '#cbd5e1',
+                        't-muted': '#64748b',
+                        'stroke-elements': 'rgba(255,255,255,0.1)',
+                    },
+                    backgroundImage: {
+                        'gradient-glow': 'conic-gradient(from 180deg at 50% 50%, #1e293b 0deg, #0f172a 180deg, #1e293b 360deg)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Global Styles -->
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--base);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        body {
+            background-color: #0f172a;
+            /* Fallback */
+            color: #cbd5e1;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Portfolio Grid Card Hover Effects */
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -5px rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+    </style>
+
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body class="bg-base text-t-medium font-sans min-h-screen flex flex-col selection:bg-accent selection:text-white">
+
+    <!-- HEADER -->
+    <header class="border-b border-stroke-elements bg-base-tint/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+            <!-- Logo -->
+            <a href="/store" class="flex flex-col leading-tight group">
+                <span
+                    class="font-display font-bold text-xl text-t-bright tracking-wider group-hover:text-accent transition-colors">NekwasaR</span>
+                <span class="font-syne text-xs text-accent font-bold uppercase tracking-[0.2em]">Store</span>
+            </a>
+
+            <!-- Nav -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="https://nekwasar.com" class="text-t-muted hover:text-white transition-colors">Back to
+                    Portfolio</a>
+                <a href="/catalog" class="text-t-bright hover:text-accent transition-colors">Catalog</a>
+                <a href="/enterprise" class="text-t-muted hover:text-white transition-colors">Enterprise</a>
+                <a href="/blog" class="text-t-muted hover:text-white transition-colors">Blog</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-4">
+                <!-- Theme Toggle -->
+                <button class="p-2 text-t-muted hover:text-t-bright transition-colors" title="Toggle theme">
+                    <i class="ph ph-moon-stars text-xl"></i>
+                </button>
+
+                <!-- Search/Cart -->
+                <button onclick="toggleCart()" class="relative p-2 text-t-muted hover:text-accent transition-colors">
+                    <i class="ph ph-shopping-cart text-xl"></i>
+                    <span id="cart-count"
+                        class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+
+                <!-- Account/Login -->
+                <div id="auth-section">
+                    <!-- Dynamic Auth Buttons injected via JS -->
+                </div>
+
+                <!-- Mobile Menu -->
+                <button class="md:hidden p-2 text-t-muted hover:text-white">
+                    <i class="ph ph-list text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-stroke-elements bg-base-shade pt-16 pb-8 text-t-muted">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                <!-- Brand -->
+                <div>
+                    <a href="/store" class="block mb-6">
+                        <span class="font-display font-bold text-2xl text-t-bright">NekwasaR</span>
+                        <span
+                            class="font-syne text-xs text-accent font-bold uppercase tracking-[0.2em] ml-2">Store</span>
+                    </a>
+                    <p class="text-base leading-relaxed mb-6">
+                        Building the N•Gen Era through innovation and insight. Premium resources for the ambitious.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-accent transition-colors"><i
+                                class="ph ph-twitter-logo text-2xl"></i></a>
+                        <a href="#" class="hover:text-accent transition-colors"><i
+                                class="ph ph-instagram-logo text-2xl"></i></a>
+                        <a href="#" class="hover:text-accent transition-colors"><i
+                                class="ph ph-github-logo text-2xl"></i></a>
+                    </div>
+                </div>
+
+                <!-- Nav -->
+                <div>
+                    <h4 class="font-display font-bold text-t-bright mb-6 uppercase tracking-wider text-sm">Navigation
+                    </h4>
+                    <ul class="space-y-4 font-medium">
+                        <li><a href="https://nekwasar.com" class="hover:text-accent transition-colors">Portfolio</a>
+                        </li>
+                        <li><a href="/blog" class="hover:text-accent transition-colors">Blog</a></li>
+                        <li><a href="/store" class="text-t-bright hover:text-accent transition-colors">Store</a></li>
+                        <li><a href="/catalog" class="hover:text-accent transition-colors">Full Catalog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect -->
+                <div>
+                    <h4 class="font-display font-bold text-t-bright mb-6 uppercase tracking-wider text-sm">Legal &
+                        Support</h4>
+                    <ul class="space-y-4 font-medium">
+                        <li><a href="/terms" class="hover:text-accent transition-colors">Terms of Service</a></li>
+                        <li><a href="/privacy" class="hover:text-accent transition-colors">Privacy Policy</a></li>
+                        <li><a href="mailto:hello@nekwasar.com" class="hover:text-accent transition-colors">Contact
+                                Support</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="border-t border-stroke-elements pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+                <p>&copy; {{ current_year }} NekwasaR. All rights reserved.</p>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="font-bold text-t-medium">All Systems Operational</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- GLOBAL MODALS (Auth, Access) -->
+
+    <!-- Auth Modal -->
+    <div id="auth-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+        <div
+            class="glass-panel w-full max-w-md p-8 rounded-2xl relative shadow-2xl border-t border-stroke-elements text-center">
+            <button onclick="closeModal('auth-modal')"
+                class="absolute top-4 right-4 text-t-muted hover:text-white transition-colors">
+                <i class="ph ph-x text-2xl"></i>
+            </button>
+
+            <h2 class="font-display font-bold text-2xl text-t-bright mb-2">Welcome Back</h2>
+            <p class="text-t-muted mb-8 text-sm">Sign in to access your purchased assets</p>
+
+            <div class="space-y-4">
+                <a href="/api/auth/login/google"
+                    class="flex items-center justify-center gap-3 w-full bg-white text-gray-900 font-bold py-3.5 rounded-xl hover:bg-gray-200 transition-all">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="G">
+                    Continue with Google
+                </a>
+
+                <div class="relative py-4">
+                    <div class="absolute inset-0 flex items-center"><span
+                            class="w-full border-t border-stroke-elements"></span></div>
+                    <div class="relative flex justify-center text-xs uppercase"><span
+                            class="bg-[#1e293b] px-2 text-t-muted">or use email</span></div>
+                </div>
+
+                <form id="magic-link-form" class="space-y-3">
+                    <input type="email" placeholder="name@company.com"
+                        class="w-full bg-base border border-stroke-elements rounded-xl px-4 py-3.5 text-t-bright focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-t-muted/50"
+                        required>
+                    <button type="submit"
+                        class="w-full bg-accent hover:bg-accent/90 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-accent/20 transition-all">Send
+                        Magic Link</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function toggleCart() { alert("Cart Logic In Progress"); }
+        function openAuthModal() { document.getElementById('auth-modal').classList.remove('hidden'); document.getElementById('auth-modal').classList.add('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+    </script>
+    <script src="/store/js/store-client.js" defer></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>
