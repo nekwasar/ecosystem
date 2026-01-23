@@ -8,6 +8,24 @@
     <meta name="description"
         content="{% block meta_description %}Premium digital resources, apps, templates, and enterprise assets curated by NekwasaR.{% endblock %}">
 
+    <!-- Console Cleaner (Hides harmless noise) -->
+    <script>
+        (function () {
+            const originalWarn = console.warn;
+            const originalError = console.error;
+            const noise = ['cdn.tailwindcss.com', 'ContentDispatcherService', 'Partitioned cookie', 'post_api.js'];
+
+            console.warn = function (...args) {
+                if (typeof args[0] === 'string' && noise.some(p => args[0].includes(p))) return;
+                originalWarn.apply(console, args);
+            };
+            console.error = function (...args) {
+                if (typeof args[0] === 'string' && noise.some(p => args[0].includes(p))) return;
+                originalError.apply(console, args);
+            };
+        })();
+    </script>
+
     <!-- Fonts: Inter + Syne (Blog) + Orbitron (Portfolio) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

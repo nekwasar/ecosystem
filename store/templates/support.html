@@ -1,30 +1,115 @@
 {% extends "base_store.html" %}
 
-{% block content %}
-<div class="max-w-4xl mx-auto py-16 px-6">
-    <h1 class="font-display font-bold text-4xl text-t-bright mb-8">Support</h1>
-    <div class="prose prose-invert prose-lg text-t-medium">
-        <p>Need help with your order or have a technical question about an asset?</p>
+{% block title %}Support Center | NekwasaR Store{% endblock %}
 
-        <div class="bg-base-tint p-8 rounded-2xl border border-stroke-elements mt-8">
-            <h3 class="text-t-bright mt-0">Contact Us</h3>
-            <p>For all inquiries, please email us directly:</p>
-            <a href="mailto:hello@nekwasar.com"
-                class="text-accent hover:text-white font-bold text-xl transition-colors">hello@nekwasar.com</a>
-            <p class="text-sm text-t-muted mt-4">We aim to respond within 24-48 hours.</p>
+{% block content %}
+<section class="py-20 bg-base min-h-screen">
+    <div class="max-w-4xl mx-auto px-6">
+        <!-- Header -->
+        <div class="mb-20 text-center">
+            <h1 class="font-display font-black text-6xl text-t-bright uppercase tracking-tighter mb-6">Support <span
+                    class="text-accent">Center</span></h1>
+            <p class="text-t-medium text-xl font-inter max-w-2xl mx-auto leading-relaxed">
+                Need help with your purchase or have a technical inquiry? We're here to ensure your transition to the
+                N•Gen Era is seamless.
+            </p>
         </div>
 
-        <h3 class="mt-12">Frequently Asked Questions</h3>
-        <details class="bg-base-tint p-4 rounded-lg mb-4 cursor-pointer">
-            <summary class="font-bold text-t-bright">How do I access my downloads?</summary>
-            <p class="mt-2 text-sm">After purchase, log in to your account and visit the Dashboard or Orders section to
-                access your files.</p>
-        </details>
-        <details class="bg-base-tint p-4 rounded-lg mb-4 cursor-pointer">
-            <summary class="font-bold text-t-bright">Can I use assets in commercial projects?</summary>
-            <p class="mt-2 text-sm">Yes, our standard license covers personal and commercial use in your own projects.
-                Resale is prohibited.</p>
-        </details>
+        <!-- Contact Options -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            <!-- Direct Email -->
+            <div
+                class="bg-base-tint border border-stroke-elements p-10 rounded-2xl shadow-xl flex flex-col items-center text-center group hover:border-accent transition-all">
+                <div
+                    class="w-16 h-16 rounded-full bg-accent/10 text-accent flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="ph-bold ph-envelope"></i>
+                </div>
+                <h3 class="font-display font-bold text-2xl text-t-bright mb-4">Email Support</h3>
+                <p class="text-t-muted mb-8 leading-relaxed">Direct line for technical assistance and licensing
+                    inquiries.</p>
+                <a href="mailto:hello@nekwasar.com"
+                    class="px-8 py-3 bg-accent text-white font-bold rounded-xl shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all">
+                    hello@nekwasar.com
+                </a>
+            </div>
+
+            <!-- Dashboard -->
+            <div
+                class="bg-base-tint border border-stroke-elements p-10 rounded-2xl shadow-xl flex flex-col items-center text-center group hover:border-secondary transition-all">
+                <div
+                    class="w-16 h-16 rounded-full bg-secondary/10 text-secondary flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="ph-bold ph-layout"></i>
+                </div>
+                <h3 class="font-display font-bold text-2xl text-t-bright mb-4">My Dashboard</h3>
+                <p class="text-t-muted mb-8 leading-relaxed">Manage your downloads, view orders, and update account
+                    settings.</p>
+                <a href="/account"
+                    class="px-8 py-3 border border-stroke-elements text-t-bright font-bold rounded-xl hover:bg-base-shade transition-all">
+                    Visit Account
+                </a>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="space-y-8">
+            <h2 class="font-display font-bold text-3xl text-t-bright mb-10 text-center uppercase tracking-widest">
+                Frequently Asked Questions</h2>
+
+            <div class="space-y-4">
+                <details
+                    class="group bg-base-shade border border-stroke-elements rounded-xl overflow-hidden transition-all">
+                    <summary
+                        class="p-6 cursor-pointer flex justify-between items-center group-hover:bg-base-tint transition-colors">
+                        <span class="font-bold text-t-bright font-display text-lg tracking-tight">How do I access my
+                            downloads after purchase?</span>
+                        <i class="ph ph-plus text-accent group-open:rotate-45 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 pt-0 text-t-medium leading-relaxed font-inter">
+                        Once your payment is processed, you will receive an automated email with a secure link.
+                        Alternatively, log in to your dashboard and navigate to "My Orders" to download your assets
+                        anytime.
+                    </div>
+                </details>
+
+                <details
+                    class="group bg-base-shade border border-stroke-elements rounded-xl overflow-hidden transition-all">
+                    <summary
+                        class="p-6 cursor-pointer flex justify-between items-center group-hover:bg-base-tint transition-colors">
+                        <span class="font-bold text-t-bright font-display text-lg tracking-tight">Can I get a refund if
+                            the asset doesn't fit my needs?</span>
+                        <i class="ph ph-plus text-accent group-open:rotate-45 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 pt-0 text-t-medium leading-relaxed font-inter">
+                        Due to the nature of digital products, we generally do not offer refunds. We recommend reviewing
+                        descriptions and previews carefully. If there is a critical bug, contact us within 48 hours for
+                        a potential resolution or credit.
+                    </div>
+                </details>
+
+                <details
+                    class="group bg-base-shade border border-stroke-elements rounded-xl overflow-hidden transition-all">
+                    <summary
+                        class="p-6 cursor-pointer flex justify-between items-center group-hover:bg-base-tint transition-colors">
+                        <span class="font-bold text-t-bright font-display text-lg tracking-tight">Are the assets
+                            one-time purchases?</span>
+                        <i class="ph ph-plus text-accent group-open:rotate-45 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 pt-0 text-t-medium leading-relaxed font-inter">
+                        Most assets are one-time payments. However, our Enterprise Apps and specific Service
+                        Subscriptions are recurring. Each product page clearly labels the billing scheme before you
+                        checkout.
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Response Time Note -->
+        <div class="mt-20 p-6 bg-base-tint/30 rounded-xl border border-dashed border-stroke-elements text-center">
+            <p class="text-sm text-t-muted italic font-inter italic">
+                Our support team typically responds to inquiries within <span class="text-t-bright font-bold">24-48
+                    hours</span>. For enterprise partners, prioritized response times apply.
+            </p>
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}
