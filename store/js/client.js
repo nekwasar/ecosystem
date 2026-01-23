@@ -37,7 +37,10 @@ async function loadProducts() {
 
     try {
         const res = await fetch('/api/store/products');
-        if (!res.ok) throw new Error("Failed to fetch");
+        if (!res.ok) {
+            const errBody = await res.text();
+            throw new Error(`Server returned ${res.status}: ${errBody}`);
+        }
         STATE_STORE.products = await res.json();
         renderProducts();
     } catch (e) {

@@ -44,20 +44,32 @@ app.add_middleware(SlowAPIMiddleware)
 
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
-    """Add security headers to every response (Rec 11)"""
+    """Add security headers and force HTTPS in production"""
+    host = request.headers.get("host", "").lower()
+    x_proto = request.headers.get("X-Forwarded-Proto", "").lower()
+    
+    # 1. Force HTTPS for store and blog (aware of proxies)
+    if not any(x in host for x in ["localhost", "127.0.0.1"]) and (request.url.scheme == "http" or x_proto == "http"):
+        # Make sure we don't redirect something that is already https but proto is missing
+        if x_proto != "https":
+            return RedirectResponse(url=str(request.url).replace("http://", "https://"), status_code=301)
+
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    
+    # CSP: Added specific Stripe endpoints and allowed inline scripts for Tailwind/Theme
+    # Also allowing connect-src http: temporarily to debug the product load issue
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://js.stripe.com; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://js.stripe.com https://m.stripe.network https://*.stripe.com; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdn.jsdelivr.net; "
         "font-src 'self' https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; "
-        "img-src 'self' data: https:; "
-        "connect-src 'self' https: https://cdn.tailwindcss.com; "
-        "frame-src 'self' https://js.stripe.com; "
+        "img-src 'self' data: https: http: https://*.stripe.com; "
+        "connect-src 'self' https: http: https://cdn.tailwindcss.com https://api.stripe.com https://m.stripe.network; "
+        "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://*.stripe.com; "
         "frame-ancestors 'none';"
     )
     return response

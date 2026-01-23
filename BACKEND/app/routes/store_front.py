@@ -8,7 +8,7 @@ import math
 
 router = APIRouter()
 
-@router.get("/", response_model=List[ProductSchema])
+@router.get("", response_model=List[ProductSchema])
 async def get_store_products(
     category_slug: Optional[str] = None,
     include_private: bool = False, # Only used if user is authenticated & authorized
