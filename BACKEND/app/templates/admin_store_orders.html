@@ -163,7 +163,7 @@
         loadOrders();
     }
 
-    let allOrders = [];
+    var allOrders = allOrders || [];
 
     async function loadOrders() {
         const tableBody = document.getElementById('ordersTableBody');

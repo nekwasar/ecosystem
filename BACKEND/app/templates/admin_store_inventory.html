@@ -75,7 +75,7 @@
         loadInventory();
     }
 
-    let allProducts = [];
+    var allProducts = allProducts || [];
 
     async function loadInventory() {
         const tableBody = document.getElementById('inventoryTableBody');
