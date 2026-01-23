@@ -52,11 +52,12 @@ async def add_security_headers(request: Request, call_next):
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://js.stripe.com; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdn.jsdelivr.net; "
         "font-src 'self' https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; "
         "img-src 'self' data: https:; "
         "connect-src 'self' https: https://cdn.tailwindcss.com; "
+        "frame-src 'self' https://js.stripe.com; "
         "frame-ancestors 'none';"
     )
     return response
@@ -108,6 +109,7 @@ app.mount("/assets", StaticFiles(directory=str(PROJECT_ROOT / "portfolio")), nam
 
 # Mount blog assets (css, js, img)
 app.mount("/blog", StaticFiles(directory=str(BLOG_DIR)), name="blog-static")
+app.mount("/store", StaticFiles(directory=str(STORE_DIR)), name="store-static")
 
 # Shortcuts / Aliases
 @app.get("/2025_nekwasar_dp")
@@ -582,6 +584,27 @@ async def store_account_settings(request: Request):
     host = request.headers.get("host", "").lower()
     if host != "store.nekwasar.com": raise HTTPException(404)
     return store_templates.TemplateResponse("account/settings.html", {"request": request, "current_year": datetime.utcnow().year, "active_tab": "settings"})
+
+@app.get("/terms-of-service", response_class=HTMLResponse)
+@app.get("/terms-of-service/", response_class=HTMLResponse)
+async def store_terms(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("terms-of-service.html", {"request": request, "current_year": datetime.utcnow().year})
+
+@app.get("/privacy-policy", response_class=HTMLResponse)
+@app.get("/privacy-policy/", response_class=HTMLResponse)
+async def store_privacy(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("privacy-policy.html", {"request": request, "current_year": datetime.utcnow().year})
+
+@app.get("/support", response_class=HTMLResponse)
+@app.get("/support/", response_class=HTMLResponse)
+async def store_support(request: Request):
+    host = request.headers.get("host", "").lower()
+    if host != "store.nekwasar.com": raise HTTPException(404)
+    return store_templates.TemplateResponse("support.html", {"request": request, "current_year": datetime.utcnow().year})
 
 # Dynamic blog post route
 @app.get("/{slug}", response_class=HTMLResponse)

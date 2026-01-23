@@ -1,0 +1,30 @@
+{% extends "base_store.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-16 px-6">
+    <h1 class="font-display font-bold text-4xl text-t-bright mb-8">Support</h1>
+    <div class="prose prose-invert prose-lg text-t-medium">
+        <p>Need help with your order or have a technical question about an asset?</p>
+
+        <div class="bg-base-tint p-8 rounded-2xl border border-stroke-elements mt-8">
+            <h3 class="text-t-bright mt-0">Contact Us</h3>
+            <p>For all inquiries, please email us directly:</p>
+            <a href="mailto:hello@nekwasar.com"
+                class="text-accent hover:text-white font-bold text-xl transition-colors">hello@nekwasar.com</a>
+            <p class="text-sm text-t-muted mt-4">We aim to respond within 24-48 hours.</p>
+        </div>
+
+        <h3 class="mt-12">Frequently Asked Questions</h3>
+        <details class="bg-base-tint p-4 rounded-lg mb-4 cursor-pointer">
+            <summary class="font-bold text-t-bright">How do I access my downloads?</summary>
+            <p class="mt-2 text-sm">After purchase, log in to your account and visit the Dashboard or Orders section to
+                access your files.</p>
+        </details>
+        <details class="bg-base-tint p-4 rounded-lg mb-4 cursor-pointer">
+            <summary class="font-bold text-t-bright">Can I use assets in commercial projects?</summary>
+            <p class="mt-2 text-sm">Yes, our standard license covers personal and commercial use in your own projects.
+                Resale is prohibited.</p>
+        </details>
+    </div>
+</div>
+{% endblock %}
