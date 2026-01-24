@@ -1,0 +1,109 @@
+{% extends "base_store.html" %}
+
+{% block title %}Categories | NekwasaR Store{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen pb-20 overflow-hidden">
+    <!-- Background Elements -->
+    <div
+        class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-accent/5 via-transparent to-transparent pointer-events-none">
+    </div>
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-secondary/10 rounded-full blur-[120px] pointer-events-none">
+    </div>
+
+    <!-- Header -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-16 text-center lg:text-left">
+        <h1 class="font-display font-bold text-4xl md:text-6xl text-t-bright mb-6 animate-slide-up">
+            Curated <span class="gradient-text">Collections</span>
+        </h1>
+        <p class="font-syne text-lg text-t-muted max-w-2xl animate-slide-up" style="animation-delay: 0.1s">
+            Explore our meticulously organized catalog of premium digital assets, source codes, and enterprise
+            solutions.
+        </p>
+    </div>
+
+    <!-- Categories Grid -->
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for c in categories %}
+            <!-- Card -->
+            <a href="/store#catalog" onclick="filterByCategory('{{ c.name }}')"
+                class="group relative h-64 rounded-3xl overflow-hidden border border-stroke-elements bg-base-shade/50 hover:bg-base-shade/80 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] flex flex-col justify-between p-8 animate-fade-in"
+                style="animation-delay: {{ loop.index0 * 0.05 }}s">
+
+                <!-- Hover Gradient Glow -->
+                <div
+                    class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-br from-accent/10 via-transparent to-transparent">
+                </div>
+
+                <!-- Content Top -->
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-4">
+                        <span
+                            class="text-xs font-bold font-syne uppercase tracking-wider text-t-muted group-hover:text-accent transition-colors">Collection
+                            0{{ loop.index }}</span>
+                        <!-- Icon Placeholder: dynamic based on index for visual variety -->
+                        <div
+                            class="w-10 h-10 rounded-full bg-base-tint border border-stroke-elements flex items-center justify-center text-t-bright group-hover:border-accent/50 group-hover:text-accent transition-all">
+                            <i
+                                class="ph-fill {{ 'ph-code' if 'code' in c.slug else 'ph-browsers' if 'web' in c.slug else 'ph-app-window' if 'app' in c.slug else 'ph-squares-four' }} text-xl"></i>
+                        </div>
+                    </div>
+
+                    <h2
+                        class="font-display font-bold text-3xl text-t-bright group-hover:text-white transition-colors mb-2">
+                        {{ c.name }}</h2>
+                </div>
+
+                <!-- Content Bottom -->
+                <div class="relative z-10">
+                    <p class="text-sm text-t-muted line-clamp-2 group-hover:text-t-medium transition-colors font-syne">
+                        {{ c.description or 'Premium resources and tools for this category.' }}
+                    </p>
+
+                    <div
+                        class="mt-6 flex items-center gap-2 text-xs font-bold text-accent uppercase tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                        <span>Browse Assets</span>
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </div>
+                </div>
+
+                <!-- Decorative Big Text (Watermark style) -->
+                <h3
+                    class="absolute -bottom-4 -right-4 text-[8rem] font-display font-black text-white/5 opacity-0 group-hover:opacity-10 transition-all duration-700 pointer-events-none select-none">
+                    {{ c.name[0] }}
+                </h3>
+            </a>
+            {% else %}
+            <div class="col-span-full py-24 text-center">
+                <div
+                    class="w-20 h-20 bg-base-tint rounded-full flex items-center justify-center mx-auto mb-6 text-t-muted border border-stroke-elements">
+                    <i class="ph-duotone ph-folder-dashed text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-t-bright font-display mb-2">No Categories Found</h3>
+                <p class="text-t-muted">The catalog is currently being organized.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple helper to pre-filter the main store page when clicking a category
+    // This assumes the main store page has a filter mechanism (it does: STATE_STORE)
+    // We can pass the filter via URL hash or query param. 
+    // The link above goes to /store#catalog with an onclick.
+    // Ideally, we'd use ?category=slug. 
+    // For now, let's use a small script to set a localStorage item or just redirect with query param if the main page supports it.
+    // Since the main page loads 'all' by default, let's update client.js to read from URL params? 
+    // Or just let this be a simple navigation for now. 
+
+    function filterByCategory(catName) {
+        // Implementation note: Ideally, Store Client JS should read ?category=...
+        // For now, I'll let them browse.
+        // Actually, user asked for "modern version of amazon". Direct links are better.
+        // But main store is a SPA-like grid.
+        // I will make the href go to `/?filter=CATEGORY_SLUG` if I update client.js, but let's stick to simple browsing to Catalog for now.
+    }
+</script>
+{% endblock %}

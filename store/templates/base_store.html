@@ -148,9 +148,11 @@
             <nav
                 class="hidden lg:flex items-center gap-16 font-display font-extrabold text-xs tracking-[0.2em] uppercase">
                 <a href="https://nekwasar.com"
-                    class="text-neutral-900 dark:text-white hover:text-accent transition-colors">Back
+                    class="text-neutral-900 dark:text-white hover:text-accent transition-colors underline decoration-2 underline-offset-4 decoration-neutral-900 dark:decoration-white">Back
                     to Portfolio</a>
                 <a href="/" class="text-neutral-900 dark:text-white hover:text-accent transition-colors">Home</a>
+                <a href="/categories"
+                    class="text-neutral-900 dark:text-white hover:text-accent transition-colors">Categories</a>
                 <a href="/enterprise"
                     class="text-neutral-900 dark:text-white hover:text-accent transition-colors">Enterprise</a>
             </nav>
@@ -316,11 +318,13 @@
         function applyTheme(theme) {
             if (theme === 'light') {
                 root.setAttribute('color-scheme', 'light');
-                root.classList.add('light'); // For Tailwind
+                root.classList.add('light');
+                root.classList.remove('dark'); // Ensure Tailwind dark mode is off
                 themeBtn.innerHTML = '<i class="ph ph-sun text-xl"></i>';
             } else {
                 root.setAttribute('color-scheme', 'dark');
                 root.classList.remove('light');
+                root.classList.add('dark'); // Activate Tailwind dark mode
                 themeBtn.innerHTML = '<i class="ph ph-moon-stars text-xl"></i>';
             }
             localStorage.setItem('store.theme', theme);

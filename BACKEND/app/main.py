@@ -553,17 +553,24 @@ async def store_product_detail(request: Request, slug: str, db: Session = Depend
         {"request": request, "product": product, "current_year": datetime.utcnow().year}
     )
 
-@app.get("/catalog", response_class=HTMLResponse)
-@app.get("/catalog/", response_class=HTMLResponse)
-async def store_catalog(request: Request):
-    """Serve Store Catalog/Marketplace Page"""
+@app.get("/categories", response_class=HTMLResponse)
+@app.get("/categories/", response_class=HTMLResponse)
+async def store_categories(request: Request, db: Session = Depends(get_db)):
+    """Serve Store Categories Page"""
     host = request.headers.get("host", "").lower()
     if host != "store.nekwasar.com":
-        return RedirectResponse("https://store.nekwasar.com/catalog")
+        return RedirectResponse("https://store.nekwasar.com/categories")
         
+    from models.store import ProductCategory
+    categories = db.query(ProductCategory).all()
+    
     return store_templates.TemplateResponse(
-        "catalog.html",
-        {"request": request, "current_year": datetime.utcnow().year}
+        "categories.html",
+        {
+            "request": request, 
+            "current_year": datetime.utcnow().year,
+            "categories": categories
+        }
     )
 
 @app.get("/enterprise", response_class=HTMLResponse)
