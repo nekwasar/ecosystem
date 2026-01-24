@@ -555,21 +555,34 @@ async def store_product_detail(request: Request, slug: str, db: Session = Depend
 
 @app.get("/categories", response_class=HTMLResponse)
 @app.get("/categories/", response_class=HTMLResponse)
-async def store_categories(request: Request, db: Session = Depends(get_db)):
-    """Serve Store Categories Page"""
+async def store_categories(request: Request, slug: str = None, db: Session = Depends(get_db)):
+    """Serve Store Categories Page with Sidebar Logic"""
     host = request.headers.get("host", "").lower()
     if host != "store.nekwasar.com":
         return RedirectResponse("https://store.nekwasar.com/categories")
         
     from models.store import ProductCategory
-    categories = db.query(ProductCategory).all()
+    
+    # Fetch Roots (Sidebar)
+    roots = db.query(ProductCategory).filter(ProductCategory.parent_id == None).all()
+    
+    active_category = None
+    if slug:
+        active_category = db.query(ProductCategory).filter(ProductCategory.slug == slug).first()
+    elif roots:
+        # Default to first root
+        active_category = roots[0]
+        
+    # Ensure we load children logic (Template accesses active_category.children)
+    # SQLAlchemy will lazy load this automatically.
     
     return store_templates.TemplateResponse(
         "categories.html",
         {
             "request": request, 
             "current_year": datetime.utcnow().year,
-            "categories": categories
+            "roots": roots,
+            "active_category": active_category
         }
     )
 
