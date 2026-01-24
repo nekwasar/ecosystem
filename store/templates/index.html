@@ -2,37 +2,80 @@
 
 {% block content %}
 <!-- Hero Section -->
-<div id="hero-section" class="relative overflow-hidden py-20 lg:py-32 transition-all duration-700 ease-in-out">
-    <!-- Background Glows -->
-    <div class="absolute top-0 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] pointer-events-none">
-    </div>
-
-    <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
-        <h1
-            class="font-display font-bold text-4xl md:text-6xl lg:text-7xl mb-6 text-t-bright tracking-tight animate-slide-up">
-            <span class="block">Digital Assets</span>
-            <span class="gradient-text">& Innovations</span>
-        </h1>
-        <p class="font-syne text-lg md:text-xl text-t-muted max-w-2xl mx-auto mb-10 leading-relaxed animate-slide-up"
-            style="animation-delay: 0.1s">
-            Premium templates, source code, and enterprise acquisitions. <br class="hidden md:inline">Curated for the
-            builders of tomorrow.
-        </p>
-
-        <div class="flex flex-wrap justify-center gap-4 animate-slide-up" style="animation-delay: 0.2s">
-            <a href="#catalog" onclick="hideHero()"
-                class="px-8 py-4 bg-accent hover:bg-accent/90 text-white font-syne font-bold rounded-full transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)]">
-                Explore Catalog
-            </a>
-            <a href="/enterprise"
-                class="px-8 py-4 bg-transparent border border-stroke-elements hover:border-amber-500 hover:text-amber-500 text-t-medium font-syne font-bold rounded-full transition-all flex items-center gap-2">
-                <i class="ph-fill ph-lock-key"></i>
-                Enterprise Access
+<!-- Hero Section (Full Screen Slider) -->
+<div id="hero-slider" class="relative h-screen w-full overflow-hidden bg-black">
+    <!-- Slides (Dynamic or Static) -->
+    <!-- Slide 1 -->
+    <div class="hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-100"
+        style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+            <h1 class="font-display font-bold text-5xl md:text-7xl text-white mb-6 animate-slide-up">
+                Digital <span class="text-accent">Excellence</span>
+            </h1>
+            <p class="font-syne text-xl text-gray-300 max-w-2xl mb-10 animate-slide-up" style="animation-delay: 0.1s">
+                Premium assets curated for the visionaries of tomorrow.
+            </p>
+            <a href="#catalog"
+                class="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors">
+                Browse Collection
             </a>
         </div>
     </div>
+
+    <!-- Slide 2 (Example Hidden) -->
+    <div class="hero-slide absolute inset-0 bg-cover bg-center transition-opacity duration-1000 opacity-0"
+        style="background-image: url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+            <h1 class="font-display font-bold text-5xl md:text-7xl text-white mb-6">
+                Enterprise <span class="text-amber-500">Solutions</span>
+            </h1>
+            <p class="font-syne text-xl text-gray-300 max-w-2xl mb-10">
+                Acquire complete SaaS businesses and source codes.
+            </p>
+            <a href="/enterprise"
+                class="px-8 py-4 bg-amber-500 text-black font-bold rounded-full hover:bg-amber-400 transition-colors">
+                View Enterprise
+            </a>
+        </div>
+    </div>
+
+    <!-- Dots -->
+    <div class="absolute bottom-10 left-0 right-0 gap-3 flex justify-center z-20">
+        <button class="w-3 h-3 rounded-full bg-white transition-all hover:scale-125" onclick="setSlide(0)"></button>
+        <button class="w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all hover:scale-125"
+            onclick="setSlide(1)"></button>
+    </div>
 </div>
+
+<script>
+    // Simple Auto-Slider Logic
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('#hero-slider button');
+
+    function showSlide(n) {
+        slides.forEach(s => s.classList.replace('opacity-100', 'opacity-0'));
+        dots.forEach(d => d.classList.replace('bg-white', 'bg-white/50'));
+
+        currentSlide = (n + slides.length) % slides.length;
+
+        slides[currentSlide].classList.replace('opacity-0', 'opacity-100');
+        dots[currentSlide].classList.replace('bg-white/50', 'bg-white');
+    }
+
+    function setSlide(n) {
+        showSlide(n);
+        resetTimer();
+    }
+
+    let slideTimer = setInterval(() => showSlide(currentSlide + 1), 5000);
+    function resetTimer() {
+        clearInterval(slideTimer);
+        slideTimer = setInterval(() => showSlide(currentSlide + 1), 5000);
+    }
+</script>
 
 <!-- Filters (Portfolio Style) -->
 <div class="border-y border-stroke-elements bg-base/50 backdrop-blur-sm sticky top-[73px] z-40">
@@ -81,7 +124,7 @@
             </div>
 
             <!-- Dark Footer (Details) -->
-            <div class="p-4 bg-[#0a0a0a] flex-1 flex flex-col justify-between border-t border-stroke-elements">
+            <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
                 <div>
                     <h3
                         class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">

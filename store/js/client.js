@@ -50,27 +50,7 @@ async function initStore() {
     // 3. Update Cart Badge
     updateCartCount();
 
-    // 4. Check Hero State
-    if (localStorage.getItem('store_hero_hidden') === 'true') {
-        const hero = document.getElementById('hero-section');
-        if (hero) hero.style.display = 'none';
-
-        // Scroll to top to avoid jumpiness if user reloads
-        window.scrollTo(0, 0);
-    }
-}
-
-function hideHero() {
-    const hero = document.getElementById('hero-section');
-    if (hero) {
-        hero.style.opacity = '0';
-        setTimeout(() => {
-            hero.style.display = 'none';
-            // Scroll to catalog smoothly
-            document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
-        }, 700); // Matches transition duration
-    }
-    localStorage.setItem('store_hero_hidden', 'true');
+    // 4. Check Hero State (Removed: Slider is permanent now)
 }
 
 async function loadProducts() {
