@@ -59,11 +59,16 @@ class Product(Base):
     currency = Column(String(3), default="USD")
     
     # Types & Billing
-    product_type = Column(String(50), default=ProductType.DIGITAL_DOWNLOAD) # Using String for flexibility, validated by logic
+    product_type = Column(String(50), default=ProductType.DIGITAL_DOWNLOAD)
     billing_scheme = Column(String(50), default=BillingScheme.ONE_TIME)
     subscription_interval = Column(String(20), nullable=True) # "month", "year"
     stripe_price_id = Column(String(255)) # Stripe Price ID
     stripe_product_id = Column(String(255)) # Stripe Product ID
+    
+    # Metadata
+    version = Column(String(50), nullable=True) # v1.0.0
+    tags = Column(JSON, nullable=True) # ["react", "saas"]
+    preview_url = Column(String(500), nullable=True) # Demo Link
     
     # Privacy / Vetting
     is_private_listing = Column(Boolean, default=False)

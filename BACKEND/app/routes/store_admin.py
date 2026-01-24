@@ -39,12 +39,37 @@ async def create_product(
     - Supports Subscription intervals logic
     - Stripe Product/Price auto-creation logic would go here
     """
-    # 1. Check Slug
+    # 1. Custom Category Logic
+    # The frontend sends '_category_name' (e.g. "SaaS" or "Custom") if not selecting by ID.
+    # We need to resolve this to a real category_id before creating the product.
+    product_data = product.dict()
+    category_name = product_data.pop("_category_name", None) # Remove helper field
+    
+    if category_name:
+        # Check if category exists
+        slug = category_name.lower().replace(" ", "-")
+        existing_cat = db.query(ProductCategory).filter(ProductCategory.slug == slug).first()
+        
+        if existing_cat:
+            product_data["category_id"] = existing_cat.id
+        else:
+            # Create new category on the fly
+            new_cat = ProductCategory(
+                name=category_name, 
+                slug=slug, 
+                description=f"Auto-created category for {category_name}"
+            )
+            db.add(new_cat)
+            db.commit()
+            db.refresh(new_cat)
+            product_data["category_id"] = new_cat.id
+
+    # 2. Check Slug Uniqueness
     if db.query(Product).filter(Product.slug == product.slug).first():
         raise HTTPException(400, "Slug already exists")
 
-    # 2. Create DB Product
-    db_product = Product(**product.dict())
+    # 3. Create DB Product
+    db_product = Product(**product_data)
     db.add(db_product)
     
     # 3. (Optional) Sync with Stripe immediately if keys are set

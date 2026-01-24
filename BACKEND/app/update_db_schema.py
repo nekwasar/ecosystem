@@ -6,8 +6,6 @@ def update_schema():
     with engine.connect() as conn:
         # 1. Add social_links column
         try:
-            # Note: IF NOT EXISTS syntax depends on Postgres version, but usually safe to wrap in try/except 
-            # or check information_schema. But for simple dev usage, we'll try raw ALTER.
             conn.execute(text("ALTER TABLE blog_authors ADD COLUMN IF NOT EXISTS social_links JSON;"))
             print("✅ Added column: social_links")
         except Exception as e:
@@ -19,6 +17,15 @@ def update_schema():
             print("✅ Added column: books")
         except Exception as e:
             print(f"⚠️ Could not add books (might exist): {e}")
+
+        # 3. Add Store Product columns
+        try:
+            conn.execute(text("ALTER TABLE store_products ADD COLUMN IF NOT EXISTS version VARCHAR(50);"))
+            conn.execute(text("ALTER TABLE store_products ADD COLUMN IF NOT EXISTS tags JSON;"))
+            conn.execute(text("ALTER TABLE store_products ADD COLUMN IF NOT EXISTS preview_url VARCHAR(500);"))
+            print("✅ Added columns: version, tags, preview_url to store_products")
+        except Exception as e:
+            print(f"⚠️ Could not add store columns: {e}")
             
         conn.commit()
         print("🎉 Database schema update complete.")

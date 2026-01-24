@@ -47,6 +47,11 @@ class ProductBase(BaseModel):
     
     # Config
     download_url: Optional[str] = None
+    
+    # Metadata
+    version: Optional[str] = None
+    tags: Optional[List[str]] = None
+    preview_url: Optional[str] = None
 
 class ProductCreate(ProductBase):
     pass

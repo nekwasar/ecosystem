@@ -83,96 +83,140 @@
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
 
     <!-- Modal Content -->
-    <div class="absolute inset-0 flex items-center justify-center p-4">
+    <div
+        class="bg-base dark:bg-base-tint border border-stroke-elements rounded-2xl shadow-2xl w-full max-w-2xl max-h-[75vh] overflow-y-auto transform transition-all scale-100">
         <div
-            class="bg-base dark:bg-base-tint border border-stroke-elements rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all scale-100">
-            <div
-                class="p-6 border-b border-stroke-elements flex justify-between items-center sticky top-0 bg-base dark:bg-base-tint z-10">
-                <h2 class="text-2xl font-bold font-syne text-t-bright">Add New Product</h2>
-                <button onclick="closeModal()" class="text-t-medium hover:text-accent">
-                    <i class="ph-bold ph-x text-xl"></i>
-                </button>
-            </div>
+            class="p-6 border-b border-stroke-elements flex justify-between items-center sticky top-0 bg-base dark:bg-base-tint z-10">
+            <h2 class="text-2xl font-bold font-syne text-t-bright">Add New Product</h2>
+            <button onclick="closeModal()" class="text-t-medium hover:text-accent">
+                <i class="ph-bold ph-x text-xl"></i>
+            </button>
+        </div>
 
-            <form id="productForm" onsubmit="handleCreateProduct(event)" class="p-6 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Name -->
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-t-medium">Product Name</label>
-                        <input type="text" name="name" required
-                            class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
-                    </div>
-
-                    <!-- Slug -->
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-t-medium">Slug (URL)</label>
-                        <input type="text" name="slug" required
-                            class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
-                    </div>
-
-                    <!-- Price -->
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-t-medium">Price (USD)</label>
-                        <input type="number" step="0.01" name="price" required
-                            class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
-                    </div>
-
-                    <!-- SKU -->
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-t-medium">SKU</label>
-                        <input type="text" name="sku" required
-                            class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
-                    </div>
-
-                    <!-- Product Type -->
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-t-medium">Type</label>
-                        <select name="product_type"
-                            class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
-                            <option value="digital_download">Digital Download</option>
-                            <option value="license_key">License Key</option>
-                            <option value="subscription">Subscription</option>
-                            <option value="transfer_service">Transfer Service</option>
-                        </select>
-                    </div>
-
-                    <!-- Billing Scheme -->
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-t-medium">Billing</label>
-                        <select name="billing_scheme"
-                            class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
-                            <option value="one_time">One Time</option>
-                            <option value="recurring">Recurring</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Description -->
+        <form id="productForm" onsubmit="handleCreateProduct(event)" class="p-6 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name -->
                 <div class="space-y-2">
-                    <label class="text-sm font-bold text-t-medium">Description</label>
-                    <textarea name="description" rows="4"
-                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all"></textarea>
-                </div>
-
-                <!-- Download URL or License logic placeholder -->
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-t-medium">Download URL / File</label>
-                    <input type="text" name="download_url" placeholder="https://..."
+                    <label class="text-sm font-bold text-t-medium">Product Name</label>
+                    <input type="text" name="name" required
                         class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
                 </div>
 
-                <div
-                    class="sticky bottom-0 bg-base dark:bg-base-tint pt-4 border-t border-stroke-elements flex justify-end gap-4">
-                    <button type="button" onclick="closeModal()"
-                        class="px-6 py-2 text-t-medium font-bold hover:text-t-bright">Cancel</button>
-                    <button type="submit"
-                        class="px-8 py-2 bg-accent text-white font-bold rounded-xl shadow-lg hover:bg-accent/90 transition-all">
-                        Create Product
-                    </button>
+                <!-- Slug -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Slug (URL)</label>
+                    <input type="text" name="slug" required
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
                 </div>
-            </form>
-        </div>
+
+                <!-- Price -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Price (USD)</label>
+                    <input type="number" step="0.01" name="price" required
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                </div>
+
+                <!-- SKU (Optional / Auto-Gen) -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">SKU (Optional)</label>
+                    <input type="text" name="sku" placeholder="Auto-generated if empty"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                </div>
+
+                <!-- Product Type -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Type</label>
+                    <select name="product_type"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                        <option value="digital_download">Digital Download</option>
+                        <option value="license_key">License Key</option>
+                        <option value="subscription">Subscription</option>
+                        <option value="transfer_service">Transfer Service</option>
+                    </select>
+                </div>
+
+                <!-- Billing Scheme -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Billing</label>
+                    <select name="billing_scheme"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                        <option value="one_time">One Time</option>
+                        <option value="recurring">Recurring</option>
+                    </select>
+                </div>
+
+                <!-- Cover Image URL -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Cover Image (URL)</label>
+                    <input type="text" name="image_url" placeholder="https://..."
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                </div>
+
+                <!-- Category -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Category</label>
+                    <select id="categorySelect" name="category_select" onchange="toggleCustomCategory(this)"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                        <option value="app">App</option>
+                        <option value="website">Website</option>
+                        <option value="codebase">Codebase</option>
+                        <option value="ebook">Ebook</option>
+                        <option value="other">Other (Type Custom)</option>
+                    </select>
+                    <!-- Custom Input (Hidden by default) -->
+                    <input type="text" id="customCategoryInput" name="custom_category"
+                        placeholder="Enter custom category..."
+                        class="hidden w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all mt-2 animate-fade-in">
+                </div>
+
+                <!-- Version -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Version</label>
+                    <input type="text" name="version" placeholder="e.g. v1.0"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                </div>
+
+                <!-- Preview URL -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Preview / Demo URL</label>
+                    <input type="text" name="preview_url" placeholder="https://demo.nekwasar.com"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="space-y-2">
+                <label class="text-sm font-bold text-t-medium">Tags (comma separated)</label>
+                <input type="text" name="tags" placeholder="react, saas, dark-mode"
+                    class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-2">
+                <label class="text-sm font-bold text-t-medium">Description</label>
+                <textarea name="description" rows="4"
+                    class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all"></textarea>
+            </div>
+
+            <!-- Download URL or License logic placeholder -->
+            <div class="space-y-2">
+                <label class="text-sm font-bold text-t-medium">Download URL / File</label>
+                <input type="text" name="download_url" placeholder="https://..."
+                    class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
+            </div>
+
+            <div
+                class="sticky bottom-0 bg-base dark:bg-base-tint pt-4 border-t border-stroke-elements flex justify-end gap-4">
+                <button type="button" onclick="closeModal()"
+                    class="px-6 py-2 text-t-medium font-bold hover:text-t-bright">Cancel</button>
+                <button type="submit"
+                    class="px-8 py-2 bg-accent text-white font-bold rounded-xl shadow-lg hover:bg-accent/90 transition-all">
+                    Create Product
+                </button>
+            </div>
+        </form>
     </div>
+</div>
 </div>
 
 <script>
@@ -249,12 +293,34 @@
     function closeModal() {
         document.getElementById('productModal').classList.add('hidden');
         document.getElementById('productForm').reset();
+        document.getElementById('customCategoryInput').classList.add('hidden'); // Reset custom input
+    }
+
+    function toggleCustomCategory(select) {
+        const input = document.getElementById('customCategoryInput');
+        if (select.value === 'other') {
+            input.classList.remove('hidden');
+            input.required = true;
+        } else {
+            input.classList.add('hidden');
+            input.required = false;
+        }
     }
 
     async function handleCreateProduct(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
-        // Convert FormData to JSON object, handling types
+
+        // Logic for Category (Select vs Custom)
+        let categoryName = formData.get('category_select');
+        if (categoryName === 'other') {
+            categoryName = formData.get('custom_category');
+        }
+
+        // Logic for Tags
+        const tagsRaw = formData.get('tags') || "";
+        const tagsArray = tagsRaw.split(',').map(t => t.trim()).filter(t => t);
+
         const payload = {
             name: formData.get('name'),
             slug: formData.get('slug'),
@@ -264,9 +330,16 @@
             product_type: formData.get('product_type'),
             billing_scheme: formData.get('billing_scheme'),
             download_url: formData.get('download_url') || null,
+            // New Fields
+            version: formData.get('version'),
+            preview_url: formData.get('preview_url'),
+            tags: tagsArray,
+            // We pass the category name as a temporary field for the backend to resolve/create
+            _category_name: categoryName,
+
             is_active: true,
             is_private_listing: false,
-            stock_quantity: -1 // infinite by default for digital
+            stock_quantity: -1
         };
 
         try {
@@ -282,6 +355,25 @@
             const data = await res.json();
 
             if (!res.ok) throw new Error(data.detail || 'Failed to create');
+
+            const prodId = data.id;
+            const imgUrl = formData.get('image_url');
+
+            // If image provided, upload it (link it)
+            if (imgUrl && imgUrl.trim() !== '') {
+                await fetch(`/api/admin/store/products/${prodId}/media`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        file_url: imgUrl,
+                        media_type: 'image',
+                        is_hero: true
+                    })
+                });
+            }
 
             // Success
             alert('Product Created!'); // Replace with toast later
