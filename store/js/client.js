@@ -73,9 +73,28 @@ async function loadProducts() {
     }
 }
 
+function setFilter(type) {
+    STATE_STORE.filter = type;
+
+    // Update active button state visually
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        if (btn.dataset.filter === type) {
+            btn.classList.add('bg-accent', 'text-white', 'shadow-lg');
+            btn.classList.remove('bg-base-tint', 'text-t-muted', 'border');
+        } else {
+            btn.classList.remove('bg-accent', 'text-white', 'shadow-lg');
+            btn.classList.add('bg-base-tint', 'text-t-muted', 'border');
+        }
+    });
+
+    renderProducts();
+}
+window.setFilter = setFilter; // Expose global
+
 function renderProducts() {
     const grid = document.getElementById('product-grid');
-    if (!grid) return; // Guard clause
+    if (!grid) return;
     grid.innerHTML = '';
 
     const filtered = STATE_STORE.filter === 'all'
@@ -89,51 +108,40 @@ function renderProducts() {
 
     filtered.forEach(p => {
         const card = document.createElement('div');
-        // New Premium Card Classes (Redesigned per request)
         card.className = "product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg";
         card.onclick = (e) => {
-            // Prevent navigation if clicking add to cart button
             if (e.target.closest('button')) return;
             window.location.href = `/product/${p.slug}`;
         };
 
-        // Image / Video Logic
         const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
 
-        // Price Logic
+        // Price Tag
         let priceTag = `<span class="text-t-bright font-bold">$${p.price}</span>`;
         if (p.is_private_listing) {
             priceTag = '<span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
         }
 
-        // Card HTML (Compact Dark Footer)
         card.innerHTML = `
-            <!-- Cover Image -->
             <div class="relative aspect-[4/3] bg-base-shade overflow-hidden">
                 <img src="${hero.file_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" alt="${p.name}" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=Asset'">
-                
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
-                
-                <!-- Type Badge (Top Right) -->
                 <div class="absolute top-3 right-3">
                     <span class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">
                         ${p.product_type.replace('_', ' ')}
                     </span>
                 </div>
             </div>
-            
-            <!-- Dark Footer (Details) -->
-            <div class="p-4 bg-[#0a0a0a] flex-1 flex flex-col justify-between border-t border-stroke-elements">
+            <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
                 <div>
                     <h3 class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">${p.name}</h3>
                     <div class="flex justify-between items-center mt-2">
-                        <span class="text-xs text-t-muted font-medium uppercase tracking-wide">${p.category_name || 'Digital Asset'}</span>
+                        <span class="text-xs text-t-muted font-medium uppercase tracking-wide">${p.category ? p.category.name : 'Digital Asset'}</span>
                         <div class="font-syne">${priceTag}</div>
                     </div>
                 </div>
             </div>
         `;
-
         grid.appendChild(card);
     });
 }
@@ -220,3 +228,67 @@ async function checkout() {
         alert("Network Error");
     }
 }
+
+// Global Search Helper (For Hero)
+function searchProducts(query) {
+    if (!query) {
+        // Reset to current category filter
+        renderProducts();
+        return;
+    }
+
+    const term = query.toLowerCase();
+    const filtered = STATE_STORE.products.filter(p =>
+        p.name.toLowerCase().includes(term) ||
+        (p.description && p.description.toLowerCase().includes(term))
+    );
+
+    const grid = document.getElementById('product-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center text-t-muted py-20">No matches found.</div>';
+        return;
+    }
+
+    // Reuse Card Logic (Ideally this should be a shared component function, but duplication is safe here for speed)
+    filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg";
+        card.onclick = (e) => {
+            if (e.target.closest('button')) return;
+            window.location.href = `/product/${p.slug}`;
+        };
+
+        const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
+
+        let priceTag = `<span class="text-t-bright font-bold">$${p.price}</span>`;
+        if (p.is_private_listing) {
+            priceTag = '<span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
+        }
+
+        card.innerHTML = `
+            <div class="relative aspect-[4/3] bg-base-shade overflow-hidden">
+                <img src="${hero.file_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" alt="${p.name}" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=Asset'">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
+                <div class="absolute top-3 right-3">
+                    <span class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">
+                        ${p.product_type.replace('_', ' ')}
+                    </span>
+                </div>
+            </div>
+            <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
+                <div>
+                    <h3 class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">${p.name}</h3>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-t-muted font-medium uppercase tracking-wide">${p.category ? p.category.name : 'Digital Asset'}</span>
+                        <div class="font-syne">${priceTag}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+window.handleHeroSearch = searchProducts; // Map the index.html function name
