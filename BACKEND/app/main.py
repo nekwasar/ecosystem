@@ -243,7 +243,7 @@ DEFAULT_POST_DATA = {
 }
 
 @app.get("/", response_class=HTMLResponse)
-async def root(request: Request):
+async def root(request: Request, db: Session = Depends(get_db)):
     """Domain-aware root route serving Portfolio, Blog, or Store based on Host header"""
     host = request.headers.get("host", "").lower()
     
@@ -266,10 +266,22 @@ async def root(request: Request):
         
     # 3. Store Domain
     if host == "store.nekwasar.com":
-        # Serves store/templates/index.html
+        # SSR for Immediate Load
+        from models.store import Product
+        # Need a DB session here. Dependencies don't work well inside pure functions triggered by routes unless defined in signature.
+        # However, 'root' does not have 'db' dependency yet.
+        # We must add it to the signature in step 1 using edit below, or use a local one (not recommended).
+        # Better: I will edit the signature in a moment. For now, I'll update the logic assuming 'db' is available.
+        
+        products = db.query(Product).filter(Product.is_active == True).order_by(Product.created_at.desc()).all()
+        
         return store_templates.TemplateResponse(
             "index.html",
-            {"request": request, "current_year": datetime.utcnow().year}
+            {
+                "request": request, 
+                "current_year": datetime.utcnow().year,
+                "products": products
+            }
         )
 
     # 3b. Store Sub-Routes (Handled via specific endpoints below, this root handler is just for "/")

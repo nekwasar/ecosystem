@@ -57,11 +57,57 @@
 <!-- Product Grid -->
 <div id="catalog" class="max-w-7xl mx-auto px-6 py-16">
     <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Javascript will inject products here. -->
-        <div class="col-span-full py-20 text-center animate-pulse">
-            <i class="ph ph-spinner text-4xl text-accent animate-spin mb-4"></i>
-            <p class="font-syne text-t-muted">Loading Curated Assets...</p>
+        {% for p in products %}
+        <div class="product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg"
+            onclick="window.location.href='/product/{{ p.slug }}'">
+
+            <!-- Cover Image -->
+            <div class="relative aspect-[4/3] bg-base-shade overflow-hidden">
+                {% set hero = p.images|selectattr("is_hero")|first or p.images|first %}
+                <img src="{{ hero.file_url if hero else '/store/img/placeholder.jpg' }}"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                    alt="{{ p.name }}" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=Asset'">
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                </div>
+
+                <!-- Type Badge (Top Right) -->
+                <div class="absolute top-3 right-3">
+                    <span
+                        class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">
+                        {{ p.product_type|replace('_', ' ') }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Dark Footer (Details) -->
+            <div class="p-4 bg-[#0a0a0a] flex-1 flex flex-col justify-between border-t border-stroke-elements">
+                <div>
+                    <h3
+                        class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">
+                        {{ p.name }}</h3>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-t-muted font-medium uppercase tracking-wide">{{ p.category.name if
+                            p.category else 'Digital Asset' }}</span>
+                        <div class="font-syne">
+                            {% if p.is_private_listing %}
+                            <span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i
+                                    class="ph-fill ph-lock-key"></i> Restricted</span>
+                            {% else %}
+                            <span class="text-t-bright font-bold">${{ p.price }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="col-span-full py-20 text-center text-t-muted">
+            <i class="ph ph-cube text-4xl text-t-muted mb-4 opacity-50"></i>
+            <p class="font-syne">No public assets available yet.</p>
+        </div>
+        {% endfor %}
     </div>
 </div>
 
@@ -127,6 +173,6 @@
 
 {% block scripts %}
 <script>
-    function openAccessModal() { document.getElementById('access-modal').classList.remove('hidden'); document.getElementById('access-modal').classList.add('flex'); }
+    // Modal logic moved to client.js to satisfy CSP and clean up
 </script>
 {% endblock %}

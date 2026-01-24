@@ -11,7 +11,27 @@ const STATE_STORE = { // Renamed safely to avoid global conflicts
 
 document.addEventListener('DOMContentLoaded', () => {
     initStore().catch(console.error);
+
+    // Scroll Listener for Hero Hiding
+    window.addEventListener('scroll', () => {
+        if (!localStorage.getItem('store_hero_hidden')) {
+            const catalog = document.getElementById('catalog');
+            if (catalog && window.scrollY > catalog.offsetTop - 100) {
+                hideHero();
+            }
+        }
+    }, { passive: true });
 });
+
+// Modal Logic (Moved from inline)
+function openAccessModal() {
+    const modal = document.getElementById('access-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+}
+window.openAccessModal = openAccessModal; // Expose to global scope for HTML onclick
 
 async function initStore() {
     // 1. Fetch User (if any)
@@ -51,60 +71,63 @@ function hideHero() {
         }, 700); // Matches transition duration
     }
     localStorage.setItem('store_hero_hidden', 'true');
+}
 
+async function loadProducts() {
+    const grid = document.getElementById('product-grid');
+    // Removed loading spinner to support SSR (Server Side Rendering)
 
-    async function loadProducts() {
-        const grid = document.getElementById('product-grid');
-        grid.innerHTML = '<div class="col-span-full text-center py-20 animate-pulse">Loading Assets...</div>';
-
-        try {
-            const res = await fetch('/api/store/products');
-            if (!res.ok) {
-                const errBody = await res.text();
-                throw new Error(`Server returned ${res.status}: ${errBody}`);
-            }
-            STATE_STORE.products = await res.json();
-            renderProducts();
-        } catch (e) {
-            grid.innerHTML = '<div class="col-span-full text-center text-red-500">Failed to load products.</div>';
+    try {
+        const res = await fetch('/api/store/products');
+        if (!res.ok) {
+            const errBody = await res.text();
+            throw new Error(`Server returned ${res.status}: ${errBody}`);
         }
+        STATE_STORE.products = await res.json();
+        // Optional: Only render if we need to update/hydrate. 
+        // For now, re-rendering ensures client-side state matches UI for filtering.
+        // renderProducts(); // Disabled to prevent flicker of SSR content
+    } catch (e) {
+        console.error("Failed to hydrate products:", e);
+        // Don't show error to user if SSR content is already there
+    }
+}
+
+function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    if (!grid) return; // Guard clause
+    grid.innerHTML = '';
+
+    const filtered = STATE_STORE.filter === 'all'
+        ? STATE_STORE.products
+        : STATE_STORE.products.filter(p => p.product_type === STATE_STORE.filter);
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center text-t-muted py-20">No assets found in this category.</div>';
+        return;
     }
 
-    function renderProducts() {
-        const grid = document.getElementById('product-grid');
-        if (!grid) return; // Guard clause
-        grid.innerHTML = '';
+    filtered.forEach(p => {
+        const card = document.createElement('div');
+        // New Premium Card Classes (Redesigned per request)
+        card.className = "product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg";
+        card.onclick = (e) => {
+            // Prevent navigation if clicking add to cart button
+            if (e.target.closest('button')) return;
+            window.location.href = `/product/${p.slug}`;
+        };
 
-        const filtered = STATE_STORE.filter === 'all'
-            ? STATE_STORE.products
-            : STATE_STORE.products.filter(p => p.product_type === STATE_STORE.filter);
+        // Image / Video Logic
+        const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
 
-        if (filtered.length === 0) {
-            grid.innerHTML = '<div class="col-span-full text-center text-t-muted py-20">No assets found in this category.</div>';
-            return;
+        // Price Logic
+        let priceTag = `<span class="text-t-bright font-bold">$${p.price}</span>`;
+        if (p.is_private_listing) {
+            priceTag = '<span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
         }
 
-        filtered.forEach(p => {
-            const card = document.createElement('div');
-            // New Premium Card Classes (Redesigned per request)
-            card.className = "product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg";
-            card.onclick = (e) => {
-                // Prevent navigation if clicking add to cart button
-                if (e.target.closest('button')) return;
-                window.location.href = `/product/${p.slug}`;
-            };
-
-            // Image / Video Logic
-            const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
-
-            // Price Logic
-            let priceTag = `<span class="text-t-bright font-bold">$${p.price}</span>`;
-            if (p.is_private_listing) {
-                priceTag = '<span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
-            }
-
-            // Card HTML (Compact Dark Footer)
-            card.innerHTML = `
+        // Card HTML (Compact Dark Footer)
+        card.innerHTML = `
             <!-- Cover Image -->
             <div class="relative aspect-[4/3] bg-base-shade overflow-hidden">
                 <img src="${hero.file_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" alt="${p.name}" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=Asset'">
@@ -131,16 +154,16 @@ function hideHero() {
             </div>
         `;
 
-            grid.appendChild(card);
-        });
-    }
+        grid.appendChild(card);
+    });
+}
 
-    function updateAuthUI() {
-        const container = document.getElementById('auth-section');
-        if (!container) return;
+function updateAuthUI() {
+    const container = document.getElementById('auth-section');
+    if (!container) return;
 
-        if (STATE_STORE.user) {
-            container.innerHTML = `
+    if (STATE_STORE.user) {
+        container.innerHTML = `
             <div class="flex items-center gap-3">
                 <div class="text-right hidden sm:block">
                     <div class="text-sm font-bold text-t-bright">${STATE_STORE.user.name || STATE_STORE.user.email.split('@')[0]}</div>
@@ -149,71 +172,71 @@ function hideHero() {
                 <img src="${STATE_STORE.user.avatar || 'https://ui-avatars.com/api/?name=' + (STATE_STORE.user.name || 'User')}" class="w-10 h-10 rounded-full border border-stroke-elements">
             </div>
         `;
-        } else {
-            container.innerHTML = `
+    } else {
+        container.innerHTML = `
             <button onclick="openAuthModal()" class="px-5 py-2.5 bg-t-bright text-base-shade font-bold rounded-xl hover:opacity-90 transition shadow-lg hover:shadow-accent/20">
                 Sign In
             </button>
         `;
-        }
+    }
+}
+
+// --- Cart Actions ---
+
+function addToCart(productId) {
+    const product = STATE_STORE.products.find(p => p.id === productId);
+    if (!product) return;
+
+    // Check if exists
+    const existing = STATE_STORE.cart.find(i => i.product_id === productId);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        STATE_STORE.cart.push({ product_id: product.id, quantity: 1, name: product.name, price: product.price });
     }
 
-    // --- Cart Actions ---
+    saveCart();
 
-    function addToCart(productId) {
-        const product = STATE_STORE.products.find(p => p.id === productId);
-        if (!product) return;
+    // Visual Feedback (Toast)
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-5 right-5 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl z-[200] flex items-center gap-3 animate-bounce';
+    toast.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> Added to Cart';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+}
 
-        // Check if exists
-        const existing = STATE_STORE.cart.find(i => i.product_id === productId);
-        if (existing) {
-            existing.quantity += 1;
+function updateCartCount() {
+    const count = STATE_STORE.cart.reduce((acc, item) => acc + item.quantity, 0);
+    const badge = document.getElementById('cart-count');
+    badge.innerText = count;
+    badge.classList.toggle('hidden', count === 0);
+}
+
+function saveCart() {
+    localStorage.setItem('nekwasar_cart', JSON.stringify(STATE_STORE.cart));
+    updateCartCount();
+}
+
+// --- Checkout ---
+
+async function checkout() {
+    if (STATE_STORE.cart.length === 0) return alert("Cart is empty");
+
+    // Call Checkout API
+    try {
+        const res = await fetch(`${API_BASE}/checkout/intent`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(STATE_STORE.cart)
+        });
+
+        const data = await res.json();
+        if (data.url) {
+            window.location.href = data.url; // Redirect to Stripe
         } else {
-            STATE_STORE.cart.push({ product_id: product.id, quantity: 1, name: product.name, price: product.price });
+            alert("Checkout Error: " + JSON.stringify(data));
         }
-
-        saveCart();
-
-        // Visual Feedback (Toast)
-        const toast = document.createElement('div');
-        toast.className = 'fixed bottom-5 right-5 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl z-[200] flex items-center gap-3 animate-bounce';
-        toast.innerHTML = '<i class="ph-fill ph-check-circle text-xl"></i> Added to Cart';
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
+    } catch (e) {
+        alert("Network Error");
     }
-
-    function updateCartCount() {
-        const count = STATE_STORE.cart.reduce((acc, item) => acc + item.quantity, 0);
-        const badge = document.getElementById('cart-count');
-        badge.innerText = count;
-        badge.classList.toggle('hidden', count === 0);
-    }
-
-    function saveCart() {
-        localStorage.setItem('nekwasar_cart', JSON.stringify(STATE_STORE.cart));
-        updateCartCount();
-    }
-
-    // --- Checkout ---
-
-    async function checkout() {
-        if (STATE_STORE.cart.length === 0) return alert("Cart is empty");
-
-        // Call Checkout API
-        try {
-            const res = await fetch(`${API_BASE}/checkout/intent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(STATE_STORE.cart)
-            });
-
-            const data = await res.json();
-            if (data.url) {
-                window.location.href = data.url; // Redirect to Stripe
-            } else {
-                alert("Checkout Error: " + JSON.stringify(data));
-            }
-        } catch (e) {
-            alert("Network Error");
-        }
-    }
+}

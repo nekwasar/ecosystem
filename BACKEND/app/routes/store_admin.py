@@ -196,14 +196,23 @@ async def list_categories(db: Session = Depends(get_db)):
     categories = db.query(ProductCategory).all()
     return categories
 
-@router.post("/categories", response_model=CategorySchema)
 async def create_category(
     category: CategoryCreate, 
     db: Session = Depends(get_db)
 ):
+    # Check if slug exists
+    if db.query(ProductCategory).filter(ProductCategory.slug == category.slug).first():
+        # Try to append random suffix or just fail? For admin, explicit failure is better.
+        raise HTTPException(400, "Category with this slug already exists.")
+
     db_cat = ProductCategory(**category.dict())
     db.add(db_cat)
-    db.commit()
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(500, f"Database Error: {str(e)}")
+        
     db.refresh(db_cat)
     return db_cat
 

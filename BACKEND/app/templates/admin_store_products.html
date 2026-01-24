@@ -78,22 +78,26 @@
 </div>
 
 <!-- Create/Edit Modal -->
-<div id="productModal" class="fixed inset-0 z-50 hidden">
+<div id="productModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
     <!-- Overlay -->
     <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
 
     <!-- Modal Content -->
     <div
-        class="bg-base dark:bg-base-tint border border-stroke-elements rounded-2xl shadow-2xl w-full max-w-2xl max-h-[75vh] overflow-y-auto transform transition-all scale-100">
+        class="relative bg-base dark:bg-base-tint border border-stroke-elements rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col transform transition-all scale-100">
         <div
-            class="p-6 border-b border-stroke-elements flex justify-between items-center sticky top-0 bg-base dark:bg-base-tint z-10">
-            <h2 class="text-2xl font-bold font-syne text-t-bright">Add New Product</h2>
+            class="p-6 border-b border-stroke-elements flex justify-between items-center bg-base dark:bg-base-tint z-10 rounded-t-2xl">
+            <h2 id="modalTitle" class="text-2xl font-bold font-syne text-t-bright">Add New Product</h2>
             <button onclick="closeModal()" class="text-t-medium hover:text-accent">
                 <i class="ph-bold ph-x text-xl"></i>
             </button>
         </div>
 
-        <form id="productForm" onsubmit="handleCreateProduct(event)" class="p-6 space-y-6">
+        <form id="productForm" onsubmit="handleSaveProduct(event)"
+            class="p-6 space-y-6 overflow-y-auto custom-scrollbar">
+            <!-- Hidden ID for Edit Mode -->
+            <input type="hidden" name="product_id" id="productIdField">
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Name -->
                 <div class="space-y-2">
@@ -157,10 +161,7 @@
                     <label class="text-sm font-bold text-t-medium">Category</label>
                     <select id="categorySelect" name="category_select" onchange="toggleCustomCategory(this)"
                         class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
-                        <option value="app">App</option>
-                        <option value="website">Website</option>
-                        <option value="codebase">Codebase</option>
-                        <option value="ebook">Ebook</option>
+                        <!-- Populated via JS -->
                         <option value="other">Other (Type Custom)</option>
                     </select>
                     <!-- Custom Input (Hidden by default) -->
@@ -206,25 +207,55 @@
             </div>
 
             <div
-                class="sticky bottom-0 bg-base dark:bg-base-tint pt-4 border-t border-stroke-elements flex justify-end gap-4">
+                class="bg-base dark:bg-base-tint pt-4 border-t border-stroke-elements flex justify-end gap-4 sticky bottom-0 rounded-b-2xl">
                 <button type="button" onclick="closeModal()"
                     class="px-6 py-2 text-t-medium font-bold hover:text-t-bright">Cancel</button>
                 <button type="submit"
                     class="px-8 py-2 bg-accent text-white font-bold rounded-xl shadow-lg hover:bg-accent/90 transition-all">
-                    Create Product
+                    Save Product
                 </button>
             </div>
         </form>
     </div>
 </div>
-</div>
 
 <script>
     // --- Store Products Logic ---
+    let STORE_CATEGORIES = [];
+    let ALL_PRODUCTS = []; // Cache to avoid refetch on Edit click
 
     window.initStoreProducts = function () {
         console.log('🚀 Init Store Products Triggered');
+        loadCategories();
         loadProducts();
+    }
+
+    async function loadCategories() {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/admin/store/categories', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                STORE_CATEGORIES = await res.json();
+                populateCategorySelect();
+            }
+        } catch (e) {
+            console.error("Failed to load categories", e);
+        }
+    }
+
+    function populateCategorySelect(selectedId = null) {
+        const select = document.getElementById('categorySelect');
+        // Keep 'other' at the bottom
+        let html = STORE_CATEGORIES.map(c =>
+            `<option value="${c.name}" ${c.id === selectedId ? 'selected' : ''}>${c.name}</option>`
+        ).join('');
+        html += `<option value="other">Other (Type Custom)</option>`;
+        select.innerHTML = html;
+
+        // Reset custom input logic
+        toggleCustomCategory(select);
     }
 
     async function loadProducts() {
@@ -238,6 +269,7 @@
 
             if (!res.ok) throw new Error(data.detail || 'Failed to fetch products');
 
+            ALL_PRODUCTS = data;
             renderTable(data);
         } catch (e) {
             console.error(e);
@@ -257,15 +289,18 @@
         tableBody.innerHTML = products.map(p => `
             <tr class="border-b border-stroke-elements hover:bg-base-tint/30 transition-colors">
                 <td class="p-4">
-                    <div class="w-12 h-12 bg-base-tint rounded-lg flex items-center justify-center text-t-muted">
-                        <i class="ph-bold ph-image"></i>
+                    <div class="w-12 h-12 bg-base-tint rounded-lg overflow-hidden border border-stroke-elements">
+                        ${p.images && p.images.length > 0
+                ? `<img src="${p.images[0].file_url}" class="w-full h-full object-cover">`
+                : `<div class="w-full h-full flex items-center justify-center text-t-muted"><i class="ph-bold ph-image"></i></div>`
+            }
                     </div>
                 </td>
                 <td class="p-4">
                     <div class="font-bold text-t-bright">${p.name}</div>
                     <div class="text-xs text-t-muted">${p.sku || 'No SKU'}</div>
                 </td>
-                <td class="p-4 text-t-medium capitalise">${p.product_type?.replace('_', ' ') || '-'}</td>
+                <td class="p-4 text-t-medium capitalise">${p.category ? p.category.name : '-'}</td>
                 <td class="p-4 font-bold text-t-bright">$${Number(p.price).toFixed(2)}</td>
                 <td class="p-4 text-t-medium capitalise">${p.billing_scheme?.replace('_', ' ') || '-'}</td>
                 <td class="p-4">
@@ -274,7 +309,7 @@
                     </span>
                 </td>
                 <td class="p-4 text-right">
-                    <button class="p-2 text-t-medium hover:text-accent transition-colors" title="Edit">
+                    <button class="p-2 text-t-medium hover:text-accent transition-colors" title="Edit" onclick="openEditModal(${p.id})">
                         <i class="ph-bold ph-pencil-simple"></i>
                     </button>
                     <button class="p-2 text-t-medium hover:text-red-500 transition-colors" title="Delete" onclick="deleteProduct(${p.id})">
@@ -288,12 +323,58 @@
     // Modal Logic
     function openCreateModal() {
         document.getElementById('productModal').classList.remove('hidden');
+        document.getElementById('modalTitle').innerText = 'Add New Product';
+        document.getElementById('productForm').reset();
+        document.getElementById('productIdField').value = ''; // Clear ID -> Create Mode
+        populateCategorySelect(); // Reset drop
+    }
+
+    function openEditModal(productId) {
+        const product = ALL_PRODUCTS.find(p => p.id === productId);
+        if (!product) return alert('Product not found in cache');
+
+        document.getElementById('productModal').classList.remove('hidden');
+        document.getElementById('modalTitle').innerText = 'Edit Product';
+
+        const form = document.getElementById('productForm');
+        form.reset();
+
+        // Fill fields
+        document.getElementById('productIdField').value = product.id;
+        form.name.value = product.name;
+        form.slug.value = product.slug;
+        form.price.value = product.price;
+        form.sku.value = product.sku || '';
+        form.product_type.value = product.product_type;
+        form.billing_scheme.value = product.billing_scheme;
+        form.description.value = product.description || '';
+        form.download_url.value = product.download_url || '';
+        form.version.value = product.version || '';
+        form.preview_url.value = product.preview_url || '';
+
+        // Handle Category
+        if (product.category) {
+            // Need ID matching if possible, but names are safer for 'select' elements if values are unique
+            // My populate uses names as values currently
+            const options = document.getElementById('categorySelect').options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].text === product.category.name) {
+                    document.getElementById('categorySelect').selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // Tags
+        if (product.tags) {
+            form.tags.value = product.tags.join(', ');
+        }
     }
 
     function closeModal() {
         document.getElementById('productModal').classList.add('hidden');
         document.getElementById('productForm').reset();
-        document.getElementById('customCategoryInput').classList.add('hidden'); // Reset custom input
+        document.getElementById('customCategoryInput').classList.add('hidden');
     }
 
     function toggleCustomCategory(select) {
@@ -307,7 +388,7 @@
         }
     }
 
-    async function handleCreateProduct(e) {
+    async function handleSaveProduct(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
 
@@ -320,6 +401,9 @@
         // Logic for Tags
         const tagsRaw = formData.get('tags') || "";
         const tagsArray = tagsRaw.split(',').map(t => t.trim()).filter(t => t);
+
+        const productId = formData.get('product_id'); // Hidden field
+        const isEdit = productId && productId !== '';
 
         const payload = {
             name: formData.get('name'),
@@ -334,18 +418,24 @@
             version: formData.get('version'),
             preview_url: formData.get('preview_url'),
             tags: tagsArray,
-            // We pass the category name as a temporary field for the backend to resolve/create
             _category_name: categoryName,
 
-            is_active: true,
-            is_private_listing: false,
             stock_quantity: -1
         };
 
+        // Only include optional bools if they matter, usually defaults are fine.
+        if (!isEdit) {
+            payload.is_active = true;
+            payload.is_private_listing = false;
+        }
+
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('/api/admin/store/products', {
-                method: 'POST',
+            const url = isEdit ? `/api/admin/store/products/${productId}` : '/api/admin/store/products';
+            const method = isEdit ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method: method,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -354,12 +444,13 @@
             });
             const data = await res.json();
 
-            if (!res.ok) throw new Error(data.detail || 'Failed to create');
+            if (!res.ok) throw new Error(data.detail || 'Failed to save');
 
-            const prodId = data.id;
+            // Handle Image Upload separate from Edit/Create for simplicity here
+            // If new image url provided:
+            const prodId = isEdit ? productId : data.id;
             const imgUrl = formData.get('image_url');
 
-            // If image provided, upload it (link it)
             if (imgUrl && imgUrl.trim() !== '') {
                 await fetch(`/api/admin/store/products/${prodId}/media`, {
                     method: 'POST',
@@ -376,10 +467,9 @@
             }
 
             // Success
-            alert('Product Created!'); // Replace with toast later
+            alert(isEdit ? 'Product Updated!' : 'Product Created!');
             closeModal();
             loadProducts(); // Refresh table
-
         } catch (error) {
             console.error(error);
             alert('Error: ' + error.message);
