@@ -65,13 +65,16 @@
                         child.material = new THREE.MeshPhysicalMaterial({
                             color: 0xffffff,
                             metalness: 0.1,
-                            roughness: 0.05,
-                            transmission: 0.95, // Glass-like transparency
-                            thickness: 1.5,
-                            ior: 1.5, // Refraction
+                            roughness: 0.0,
+                            transmission: 1.0, // Maximum Transparency
+                            thickness: 0.5,
+                            ior: 1.5,
                             clearcoat: 1.0,
                             clearcoatRoughness: 0.1,
-                            envMapIntensity: 1.5
+                            envMapIntensity: 2.0,
+                            transparent: true,
+                            opacity: 1.0,
+                            side: THREE.DoubleSide
                         });
                     }
                 });
@@ -95,23 +98,31 @@
             // Mouse Interaction
             let mouseX = 0;
             let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
             document.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX - window.innerWidth / 2) * 0.001;
-                mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
+                mouseX = (e.clientX - window.innerWidth / 2) * 0.0005; // Reduced sensitivity
+                mouseY = (e.clientY - window.innerHeight / 2) * 0.0005;
             });
 
             function animate() {
                 requestAnimationFrame(animate);
 
                 if (model) {
-                    // Continuous Rotation
-                    model.rotation.x += 0.002;
-                    model.rotation.y += 0.003;
-                    model.rotation.z += 0.001;
+                    // Very Slow Constant Rotation
+                    model.rotation.y += 0.001;
+                    model.rotation.z += 0.0005;
 
-                    // Mouse Interaction
-                    model.rotation.x += mouseY;
-                    model.rotation.y += mouseX;
+                    // Smooth Mouse Tilt (Look At)
+                    targetX = mouseY;
+                    targetY = mouseX;
+
+                    // Interpolate current rotation 'offset' or just add mouse influence nicely
+                    // Ideally we separate base rotation from mouse tilt, but simply adding works for "spin variation"
+                    // To make it feel "interactive" without spinning out of control:
+                    model.rotation.x += (targetX - model.rotation.x * 0.1) * 0.05; // Damping
+                    model.rotation.y += (targetY * 0.5) * 0.05;
                 }
 
                 renderer.render(scene, camera);
