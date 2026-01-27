@@ -77,6 +77,16 @@ async def get_blog_post(post_id: int, db: Session = Depends(get_db)):
         if published_at > now_utc:
              raise HTTPException(404, "Blog post not found")
 
+    # CLEANUP: Remove accidental template code saved in content
+    if post.content:
+        bad_patterns = [
+            "{% if not (post_data and post_data.content) %}",
+            "{{ post_data.content | safe }}",
+            "{% endif %}"
+        ]
+        for pattern in bad_patterns:
+            post.content = post.content.replace(pattern, "")
+
     return post
 
 @router.post("/{post_id}/view")

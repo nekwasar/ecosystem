@@ -1810,7 +1810,13 @@
             const engagementBar = cleanContainer.querySelector('#blog-engagement-bar');
             if (engagementBar) engagementBar.remove();
 
-            return cleanContainer.innerHTML;
+            // 5. REMOVE JINJA ARTIFACTS: Prevent template logic from being saved as text
+            let finalHtml = cleanContainer.innerHTML;
+            finalHtml = finalHtml.replace(/{% if not \(post_data and post_data\.content\) %}/g, "");
+            finalHtml = finalHtml.replace(/{{ post_data\.content \| safe }}/g, "");
+            finalHtml = finalHtml.replace(/{% endif %}/g, "");
+
+            return finalHtml;
         }
 
         // Function to save draft
