@@ -13,7 +13,16 @@
         (function () {
             const originalWarn = console.warn;
             const originalError = console.error;
-            const noise = ['cdn.tailwindcss.com', 'ContentDispatcherService', 'Partitioned cookie', 'post_api.js'];
+            const noise = [
+                'cdn.tailwindcss.com',
+                'ContentDispatcherService',
+                'Partitioned cookie',
+                'post_api.js',
+                'Content-Security-Policy',
+                'script-src',
+                'm.stripe.network',
+                'TAB_STATE'
+            ];
 
             console.warn = function (...args) {
                 if (typeof args[0] === 'string' && noise.some(p => args[0].includes(p))) return;
@@ -255,6 +264,8 @@
                 <!-- Mobile Menu Button -->
                 <button onclick="openMobileMenu()"
                     class="md:hidden p-1.5 md:p-2 text-t-muted hover:text-white transition-colors">
+                    <i class="ph ph-list text-lg md:text-xl"></i>
+                </button>
             </div>
         </div>
 
