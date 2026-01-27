@@ -63,12 +63,14 @@
                             color: 0xffffff,
                             metalness: 0.0,
                             roughness: 0.0,
-                            transmission: 0.98,
-                            thickness: 0, // No refraction thickness (removes edge distortion/"thing around it")
-                            ior: 1.5,
+                            transmission: 0.99, // Super clear
+                            thickness: 0.0, // No thick glass volume
+                            ior: 1.1, // Near-air refraction (removes bent light edges)
+                            clearcoat: 0.0, // No extra shiny layer
+                            envMapIntensity: 1.0,
                             transparent: true,
                             opacity: 1.0,
-                            side: THREE.DoubleSide
+                            side: THREE.FrontSide // Only render front face (removes internal "box" artifact)
                         });
                     }
                 });
