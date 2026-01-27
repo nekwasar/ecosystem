@@ -57,16 +57,18 @@ async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     # CSP: Fixed configuration to allow Stripe, Tailwind, and Inline Scripts
+    # CSP: Permissive configuration to prevent 3rd party blocking (Stripe, Fonts, CDN)
+    # Allows all HTTPS resources, inline scripts, and data blobs.
     response.headers["Content-Security-Policy"] = (
-        "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://js.stripe.com https://m.stripe.network https://*.stripe.com; "
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdn.jsdelivr.net; "
-        "font-src 'self' https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; "
-        "img-src 'self' data: blob: https: http: https://*.stripe.com; "
-        "connect-src 'self' https: http: https://cdn.tailwindcss.com https://api.stripe.com https://m.stripe.network https://*.stripe.com; "
-        "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://*.stripe.com; "
+        "default-src 'self' https:; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:; "
+        "style-src 'self' 'unsafe-inline' https:; "
+        "font-src 'self' data: https:; "
+        "img-src 'self' data: blob: https:; "
+        "connect-src 'self' https: blob:; "
+        "frame-src 'self' https:; "
         "worker-src 'self' blob:; "
-        "child-src 'self' blob: https://*.stripe.com; "
+        "child-src 'self' blob: https:; "
         "frame-ancestors 'none';"
     )
     return response

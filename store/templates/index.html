@@ -11,6 +11,13 @@
         class="absolute right-[5%] top-1/2 -translate-y-1/2 w-[80px] h-[80px] md:w-[150px] md:h-[150px] block z-0 pointer-events-none opacity-0 transition-opacity duration-1000">
     </div>
 
+    <!-- Absolute Badge -->
+    <div
+        class="absolute top-4 right-4 md:right-10 z-20 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-base-tint border border-stroke-elements text-[10px] font-bold uppercase tracking-widest text-t-muted hover:border-accent/50 transition-colors cursor-default animate-fade-in shadow-sm">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+        Updated Weekly
+    </div>
+
     <script type="module">
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -129,16 +136,11 @@
     </script>
 
 
-    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        <!-- Badge -->
-        <div
-            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-base-tint border border-stroke-elements text-[10px] font-bold uppercase tracking-widest text-t-muted mb-8 hover:border-accent/50 transition-colors cursor-default animate-fade-in shadow-sm">
-            <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-            Updated Weekly
-        </div>
+    <div class="relative z-10 max-w-4xl mx-auto px-6 flex flex-col items-end md:items-center text-right md:text-center">
 
         <!-- Headline -->
-        <h1 class="font-display font-bold text-5xl md:text-7xl text-t-bright mb-6 leading-tight animate-slide-up">
+        <h1
+            class="font-display font-bold text-5xl md:text-7xl text-t-bright mb-6 leading-tight animate-slide-up text-right md:text-center">
             Build Faster with <br>
             <span class="gradient-text">Premium Assets.</span>
         </h1>

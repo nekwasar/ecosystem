@@ -206,13 +206,16 @@
 <body class="bg-base text-t-medium font-sans min-h-screen flex flex-col selection:bg-accent selection:text-white">
 
     <!-- HEADER -->
+    <!-- HEADER -->
     <header class="border-b border-stroke-elements bg-base-tint/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+        <div
+            class="max-w-7xl mx-auto px-4 md:px-6 py-3 md:py-4 flex flex-nowrap items-center justify-between gap-2 md:gap-4">
             <!-- Logo -->
-            <a href="/store" class="flex flex-col leading-tight group">
+            <a href="/store" class="flex flex-col leading-tight group shrink-0">
                 <span
-                    class="font-display font-bold text-xl text-t-bright tracking-wider group-hover:text-accent transition-colors">NekwasaR</span>
-                <span class="font-syne text-xs text-accent font-bold uppercase tracking-[0.2em]">Store</span>
+                    class="font-display font-bold text-lg md:text-xl text-t-bright tracking-wider group-hover:text-accent transition-colors">NekwasaR</span>
+                <span
+                    class="font-syne text-[10px] md:text-xs text-accent font-bold uppercase tracking-[0.2em]">Store</span>
             </a>
 
             <!-- Nav (Edited Lines: 130-137) -->
@@ -229,16 +232,17 @@
             </nav>
 
             <!-- Actions -->
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-1 md:gap-4 shrink-0">
                 <!-- Theme Toggle (Functional) -->
-                <button id="theme-toggle" class="p-2 text-t-muted hover:text-t-bright transition-colors"
+                <button id="theme-toggle" class="p-1.5 md:p-2 text-t-muted hover:text-t-bright transition-colors"
                     title="Toggle theme">
-                    <i class="ph ph-moon-stars text-xl"></i>
+                    <i class="ph ph-moon-stars text-lg md:text-xl"></i>
                 </button>
 
                 <!-- Search/Cart -->
-                <button onclick="toggleCart()" class="relative p-2 text-t-muted hover:text-accent transition-colors">
-                    <i class="ph ph-shopping-cart text-xl"></i>
+                <button onclick="toggleCart()"
+                    class="relative p-1.5 md:p-2 text-t-muted hover:text-accent transition-colors">
+                    <i class="ph ph-shopping-cart text-lg md:text-xl"></i>
                     <span id="cart-count"
                         class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
                 </button>
@@ -248,12 +252,75 @@
                     <!-- Dynamic Auth Buttons injected via JS -->
                 </div>
 
-                <!-- Mobile Menu -->
-                <button class="md:hidden p-2 text-t-muted hover:text-white">
-                    <i class="ph ph-list text-xl"></i>
+                <!-- Mobile Menu Button -->
+                <button onclick="openMobileMenu()"
+                    class="md:hidden p-1.5 md:p-2 text-t-muted hover:text-white transition-colors">
+                    <i class="ph ph-list text-lg md:text-xl"></i>
                 </button>
             </div>
         </div>
+
+        <!-- Mobile Slide-Out Menu -->
+        <div id="mobile-menu" class="fixed inset-0 z-[100] invisible" aria-hidden="true">
+            <!-- Backdrop -->
+            <div id="mobile-menu-backdrop"
+                class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"
+                onclick="closeMobileMenu()"></div>
+
+            <!-- Panel -->
+            <div id="mobile-menu-panel"
+                class="absolute right-0 top-0 h-full w-[280px] bg-base border-l border-stroke-elements shadow-2xl transform translate-x-full transition-transform duration-300 ease-out flex flex-col p-6">
+
+                <div class="flex items-center justify-between mb-10">
+                    <span class="font-display font-bold text-lg text-t-bright">Menu</span>
+                    <button onclick="closeMobileMenu()" class="p-2 text-t-muted hover:text-accent transition-colors">
+                        <i class="ph ph-x text-2xl"></i>
+                    </button>
+                </div>
+
+                <nav class="flex flex-col gap-6 font-display font-medium text-lg text-t-medium">
+                    <a href="/" class="hover:text-white transition-colors">Home</a>
+                    <a href="/categories" class="hover:text-white transition-colors">Categories</a>
+                    <a href="/enterprise" class="hover:text-white transition-colors">Enterprise</a>
+                    <hr class="border-stroke-elements my-2">
+                    <a href="https://nekwasar.com" class="text-sm text-t-muted hover:text-accent">
+                        <i class="ph-bold ph-arrow-left mr-1"></i> Back to Portfolio
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <script>
+            const menu = document.getElementById('mobile-menu');
+            const backdrop = document.getElementById('mobile-menu-backdrop');
+            const panel = document.getElementById('mobile-menu-panel');
+
+            function openMobileMenu() {
+                menu.classList.remove('invisible');
+                // Trigger reflow
+                void menu.offsetWidth;
+                backdrop.classList.remove('opacity-0');
+                panel.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                backdrop.classList.add('opacity-0');
+                panel.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+
+                setTimeout(() => {
+                    menu.classList.add('invisible');
+                }, 300);
+            }
+
+            // Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !menu.classList.contains('invisible')) {
+                    closeMobileMenu();
+                }
+            });
+        </script>
     </header>
 
     <!-- MAIN CONTENT -->
