@@ -12,7 +12,7 @@
 
     <!-- 3D Floating Element (Real 3D Model) -->
     <div id="canvas-container"
-        class="absolute right-[-20%] md:right-[0%] top-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] block z-0 pointer-events-none opacity-0 transition-opacity duration-1000">
+        class="absolute right-[5%] top-1/2 -translate-y-1/2 w-[120px] h-[120px] md:w-[150px] md:h-[150px] block z-0 pointer-events-none opacity-0 transition-opacity duration-1000">
     </div>
 
     <script type="module">
@@ -83,7 +83,7 @@
                 const box = new THREE.Box3().setFromObject(model);
                 const center = box.getCenter(new THREE.Vector3());
                 model.position.sub(center); // Center pivot
-                model.scale.set(1.5, 1.5, 1.5); // Adjust size
+                model.scale.set(1.2, 1.2, 1.2); // Adjust size relative to tiny container
 
                 scene.add(model);
 
