@@ -59,18 +59,11 @@
                     if (child.isMesh) {
                         // Apply a custom high-quality glass material
                         // This ensures consistent "premium" look regardless of the export settings
-                        child.material = new THREE.MeshPhysicalMaterial({
-                            color: 0xffffff,
-                            metalness: 0.0,
-                            roughness: 0.0,
-                            transmission: 0.99, // Super clear
-                            thickness: 0.0, // No thick glass volume
-                            ior: 1.1, // Near-air refraction (removes bent light edges)
-                            clearcoat: 0.0, // No extra shiny layer
-                            envMapIntensity: 1.0,
+                        child.material = new THREE.MeshBasicMaterial({
+                            color: 0x8b5cf6, // Accent Purple
+                            wireframe: true,
                             transparent: true,
-                            opacity: 1.0,
-                            side: THREE.FrontSide // Only render front face (removes internal "box" artifact)
+                            opacity: 0.2, // Very subtle, professional
                         });
                     }
                 });
