@@ -56,20 +56,17 @@ async def add_security_headers(request: Request, call_next):
 
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["X-XSS-Protection"] = "1; mode=block"
-    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-    
-    # CSP: Added specific Stripe endpoints and allowed inline scripts for Tailwind/Theme
-    # Also allowing connect-src http: temporarily to debug the product load issue
+    # CSP: Fixed configuration to allow Stripe, Tailwind, and Inline Scripts
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://js.stripe.com https://m.stripe.network https://*.stripe.com; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdn.jsdelivr.net; "
         "font-src 'self' https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; "
-        "img-src 'self' data: https: http: https://*.stripe.com; "
-        "connect-src 'self' https: http: https://cdn.tailwindcss.com https://api.stripe.com https://m.stripe.network; "
+        "img-src 'self' data: blob: https: http: https://*.stripe.com; "
+        "connect-src 'self' https: http: https://cdn.tailwindcss.com https://api.stripe.com https://m.stripe.network https://*.stripe.com; "
         "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://*.stripe.com; "
+        "worker-src 'self' blob:; "
+        "child-src 'self' blob: https://*.stripe.com; "
         "frame-ancestors 'none';"
     )
     return response
