@@ -59,18 +59,18 @@ async def add_security_headers(request: Request, call_next):
     # CSP: Fixed configuration to allow Stripe, Tailwind, and Inline Scripts
     # CSP: Permissive configuration to prevent 3rd party blocking (Stripe, Fonts, CDN)
     # Allows all HTTPS resources, inline scripts, and data blobs.
-    # response.headers["Content-Security-Policy"] = (
-    #     "default-src 'self' https:; "
-    #     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:; "
-    #     "style-src 'self' 'unsafe-inline' https:; "
-    #     "font-src 'self' data: https:; "
-    #     "img-src 'self' data: blob: https:; "
-    #     "connect-src 'self' https: blob:; "
-    #     "frame-src 'self' https:; "
-    #     "worker-src 'self' blob:; "
-    #     "child-src 'self' blob: https:; "
-    #     "frame-ancestors 'none';"
-    # )
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self' https: data: blob:; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:; "
+        "style-src 'self' 'unsafe-inline' https:; "
+        "font-src 'self' data: https:; "
+        "img-src 'self' data: blob: https:; "
+        "connect-src 'self' https: wss: blob:; "
+        "frame-src 'self' https:; "
+        "worker-src 'self' blob:; "
+        "child-src 'self' blob: https:; "
+        "frame-ancestors 'none';"
+    )
     return response
 
 # Templates for admin pages
