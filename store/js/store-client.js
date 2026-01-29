@@ -134,9 +134,8 @@ function updateAuthUI() {
         `;
     } else {
         container.innerHTML = `
-            <button onclick="openAuthModal()" class="p-1.5 md:px-5 md:py-2.5 text-t-muted hover:text-accent md:text-white dark:md:text-black md:bg-gray-900 dark:md:bg-white md:font-semibold rounded-full md:hover:opacity-90 transition-all md:shadow-lg md:shadow-primary/10 flex items-center justify-center">
-                <i class="ph ph-user text-lg md:text-xl md:hidden"></i>
-                <span class="hidden md:inline text-sm">Sign In</span>
+            <button onclick="openAuthModal()" class="p-1.5 md:p-2 text-t-muted hover:text-accent transition-colors flex items-center justify-center">
+                <i class="ph ph-user text-lg md:text-xl"></i>
             </button>
         `;
     }
