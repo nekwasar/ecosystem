@@ -134,12 +134,17 @@ function updateAuthUI() {
         `;
     } else {
         container.innerHTML = `
-            <button onclick="openAuthModal()" class="p-1.5 md:px-5 md:py-2.5 bg-transparent md:bg-gray-900 dark:md:bg-white text-t-muted md:text-white dark:md:text-black font-semibold rounded-full hover:text-accent md:hover:opacity-90 transition md:shadow-lg md:shadow-primary/10 flex items-center justify-center">
-                <i class="ph ph-user text-lg md:hidden"></i>
+            <button onclick="openAuthModal()" class="p-1.5 md:px-5 md:py-2.5 text-t-muted hover:text-accent md:text-white dark:md:text-black md:bg-gray-900 dark:md:bg-white md:font-semibold rounded-full md:hover:opacity-90 transition-all md:shadow-lg md:shadow-primary/10 flex items-center justify-center">
+                <i class="ph ph-user text-lg md:text-xl md:hidden"></i>
                 <span class="hidden md:inline text-sm">Sign In</span>
             </button>
         `;
     }
+}
+
+function toggleSearch() {
+    // Placeholder for search logic
+    alert("Search feature coming soon!");
 }
 
 // --- Cart Actions ---
