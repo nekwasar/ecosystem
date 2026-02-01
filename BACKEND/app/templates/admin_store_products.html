@@ -156,6 +156,20 @@
                         class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all">
                 </div>
 
+                <!-- Gallery Images -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Gallery Images (URLs, one per line)</label>
+                    <textarea name="gallery_images" rows="3" placeholder="https://..."
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all"></textarea>
+                </div>
+
+                <!-- Product Videos -->
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-t-medium">Videos (URLs, one per line)</label>
+                    <textarea name="video_urls" rows="2" placeholder="https://..."
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none transition-all"></textarea>
+                </div>
+
                 <!-- Category -->
                 <div class="space-y-2">
                     <label class="text-sm font-bold text-t-medium">Category</label>
@@ -375,6 +389,7 @@
         document.getElementById('productModal').classList.add('hidden');
         document.getElementById('productForm').reset();
         document.getElementById('customCategoryInput').classList.add('hidden');
+        document.getElementById('customCategoryInput').required = false;
     }
 
     function toggleCustomCategory(select) {
@@ -446,50 +461,73 @@
 
             if (!res.ok) throw new Error(data.detail || 'Failed to save');
 
-            // Handle Image Upload separate from Edit/Create for simplicity here
-            // If new image url provided:
-            const prodId = isEdit ? productId : data.id;
-            const imgUrl = formData.get('image_url');
+            const savedProductId = data.id;
 
-            if (imgUrl && imgUrl.trim() !== '') {
-                await fetch(`/api/admin/store/products/${prodId}/media`, {
+            // --- Media Handling ---
+            // 1. Cover Image (Hero)
+            const coverUrl = formData.get('image_url');
+            if (coverUrl) {
+                await saveMedia(savedProductId, coverUrl, 'image', true);
+            }
+
+            // 2. Gallery Images
+            const galleryRaw = formData.get('gallery_images') || "";
+            const galleryUrls = galleryRaw.split('\n').map(u => u.trim()).filter(u => u);
+            for (const url of galleryUrls) {
+                await saveMedia(savedProductId, url, 'image', false);
+            }
+
+            // 3. Videos
+            const videoRaw = formData.get('video_urls') || "";
+            const videoUrls = videoRaw.split('\n').map(u => u.trim()).filter(u => u);
+            for (const url of videoUrls) {
+                await saveMedia(savedProductId, url, 'video', false);
+            }
+
+            closeModal();
+            loadProducts(); // Refresh table
+
+        } catch (e) {
+            alert('Error: ' + e.message);
+            console.error(e);
+        }
+
+
+        async function saveMedia(productId, url, type, isHero) {
+            try {
+                const token = localStorage.getItem('token');
+                await fetch(`/api/admin/store/products/${productId}/media`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        file_url: imgUrl,
-                        media_type: 'image',
-                        is_hero: true
+                        file_url: url,
+                        media_type: type,
+                        is_hero: isHero
                     })
                 });
+            } catch (e) {
+                console.error("Failed to save media", url, e);
             }
-
-            // Success
-            alert(isEdit ? 'Product Updated!' : 'Product Created!');
-            closeModal();
-            loadProducts(); // Refresh table
-        } catch (error) {
-            console.error(error);
-            alert('Error: ' + error.message);
         }
-    }
 
-    async function deleteProduct(id) {
-        if (!confirm('Are you sure you want to delete this product?')) return;
 
-        try {
-            const token = localStorage.getItem('token');
-            const res = await fetch(`/api/admin/store/products/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+        async function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product?')) return;
 
-            if (!res.ok) throw new Error('Failed to delete');
-            loadProducts();
-        } catch (e) {
-            alert(e.message);
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`/api/admin/store/products/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) throw new Error('Failed to delete');
+                loadProducts();
+            } catch (e) {
+                alert(e.message);
+            }
         }
-    }
 </script>

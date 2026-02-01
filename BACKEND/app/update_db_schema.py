@@ -27,6 +27,14 @@ def update_schema():
         except Exception as e:
             print(f"⚠️ Could not add store columns: {e}")
             
+        # 4. Clean Corrupt Categories (Fixes 500 Error)
+        try:
+            conn.execute(text("DELETE FROM store_categories WHERE name IS NULL OR TRIM(name) = '';"))
+            conn.execute(text("DELETE FROM store_categories WHERE slug IS NULL OR TRIM(slug) = '';"))
+            print("✅ Cleaned corrupt categories")
+        except Exception as e:
+            print(f"⚠️ Error cleaning categories: {e}")
+
         conn.commit()
         print("🎉 Database schema update complete.")
 

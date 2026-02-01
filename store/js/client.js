@@ -9,6 +9,59 @@ const STATE_STORE = { // Renamed safely to avoid global conflicts
     filter: 'all'
 };
 
+// --- Shared Components ---
+function createProductCard(p) {
+    const card = document.createElement('div');
+    card.className = "group relative aspect-[4/5] md:aspect-[3/4] rounded-3xl overflow-hidden bg-base-shade cursor-pointer shadow-2xl hover:shadow-[0_0_40px_rgba(var(--accent-rgb),0.2)] transition-all duration-500 border border-white/5";
+    card.onclick = (e) => {
+        if (e.target.closest('button')) return;
+        window.location.href = `/product/${p.slug}`;
+    };
+
+    const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
+
+    // Price Styling
+    let priceTag = `<span class="text-white font-bold text-lg drop-shadow-md">$${p.price}</span>`;
+    if (p.is_private_listing) {
+        priceTag = '<span class="text-amber-400 font-bold uppercase text-xs tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
+    }
+
+    card.innerHTML = `
+        <!-- Image Background -->
+        <div class="absolute inset-0 w-full h-full">
+            <img src="${hero.file_url}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" alt="${p.name}" onerror="this.src='https://placehold.co/600x800/1e293b/FFF?text=Asset'">
+        </div>
+        
+        <!-- Glass/Dark Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
+        
+        <!-- Top Badges -->
+        <div class="absolute top-4 right-4 z-10">
+            <span class="px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg">
+                ${p.product_type.replace('_', ' ')}
+            </span>
+        </div>
+
+        <!-- Content Overlay -->
+        <div class="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300 z-10">
+            <h3 class="text-xl md:text-2xl font-bold font-syne text-white leading-tight mb-1 drop-shadow-lg line-clamp-2">${p.name}</h3>
+            
+            <div class="flex justify-between items-center mb-4 opacity-90">
+                <span class="text-xs text-gray-300 font-medium uppercase tracking-wide">${p.category ? p.category.name : 'Digital Asset'}</span>
+                <div class="font-syne">${priceTag}</div>
+            </div>
+
+            <!-- Hover Action -->
+            <div class="h-0 opacity-0 group-hover:h-auto group-hover:opacity-100 overflow-hidden transition-all duration-500 ease-in-out">
+                    <button class="w-full py-3 bg-accent hover:bg-accent-highlight text-black font-bold rounded-xl shadow-lg shadow-accent/20 flex items-center justify-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform delay-100">
+                    View Details <i class="ph-bold ph-arrow-right"></i>
+                    </button>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initStore().catch(console.error);
 
@@ -107,42 +160,7 @@ function renderProducts() {
     }
 
     filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = "product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg";
-        card.onclick = (e) => {
-            if (e.target.closest('button')) return;
-            window.location.href = `/product/${p.slug}`;
-        };
-
-        const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
-
-        // Price Tag
-        let priceTag = `<span class="text-t-bright font-bold">$${p.price}</span>`;
-        if (p.is_private_listing) {
-            priceTag = '<span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
-        }
-
-        card.innerHTML = `
-            <div class="relative aspect-[4/3] bg-base-shade overflow-hidden">
-                <img src="${hero.file_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" alt="${p.name}" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=Asset'">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
-                <div class="absolute top-3 right-3">
-                    <span class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">
-                        ${p.product_type.replace('_', ' ')}
-                    </span>
-                </div>
-            </div>
-            <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
-                <div>
-                    <h3 class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">${p.name}</h3>
-                    <div class="flex justify-between items-center mt-2">
-                        <span class="text-xs text-t-muted font-medium uppercase tracking-wide">${p.category ? p.category.name : 'Digital Asset'}</span>
-                        <div class="font-syne">${priceTag}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-        grid.appendChild(card);
+        grid.appendChild(createProductCard(p));
     });
 }
 
@@ -253,41 +271,7 @@ function searchProducts(query) {
 
     // Reuse Card Logic (Ideally this should be a shared component function, but duplication is safe here for speed)
     filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = "product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg";
-        card.onclick = (e) => {
-            if (e.target.closest('button')) return;
-            window.location.href = `/product/${p.slug}`;
-        };
-
-        const hero = p.images.find(i => i.is_hero) || p.images[0] || { file_url: '/store/img/placeholder.jpg' };
-
-        let priceTag = `<span class="text-t-bright font-bold">$${p.price}</span>`;
-        if (p.is_private_listing) {
-            priceTag = '<span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i class="ph-fill ph-lock-key"></i> Restricted</span>';
-        }
-
-        card.innerHTML = `
-            <div class="relative aspect-[4/3] bg-base-shade overflow-hidden">
-                <img src="${hero.file_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" alt="${p.name}" onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=Asset'">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
-                <div class="absolute top-3 right-3">
-                    <span class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">
-                        ${p.product_type.replace('_', ' ')}
-                    </span>
-                </div>
-            </div>
-            <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
-                <div>
-                    <h3 class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">${p.name}</h3>
-                    <div class="flex justify-between items-center mt-2">
-                        <span class="text-xs text-t-muted font-medium uppercase tracking-wide">${p.category ? p.category.name : 'Digital Asset'}</span>
-                        <div class="font-syne">${priceTag}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-        grid.appendChild(card);
+        grid.appendChild(createProductCard(p));
     });
 }
 window.handleHeroSearch = searchProducts; // Map the index.html function name

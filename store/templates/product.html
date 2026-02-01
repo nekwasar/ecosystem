@@ -64,10 +64,33 @@
                 </div>
                 {% endif %}
 
-                {% for img in product.images %}
-                <div
-                    class="min-w-[40%] sm:min-w-[30%] aspect-[9/16] sm:aspect-video rounded-xl overflow-hidden shadow-lg border border-stroke-elements shrink-0 snap-center">
-                    <img src="{{ img.file_url }}" class="w-full h-full object-cover" alt="Screenshot">
+                {% for media in product.images %}
+                <div onclick="openLightbox('{{ media.media_type }}', '{{ media.file_url }}')"
+                    class="min-w-[80%] sm:min-w-[60%] aspect-video rounded-xl overflow-hidden shadow-lg border border-stroke-elements shrink-0 snap-center bg-black cursor-pointer group relative hover:ring-2 ring-accent/50 transition-all">
+
+                    {% if media.media_type == 'video' %}
+                    <div class="absolute inset-0 z-10 bg-transparent"></div>
+                    {% if 'youtube' in media.file_url or 'youtu.be' in media.file_url %}
+                    <iframe
+                        src="{{ media.file_url | replace('watch?v=', 'embed/') | replace('youtu.be/', 'www.youtube.com/embed/') }}"
+                        class="w-full h-full pointer-events-none" frameborder="0"></iframe>
+                    {% else %}
+                    <video src="{{ media.file_url }}" class="w-full h-full object-cover"></video>
+                    {% endif %}
+                    <div class="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                        <div
+                            class="w-12 h-12 rounded-full bg-accent/90 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <i class="ph-fill ph-play text-xl"></i>
+                        </div>
+                    </div>
+                    {% else %}
+                    <img src="{{ media.file_url }}" class="w-full h-full object-cover" alt="Media">
+                    <div
+                        class="absolute inset-0 z-20 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity pointer-events-none">
+                        <i
+                            class="ph-bold ph-arrows-out-simple text-white text-3xl drop-shadow-lg transform scale-75 group-hover:scale-100 transition-transform"></i>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
@@ -185,4 +208,56 @@
         </div>
     </div>
 </div>
+
+<!-- Media Lightbox -->
+<div id="mediaLightbox"
+    class="fixed inset-0 z-[100] hidden bg-black/95 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-300 opacity-0"
+    onclick="closeLightbox()">
+    <button onclick="closeLightbox()"
+        class="absolute top-6 right-6 text-t-muted hover:text-white transition-colors z-[110]">
+        <i class="ph-bold ph-x text-3xl"></i>
+    </button>
+    <div id="lightboxContent" class="w-full max-w-7xl max-h-[90vh] flex items-center justify-center relative"
+        onclick="event.stopPropagation()">
+        <!-- Content Injected Here -->
+    </div>
+</div>
+
+<script>
+    function openLightbox(type, url) {
+        const lightbox = document.getElementById('mediaLightbox');
+        const content = document.getElementById('lightboxContent');
+
+        lightbox.classList.remove('hidden');
+        // Small delay to allow display:block to render before opacity transition
+        setTimeout(() => lightbox.classList.remove('opacity-0'), 10);
+
+        if (type === 'video') {
+            if (url.includes('youtube') || url.includes('youtu.be')) {
+                const embedUrl = url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/');
+                content.innerHTML = `<iframe src="${embedUrl}?autoplay=1" class="w-full aspect-video rounded-xl shadow-2xl border border-white/10" frameborder="0" allowfullscreen allow="autoplay"></iframe>`;
+            } else {
+                content.innerHTML = `<video src="${url}" controls autoplay class="w-full max-h-[90vh] rounded-xl shadow-2xl border border-white/10 outline-none"></video>`;
+            }
+        } else {
+            content.innerHTML = `<img src="${url}" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl border border-white/10">`;
+        }
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('mediaLightbox');
+        const content = document.getElementById('lightboxContent');
+
+        lightbox.classList.add('opacity-0');
+        setTimeout(() => {
+            lightbox.classList.add('hidden');
+            content.innerHTML = ''; // Stop video playback
+        }, 300);
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
 {% endblock %}
