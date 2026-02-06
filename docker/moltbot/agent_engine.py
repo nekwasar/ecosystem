@@ -63,13 +63,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # 0. Intercept Model Check
     if "which model" in user_text.lower() or user_text.lower() == "/model":
-        # Find the model being used
-        llm_cfg = config.get("llm", {}).get("providers", {}).get("openrouter", {})
-        current_model = llm_cfg.get("model", "deepseek/deepseek-r1-0528:free")
-        # Also check env override
-        if os.getenv("OPENROUTER_MODEL_PREF"):
-            current_model = os.getenv("OPENROUTER_MODEL_PREF")
-            
+        # Check dynamic env first
+        current_model = os.environ.get("CURRENT_MODEL")
+        
+        # Fallback to config if not switched yet
+        if not current_model:
+             llm_cfg = config.get("llm", {}).get("providers", {}).get("openrouter", {})
+             current_model = llm_cfg.get("model", "gpt-oss-120b:free")
+
         await update.message.reply_text(f"🧠 **Current Neural Network:** `{current_model}`")
         return
 
