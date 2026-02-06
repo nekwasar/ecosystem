@@ -51,5 +51,6 @@ services:
       - CEREBRAS_API_KEY=${CEREBRAS_API_KEY}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - WEB_ENABLED=true
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
 volumes:
   postgres_data:
