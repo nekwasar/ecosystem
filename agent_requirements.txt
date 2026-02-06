@@ -1,0 +1,7 @@
+duckduckgo-search
+googlesearch-python
+trafilatura
+sqlalchemy
+psycopg2-binary
+requests
+python-dateutil
