@@ -84,20 +84,63 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(output[-400:] if len(output) > 2000 else output)
         return
 
-    # 2. Default: Chat with LLM (The Soul)
-    # We use a simple HTTP request to openrouter here for the "Chat" capability
-    # to avoid importing the huge 'openai' lib just for one call, keeping it light.
+    # 2. Intercept Switching Commands
+    lower_text = user_text.lower()
+    if lower_text.startswith("switch to"):
+        target = lower_text.replace("switch to", "").strip()
+        new_model = ""
+        new_provider = ""
+        
+        if "groq" in target:
+            new_provider = "groq"
+            new_model = "llama3-70b-8192"
+        elif "cerebras" in target:
+            new_provider = "cerebras"
+            new_model = "llama3.1-70b"
+        elif "gpt" in target or "openrouter" in target:
+            new_provider = "openrouter"
+            new_model = "gpt-oss-120b:free"
+        
+        if new_provider:
+            # Update Runtime Config (In-Memory)
+            # Note: For persistence, we'd write to config.json, but for now we set ENV vars for the session
+            os.environ["CURRENT_PROVIDER"] = new_provider
+            os.environ["CURRENT_MODEL"] = new_model
+            await update.message.reply_text(f"🔄 **Switched to {new_provider.upper()}**\nBrain: `{new_model}`")
+            return
+        else:
+            await update.message.reply_text("❌ Unknown provider. Options: Groq, Cerebras, OpenRouter (GPT).")
+            return
+
+    # 3. Default: Chat with LLM (The Soul)
     import requests
     
     soul = get_soul()
     
-    # Provider Config
-    llm_cfg = config.get("llm", {}).get("providers", {}).get("openrouter", {})
-    api_key = os.getenv("OPENROUTER_API_KEY") 
-    model = "gpt-oss-120b:free"
+    # Determine Provider & Model
+    current_provider = os.environ.get("CURRENT_PROVIDER", "openrouter")
+    current_model = os.environ.get("CURRENT_MODEL", config.get("llm", {}).get("model", "gpt-oss-120b:free"))
+    
+    # API Configs
+    providers = {
+        "openrouter": {
+            "url": "https://openrouter.ai/api/v1/chat/completions",
+            "key": os.getenv("OPENROUTER_API_KEY")
+        },
+        "groq": {
+            "url": "https://api.groq.com/openai/v1/chat/completions",
+            "key": os.getenv("GROQ_API_KEY")
+        },
+        "cerebras": {
+            "url": "https://api.cerebras.ai/v1/chat/completions",
+            "key": os.getenv("CEREBRAS_API_KEY")
+        }
+    }
+    
+    active_cfg = providers.get(current_provider, providers["openrouter"])
     
     payload = {
-        "model": model,
+        "model": current_model,
         "messages": [
             {"role": "system", "content": soul},
             {"role": "user", "content": user_text}
@@ -106,15 +149,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     try:
         resp = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}"},
+            active_cfg["url"],
+            headers={"Authorization": f"Bearer {active_cfg['key']}"},
             json=payload
         )
         if resp.status_code == 200:
             ai_text = resp.json()['choices'][0]['message']['content']
             await update.message.reply_text(ai_text)
         else:
-            await update.message.reply_text(f"Brain Error: {resp.text}")
+            await update.message.reply_text(f"Brain Error ({current_provider}): {resp.text}")
     except Exception as e:
         await update.message.reply_text(f"Connection Error: {e}")
 
