@@ -94,7 +94,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Provider Config
     llm_cfg = config.get("llm", {}).get("providers", {}).get("openrouter", {})
     api_key = os.getenv("OPENROUTER_API_KEY") 
-    model = "deepseek/deepseek-r1-0528:free"
+    model = "gpt-oss-120b:free"
     
     payload = {
         "model": model,
