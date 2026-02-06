@@ -61,6 +61,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
     chat_id = update.effective_chat.id
     
+    # 0. Intercept Model Check
+    if "which model" in user_text.lower() or user_text.lower() == "/model":
+        # Find the model being used
+        llm_cfg = config.get("llm", {}).get("providers", {}).get("openrouter", {})
+        current_model = llm_cfg.get("model", "deepseek/deepseek-r1-0528:free")
+        # Also check env override
+        if os.getenv("OPENROUTER_MODEL_PREF"):
+            current_model = os.getenv("OPENROUTER_MODEL_PREF")
+            
+        await update.message.reply_text(f"🧠 **Current Neural Network:** `{current_model}`")
+        return
+
     # 1. Check for specific trigger words if not a command
     if user_text.lower().startswith("roast "):
         target = user_text[6:]
