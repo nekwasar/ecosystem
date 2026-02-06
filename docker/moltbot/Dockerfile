@@ -23,5 +23,5 @@ RUN playwright install --with-deps chromium
 # Setup ROBI's Rooms
 RUN mkdir -p /app/workspace /app/config /app/skills
 
-# Default Command: Keep ROBI alive and listening
-CMD ["tail", "-f", "/dev/null"]
+# Default Command: Start the BRAIN
+CMD ["python3", "/app/code/docker/moltbot/agent_engine.py"]
