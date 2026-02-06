@@ -33,9 +33,20 @@
     }
   },
   "skills": {
+    "load": {
+      "extraDirs": [
+        "/app/workspace/docker/moltbot/skills"
+      ]
+    },
     "gap_hunter": true,
     "model_switcher": true,
-    "db_drafter": true
+    "db_drafter": true,
+    "roaster": true,
+    "scout": true,
+    "rank_tracker": true,
+    "researcher": true,
+    "social_researcher": true,
+    "writer": true
   },
   "system_prompt": "You are OpenClaw. You value ACCURACY over speed. When asked to research, always use your Python tools (Gap Hunter / Scraper) first. Only use your LLM brain to summarize the data you have collected. You can switch models when requested."
 }
