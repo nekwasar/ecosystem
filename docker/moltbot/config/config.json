@@ -1,0 +1,41 @@
+{
+  "agent_name": "OpenClaw",
+  "agent_bio": "I am OpenClaw, a Safe God-Tier researcher and writer. I use code for facts and LLMs for synthesis.",
+  "web_enabled": true,
+  "web_port": 3000,
+  "llm": {
+    "provider": "openrouter",
+    "model": "deepseek/deepseek-r1-0528:free",
+    "providers": {
+      "openrouter": {
+        "baseUrl": "https://openrouter.ai/api/v1",
+        "apiKey": "${OPENROUTER_API_KEY}",
+        "models": [
+          "deepseek/deepseek-r1-0528:free",
+          "gpt-oss-120b:free",
+          "openrouter/auto"
+        ]
+      },
+      "groq": {
+        "baseUrl": "https://api.groq.com/openai/v1",
+        "apiKey": "${GROQ_API_KEY}",
+        "models": [
+          "llama3-70b-8192"
+        ]
+      },
+      "cerebras": {
+        "baseUrl": "https://api.cerebras.ai/v1",
+        "apiKey": "${CEREBRAS_API_KEY}",
+        "models": [
+          "llama3.1-70b"
+        ]
+      }
+    }
+  },
+  "skills": {
+    "gap_hunter": true,
+    "model_switcher": true,
+    "db_drafter": true
+  },
+  "system_prompt": "You are OpenClaw. You value ACCURACY over speed. When asked to research, always use your Python tools (Gap Hunter / Scraper) first. Only use your LLM brain to summarize the data you have collected. You can switch models when requested."
+}
