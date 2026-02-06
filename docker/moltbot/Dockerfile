@@ -23,5 +23,8 @@ RUN playwright install --with-deps chromium
 # Setup ROBI's Rooms
 RUN mkdir -p /app/workspace /app/config /app/skills
 
-# Default Command: Start the BRAIN
-CMD ["python3", "/app/code/docker/moltbot/agent_engine.py"]
+# Copy Code (Backup if volume fails)
+COPY . /app/code
+
+# Default Command: Start the BRAIN (Using Workspace Path for Live Updates)
+CMD ["python3", "/app/workspace/docker/moltbot/agent_engine.py"]
