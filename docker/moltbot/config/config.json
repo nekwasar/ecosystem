@@ -3,6 +3,12 @@
   "agent_bio": "I am OpenClaw, a Safe God-Tier researcher and writer. I use code for facts and LLMs for synthesis.",
   "web_enabled": true,
   "web_port": 3000,
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "botToken": "${TELEGRAM_BOT_TOKEN}"
+    }
+  },
   "llm": {
     "provider": "openrouter",
     "model": "deepseek/deepseek-r1-0528:free",

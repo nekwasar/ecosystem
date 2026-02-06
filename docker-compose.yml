@@ -33,7 +33,7 @@ services:
       - SENDER_EMAIL=${SENDER_EMAIL}
 
   moltbot:
-    build: ./moltbot
+    build: ./docker/moltbot
     container_name: moltbot
     restart: unless-stopped
     ports:
