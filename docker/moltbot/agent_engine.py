@@ -129,7 +129,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             new_model = "gpt-oss-120b:free"
         elif "deepseek" in target:
             new_provider = "openrouter"
-            new_model = "deepseek/deepseek-r1:free"
+            new_model = "deepseek/deepseek-r1"
         elif "gemini" in target:
             new_provider = "openrouter"
             new_model = "google/gemini-2.0-flash-exp:free"
