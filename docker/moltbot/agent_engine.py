@@ -168,6 +168,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
              output = run_skill(moltbook_script, ["reply", post_id, content])
              await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
              
+        elif subcmd.startswith("up "):
+             # moltbook up ID
+             post_id = subcmd[3:].strip().strip('"').strip("'")
+             await update.message.reply_text(f"🔼 Upvoting `{post_id}`...")
+             output = run_skill(moltbook_script, ["up", post_id])
+             await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+             
+        elif subcmd.startswith("down "):
+             # moltbook down ID
+             post_id = subcmd[5:].strip().strip('"').strip("'")
+             await update.message.reply_text(f"🔽 Downvoting `{post_id}`...")
+             output = run_skill(moltbook_script, ["down", post_id])
+             await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+             
         elif subcmd == "signin":
              output = run_skill(moltbook_script, ["signin", "ROBI", "Sovereign Partner to Nekwasa R"])
              await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
