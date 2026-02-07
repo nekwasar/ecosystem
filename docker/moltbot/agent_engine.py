@@ -83,6 +83,32 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         output = run_skill(roast_script, [target])
         # Parse output to find "Content:" logic or just send raw
         await update.message.reply_text(output[-400:] if len(output) > 2000 else output)
+        await update.message.reply_text(output[-400:] if len(output) > 2000 else output)
+        return
+
+    # 1.5. Shell Execution (If Enabled)
+    if user_text.lower().startswith("/exec ") or user_text.lower().startswith("exec "):
+        # Check permission
+        if os.getenv("MOLTBOOK_ALLOW_SHELL") != "true":
+            await update.message.reply_text("❌ Shell execution is DISABLED in config.")
+            return
+            
+        cmd = user_text[6:].strip() if user_text.lower().startswith("/exec") else user_text[5:].strip()
+        await update.message.reply_text(f"💻 Executing: `{cmd}`...")
+        
+        try:
+            # Run command with timeout
+            proc = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=30)
+            output = proc.stdout if proc.stdout else proc.stderr
+            if not output: output = "Done (No Output)."
+            
+            # Send back results
+            if len(output) > 3000:
+                await update.message.reply_text(f"Output too long. Last 3000 chars:\n```\n{output[-3000:]}\n```", parse_mode='Markdown')
+            else:
+                await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+        except Exception as e:
+            await update.message.reply_text(f"❌ Execution Error: {e}")
         return
 
     # 2. Intercept Switching Commands
@@ -98,9 +124,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         elif "cerebras" in target:
             new_provider = "cerebras"
             new_model = "llama3.1-70b"
-        elif "gpt" in target or "openrouter" in target:
+        elif "gpt" in target:
             new_provider = "openrouter"
             new_model = "gpt-oss-120b:free"
+        elif "deepseek" in target:
+            new_provider = "openrouter"
+            new_model = "deepseek/deepseek-r1:free"
+        elif "gemini" in target:
+            new_provider = "openrouter"
+            new_model = "google/gemini-2.0-flash-exp:free"
+        elif "auto" in target:
+            new_provider = "openrouter"
+            new_model = "openrouter/auto"
         
         if new_provider:
             # Update Runtime Config (In-Memory)

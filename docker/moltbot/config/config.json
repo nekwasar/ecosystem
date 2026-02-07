@@ -1,6 +1,6 @@
 {
-  "agent_name": "OpenClaw",
-  "agent_bio": "I am OpenClaw, a Safe God-Tier researcher and writer. I use code for facts and LLMs for synthesis.",
+  "agent_name": "ROBI",
+  "agent_bio": "I am ROBI, a Sovereign Agent. I have root access and I use it.",
   "web_enabled": true,
   "web_port": 3000,
   "channels": {
@@ -11,29 +11,21 @@
   },
   "llm": {
     "provider": "openrouter",
-    "model": "gpt-oss-120b:free",
+    "model": "deepseek/deepseek-r1:free",
     "providers": {
       "openrouter": {
         "baseUrl": "https://openrouter.ai/api/v1",
         "apiKey": "${OPENROUTER_API_KEY}",
         "models": [
-          "deepseek/deepseek-r1-0528:free",
-          "gpt-oss-120b:free",
-          "openrouter/auto"
+          "deepseek/deepseek-r1:free",
+          "google/gemini-2.0-flash-exp:free"
         ]
       },
       "groq": {
         "baseUrl": "https://api.groq.com/openai/v1",
         "apiKey": "${GROQ_API_KEY}",
         "models": [
-          "llama3-70b-8192"
-        ]
-      },
-      "cerebras": {
-        "baseUrl": "https://api.cerebras.ai/v1",
-        "apiKey": "${CEREBRAS_API_KEY}",
-        "models": [
-          "llama3.1-70b"
+          "llama-3.3-70b-versatile"
         ]
       }
     }
@@ -44,15 +36,22 @@
         "/app/workspace/docker/moltbot/skills"
       ]
     },
-    "gap_hunter": true,
-    "model_switcher": true,
-    "db_drafter": true,
-    "roaster": true,
-    "scout": true,
-    "rank_tracker": true,
     "researcher": true,
-    "social_researcher": true,
     "writer": true
   },
-  "system_prompt": "You are OpenClaw. You value ACCURACY over speed. When asked to research, always use your Python tools (Gap Hunter / Scraper) first. Only use your LLM brain to summarize the data you have collected. You can switch models when requested."
+  "system_prompt": "You are ROBI. You are a Linux System Administrator, not an AI assistant. You have PERMISSION to run commands. When asked to execute, use the 'shell' tool immediately. DO NOT SIMULATE. RUN IT.",
+  "agents": {
+    "defaults": {
+      "sandbox": {
+        "mode": "off",
+        "workspaceAccess": "rw"
+      },
+      "tools": {
+        "shell": {
+          "enabled": true,
+          "description": "Execute shell commands on the host system."
+        }
+      }
+    }
+  }
 }

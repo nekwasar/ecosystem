@@ -18,18 +18,19 @@ services:
     build: .
     container_name: nekwasar_server
     restart: always
-    depends_on:
+ depends_on:
       - db
     ports:
       - "8000:8000"
     volumes:
       - ./BACKEND/uploads:/app/BACKEND/uploads
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432>
       - SECRET_KEY=${SECRET_KEY}
       - API_HOST=0.0.0.0
       - API_PORT=8000
       - BREVO_API_KEY=${BREVO_API_KEY}
+
       - SENDER_EMAIL=${SENDER_EMAIL}
 
   moltbot:
@@ -37,7 +38,7 @@ services:
     container_name: moltbot
     restart: unless-stopped
     ports:
-      - "3000:3000"
+- "3000:3000"
     volumes:
       - ./docker/moltbot/config:/app/config
       - ./:/app/workspace
@@ -49,8 +50,10 @@ services:
       - GROQ_API_KEY=${GROQ_API_KEY}
       - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
       - CEREBRAS_API_KEY=${CEREBRAS_API_KEY}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432>
       - WEB_ENABLED=true
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} 
+      - MOLTBOT_ALLOW_SHELL=true
+      - EXECUTION_ENABLED=true
 volumes:
   postgres_data:
