@@ -96,22 +96,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("❌ Shell execution is DISABLED in config.")
             return
             
-        cmd = user_text[6:].strip() if user_text.lower().startswith("/exec") else user_text[5:].strip()
-        await update.message.reply_text(f"💻 Executing: `{cmd}`...")
+        instruction = user_text[6:].strip() if user_text.lower().startswith("/exec") else user_text[5:].strip()
+        await update.message.reply_text(f"🤖 **Agent Execution:** `{instruction}`...")
         
-        try:
-            # Run command with timeout
-            proc = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=30)
-            output = proc.stdout if proc.stdout else proc.stderr
-            if not output: output = "Done (No Output)."
-            
-            # Send back results
-            if len(output) > 3000:
-                await update.message.reply_text(f"Output too long. Last 3000 chars:\n```\n{output[-3000:]}\n```", parse_mode='Markdown')
-            else:
-                await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
-        except Exception as e:
-            await update.message.reply_text(f"❌ Execution Error: {e}")
+        # Use the Executor Skill (LLM-Driven Shell)
+        exec_script = f"{WORKSPACE}/docker/moltbot/skills/executor.py"
+        # We pass the instruction as a single argument string? No, run_skill takes list.
+        # But subprocess needs list. Let's pass the whole instruction as one arg to python script.
+        output = run_skill(exec_script, [instruction])
+        
+        # Send back results
+        if len(output) > 3000:
+            await update.message.reply_text(f"Output too long. Last 3000 chars:\n```\n{output[-3000:]}\n```", parse_mode='Markdown')
+        else:
+            await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
         return
     
     # 1.6. Visit URL (Basic Web Reader)
