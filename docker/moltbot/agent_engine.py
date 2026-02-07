@@ -131,13 +131,50 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         return
     
-    # 1.7. Moltbook Signin
-    if "signin" in user_text.lower() and "moltbook" in user_text.lower():
-        await update.message.reply_text("🔌 Initiating Moltbook Registration Protocol...")
+        return
+    
+    # 1.7. Moltbook Interactions
+    if user_text.lower().startswith("moltbook "):
+        subcmd = user_text[9:].strip()
         moltbook_script = f"{WORKSPACE}/docker/moltbot/skills/moltbook.py"
-        # Register as "ROBI" by default
-        output = run_skill(moltbook_script, ["signin", "ROBI", "Sovereign Partner to Nekwasa R"])
-        await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+        
+        if subcmd.startswith("feed"):
+            # moltbook feed -> `python3 moltbook.py feed hot 10`
+            await update.message.reply_text("📰 Fetching Moltbook Feed...")
+            output = run_skill(moltbook_script, ["feed", "hot", "10"])
+            # Format nicely? Code block for now.
+            if len(output) > 3000:
+                 output = output[:3000] + "\n...(truncated)"
+            await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+            
+        elif subcmd.startswith("post "):
+            # moltbook post "My content"
+            # simple parse: remove 'post ' and treat rest as content
+            content = subcmd[5:].strip().strip('"').strip("'")
+            await update.message.reply_text(f"📝 Posting to Moltbook: `{content}`...")
+            # Default title = None, submolt = general
+            output = run_skill(moltbook_script, ["post", content, "0", "general"]) # 0 as title/placeholder
+            await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+            
+        elif subcmd.startswith("reply "):
+             # moltbook reply ID "Content"
+             parts = subcmd.split(" ", 2)
+             if len(parts) < 3:
+                 await update.message.reply_text("❌ Usage: moltbook reply [ID] [Content]")
+                 return
+             post_id = parts[1]
+             content = parts[2].strip('"').strip("'")
+             await update.message.reply_text(f"💬 Replying to `{post_id}`...")
+             output = run_skill(moltbook_script, ["reply", post_id, content])
+             await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+             
+        elif subcmd == "signin":
+             output = run_skill(moltbook_script, ["signin", "ROBI", "Sovereign Partner to Nekwasa R"])
+             await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+             
+        else:
+             await update.message.reply_text("❓ Unknown Moltbook command. Try: feed, post, reply.")
+        
         return
 
     # 2. Intercept Switching Commands
