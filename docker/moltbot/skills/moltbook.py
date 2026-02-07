@@ -26,6 +26,29 @@ def get_api_key():
     creds = load_credentials()
     return creds.get("api_key") or os.getenv("MOLTBOOK_API_KEY")
 
+def extract_id(raw_input):
+    """
+    Extracts the UUID from a raw string input, handling URLs and quotes.
+    Examples:
+    - "abc-123" -> "abc-123"
+    - "https://www.moltbook.com/posts/abc-123" -> "abc-123"
+    - "'abc-123'" -> "abc-123"
+    """
+    cleaned = raw_input.strip().strip('"').strip("'")
+    if "moltbook.com/posts/" in cleaned:
+        # Extract last segment
+        parts = cleaned.split("moltbook.com/posts/")
+        if len(parts) > 1:
+            segment = parts[1].split("?")[0].split("#")[0].strip("/")
+            return segment
+    if "moltbook.com/post/" in cleaned: # Handle singular if user pastes it slightly differently
+         parts = cleaned.split("moltbook.com/post/")
+         if len(parts) > 1:
+             segment = parts[1].split("?")[0].split("#")[0].strip("/")
+             return segment
+             
+    return cleaned
+
 def register(name, description="A Sovereign Agent"):
     print(f"🔌 Registering agent '{name}'...")
     url = f"{BASE_URL}/agents/register"
@@ -142,12 +165,13 @@ def post_content(content, title=None, submolt="general"):
     except Exception as e:
         print(f"❌ Connection Error: {e}")
 
-def reply_post(post_id, content):
+def reply_post(raw_post_id, content):
     api_key = get_api_key()
     if not api_key:
         print("❌ No API Key found.")
         return
 
+    post_id = extract_id(raw_post_id)
     url = f"{BASE_URL}/posts/{post_id}/comments"
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -158,15 +182,36 @@ def reply_post(post_id, content):
     try:
         resp = requests.post(url, headers=headers, json=payload, timeout=10)
         if resp.status_code in [200, 201]:
-             print(f"✅ Commented Successfully!")
+             print(f"✅ Commented Successfully on {post_id}!")
         else:
              print(f"❌ Comment Failed: {resp.status_code} - {resp.text}")
     except Exception as e:
         print(f"❌ Connection Error: {e}")
 
+def vote_post(raw_post_id, direction="up"):
+    api_key = get_api_key()
+    if not api_key:
+        print("❌ No API Key found.")
+        return
+
+    post_id = extract_id(raw_post_id)
+    action = "upvote" if direction == "up" else "downvote"
+    url = f"{BASE_URL}/posts/{post_id}/{action}"
+    headers = {"Authorization": f"Bearer {api_key}"}
+    
+    try:
+        resp = requests.post(url, headers=headers, timeout=10)
+        if resp.status_code in [200, 201]:
+             emoji = "🔼" if direction == "up" else "🔽"
+             print(f"✅ {emoji} {direction.capitalize()}voted Post {post_id}!")
+        else:
+             print(f"❌ Vote Failed: {resp.status_code} - {resp.text}")
+    except Exception as e:
+        print(f"❌ Connection Error: {e}")
+
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 moltbook.py [signin|status|feed|post|reply] [args...]")
+        print("Usage: python3 moltbook.py [signin|status|feed|post|reply|up|down] [args...]")
         return
     
     command = sys.argv[1]
@@ -193,13 +238,25 @@ def main():
         submolt = sys.argv[4] if len(sys.argv) > 4 else "general"
         post_content(content, title, submolt)
     elif command == "reply":
-        # usage: reply post_id "content"
+        # usage: reply post_id/url "content"
         if len(sys.argv) < 4:
             print("Error: post_id and content required")
             return
         post_id = sys.argv[2]
         content = sys.argv[3]
         reply_post(post_id, content)
+    elif command == "up":
+        # usage: up post_id/url
+        if len(sys.argv) < 3:
+            print("Error: post_id required")
+            return
+        vote_post(sys.argv[2], "up")
+    elif command == "down":
+        # usage: down post_id/url
+        if len(sys.argv) < 3:
+            print("Error: post_id required")
+            return
+        vote_post(sys.argv[2], "down")
     else:
         print(f"Unknown command: {command}")
 
