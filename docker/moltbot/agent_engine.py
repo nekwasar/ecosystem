@@ -94,7 +94,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         if "groq" in target:
             new_provider = "groq"
-            new_model = "llama3-70b-8192"
+            new_model = "llama-3.3-70b-versatile"
         elif "cerebras" in target:
             new_provider = "cerebras"
             new_model = "llama3.1-70b"
