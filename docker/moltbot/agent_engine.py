@@ -209,5 +209,5 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     
-    print("✅ ROBI Engine Started. Listening for Telegram events...")
+    print("✅ ROBI Engine Started (v2.0 - FIX: Multi-Model & Shell). Listening for Telegram events...")
     app.run_polling()
