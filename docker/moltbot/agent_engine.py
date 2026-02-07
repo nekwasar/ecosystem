@@ -110,6 +110,23 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             await update.message.reply_text(f"❌ Execution Error: {e}")
         return
+    
+    # 1.6. Visit URL (Basic Web Reader)
+    if user_text.lower().startswith("/visit ") or user_text.lower().startswith("visit "):
+        url = user_text[6:].strip() if user_text.lower().startswith("/visit") else user_text[5:].strip()
+        await update.message.reply_text(f"🌐 Visiting: `{url}`...")
+        
+        try:
+            import requests
+            resp = requests.get(url, timeout=10)
+            if resp.status_code == 200:
+                content = resp.text[:4000] # Limit size
+                await update.message.reply_text(f"📄 **Content Preview:**\n```\n{content}\n```", parse_mode='Markdown')
+            else:
+                await update.message.reply_text(f"❌ Failed to visit. Status: {resp.status_code}")
+        except Exception as e:
+            await update.message.reply_text(f"❌ Connection Error: {e}")
+        return
 
     # 2. Intercept Switching Commands
     lower_text = user_text.lower()
