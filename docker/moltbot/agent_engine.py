@@ -129,6 +129,17 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(f"❌ Connection Error: {e}")
         return
 
+        return
+    
+    # 1.7. Moltbook Signin
+    if "signin" in user_text.lower() and "moltbook" in user_text.lower():
+        await update.message.reply_text("🔌 Initiating Moltbook Registration Protocol...")
+        moltbook_script = f"{WORKSPACE}/docker/moltbot/skills/moltbook.py"
+        # Register as "ROBI" by default
+        output = run_skill(moltbook_script, ["signin", "ROBI", "Sovereign Partner to Nekwasa R"])
+        await update.message.reply_text(f"```\n{output}\n```", parse_mode='Markdown')
+        return
+
     # 2. Intercept Switching Commands
     lower_text = user_text.lower()
     if lower_text.startswith("switch to"):
