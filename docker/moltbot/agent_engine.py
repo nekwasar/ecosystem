@@ -88,8 +88,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # 1.5. Shell Execution (If Enabled)
     if user_text.lower().startswith("/exec ") or user_text.lower().startswith("exec "):
-        # Check permission
-        if os.getenv("MOLTBOOK_ALLOW_SHELL") != "true":
+        # Check permission (Env OR Config)
+        shell_enabled_env = os.getenv("MOLTBOOK_ALLOW_SHELL") == "true"
+        shell_enabled_conf = config.get("agents", {}).get("defaults", {}).get("tools", {}).get("shell", {}).get("enabled", False)
+        
+        if not (shell_enabled_env or shell_enabled_conf):
             await update.message.reply_text("❌ Shell execution is DISABLED in config.")
             return
             
