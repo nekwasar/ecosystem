@@ -18,7 +18,7 @@ services:
     build: .
     container_name: nekwasar_server
     restart: always
- depends_on:
+    depends_on:
       - db
     ports:
       - "8000:8000"
@@ -38,7 +38,7 @@ services:
     container_name: moltbot
     restart: unless-stopped
     ports:
-- "3000:3000"
+      - "3000:3000"
     volumes:
       - ./docker/moltbot/config:/app/config
       - ./:/app/workspace
