@@ -179,10 +179,12 @@ function updateAuthUI() {
             </div>
         `;
     } else {
+        container.innerHTML = `
         <button onclick="openAuthModal()" class="flex items-center justify-center p-2 md:p-0 md:px-5 md:py-2.5 md:bg-t-bright md:text-base-shade md:font-bold md:rounded-xl md:shadow-lg hover:opacity-90 transition text-t-muted hover:text-accent">
             <i class="ph ph-user text-2xl md:hidden"></i>
             <span class="hidden md:inline">Sign In</span>
         </button>
+        `;
     }
 }
 
