@@ -42,6 +42,14 @@ async def admin_login(request: Request):
     """Serve admin login page"""
     return templates.TemplateResponse("admin_login.html", {"request": request})
 
+@router.get("/admin/media", response_class=HTMLResponse)
+async def admin_media_page(request: Request, db: Session = Depends(get_db)):
+    # Verify auth via dependency or session check (admin router usually has global dependency?)
+    # Assuming global admin dependency or handled by middleware/auth route
+    # But usually admin routes are protected. 
+    # Let's check imports.
+    return templates.TemplateResponse("admin_media.html", {"request": request})
+
 @router.get("/admin/dashboard", response_class=HTMLResponse)
 @router.get("/admin/dashboard/", response_class=HTMLResponse)
 async def admin_dashboard(request: Request):

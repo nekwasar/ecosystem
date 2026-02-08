@@ -1,9 +1,0 @@
-requests
-sqlalchemy
-psycopg2-binary
-duckduckgo-search
-googlesearch-python
-trafilatura
-playwright
-python-dateutil
-python-telegram-bot
