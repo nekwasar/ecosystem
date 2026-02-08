@@ -20,6 +20,7 @@ Base = declarative_base()
 # This must be after Base is defined to avoid circular imports
 from models.blog import BlogPost, BlogComment, BlogLike, TemporalUser, BlogView
 from models.author import BlogAuthor
+from models.media import FileAsset
 
 # Create tables
 def create_tables():

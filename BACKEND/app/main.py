@@ -650,9 +650,54 @@ async def store_support(request: Request):
     return store_templates.TemplateResponse("support.html", {"request": request, "current_year": datetime.utcnow().year})
 
 # Dynamic blog post route
+from routes import (
+    contacts_router, blogs_router, products_router, auth_router, 
+    admin_router, search_router, newsletter_router, analytics_router, content_router,
+    store_admin_router, store_front_router, store_checkout_router, store_auth_router,
+    media
+)
+# ... [Keeping middle imports same] ...
+
+# Include routers
+app.include_router(contacts_router, prefix="/api/contacts", tags=["contacts"])
+app.include_router(blogs_router, prefix="/api/blogs", tags=["blogs"])
+app.include_router(products_router, prefix="/api/products", tags=["products"])
+app.include_router(auth_router, prefix="/api/auth", tags=["authentication"])
+app.include_router(search_router, prefix="/api/search", tags=["search"])
+app.include_router(newsletter_router, prefix="/api/newsletter", tags=["newsletter"])
+app.include_router(analytics_router, prefix="/api/analytics", tags=["analytics"])
+app.include_router(content_router, prefix="/api/content", tags=["content"])
+app.include_router(admin_router, tags=["admin"])
+app.include_router(store_admin_router, prefix="/api/admin/store", tags=["store-admin"])
+app.include_router(store_front_router, prefix="/api/store/products", tags=["store-front"])
+app.include_router(store_checkout_router, prefix="/api/store/checkout", tags=["store-checkout"])
+app.include_router(store_auth_router, prefix="/api/auth", tags=["store-auth"])
+
+# Media Routers
+app.include_router(media.router, prefix="/api/admin/media", tags=["media-admin"])
+app.include_router(media.public_router, tags=["media-public"]) # Roots like /share
+
+# Global CDN Download Handler
+@app.get("/d_{slug}", response_class=FileResponse)
+async def cdn_download_handler(slug: str, db: Session = Depends(get_db)):
+    """Handle cdn.nekwasar.com/d_slug"""
+    res = await media.serve_cdn_asset(slug, download=True, db=db)
+    if res: return res
+    raise HTTPException(404, "File not found")
+
+# Dynamic blog post route (Catch-All)
 @app.get("/{slug}", response_class=HTMLResponse)
 async def blog_post_by_slug(request: Request, slug: str, db: Session = Depends(get_db)):
-    """Serve individual blog posts by slug with anti-leakage domain enforcement"""
+    """Serve individual blog posts by slug OR CDN assets"""
+    host = request.headers.get("host", "").lower()
+
+    # 0. CDN Check
+    if host == "cdn.nekwasar.com":
+        res = await media.serve_cdn_asset(slug, download=False, db=db)
+        if res: return res
+        raise HTTPException(404, "Asset not found") # CDN 404 is stricter
+    
+    # ... [Rest of function] ...
     host = request.headers.get("host", "").lower()
     
     # 1. Assets Check: If on portfolio domain, check if it's a root-level file (like favicon.png)
