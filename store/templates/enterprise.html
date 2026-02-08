@@ -5,17 +5,18 @@
 {% block content %}
 <div class="relative overflow-hidden">
     <!-- Hero -->
+    <!-- Hero -->
     <div class="py-24 lg:py-40 text-center relative z-10 px-6">
         <div
             class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-accent/10 rounded-full blur-[120px] pointer-events-none">
         </div>
 
         <h1 class="font-display font-bold text-5xl md:text-7xl lg:text-8xl text-t-bright mb-8 tracking-tighter">
-            Build the <span class="gradient-text">N•Gen</span> Era.
+            The <span class="gradient-text">Vault.</span>
         </h1>
         <p class="font-syne text-xl text-t-muted max-w-3xl mx-auto mb-12 leading-relaxed">
-            We provide the foundational infrastructure for the next generation of digital banking, commerce, and
-            governance platforms.
+            Access strictly controlled innovations. From secret web technologies to next-gen inventions and high-value
+            apps. This catalog contains extremely sensitive intellectual property.
         </p>
         <button onclick="openAccessModal()"
             class="px-10 py-5 bg-base-bright border border-amber-500/50 hover:bg-amber-500 hover:text-black text-amber-500 font-syne font-bold text-lg rounded-full transition-all shadow-[0_0_40px_rgba(245,158,11,0.15)] flex items-center gap-3 mx-auto">
@@ -23,42 +24,113 @@
         </button>
     </div>
 
-    <!-- Feature Grid -->
-    <div class="max-w-7xl mx-auto px-6 py-24 border-t border-stroke-elements">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
-            <div class="space-y-4">
-                <div
-                    class="w-16 h-16 bg-base-tint rounded-2xl flex items-center justify-center border border-stroke-elements mx-auto md:mx-0">
-                    <i class="ph-bold ph-shield-check text-3xl text-accent"></i>
+    <!-- Preview Grid (Hardcoded for Demo) -->
+    <div class="max-w-7xl mx-auto px-6 py-12 border-t border-stroke-elements">
+        <h2 class="text-2xl font-display font-bold text-t-bright mb-8 text-center md:text-left">Vault Preview</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Item 1 -->
+            <div
+                class="product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg">
+                <div class="relative aspect-[4/3] bg-black overflow-hidden flex items-center justify-center">
+                    <i
+                        class="ph-duotone ph-brain text-6xl text-purple-500 opacity-80 group-hover:scale-110 transition duration-700"></i>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                    </div>
+                    <div class="absolute top-3 right-3">
+                        <span
+                            class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">AI
+                            SYSTEM</span>
+                    </div>
                 </div>
-                <h3 class="font-display font-bold text-2xl text-t-bright">Enterprise Security</h3>
-                <p class="text-t-muted leading-relaxed">
-                    Source code audited for vulnerabilities. Implementation plans include PCI-DSS and GDPR compliance
-                    roadmaps.
-                </p>
-            </div>
-            <div class="space-y-4">
-                <div
-                    class="w-16 h-16 bg-base-tint rounded-2xl flex items-center justify-center border border-stroke-elements mx-auto md:mx-0">
-                    <i class="ph-bold ph-bank text-3xl text-secondary"></i>
+                <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
+                    <div>
+                        <h3
+                            class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">
+                            Project Chimera</h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-xs text-t-muted font-medium uppercase tracking-wide">Neural
+                                Interface</span>
+                            <span class="text-white font-bold">$5,000,000</span>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="font-display font-bold text-2xl text-t-bright">Banking Infrastructure</h3>
-                <p class="text-t-muted leading-relaxed">
-                    Pre-built modules for ledger management, KYC integration, and multi-currency wallets. Save 12+
-                    months of R&D.
-                </p>
             </div>
-            <div class="space-y-4">
-                <div
-                    class="w-16 h-16 bg-base-tint rounded-2xl flex items-center justify-center border border-stroke-elements mx-auto md:mx-0">
-                    <i class="ph-bold ph-strategy text-3xl text-green-500"></i>
+
+            <!-- Item 2 -->
+            <div
+                class="product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg">
+                <div class="relative aspect-[4/3] bg-black overflow-hidden flex items-center justify-center">
+                    <i
+                        class="ph-duotone ph-rocket text-6xl text-red-500 opacity-80 group-hover:scale-110 transition duration-700"></i>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                    </div>
+                    <div class="absolute top-3 right-3">
+                        <span
+                            class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">AEROSPACE</span>
+                    </div>
                 </div>
-                <h3 class="font-display font-bold text-2xl text-t-bright">Strategic Acquisition</h3>
-                <p class="text-t-muted leading-relaxed">
-                    Full IP transfer available for select "Reserved" assets. Own the code, the brand, and the future
-                    deployment.
-                </p>
+                <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
+                    <div>
+                        <h3
+                            class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">
+                            Titan Engine V2</h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-xs text-t-muted font-medium uppercase tracking-wide">Propulsion</span>
+                            <span class="text-white font-bold">$25,000,000</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Item 3 -->
+            <div
+                class="product-card bg-base-shade rounded-xl overflow-hidden group flex flex-col h-full border border-stroke-elements hover:border-accent/50 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg">
+                <div class="relative aspect-[4/3] bg-black overflow-hidden flex items-center justify-center">
+                    <i
+                        class="ph-duotone ph-fingerprint text-6xl text-blue-500 opacity-80 group-hover:scale-110 transition duration-700"></i>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60">
+                    </div>
+                    <div class="absolute top-3 right-3">
+                        <span
+                            class="bg-black/60 backdrop-blur border border-white/10 text-white text-[10px] font-bold font-syne px-2 py-1 rounded uppercase tracking-wider">CYBERSEC</span>
+                    </div>
+                </div>
+                <div class="p-4 bg-[#141414] flex-1 flex flex-col justify-between border-t border-stroke-elements">
+                    <div>
+                        <h3
+                            class="text-lg font-bold font-display text-white leading-tight mb-1 group-hover:text-accent transition-colors line-clamp-1">
+                            Ghost Protocol</h3>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-xs text-t-muted font-medium uppercase tracking-wide">Software</span>
+                            <span class="text-white font-bold">$1,200,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sensitivity Note -->
+    <div class="max-w-4xl mx-auto px-6 py-12 text-center">
+        <div class="bg-amber-900/10 border border-amber-500/20 p-6 rounded-2xl relative overflow-hidden">
+            <div class="absolute -left-4 top-0 bottom-0 w-8 bg-amber-500/20 blur-xl"></div>
+            <p class="font-syne text-t-muted text-lg">
+                <strong class="text-amber-500 text-xl block mb-2">⚠️ RESTRICTED ACCESS</strong>
+                Due to the extreme sensitivity and value of these assets, only a curated preview is shown above.
+                <span class="text-t-bright font-bold">Holders of Enterprise Access</span> can view the full catalog of
+                secret inventions and technologies.
+            </p>
+        </div>
+
+        <div class="mt-8">
+            <a href="#" onclick="openAccessModal()"
+                class="text-t-bright font-bold font-syne hover:text-accent underline decoration-wavy underline-offset-4 transition-colors">
+                Access All Products &rarr;
+            </a>
         </div>
     </div>
 </div>
