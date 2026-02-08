@@ -1,140 +1,260 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NekwasaR.CDN | Global Asset Hub</title>
-
-    <!-- Reuse Portfolio CSS -->
-    <link rel="stylesheet" href="https://nekwasar.com/css/loaders/loader.css">
-    <link rel="stylesheet" href="https://nekwasar.com/css/plugins.css">
-    <link rel="stylesheet" href="https://nekwasar.com/css/main.css"> <!-- Contains Colors/Dark Mode -->
-
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-    <!-- Theme Colors -->
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#dcdce7">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111111">
-
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Syne:wght@400;600;800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'syne': ['Syne', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Portfolio Derived Colors
+                        base: '#050505',
+                        'base-tint': '#111111',
+                        accent: '#6366f1', // Indigo Accent
+                        'accent-bright': '#818cf8',
+                        'accent-glow': '#a5b4fc',
+                        stroke: '#27272a',
+                        't-bright': '#ffffff',
+                        't-muted': '#a1a1aa'
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-20px) rotate(2deg)' },
+                        },
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 10px rgba(99, 102, 241, 0.2)' },
+                            '100%': { boxShadow: '0 0 30px rgba(99, 102, 241, 0.6)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Custom tweaks for CDN landing specific layout */
-        .cdn-hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            z-index: 2;
+        body {
+            background-color: #050505;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            overflow-x: hidden;
         }
 
-        .cdn-content {
-            max-width: 800px;
-            padding: 2rem;
+        .grid-overlay {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
         }
 
-        .headline__title {
-            font-size: 4rem;
-            /* Match portfolio big text */
-            margin-bottom: 1.5rem;
+        .text-glow {
+            text-shadow: 0 0 20px rgba(129, 140, 248, 0.5);
         }
 
-        .btn-group-custom {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
+        .glass-card {
+            background: rgba(17, 17, 17, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Force hide loader after load */
-        .loaded #loader {
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s ease-in-out;
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 
-<body>
+<body class="text-t-bright font-inter min-h-screen flex flex-col antialiased selection:bg-accent selection:text-white">
 
-    <!-- Loader -->
-    <div id="loader" class="loader">
-        <div id="loaderContent" class="loader__content">
-            <div class="loader__shadow"></div>
-            <div class="loader__box"></div>
-        </div>
-    </div>
-
-    <!-- Background -->
-    <div id="imageBackground" class="image-background" data-speed="0.4"></div>
-
-    <!-- Header Controls (Theme Switcher) -->
-    <div class="header__controls d-flex justify-content-end"
-        style="position: absolute; top: 20px; right: 20px; z-index: 100;">
-        <button id="color-switcher" class="color-switcher header__switcher btn" type="button" role="switch"
-            aria-label="light/dark mode" aria-checked="true"></button>
-    </div>
-
-    <!-- Hero Content -->
-    <section class="cdn-hero">
-        <div class="cdn-content animate-headline">
-            <!-- Logo / Icon -->
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 top-0 left-0 glass-nav">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Brand -->
             <div
-                style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent); margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <i class="ph-fill ph-lightning" style="font-size: 2rem;"></i>
-                <span>NEKWASAR.CDN</span>
-            </div>
-
-            <h1 class="headline__title">Global Asset<br><span style="color: var(--accent);">Distribution.</span></h1>
-
-            <p class="headline__subtitle" style="max-width: 600px; margin: 0 auto;">
-                High-performance content delivery for the NekwasaR ecosystem. Serving static assets, media, and secure
-                downloads globally.
-            </p>
-
-            <div class="btn-group-custom">
-                <a class="btn btn-default btn-hover btn-hover-accent" href="https://nekwasar.com">
-                    <span class="btn-caption">Visit Portfolio</span>
-                    <i class="ph-bold ph-user"></i>
-                </a>
-                <a class="btn btn-default btn-hover btn-hover-accent" href="https://store.nekwasar.com">
-                    <span class="btn-caption">Explore Store</span>
-                    <i class="ph-bold ph-storefront"></i>
-                </a>
-                <a class="btn btn-default btn-hover btn-hover-accent" href="https://blog.nekwasar.com">
-                    <span class="btn-caption">Explore Blog</span>
-                    <i class="ph-bold ph-article"></i>
-                </a>
-            </div>
-
-            <!-- Stats (Optional decoration using portfolio style) -->
-            <div style="margin-top: 4rem; display: flex; gap: 2rem; justify-content: center; opacity: 0.7;">
-                <div>
-                    <div style="font-family: 'Orbitron'; font-weight: bold; font-size: 1.5rem;">99.9%</div>
-                    <div style="font-size: 0.8rem; text-transform: uppercase;">Uptime</div>
+                class="flex items-center gap-3 font-orbitron font-bold text-xl tracking-wider group cursor-pointer hover:scale-105 transition-transform">
+                <div
+                    class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center border border-accent/40 group-hover:border-accent group-hover:bg-accent/30 transition-all">
+                    <i class="ph-fill ph-lightning text-accent-bright text-xl"></i>
                 </div>
-                <div>
-                    <div style="font-family: 'Orbitron'; font-weight: bold; font-size: 1.5rem;">Global</div>
-                    <div style="font-size: 0.8rem; text-transform: uppercase;">Reach</div>
-                </div>
+                <span>NEK.CDN</span>
             </div>
+
+            <!-- Nav Links -->
+            <div
+                class="hidden md:flex items-center gap-8 font-syne font-bold text-sm uppercase tracking-widest text-t-muted">
+                <a href="https://nekwasar.com"
+                    class="hover:text-t-bright transition-colors hover:scale-105 transform">Portfolio</a>
+                <a href="https://store.nekwasar.com"
+                    class="hover:text-t-bright transition-colors hover:scale-105 transform">Store</a>
+                <a href="https://blog.nekwasar.com"
+                    class="hover:text-t-bright transition-colors hover:scale-105 transform">Blog</a>
+            </div>
+
+            <!-- CTA -->
+            <a href="https://nekwasar.com"
+                class="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent/50 transition-all font-syne font-bold text-xs uppercase tracking-wider backdrop-blur-md group">
+                <span>Visit Main Site</span>
+                <i
+                    class="ph-bold ph-arrow-up-right group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform text-accent-bright"></i>
+            </a>
         </div>
-    </section>
+    </nav>
 
-    <!-- Scripts -->
-    <script src="https://nekwasar.com/js/libs.min.js"></script>
-    <script src="https://nekwasar.com/js/app.js"></script> <!-- Handles Loader & Theme Switch -->
-    <script>
-        // Force remove loader fallback
-        window.addEventListener('load', () => {
-            document.body.classList.add('loaded');
-            const loader = document.getElementById('loader');
-            if (loader) loader.classList.add('loaded');
-        });
-    </script>
+    <!-- Hero Section -->
+    <main class="flex-grow flex flex-col justify-center relative pt-32 pb-20 overflow-hidden">
+        <!-- Grid BG -->
+        <div class="absolute inset-0 grid-overlay pointer-events-none z-0"></div>
+
+        <div class="max-w-7xl mx-auto px-6 w-full relative z-10">
+
+            <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+
+                <!-- Text Content -->
+                <div class="flex-1 text-center lg:text-left">
+                    <!-- Badge -->
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent-bright text-[10px] font-bold uppercase tracking-[0.2em] mb-8 font-orbitron animate-pulse-glow backdrop-blur-md">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                        Status: Operational
+                    </div>
+
+                    <h1
+                        class="font-orbitron font-black text-6xl md:text-8xl lg:text-9xl tracking-tight mb-8 leading-none bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 drop-shadow-2xl">
+                        GLOBAL<br>
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-accent-bright to-purple-400 text-glow">ASSETS.</span>
+                    </h1>
+
+                    <p
+                        class="font-syne text-xl md:text-2xl text-t-muted max-w-2xl mx-auto lg:mx-0 mb-12 leading-relaxed font-medium">
+                        Welcome to the dedicated Content Delivery Network for the <span class="text-t-bright">NekwasaR
+                            Ecosystem</span>. Serving high-performance media, secure downloads, and static resources at
+                        the edge.
+                    </p>
+
+                    <!-- Buttons -->
+                    <div
+                        class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-6 w-full">
+                        <a href="https://store.nekwasar.com"
+                            class="w-full sm:w-auto px-8 py-5 rounded-xl bg-accent hover:bg-indigo-500 text-white font-orbitron font-bold tracking-widest uppercase transition-all shadow-[0_0_40px_-10px_rgba(99,102,241,0.5)] hover:shadow-[0_0_60px_-10px_rgba(99,102,241,0.7)] transform hover:-translate-y-1 flex items-center justify-center gap-3 group">
+                            <i class="ph-bold ph-storefront text-xl group-hover:rotate-12 transition-transform"></i>
+                            Explore Store
+                        </a>
+                        <a href="https://blog.nekwasar.com"
+                            class="w-full sm:w-auto px-8 py-5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-t-bright font-orbitron font-bold tracking-widest uppercase transition-all backdrop-blur-md transform hover:-translate-y-1 flex items-center justify-center gap-3">
+                            <i
+                                class="ph-bold ph-article text-xl text-t-muted group-hover:text-white transition-colors"></i>
+                            Explore Blog
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Visual / Cards -->
+                <div class="flex-1 w-full max-w-md lg:max-w-lg relative block">
+                    <!-- Floating Card 1 -->
+                    <div class="glass-card p-6 rounded-2xl mb-6 transform rotate-2 hover:rotate-0 transition-transform duration-500 relative z-20 animate-float"
+                        style="animation-delay: 0s;">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                                <i class="ph-fill ph-check-circle text-2xl text-green-400"></i>
+                            </div>
+                            <span
+                                class="text-xs font-orbitron font-bold text-t-muted uppercase tracking-widest">Uptime</span>
+                        </div>
+                        <div class="text-4xl font-orbitron font-bold text-white mb-1">99.99%</div>
+                        <p class="text-sm text-t-muted font-syne">Continuous availability across region US-EAST.</p>
+                    </div>
+
+                    <!-- Floating Card 2 -->
+                    <div class="glass-card p-6 rounded-2xl ml-8 transform -rotate-1 hover:rotate-0 transition-transform duration-500 relative z-10 animate-float"
+                        style="animation-delay: 2s;">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
+                                <i class="ph-fill ph-shield-check text-2xl text-purple-400"></i>
+                            </div>
+                            <span
+                                class="text-xs font-orbitron font-bold text-t-muted uppercase tracking-widest">Security</span>
+                        </div>
+                        <div class="text-lg font-orbitron font-bold text-white mb-2">TLS 1.3 Encryption</div>
+                        <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 w-full animate-pulse"></div>
+                        </div>
+                    </div>
+
+                    <!-- Background Blobs -->
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-accent/20 to-purple-500/20 rounded-full blur-[100px] -z-10 pointer-events-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Features Grid (Desktop Only) -->
+            <div
+                class="hidden lg:grid grid-cols-3 gap-8 mt-24 border-t border-white/5 pt-12 opacity-80 hover:opacity-100 transition-opacity">
+                <div class="flex items-center gap-4 group">
+                    <div
+                        class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                        <i class="ph-bold ph-lightning text-xl text-t-muted group-hover:text-accent-bright"></i>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-bold text-sm text-white mb-1">Low Latency</div>
+                        <div class="text-xs text-t-muted font-syne uppercase tracking-wider">Optimized Routing</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 group">
+                    <div
+                        class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                        <i class="ph-bold ph-lock-key text-xl text-t-muted group-hover:text-accent-bright"></i>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-bold text-sm text-white mb-1">Secure Access</div>
+                        <div class="text-xs text-t-muted font-syne uppercase tracking-wider">Strict Policy Engine</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 group">
+                    <div
+                        class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                        <i
+                            class="ph-bold ph-globe-hemisphere-west text-xl text-t-muted group-hover:text-accent-bright"></i>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-bold text-sm text-white mb-1">Global Edge</div>
+                        <div class="text-xs text-t-muted font-syne uppercase tracking-wider">Multi-Region Scale</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-6 border-t border-white/5 bg-base-tint/50 backdrop-blur-sm text-center">
+        <p class="font-syne text-xs text-t-muted uppercase tracking-widest">
+            &copy; 2026 NekwasaR Ecosystem. All Systems Normal.
+        </p>
+    </footer>
+
 </body>
 
 </html>
