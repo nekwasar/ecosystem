@@ -264,7 +264,8 @@ async def root(request: Request, db: Session = Depends(get_db)):
         )
 
     # 3. CDN Domain
-    if host == "cdn.nekwasar.com":
+    # 3. CDN Domain
+    if "cdn.nekwasar.com" in host:
         return templates.TemplateResponse("cdn_index.html", {"request": request})
         
     # 4. Store Domain
