@@ -33,27 +33,5 @@ services:
 
       - SENDER_EMAIL=${SENDER_EMAIL}
 
-  moltbot:
-    build: ./docker/moltbot
-    container_name: moltbot
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./docker/moltbot/config:/app/config
-      - ./:/app/workspace
-    networks:
-      - default
-    depends_on:
-      - db
-    environment:
-      - GROQ_API_KEY=${GROQ_API_KEY}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - CEREBRAS_API_KEY=${CEREBRAS_API_KEY}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432>
-      - WEB_ENABLED=true
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN} 
-      - MOLTBOT_ALLOW_SHELL=true
-      - EXECUTION_ENABLED=true
 volumes:
   postgres_data:
