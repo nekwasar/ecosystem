@@ -65,15 +65,7 @@ function createProductCard(p) {
 document.addEventListener('DOMContentLoaded', () => {
     initStore().catch(console.error);
 
-    // Scroll Listener for Hero Hiding
-    window.addEventListener('scroll', () => {
-        if (!localStorage.getItem('store_hero_hidden')) {
-            const catalog = document.getElementById('catalog');
-            if (catalog && window.scrollY > catalog.offsetTop - 100) {
-                hideHero();
-            }
-        }
-    }, { passive: true });
+
 });
 
 // Modal Logic (Moved from inline)
