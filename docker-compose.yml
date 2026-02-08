@@ -25,7 +25,7 @@ services:
     volumes:
       - ./BACKEND/uploads:/app/BACKEND/uploads
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432>
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432
       - SECRET_KEY=${SECRET_KEY}
       - API_HOST=0.0.0.0
       - API_PORT=8000
