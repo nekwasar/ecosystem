@@ -262,8 +262,12 @@ async def root(request: Request, db: Session = Depends(get_db)):
                 "post_data": DEFAULT_POST_DATA
             }
         )
+
+    # 3. CDN Domain
+    if host == "cdn.nekwasar.com":
+        return templates.TemplateResponse("cdn_index.html", {"request": request})
         
-    # 3. Store Domain
+    # 4. Store Domain
     if host == "store.nekwasar.com":
         # SSR for Immediate Load
         from models.store import Product
