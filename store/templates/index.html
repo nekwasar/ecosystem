@@ -297,6 +297,7 @@
                         <span class="text-xs text-t-muted font-medium uppercase tracking-wide">{{ p.category.name if
                             p.category else 'Digital Asset' }}</span>
                         <div class="font-syne">
+                            {% if p.is_private_listing %}
                             <span class="text-amber-500 font-bold uppercase text-xs tracking-wider"><i
                                     class="ph-fill ph-lock-key"></i> Restricted</span>
                             {% else %}
