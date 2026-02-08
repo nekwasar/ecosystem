@@ -1,447 +1,530 @@
-<!-- Main Container -->
+<!-- Media Manager Template with Wizard -->
 <div class="p-6 md:p-10 max-w-7xl mx-auto">
-
     <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         <div>
             <h1 class="text-3xl font-bold font-syne mb-1 text-t-bright">Media Library</h1>
-            <p class="text-t-muted text-sm">Manage assets, generate CDN links, and share files.</p>
+            <p class="text-t-muted text-sm">Manage assets and global content delivery.</p>
         </div>
-        <button onclick="openUploadModal()"
+        <button onclick="openWizard()"
             class="px-6 py-3 bg-accent hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg hover:shadow-accent/20 transition-all flex items-center gap-2">
-            <i class="ph-bold ph-upload-simple"></i>
-            <span>Upload Asset</span>
+            <i class="ph-bold ph-plus"></i>
+            <span>New Asset</span>
         </button>
     </div>
 
-    <!-- Toolbar -->
-    <div class="flex flex-wrap gap-4 mb-8 items-center bg-base-tint p-2 rounded-xl border border-stroke-elements">
-        <div class="flex gap-2">
-            <button onclick="filterType('all')"
-                class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-accent text-white"
-                data-type="all">All</button>
-            <button onclick="filterType('image')"
-                class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/5 text-t-muted"
-                data-type="image">Images</button>
-            <button onclick="filterType('video')"
-                class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-white/5 text-t-muted"
-                data-type="video">Videos</button>
-        </div>
-        <div class="ml-auto w-full md:w-auto relative">
-            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-t-muted"></i>
-            <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search files..."
-                class="w-full md:w-64 pl-10 pr-4 py-2 bg-base border border-stroke-elements rounded-lg focus:border-accent outline-none text-sm transition-colors text-t-bright">
-        </div>
-    </div>
-
-    <!-- Grid -->
+    <!-- Media Grid -->
     <div id="mediaGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        <!-- Items injected here -->
         <div class="col-span-full py-20 text-center text-t-muted animate-pulse">Loading assets...</div>
     </div>
-
 </div>
 
-<!-- Upload Modal -->
-<div id="uploadModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeUploadModal()">
-    </div>
+<!-- Wizard Modal -->
+<div id="wizardModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-base/90 backdrop-blur-md transition-opacity"
+        onclick="if(confirm('Cancel upload?')) closeWizard()"></div>
 
+    <!-- Wizard Container -->
     <div
-        class="relative bg-base-tint border border-stroke-elements rounded-2xl w-full max-w-lg shadow-2xl transform transition-all scale-100 p-6">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-bold font-syne text-t-bright">Upload Asset</h3>
-            <button onclick="closeUploadModal()" class="text-t-muted hover:text-white"><i
+        class="relative bg-base-tint border border-stroke-elements rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+
+        <!-- Header -->
+        <div class="px-8 py-6 border-b border-stroke-elements flex justify-between items-center bg-base-tint z-10">
+            <div>
+                <h3 class="text-xl font-bold font-syne text-t-bright">Upload Wizard</h3>
+                <p class="text-xs text-t-muted font-mono mt-1">STEP <span id="currentStepNum">1</span> OF 5</p>
+            </div>
+            <button onclick="closeWizard()" class="text-t-muted hover:text-white"><i
                     class="ph-bold ph-x text-xl"></i></button>
         </div>
 
-        <form id="uploadForm" onsubmit="handleUpload(event)">
+        <!-- Progress Bar -->
+        <div class="w-full bg-base h-1">
+            <div id="wizardProgress" class="h-full bg-accent transition-all duration-300" style="width: 20%"></div>
+        </div>
 
-            <!-- Drop Zone -->
-            <div id="dropZone"
-                class="border-2 border-dashed border-stroke-elements rounded-xl p-8 text-center cursor-pointer hover:border-accent transition-colors mb-6 group relative overflow-hidden">
-                <input type="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    onchange="handleFileSelect(this)" required>
-                <div id="dropContent" class="pointer-events-none">
-                    <i
-                        class="ph-duotone ph-cloud-arrow-up text-4xl text-t-muted mb-2 group-hover:text-accent transition-colors"></i>
-                    <p class="text-sm text-t-bright font-medium">Click to upload or drag & drop</p>
-                    <p class="text-xs text-t-muted mt-1">Images, Videos, Documents (Max 100MB)</p>
-                </div>
-                <div id="filePreview" class="hidden flex-col items-center pointer-events-none">
+        <!-- Content Area -->
+        <div class="flex-1 overflow-y-auto p-8 relative">
+
+            <!-- STEP 1: UPLOAD -->
+            <div id="step1" class="wizard-step">
+                <h4 class="text-lg font-bold text-t-bright mb-4">1. Select File</h4>
+                <div id="dropZone"
+                    class="border-2 border-dashed border-stroke-elements rounded-xl h-64 flex flex-col items-center justify-center cursor-pointer hover:border-accent hover:bg-accent/5 transition-all relative group">
+                    <input type="file" id="fileInput"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        onchange="handleFileSelect(this)">
                     <div
-                        class="w-16 h-16 bg-base rounded-lg flex items-center justify-center mb-2 border border-stroke-elements">
-                        <i class="ph-fill ph-file text-2xl text-accent"></i>
+                        class="text-center pointer-events-none group-hover:scale-105 transition-transform duration-300">
+                        <div
+                            class="w-16 h-16 bg-base rounded-full flex items-center justify-center mx-auto mb-4 border border-stroke-elements group-hover:border-accent">
+                            <i class="ph-duotone ph-cloud-arrow-up text-3xl text-t-muted group-hover:text-accent"></i>
+                        </div>
+                        <p class="text-t-bright font-bold">Click or Drag & Drop</p>
+                        <p class="text-xs text-t-muted mt-2">Max 100MB • Images, Videos, Docs</p>
                     </div>
-                    <p id="selectedFileName" class="text-sm font-bold truncate max-w-[200px] text-t-bright"></p>
-                    <p id="selectedFileSize" class="text-xs text-t-muted"></p>
                 </div>
             </div>
 
-            <!-- Settings -->
-            <div class="space-y-4 mb-6">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-t-muted mb-1">Custom Slug
-                        (Optional)</label>
-                    <div class="relative">
-                        <input type="text" name="slug" id="slugInput" placeholder="e.g. my-awesome-file"
-                            class="w-full px-4 py-2 bg-base border border-stroke-elements rounded-lg focus:border-accent outline-none text-sm text-t-bright">
-                        <span id="slugHint" class="absolute right-3 top-2.5 text-xs text-t-muted">Auto-generated if
-                            empty</span>
+            <!-- STEP 2: DETAILS -->
+            <div id="step2" class="wizard-step hidden">
+                <h4 class="text-lg font-bold text-t-bright mb-6">2. File Details</h4>
+                <div class="flex items-start gap-6">
+                    <!-- Preview -->
+                    <div
+                        class="w-1/3 aspect-square bg-base rounded-xl border border-stroke-elements flex items-center justify-center overflow-hidden relative">
+                        <div id="filePreviewContainer" class="w-full h-full flex items-center justify-center">
+                            <!-- Preview injected JS -->
+                        </div>
+                    </div>
+
+                    <!-- Inputs -->
+                    <div class="flex-1 space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-t-muted mb-1">File Name
+                                (Slug)</label>
+                            <input type="text" id="slugInput"
+                                class="w-full px-4 py-3 bg-base border border-stroke-elements rounded-lg focus:border-accent outline-none text-t-bright font-mono text-sm"
+                                placeholder="my-file-name">
+                            <p class="text-[10px] text-t-muted mt-1">This will be part of the URL.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-t-muted mb-1">Original
+                                Name</label>
+                            <div id="originalNameDisplay"
+                                class="text-sm text-t-medium truncate bg-base px-3 py-2 rounded border border-stroke-elements">
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-xs font-bold uppercase tracking-wider text-t-muted mb-1">Size</label>
+                            <div id="fileSizeDisplay" class="text-sm text-t-medium"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: DOMAIN -->
+            <div id="step3" class="wizard-step hidden">
+                <h4 class="text-lg font-bold text-t-bright mb-6">3. Choose Domain</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- OPTION: CDN -->
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="wiz_domain" value="CDN" class="peer sr-only" checked
+                            onchange="updateReview()">
+                        <div
+                            class="p-6 border border-stroke-elements rounded-xl peer-checked:border-accent peer-checked:bg-accent/10 hover:bg-base transition-all h-full relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 p-3 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                <i class="ph-fill ph-check-circle text-accent text-xl"></i>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-base rounded-lg flex items-center justify-center border border-stroke-elements mb-4 peer-checked:border-accent">
+                                <i class="ph-fill ph-lightning text-2xl text-t-muted peer-checked:text-accent"></i>
+                            </div>
+                            <h5 class="font-bold text-t-bright mb-1">NekwasaR CDN</h5>
+                            <p class="text-xs text-t-muted mb-3">cdn.nekwasar.com</p>
+                            <p class="text-xs text-t-medium leading-relaxed">Best for high-performance assets, images,
+                                and embedded media. Served from the edge.</p>
+                        </div>
+                    </label>
+
+                    <!-- OPTION: SHARE -->
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="wiz_domain" value="SHARE" class="peer sr-only"
+                            onchange="updateReview()">
+                        <div
+                            class="p-6 border border-stroke-elements rounded-xl peer-checked:border-accent peer-checked:bg-accent/10 hover:bg-base transition-all h-full relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 p-3 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                <i class="ph-fill ph-check-circle text-accent text-xl"></i>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-base rounded-lg flex items-center justify-center border border-stroke-elements mb-4 peer-checked:border-accent">
+                                <i class="ph-fill ph-share-network text-2xl text-t-muted peer-checked:text-accent"></i>
+                            </div>
+                            <h5 class="font-bold text-t-bright mb-1">Standard Share</h5>
+                            <p class="text-xs text-t-muted mb-3">nekwasar.com/share</p>
+                            <p class="text-xs text-t-medium leading-relaxed">Best for temporary file sharing, documents,
+                                or private links.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- STEP 4: ACCESS -->
+            <div id="step4" class="wizard-step hidden">
+                <h4 class="text-lg font-bold text-t-bright mb-6">4. Access Behavior</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- OPTION: VIEW -->
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="wiz_access" value="VIEW" class="peer sr-only" checked
+                            onchange="updateReview()">
+                        <div
+                            class="p-6 border border-stroke-elements rounded-xl peer-checked:border-accent peer-checked:bg-accent/10 hover:bg-base transition-all h-full relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 p-3 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                <i class="ph-fill ph-check-circle text-accent text-xl"></i>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-base rounded-lg flex items-center justify-center border border-stroke-elements mb-4 peer-checked:border-accent">
+                                <i class="ph-fill ph-eye text-2xl text-t-muted peer-checked:text-accent"></i>
+                            </div>
+                            <h5 class="font-bold text-t-bright mb-1">View in Browser</h5>
+                            <p class="text-xs text-t-medium leading-relaxed">File opens directly in the browser (images,
+                                PDFs, videos). User can still download manually.</p>
+                        </div>
+                    </label>
+
+                    <!-- OPTION: DOWNLOAD -->
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="wiz_access" value="DOWNLOAD" class="peer sr-only"
+                            onchange="updateReview()">
+                        <div
+                            class="p-6 border border-stroke-elements rounded-xl peer-checked:border-accent peer-checked:bg-accent/10 hover:bg-base transition-all h-full relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 p-3 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                <i class="ph-fill ph-check-circle text-accent text-xl"></i>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-base rounded-lg flex items-center justify-center border border-stroke-elements mb-4 peer-checked:border-accent">
+                                <i
+                                    class="ph-fill ph-download-simple text-2xl text-t-muted peer-checked:text-accent"></i>
+                            </div>
+                            <h5 class="font-bold text-t-bright mb-1">Force Download</h5>
+                            <p class="text-xs text-t-medium leading-relaxed">Browser immediately prompts to save the
+                                file. Good for zips, installers, or raw data.</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- STEP 5: REVIEW & PUBLISH -->
+            <div id="step5" class="wizard-step hidden">
+                <h4 class="text-lg font-bold text-t-bright mb-6">5. Overview</h4>
+
+                <div class="bg-base rounded-xl p-6 border border-stroke-elements space-y-4">
+                    <div class="flex justify-between border-b border-stroke-elements pb-4">
+                        <span class="text-t-muted text-sm">File Name</span>
+                        <span class="text-t-bright font-bold text-sm text-right truncate pl-4"
+                            id="revFileName">...</span>
+                    </div>
+                    <div class="flex justify-between border-b border-stroke-elements pb-4">
+                        <span class="text-t-muted text-sm">Target URL</span>
+                        <span class="text-accent font-mono text-xs text-right truncate pl-4 select-all"
+                            id="revUrl">...</span>
+                    </div>
+                    <div class="flex justify-between pb-2">
+                        <span class="text-t-muted text-sm">Behavior</span>
+                        <span class="text-t-bright text-sm font-bold bg-white/5 px-2 py-0.5 rounded"
+                            id="revBehavior">...</span>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-t-muted mb-2">Delivery
-                        Method</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="route_type" value="SHARE" class="peer sr-only" checked
-                                onchange="updateUrlPreview()">
-                            <div
-                                class="p-3 border border-stroke-elements rounded-xl peer-checked:border-accent peer-checked:bg-accent/10 transition-all text-center">
-                                <i class="ph-bold ph-share-network text-xl mb-1 block text-t-bright"></i>
-                                <span class="text-sm font-bold text-t-bright">Share Link</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="route_type" value="CDN" class="peer sr-only"
-                                onchange="updateUrlPreview()">
-                            <div
-                                class="p-3 border border-stroke-elements rounded-xl peer-checked:border-accent peer-checked:bg-accent/10 transition-all text-center">
-                                <i class="ph-bold ph-globe text-xl mb-1 block text-t-bright"></i>
-                                <span class="text-sm font-bold text-t-bright">CDN Asset</span>
-                            </div>
-                        </label>
-                    </div>
-                    <p id="urlPreview"
-                        class="mt-2 text-xs text-t-muted font-mono bg-base p-2 rounded border border-stroke-elements text-center">
-                        nekwasar.com/share/...
+                <div class="mt-8 flex items-center justify-center">
+                    <p class="text-xs text-t-muted max-w-sm text-center">
+                        <i class="ph-bold ph-info mr-1"></i>
+                        The asset will be live immediately after publishing.
                     </p>
                 </div>
             </div>
 
-            <button type="submit" id="uploadBtn"
-                class="w-full py-3 bg-accent hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                <span id="uploadText">Upload Asset</span>
-                <i id="uploadSpinner" class="ph-bold ph-spinner animate-spin hidden"></i>
+            <!-- SUCCESS STATE -->
+            <div id="stepSuccess" class="hidden text-center py-10 flex flex-col items-center">
+                <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6">
+                    <i class="ph-fill ph-check text-4xl text-green-500"></i>
+                </div>
+                <h4 class="text-2xl font-bold text-t-bright mb-2">Published Successfully!</h4>
+                <p class="text-t-muted mb-8 text-sm">Your asset is ready to use.</p>
+
+                <div
+                    class="bg-base p-4 rounded-xl border border-stroke-elements flex items-center gap-3 mb-8 w-full max-w-md">
+                    <input type="text" id="finalUrlInput"
+                        class="bg-transparent border-none outline-none text-accent font-mono text-sm flex-1 truncate"
+                        readonly value="...">
+                    <button onclick="copyFinalUrl()"
+                        class="text-t-muted hover:text-white transition-colors p-2 hover:bg-white/10 rounded">
+                        <i class="ph-bold ph-copy text-lg"></i>
+                    </button>
+                    <a href="#" target="_blank" id="finalOpenLink"
+                        class="text-t-muted hover:text-white transition-colors p-2 hover:bg-white/10 rounded">
+                        <i class="ph-bold ph-arrow-square-out text-lg"></i>
+                    </a>
+                </div>
+
+                <button onclick="location.reload()"
+                    class="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl transition-all">
+                    Upload Another
+                </button>
+                <button onclick="closeWizard()" class="mt-4 text-xs text-t-muted hover:text-white underline">
+                    Close Wizard
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Footer Actions -->
+        <div id="wizardFooter"
+            class="p-6 border-t border-stroke-elements bg-base-tint flex justify-between items-center z-10">
+            <button onclick="prevStep()" id="prevBtn"
+                class="px-6 py-2.5 text-t-muted hover:text-white font-bold transition-colors disabled:opacity-0">
+                Back
             </button>
-        </form>
+            <button onclick="nextStep()" id="nextBtn"
+                class="px-8 py-2.5 bg-accent hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg transition-all flex items-center gap-2">
+                <span>Next Step</span>
+                <i class="ph-bold ph-arrow-right"></i>
+            </button>
+            <button onclick="publishAsset()" id="publishBtn"
+                class="hidden px-8 py-2.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow-lg transition-all flex items-center gap-2">
+                <span>Publish Asset</span>
+                <i class="ph-bold ph-rocket-launch"></i>
+            </button>
+        </div>
     </div>
 </div>
-
-<!-- Notification Toast -->
-<div id="toast"
-    class="fixed bottom-5 right-5 z-[60] bg-base-tint border border-accent text-white px-6 py-4 rounded-xl shadow-2xl translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3">
-    <i class="ph-fill ph-check-circle text-green-400 text-xl"></i>
-    <div class="flex flex-col">
-        <span class="font-bold text-sm" id="toastTitle">Success</span>
-        <span class="text-xs text-t-muted" id="toastMessage">Action completed</span>
-    </div>
-</div>
-
-<!-- Styles for Drag/Drop -->
-<style>
-    .drag-active {
-        border-color: #6366f1 !important;
-        background: rgba(99, 102, 241, 0.1) !important;
-    }
-</style>
 
 <script>
-    var ASSETS = [];
+    let currentStep = 1;
+    let selectedFile = null;
+    let ASSETS = [];
 
-    // --- Init ---
-    // Expose init function for SPA loader
     function initMediaManager() {
-        console.log('Media Manager Initialized');
         loadAssets();
-        setupDragDrop();
     }
 
-    // Fallback: If loaded directly (unlikely given SPA, but safe to check)
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     initMediaManager();
-    // });
-
+    // --- Asset Loading ---
     async function loadAssets() {
-        try {
-            const res = await fetch('/api/admin/media?limit=100');
-            ASSETS = await res.json();
-            renderAssets(ASSETS);
-        } catch (e) {
-            console.error("Failed to load assets", e);
-        }
-    }
-
-    function renderAssets(list) {
         const grid = document.getElementById('mediaGrid');
-        if (list.length === 0) {
-            grid.innerHTML = '<div class="col-span-full py-20 text-center text-t-muted flex flex-col items-center gap-4"><i class="ph-duotone ph-folder-open text-4xl"></i><span>No assets found.</span></div>';
-            return;
-        }
+        try {
+            const res = await fetch('/api/admin/media?limit=50');
+            ASSETS = await res.json();
 
-        grid.innerHTML = list.map(asset => {
-            const isImage = asset.mime_type.startsWith('image/');
-            const icon = isImage ? 'ph-image' : (asset.mime_type.startsWith('video/') ? 'ph-film-strip' : 'ph-file-text');
-            const preview = isImage
-                ? `<img src="${asset.file_url}" class="w-full h-full object-cover transition-transform group-hover:scale-110" loading="lazy">`
-                : `<div class="w-full h-full bg-base flex items-center justify-center"><i class="ph-duotone ${icon} text-4xl text-t-muted group-hover:text-accent transition-colors"></i></div>`;
-
-            const badge = asset.route_type === 'CDN'
-                ? `<span class="absolute top-2 left-2 px-2 py-0.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 text-[10px] font-bold rounded uppercase backdrop-blur-md">CDN</span>`
-                : `<span class="absolute top-2 left-2 px-2 py-0.5 bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded uppercase backdrop-blur-md">SHARE</span>`;
-
-            return `
-            <div class="group relative bg-base-tint border border-stroke-elements rounded-xl overflow-hidden hover:border-accent/50 transition-all hover:shadow-xl">
-                <!-- Preview -->
-                <div class="aspect-square relative overflow-hidden bg-base">
-                    ${preview}
-                    ${badge}
-                    <!-- Overlay Actions -->
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[2px]">
-                         <button onclick="copyLink('${asset.file_url}')" class="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white backdrop-blur-md" title="Copy Link">
-                            <i class="ph-bold ph-link"></i>
-                         </button>
-                         <button onclick="copyLink('${getDownloadLink(asset)}')" class="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white backdrop-blur-md" title="Copy Download Link">
-                            <i class="ph-bold ph-download-simple"></i>
-                         </button>
-                         <button onclick="deleteAsset(${asset.id})" class="p-2 bg-red-500/20 hover:bg-red-500/40 text-red-500 border border-red-500/30 rounded-lg backdrop-blur-md" title="Delete">
-                            <i class="ph-bold ph-trash"></i>
-                         </button>
-                    </div>
-                </div>
-                <!-- Info -->
-                <div class="p-3">
-                    <div class="flex justify-between items-start mb-1">
-                        <div class="font-bold text-sm truncate pr-2 w-full text-t-bright" title="${asset.filename}">${asset.slug}</div>
-                    </div>
-                    <div class="flex justify-between text-xs text-t-muted">
-                        <span class="uppercase">${asset.mime_type.split('/')[1] || 'FILE'}</span>
-                        <span>${formatBytes(asset.size)}</span>
-                    </div>
-                </div>
-            </div>
-            `;
-        }).join('');
-    }
-
-    // --- Helpers ---
-    function getDownloadLink(asset) {
-        if (asset.route_type === 'CDN') {
-            return asset.file_url.replace(asset.slug, `d_${asset.slug}`);
-        } else {
-            return asset.file_url.replace('/share/', '/d/');
-        }
-    }
-
-    function formatBytes(bytes, decimals = 2) {
-        if (!+bytes) return '0 B';
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
-    }
-
-    function filterType(type) {
-        document.querySelectorAll('.filter-btn').forEach(b => {
-            const isActive = b.dataset.type === type;
-            b.classList.toggle('active', isActive);
-            if (isActive) {
-                b.classList.remove('text-t-muted', 'hover:bg-white/5');
-                b.classList.add('bg-accent', 'text-white');
-            } else {
-                b.classList.add('text-t-muted', 'hover:bg-white/5');
-                b.classList.remove('bg-accent', 'text-white');
+            if (ASSETS.length === 0) {
+                grid.innerHTML = '<div class="col-span-full py-20 text-center text-t-muted">No assets found. Upload one to start.</div>';
+                return;
             }
-        });
 
-        if (type === 'all') {
-            renderAssets(ASSETS);
-        } else {
-            renderAssets(ASSETS.filter(a => a.mime_type.includes(type)));
+            grid.innerHTML = ASSETS.map(asset => {
+                const isImage = asset.mime_type.startsWith('image/');
+                const icon = isImage ? 'ph-image' : 'ph-file';
+                const preview = isImage
+                    ? `<img src="${asset.file_url}" class="w-full h-full object-cover">`
+                    : `<div class="w-full h-full bg-base flex items-center justify-center"><i class="ph-duotone ${icon} text-4xl text-t-muted"></i></div>`;
+
+                return `
+                <div class="group relative bg-base-tint border border-stroke-elements rounded-xl overflow-hidden hover:border-accent/50 transition-all hover:shadow-xl">
+                    <div class="aspect-square relative bg-base">${preview}</div>
+                    <div class="p-3">
+                        <div class="font-bold text-sm text-t-bright truncate" title="${asset.slug}">${asset.slug}</div>
+                        <div class="flex justify-between text-[10px] text-t-muted mt-1">
+                            <span>${asset.route_type}</span>
+                            <span>${(asset.size / 1024).toFixed(1)} KB</span>
+                        </div>
+                    </div>
+                     <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[2px]">
+                         <button onclick="copyToClipboard('${asset.file_url}')" class="p-2 bg-white/10 rounded-lg text-white hover:bg-white/20"><i class="ph-bold ph-link"></i></button>
+                         <button onclick="deleteAsset(${asset.id})" class="p-2 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500/30"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+        } catch (e) {
+            console.error(e);
+            grid.innerHTML = '<div class="col-span-full text-center text-red-400">Error loading assets.</div>';
         }
     }
 
-    function handleSearch(query) {
-        if (!query) return renderAssets(ASSETS);
-        const term = query.toLowerCase();
-        renderAssets(ASSETS.filter(a =>
-            a.slug.toLowerCase().includes(term) ||
-            a.original_name.toLowerCase().includes(term)
-        ));
+    // --- Wizard Logic ---
+    function openWizard() {
+        currentStep = 1;
+        selectedFile = null;
+        document.getElementById('fileInput').value = '';
+        document.getElementById('slugInput').value = '';
+        document.getElementById('wizardModal').classList.remove('hidden');
+        updateStepUI();
     }
 
-    // --- Upload Logic ---
-    function openUploadModal() {
-        document.getElementById('uploadModal').classList.remove('hidden');
-        document.getElementById('uploadForm').reset();
-        resetDropZone();
-        updateUrlPreview();
+    function closeWizard() {
+        document.getElementById('wizardModal').classList.add('hidden');
     }
-    function closeUploadModal() {
-        document.getElementById('uploadModal').classList.add('hidden');
+
+    function updateStepUI() {
+        // Hide all steps
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('hidden'));
+        // Show current
+        document.getElementById(`step${currentStep}`).classList.remove('hidden');
+
+        // Progress
+        document.getElementById('wizardProgress').style.width = `${(currentStep / 5) * 100}%`;
+        document.getElementById('currentStepNum').innerText = currentStep;
+
+        // Footer Buttons
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const publishBtn = document.getElementById('publishBtn');
+        const footer = document.getElementById('wizardFooter');
+
+        // Reset visibility
+        footer.classList.remove('hidden');
+
+        prevBtn.disabled = currentStep === 1;
+        prevBtn.style.opacity = currentStep === 1 ? '0' : '1';
+
+        if (currentStep === 5) {
+            nextBtn.classList.add('hidden');
+            publishBtn.classList.remove('hidden');
+        } else {
+            nextBtn.classList.remove('hidden');
+            publishBtn.classList.add('hidden');
+        }
+
+        // Disable Next if no file on Step 1
+        if (currentStep === 1 && !selectedFile) {
+            nextBtn.disabled = true;
+            nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    }
+
+    function nextStep() {
+        if (currentStep < 5) {
+            currentStep++;
+            updateStepUI();
+            if (currentStep === 5) updateReview();
+        }
+    }
+
+    function prevStep() {
+        if (currentStep > 1) {
+            currentStep--;
+            updateStepUI();
+        }
     }
 
     function handleFileSelect(input) {
-        const file = input.files[0];
-        if (!file) return;
+        if (input.files && input.files[0]) {
+            selectedFile = input.files[0];
 
-        // Show Preview
-        document.getElementById('dropContent').classList.add('hidden');
-        document.getElementById('filePreview').classList.remove('hidden');
-        document.getElementById('filePreview').classList.add('flex');
+            // Auto fill slug
+            const safeName = selectedFile.name.split('.')[0].toLowerCase().replace(/[^a-z0-9]/g, '-');
+            document.getElementById('slugInput').value = safeName;
 
-        document.getElementById('selectedFileName').innerText = file.name;
-        document.getElementById('selectedFileSize').innerText = formatBytes(file.size);
+            // Display Details
+            document.getElementById('originalNameDisplay').innerText = selectedFile.name;
+            document.getElementById('fileSizeDisplay').innerText = (selectedFile.size / 1024).toFixed(2) + ' KB';
 
-        // Auto-fill slug if empty
-        const slugInput = document.getElementById('slugInput');
-        if (!slugInput.value) {
-            const safeName = file.name.split('.')[0].toLowerCase().replace(/[^a-z0-9]/g, '-');
-            slugInput.value = safeName;
-            updateUrlPreview();
+            // Preview
+            const container = document.getElementById('filePreviewContainer');
+            if (selectedFile.type.startsWith('image/')) {
+                const url = URL.createObjectURL(selectedFile);
+                container.innerHTML = `<img src="${url}" class="w-full h-full object-cover">`;
+            } else {
+                container.innerHTML = `<i class="ph-duotone ph-file text-4xl text-t-muted"></i>`;
+            }
+
+            // Enable Next
+            updateStepUI();
         }
     }
 
-    function resetDropZone() {
-        document.getElementById('dropContent').classList.remove('hidden');
-        document.getElementById('filePreview').classList.add('hidden');
-        document.getElementById('filePreview').classList.remove('flex');
-        document.getElementById('fileInput').value = '';
-    }
+    function updateReview() {
+        const slug = document.getElementById('slugInput').value;
+        const domain = document.querySelector('input[name="wiz_domain"]:checked').value;
+        const access = document.querySelector('input[name="wiz_access"]:checked').value;
 
-    function updateUrlPreview() {
-        const slug = document.getElementById('slugInput').value || '...';
-        const type = document.querySelector('input[name="route_type"]:checked').value;
-        const el = document.getElementById('urlPreview');
+        document.getElementById('revFileName').innerText = slug;
 
-        if (type === 'CDN') {
-            el.innerText = `https://cdn.nekwasar.com/${slug}`;
+        let url = '';
+        if (domain === 'CDN') {
+            url = `https://cdn.nekwasar.com/${slug}`;
+            if (access === 'DOWNLOAD') url = `https://cdn.nekwasar.com/d_${slug}`;
         } else {
-            el.innerText = `nekwasar.com/share/${slug}`;
+            url = `nekwasar.com/share/${slug}`;
+            if (access === 'DOWNLOAD') url = `nekwasar.com/d/${slug}`;
         }
+        document.getElementById('revUrl').innerText = url;
+        document.getElementById('revBehavior').innerText = access === 'VIEW' ? 'View-Only' : 'Auto-Download';
     }
 
-    // Add event listener to slug input to update preview live
-    // Note: multiple bindings if reloaded? It's okay.
-    var slugIn = document.getElementById('slugInput');
-    if (slugIn) slugIn.addEventListener('input', updateUrlPreview);
-
-    async function handleUpload(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const btn = document.getElementById('uploadBtn');
-        const spinner = document.getElementById('uploadSpinner');
-        const text = document.getElementById('uploadText');
-
-        // Loading State
-        btn.disabled = true;
-        spinner.classList.remove('hidden');
-        text.innerText = 'Uploading...';
+    async function publishAsset() {
+        const publishBtn = document.getElementById('publishBtn');
+        const origText = publishBtn.innerHTML;
+        publishBtn.disabled = true;
+        publishBtn.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Publishing...';
 
         try {
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('slug', document.getElementById('slugInput').value);
+            formData.append('route_type', document.querySelector('input[name="wiz_domain"]:checked').value);
+            // Ignore access type for backend, it's URL based
+
             const res = await fetch('/api/admin/media/upload', {
                 method: 'POST',
                 body: formData
             });
+
+            if (!res.ok) throw new Error('Upload failed');
+
             const data = await res.json();
 
-            if (!res.ok) throw new Error(data.detail || 'Upload failed');
+            // Construct Final URL based on logic
+            let finalUrl = data.url; // Default from backend
+            const access = document.querySelector('input[name="wiz_access"]:checked').value;
+            const domain = document.querySelector('input[name="wiz_domain"]:checked').value;
 
-            showToast('Success', 'File uploaded successfully');
-            closeUploadModal();
-            loadAssets(); // Refresh grid
+            if (access === 'DOWNLOAD') {
+                if (domain === 'CDN') finalUrl = finalUrl.replace(data.slug, `d_${data.slug}`);
+                else finalUrl = finalUrl.replace('/share/', '/d/');
+            }
+
+            // Show Success
+            // Hide all wizard steps
+            document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('hidden'));
+
+            // Show Success div (which is NOT a wizard-step class anymore to avoid confusion or is it?)
+            // Actually let's just show it explicitly
+            const successDiv = document.getElementById('stepSuccess');
+            successDiv.classList.remove('hidden');
+            successDiv.classList.add('flex'); // consistent with flex-col
+
+            // Hide Footer
+            document.getElementById('wizardFooter').classList.add('hidden');
+            // Hide Progress
+            document.querySelector('.w-full.bg-base.h-1').classList.add('hidden');
+
+            document.getElementById('finalUrlInput').value = finalUrl;
+            document.getElementById('finalOpenLink').href = finalUrl.startsWith('http') ? finalUrl : 'https://' + finalUrl;
+
+            loadAssets(); // Refresh background list
 
         } catch (e) {
-            showToast('Error', e.message, true);
-        } finally {
-            btn.disabled = false;
-            spinner.classList.add('hidden');
-            text.innerText = 'Upload Asset';
+            alert('Error: ' + e.message);
+            publishBtn.disabled = false;
+            publishBtn.innerHTML = `<span>Publish Asset</span><i class="ph-bold ph-rocket-launch"></i>`;
         }
     }
 
-    // --- Actions ---
-    function copyLink(url) {
-        // If relative URL, make absolute
-        const fullUrl = url.startsWith('http') ? url : window.location.origin + url;
-        navigator.clipboard.writeText(fullUrl).then(() => {
-            showToast('Copied', 'Link copied to clipboard');
-        });
+    function copyToClipboard(text) {
+        if (!text.startsWith('http')) text = window.location.origin + text;
+        navigator.clipboard.writeText(text);
+        alert('Copied!');
+    }
+
+    function copyFinalUrl() {
+        const val = document.getElementById('finalUrlInput').value;
+        navigator.clipboard.writeText(val);
+        alert('Copied!');
     }
 
     async function deleteAsset(id) {
-        if (!confirm('Are you sure? This cannot be undone.')) return;
-        try {
-            const res = await fetch(`/api/admin/media/${id}`, { method: 'DELETE' });
-            if (res.ok) {
-                showToast('Deleted', 'Asset removed');
-                loadAssets();
-            } else {
-                throw new Error('Delete failed');
-            }
-        } catch (e) {
-            showToast('Error', e.message, true);
-        }
-    }
-
-    function showToast(title, message, isError = false) {
-        const t = document.getElementById('toast');
-        document.getElementById('toastTitle').innerText = title;
-        document.getElementById('toastMessage').innerText = message;
-
-        if (isError) {
-            t.querySelector('i').classList.replace('ph-check-circle', 'ph-warning-circle');
-            t.querySelector('i').classList.replace('text-green-400', 'text-red-400');
-        } else {
-            t.querySelector('i').classList.replace('ph-warning-circle', 'ph-check-circle');
-            t.querySelector('i').classList.replace('text-red-400', 'text-green-400');
-        }
-
-        t.classList.remove('translate-y-20', 'opacity-0');
-        setTimeout(() => {
-            t.classList.add('translate-y-20', 'opacity-0');
-        }, 3000);
-    }
-
-    function setupDragDrop() {
-        const dropZone = document.getElementById('dropZone');
-        if (!dropZone) return;
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight(e) {
-            dropZone.classList.add('drag-active');
-        }
-
-        function unhighlight(e) {
-            dropZone.classList.remove('drag-active');
-        }
-
-        dropZone.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            document.getElementById('fileInput').files = files;
-            handleFileSelect(document.getElementById('fileInput'));
-        }
+        if (!confirm('Delete this asset?')) return;
+        await fetch(`/api/admin/media/${id}`, { method: 'DELETE' });
+        loadAssets();
     }
 </script>
