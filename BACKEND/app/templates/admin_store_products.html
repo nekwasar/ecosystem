@@ -491,43 +491,44 @@
             alert('Error: ' + e.message);
             console.error(e);
         }
+    }
 
 
-        async function saveMedia(productId, url, type, isHero) {
-            try {
-                const token = localStorage.getItem('token');
-                await fetch(`/api/admin/store/products/${productId}/media`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        file_url: url,
-                        media_type: type,
-                        is_hero: isHero
-                    })
-                });
-            } catch (e) {
-                console.error("Failed to save media", url, e);
-            }
+    async function saveMedia(productId, url, type, isHero) {
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`/api/admin/store/products/${productId}/media`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    file_url: url,
+                    media_type: type,
+                    is_hero: isHero
+                })
+            });
+        } catch (e) {
+            console.error("Failed to save media", url, e);
         }
+    }
 
 
-        async function deleteProduct(id) {
-            if (!confirm('Are you sure you want to delete this product?')) return;
+    async function deleteProduct(id) {
+        if (!confirm('Are you sure you want to delete this product?')) return;
 
-            try {
-                const token = localStorage.getItem('token');
-                const res = await fetch(`/api/admin/store/products/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/admin/store/products/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
 
-                if (!res.ok) throw new Error('Failed to delete');
-                loadProducts();
-            } catch (e) {
-                alert(e.message);
-            }
+            if (!res.ok) throw new Error('Failed to delete');
+            loadProducts();
+        } catch (e) {
+            alert(e.message);
         }
+    }
 </script>
