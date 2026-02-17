@@ -10,6 +10,7 @@
 *.sqlite3
 nekwasar.db
 
+
 # Python
 __pycache__/
 *.py[cod]
@@ -38,6 +39,7 @@ env/
 ENV/
 .venv/
 .env/
+nginx.conf
 
 # IDE
 .vscode/
