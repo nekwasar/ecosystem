@@ -667,3 +667,19 @@
   // --------------------------------------------- //
 
 })(); // Close the IIFE wrapper
+
+// --------------------------------------------- //
+// Service Worker Registration
+// --------------------------------------------- //
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Register sw.js using absolute path from root
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registered successfully:', registration.scope);
+      })
+      .catch(error => {
+        console.log('SW registration failed:', error);
+      });
+  });
+}
