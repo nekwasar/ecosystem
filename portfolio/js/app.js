@@ -44,7 +44,6 @@
     // Loader & Loading Animation Start
     // --------------------------------------------- //
 
-    /*
     console.log('=== LOADER DEBUG START ===');
     console.log('Page loaded, checking loader elements...');
 
@@ -100,7 +99,6 @@
     }, 500);
 
     console.log('=== LOADER DEBUG SETUP COMPLETE ===');
-    */
 
     // Only run GSAP animations if GSAP is available
     if (typeof gsap !== 'undefined') {
