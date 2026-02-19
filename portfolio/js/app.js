@@ -90,13 +90,13 @@
       }, 300);
     }
 
-    console.log('Setting up 2-second timeout...');
-    // STRICT ENFORCEMENT: Hide loader after exactly 2 seconds on first page load
+    console.log('Setting up 500ms timeout...');
+    // STRICT ENFORCEMENT: Hide loader after exactly 500ms on first page load
     setTimeout(() => {
-      console.log('=== 2-SECOND TIMEOUT FIRED ===');
+      console.log('=== 500MS TIMEOUT FIRED ===');
       console.log('Calling hideLoader()...');
       hideLoader();
-    }, 2000);
+    }, 500);
 
     console.log('=== LOADER DEBUG SETUP COMPLETE ===');
 
