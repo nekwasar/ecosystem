@@ -5357,3 +5357,21 @@ form textarea:required:valid {
     display: inline-flex;
   }
 }
+
+/* ------------------------------------------------*/
+/* PhotoSwipe UI Improvements */
+/* ------------------------------------------------*/
+.pswp__button--close {
+  opacity: 1 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-right: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.pswp__button--close:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: #fff;
+}
