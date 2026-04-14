@@ -1,0 +1,1214 @@
+<!-- Search Performance Metrics -->
+<div class="search-performance">
+    <div class="analytics-header">
+        <h1 class="page-title">Search Performance Metrics</h1>
+        <p class="page-subtitle">Monitor and optimize search system performance</p>
+    </div>
+
+    <!-- Performance Overview Cards -->
+    <div class="performance-overview">
+        <div class="metric-card">
+            <div class="metric-icon">
+                <i class="ph-bold ph-gauge"></i>
+            </div>
+            <div class="metric-content">
+                <div class="metric-value" id="avgResponseTime">0ms</div>
+                <div class="metric-label">Avg. Response Time</div>
+                <div class="metric-trend" id="responseTimeTrend">
+                    <i class="ph-bold ph-trend-down"></i>
+                    <span>-8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-icon">
+                <i class="ph-bold ph-database"></i>
+            </div>
+            <div class="metric-content">
+                <div class="metric-value" id="indexSize">0MB</div>
+                <div class="metric-label">Search Index Size</div>
+                <div class="metric-trend" id="indexSizeTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+12.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-icon">
+                <i class="ph-bold ph-target"></i>
+            </div>
+            <div class="metric-content">
+                <div class="metric-value" id="relevanceScore">0%</div>
+                <div class="metric-label">Avg. Relevance Score</div>
+                <div class="metric-trend" id="relevanceTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+5.7%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-icon">
+                <i class="ph-bold ph-activity"></i>
+            </div>
+            <div class="metric-content">
+                <div class="metric-value" id="uptime">99.9%</div>
+                <div class="metric-label">Search Uptime</div>
+                <div class="metric-trend" id="uptimeTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+0.1%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Charts -->
+    <div class="performance-charts">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Response Time Trends</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-metric="response">Response Time</button>
+                    <button class="chart-btn" data-metric="throughput">Throughput</button>
+                    <button class="chart-btn" data-metric="errors">Error Rate</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="performanceTrendsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3>Search Load Distribution</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="loadDistributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Breakdown -->
+    <div class="performance-breakdown">
+        <div class="breakdown-card">
+            <div class="card-header">
+                <h3>Query Performance by Type</h3>
+            </div>
+            <div class="performance-table" id="queryTypePerformance">
+                <!-- Performance data will be populated here -->
+            </div>
+        </div>
+
+        <div class="breakdown-card">
+            <div class="card-header">
+                <h3>Index Performance Metrics</h3>
+            </div>
+            <div class="index-metrics">
+                <div class="metric-item">
+                    <div class="metric-label">Total Documents</div>
+                    <div class="metric-value" id="totalDocuments">0</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Index Segments</div>
+                    <div class="metric-value" id="indexSegments">0</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Last Optimization</div>
+                    <div class="metric-value" id="lastOptimization">--</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Fragmentation</div>
+                    <div class="metric-value" id="fragmentation">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Health -->
+    <div class="system-health">
+        <div class="section-header">
+            <h3>System Health & Alerts</h3>
+        </div>
+        <div class="health-indicators">
+            <div class="health-card">
+                <div class="health-icon">
+                    <i class="ph-bold ph-cpu"></i>
+                </div>
+                <div class="health-content">
+                    <div class="health-title">CPU Usage</div>
+                    <div class="health-value" id="cpuUsage">0%</div>
+                    <div class="health-bar">
+                        <div class="health-fill cpu" id="cpuBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-icon">
+                    <i class="ph-bold ph-memory"></i>
+                </div>
+                <div class="health-content">
+                    <div class="health-title">Memory Usage</div>
+                    <div class="health-value" id="memoryUsage">0%</div>
+                    <div class="health-bar">
+                        <div class="health-fill memory" id="memoryBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-icon">
+                    <i class="ph-bold ph-hard-drive"></i>
+                </div>
+                <div class="health-content">
+                    <div class="health-title">Disk Usage</div>
+                    <div class="health-value" id="diskUsage">0%</div>
+                    <div class="health-bar">
+                        <div class="health-fill disk" id="diskBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="health-card">
+                <div class="health-icon">
+                    <i class="ph-bold ph-wifi-high"></i>
+                </div>
+                <div class="health-content">
+                    <div class="health-title">Network I/O</div>
+                    <div class="health-value" id="networkIO">0MB/s</div>
+                    <div class="health-bar">
+                        <div class="health-fill network" id="networkBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Optimization -->
+    <div class="performance-optimization">
+        <div class="section-header">
+            <h3>Performance Optimization</h3>
+        </div>
+        <div class="optimization-actions">
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="ph-bold ph-gear"></i>
+                </div>
+                <div class="action-content">
+                    <h4>Optimize Search Index</h4>
+                    <p>Rebuild and optimize the search index for better performance</p>
+                    <button class="action-btn" onclick="optimizeIndex()">
+                        <i class="ph-bold ph-play"></i>
+                        Optimize Now
+                    </button>
+                </div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="ph-bold ph-broom"></i>
+                </div>
+                <div class="action-content">
+                    <h4>Clear Search Cache</h4>
+                    <p>Clear cached search results to free up memory</p>
+                    <button class="action-btn" onclick="clearCache()">
+                        <i class="ph-bold ph-trash"></i>
+                        Clear Cache
+                    </button>
+                </div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="ph-bold ph-chart-line"></i>
+                </div>
+                <div class="action-content">
+                    <h4>Rebuild Analytics</h4>
+                    <p>Recalculate search analytics and performance metrics</p>
+                    <button class="action-btn" onclick="rebuildAnalytics()">
+                        <i class="ph-bold ph-refresh"></i>
+                        Rebuild
+                    </button>
+                </div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">
+                    <i class="ph-bold ph-database"></i>
+                </div>
+                <div class="action-content">
+                    <h4>Backup Search Data</h4>
+                    <p>Create a backup of search index and analytics data</p>
+                    <button class="action-btn" onclick="backupData()">
+                        <i class="ph-bold ph-download"></i>
+                        Backup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Alerts -->
+    <div class="performance-alerts">
+        <div class="section-header">
+            <h3>Performance Alerts</h3>
+            <button class="configure-btn" id="configureAlertsBtn">
+                <i class="ph-bold ph-gear"></i>
+                Configure
+            </button>
+        </div>
+        <div class="alerts-list" id="performanceAlerts">
+            <!-- Alerts will be populated here -->
+        </div>
+    </div>
+</div>
+
+<style>
+.search-performance {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.page-title {
+    font: normal 700 2rem/1.2 var(--_font-accent);
+    color: var(--t-accent);
+    background: var(--t-accent);
+    background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font: normal 400 1.25rem/1.4 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Performance Overview */
+.performance-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.metric-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.metric-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.25rem;
+}
+
+.metric-content {
+    flex: 1;
+}
+
+.metric-value {
+    font: normal 700 1.5rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin-bottom: 0.25rem;
+}
+
+.metric-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+.metric-trend.negative {
+    color: var(--error, #ef4444);
+}
+
+/* Performance Charts */
+.performance-charts {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.5rem;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.chart-header h3 {
+    font: normal 600 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.chart-btn {
+    background: none;
+    border: 1px solid var(--stroke-elements);
+    color: var(--t-medium);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--_radius-s);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+}
+
+.chart-btn.active {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.chart-container {
+    height: 250px;
+    position: relative;
+}
+
+/* Performance Breakdown */
+.performance-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.breakdown-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.5rem;
+}
+
+.card-header h3 {
+    font: normal 600 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0 0 1.5rem 0;
+}
+
+/* Performance Table */
+.performance-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.performance-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border-radius: var(--_radius-md);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    border: 1px solid var(--stroke-elements);
+}
+
+.performance-row:hover {
+    background: var(--stroke-elements);
+}
+
+.query-type {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.performance-metrics {
+    display: flex;
+    gap: 1rem;
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric-value {
+    font: normal 700 1rem/1.2 var(--_font-accent);
+    color: var(--accent);
+    display: block;
+}
+
+.metric-label {
+    font: normal 400 0.75rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Index Metrics */
+.index-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.metric-item {
+    text-align: center;
+    padding: 0.75rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-md);
+}
+
+.metric-label {
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.metric-value {
+    font: normal 700 1.25rem/1.2 var(--_font-accent);
+    color: var(--accent);
+}
+
+/* System Health */
+.system-health {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h3 {
+    font: normal 600 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.configure-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    font: normal 600 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.configure-btn:hover {
+    background: var(--secondary);
+}
+
+.health-indicators {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.health-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.health-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.health-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1rem;
+}
+
+.health-content {
+    flex: 1;
+}
+
+.health-title {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.health-value {
+    font: normal 700 1.25rem/1.2 var(--_font-accent);
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+}
+
+.health-bar {
+    height: 6px;
+    background: var(--stroke-elements);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.health-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width var(--_animspeed-slow) var(--_animbezier);
+}
+
+.health-fill.cpu { background: var(--accent); }
+.health-fill.memory { background: var(--secondary); }
+.health-fill.disk { background: var(--warning, #f59e0b); }
+.health-fill.network { background: var(--success, #10b981); }
+
+/* Performance Optimization */
+.performance-optimization {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.optimization-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.action-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.action-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.action-content {
+    flex: 1;
+}
+
+.action-content h4 {
+    font: normal 600 1.125rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0 0 0.25rem 0;
+}
+
+.action-content p {
+    font: normal 400 1rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin: 0 0 1rem 0;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--_radius-md);
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    font: normal 600 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.action-btn:hover {
+    background: var(--secondary);
+    border-color: var(--secondary);
+}
+
+/* Performance Alerts */
+.performance-alerts {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.5rem;
+}
+
+.alerts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--_radius-lg);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    border: 1px solid var(--stroke-elements);
+}
+
+.alert-item:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alert-item.warning {
+    border-color: var(--warning, #f59e0b);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.alert-item.error {
+    border-color: var(--error, #ef4444);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.alert-item.info {
+    border-color: var(--info, #3b82f6);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.alert-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.alert-item.warning .alert-icon {
+    background: var(--warning, #f59e0b);
+    color: white;
+}
+
+.alert-item.error .alert-icon {
+    background: var(--error, #ef4444);
+    color: white;
+}
+
+.alert-item.info .alert-icon {
+    background: var(--info, #3b82f6);
+    color: white;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.alert-message {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.alert-time {
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .performance-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .performance-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .optimization-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-performance {
+        padding: 0.75rem;
+    }
+
+    .performance-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .health-indicators {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .chart-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .chart-controls {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .action-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .alert-item {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+// Search Performance Metrics
+document.addEventListener('DOMContentLoaded', function() {
+    initSearchPerformance();
+});
+
+function initSearchPerformance() {
+    loadPerformanceData();
+    initChartControls();
+}
+
+async function loadPerformanceData() {
+    try {
+        const response = await fetch('/api/admin/search/performance');
+        if (response.ok) {
+            const data = await response.json();
+            updatePerformanceOverview(data.overview);
+            updatePerformanceCharts(data.charts);
+            updatePerformanceBreakdown(data.breakdown);
+            updateSystemHealth(data.health);
+            updatePerformanceAlerts(data.alerts);
+        }
+    } catch (error) {
+        console.error('Error loading performance data:', error);
+        showFallbackPerformanceData();
+    }
+}
+
+function updatePerformanceOverview(data) {
+    document.getElementById('avgResponseTime').textContent = Math.round(data.avgResponseTime * 1000) + 'ms';
+    document.getElementById('indexSize').textContent = formatFileSize(data.indexSize);
+    document.getElementById('relevanceScore').textContent = Math.round(data.relevanceScore) + '%';
+    document.getElementById('uptime').textContent = data.uptime.toFixed(1) + '%';
+
+    updateTrend('responseTimeTrend', data.responseTimeChange);
+    updateTrend('indexSizeTrend', data.indexSizeChange);
+    updateTrend('relevanceTrend', data.relevanceChange);
+    updateTrend('uptimeTrend', data.uptimeChange);
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    const icon = element.querySelector('i');
+
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change).toFixed(1) + '%';
+
+    if (change < 0) {
+        element.classList.add('negative');
+        icon.className = 'ph-bold ph-trend-down';
+    } else {
+        element.classList.remove('negative');
+        icon.className = 'ph-bold ph-trend-up';
+    }
+}
+
+function updatePerformanceCharts(data) {
+    // Performance trends chart
+    const trendsCtx = document.getElementById('performanceTrendsChart').getContext('2d');
+    new Chart(trendsCtx, {
+        type: 'line',
+        data: {
+            labels: data.trends.labels,
+            datasets: [{
+                label: 'Response Time (ms)',
+                data: data.trends.responseTime,
+                borderColor: 'var(--accent)',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                tension: 0.4,
+                yAxisID: 'y'
+            }, {
+                label: 'Throughput (qps)',
+                data: data.trends.throughput,
+                borderColor: 'var(--secondary)',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Response Time (ms)'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Throughput (qps)'
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    }
+                }
+            }
+        }
+    });
+
+    // Load distribution chart
+    const loadCtx = document.getElementById('loadDistributionChart').getContext('2d');
+    new Chart(loadCtx, {
+        type: 'doughnut',
+        data: {
+            labels: data.loadDistribution.labels,
+            datasets: [{
+                data: data.loadDistribution.values,
+                backgroundColor: [
+                    'var(--accent)',
+                    'var(--secondary)',
+                    'var(--success, #10b981)',
+                    'var(--warning, #f59e0b)',
+                    'var(--error, #ef4444)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+}
+
+function updatePerformanceBreakdown(data) {
+    // Query type performance
+    const queryTypeContainer = document.getElementById('queryTypePerformance');
+    queryTypeContainer.innerHTML = data.queryTypes.map(type => `
+        <div class="performance-row">
+            <div class="query-type">${type.name}</div>
+            <div class="performance-metrics">
+                <div class="metric">
+                    <span class="metric-value">${type.avgTime}ms</span>
+                    <span class="metric-label">Avg Time</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">${type.successRate}%</span>
+                    <span class="metric-label">Success</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value">${type.count}</span>
+                    <span class="metric-label">Queries</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Index metrics
+    document.getElementById('totalDocuments').textContent = data.indexMetrics.totalDocuments.toLocaleString();
+    document.getElementById('indexSegments').textContent = data.indexMetrics.segments;
+    document.getElementById('lastOptimization').textContent = formatDate(data.indexMetrics.lastOptimization);
+    document.getElementById('fragmentation').textContent = data.indexMetrics.fragmentation + '%';
+}
+
+function updateSystemHealth(data) {
+    updateHealthMetric('cpu', data.cpu);
+    updateHealthMetric('memory', data.memory);
+    updateHealthMetric('disk', data.disk);
+    updateHealthMetric('network', data.network);
+}
+
+function updateHealthMetric(type, value) {
+    const element = document.getElementById(type + 'Usage');
+    const bar = document.getElementById(type + 'Bar');
+
+    if (type === 'network') {
+        element.textContent = formatFileSize(value) + '/s';
+        bar.style.width = Math.min((value / 1000000) * 100, 100) + '%'; // Normalize to MB/s
+    } else {
+        element.textContent = Math.round(value) + '%';
+        bar.style.width = value + '%';
+    }
+}
+
+function updatePerformanceAlerts(alerts) {
+    const container = document.getElementById('performanceAlerts');
+
+    if (!alerts || alerts.length === 0) {
+        container.innerHTML = `
+            <div class="alert-item info">
+                <div class="alert-icon">
+                    <i class="ph-bold ph-check-circle"></i>
+                </div>
+                <div class="alert-content">
+                    <div class="alert-title">All Systems Operational</div>
+                    <div class="alert-message">No performance issues detected</div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = alerts.map(alert => `
+        <div class="alert-item ${alert.level}">
+            <div class="alert-icon">
+                <i class="ph-bold ${getAlertIcon(alert.level)}"></i>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">${alert.title}</div>
+                <div class="alert-message">${alert.message}</div>
+                <div class="alert-time">${formatTimeAgo(alert.timestamp)}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function initChartControls() {
+    document.querySelectorAll('.chart-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadPerformanceChart(this.dataset.metric);
+        });
+    });
+}
+
+async function loadPerformanceChart(metric) {
+    try {
+        const response = await fetch(`/api/admin/search/performance/chart?metric=${metric}`);
+        if (response.ok) {
+            const data = await response.json();
+            updatePerformanceTrendsChart(data);
+        }
+    } catch (error) {
+        console.error('Error loading performance chart:', error);
+    }
+}
+
+// Optimization actions
+async function optimizeIndex() {
+    showNotification('Optimizing search index...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/optimize-index', { method: 'POST' });
+        if (response.ok) {
+            showNotification('Search index optimized successfully', 'success');
+            loadPerformanceData();
+        } else {
+            showNotification('Failed to optimize index', 'error');
+        }
+    } catch (error) {
+        console.error('Error optimizing index:', error);
+        showNotification('Error optimizing index', 'error');
+    }
+}
+
+async function clearCache() {
+    showNotification('Clearing search cache...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/clear-cache', { method: 'POST' });
+        if (response.ok) {
+            showNotification('Search cache cleared successfully', 'success');
+            loadPerformanceData();
+        } else {
+            showNotification('Failed to clear cache', 'error');
+        }
+    } catch (error) {
+        console.error('Error clearing cache:', error);
+        showNotification('Error clearing cache', 'error');
+    }
+}
+
+async function rebuildAnalytics() {
+    showNotification('Rebuilding analytics...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/rebuild-analytics', { method: 'POST' });
+        if (response.ok) {
+            showNotification('Analytics rebuilt successfully', 'success');
+            loadPerformanceData();
+        } else {
+            showNotification('Failed to rebuild analytics', 'error');
+        }
+    } catch (error) {
+        console.error('Error rebuilding analytics:', error);
+        showNotification('Error rebuilding analytics', 'error');
+    }
+}
+
+async function backupData() {
+    showNotification('Creating backup...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/backup');
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `search-backup-${new Date().toISOString().split('T')[0]}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            showNotification('Backup created successfully', 'success');
+        } else {
+            showNotification('Failed to create backup', 'error');
+        }
+    } catch (error) {
+        console.error('Error creating backup:', error);
+        showNotification('Error creating backup', 'error');
+    }
+}
+
+function getAlertIcon(level) {
+    const icons = {
+        'warning': 'ph-warning',
+        'error': 'ph-x-circle',
+        'info': 'ph-info'
+    };
+    return icons[level] || 'ph-info';
+}
+
+function formatFileSize(bytes) {
+    if (!bytes) return '0B';
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + sizes[i];
+}
+
+function formatDate(timestamp) {
+    return new Date(timestamp).toLocaleDateString();
+}
+
+function formatTimeAgo(timestamp) {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diff = now - time;
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return 'now';
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
+}
+
+function showNotification(message, type = 'info') {
+    // Use global notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+function showFallbackPerformanceData() {
+    // Show sample data when API is not available
+    updatePerformanceOverview({
+        avgResponseTime: 0.234,
+        indexSize: 52428800, // 50MB
+        relevanceScore: 87.5,
+        uptime: 99.9,
+        responseTimeChange: -8.2,
+        indexSizeChange: 12.5,
+        relevanceChange: 5.7,
+        uptimeChange: 0.1
+    });
+}
+</script>

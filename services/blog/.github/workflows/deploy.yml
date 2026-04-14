@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/blog/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd services/blog
+          pip install -r requirements.txt
+      
+      - name: Build Docker image
+        run: |
+          docker build -t nekwasar-blog:${{ github.sha }} services/blog
+      
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /home/nekwasar/ecosystem
+            docker pull nekwasar-blog:${{ github.sha }} || true
+            docker stop ecosystem_blog || true
+            docker rm ecosystem_blog || true
+            docker run -d --name ecosystem_blog \
+              --network ecosystem_network \
+              -p 8003:8003 \
+              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              nekwasar-blog:${{ github.sha }}

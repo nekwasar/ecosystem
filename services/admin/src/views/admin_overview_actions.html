@@ -1,0 +1,750 @@
+<!-- Quick Actions Page -->
+<div class="quick-actions">
+    <!-- Action Categories -->
+    <div class="actions-grid">
+        <!-- Content Actions -->
+        <div class="action-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <i class="ph-bold ph-article"></i>
+                </div>
+                <div class="category-info">
+                    <h3>Content Management</h3>
+                    <p>Create and manage blog content</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="navigateTo('blog', 'posts')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-plus"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">New Post</div>
+                        <div class="action-subtitle">Create a new blog post</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="navigateTo('blog', 'drafts')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-file-text"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">View Drafts</div>
+                        <div class="action-subtitle">Continue writing drafts</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="navigateTo('blog', 'media')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-images"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Upload Media</div>
+                        <div class="action-subtitle">Add images and files</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Communication Actions -->
+        <div class="action-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <i class="ph-bold ph-paper-plane-tilt"></i>
+                </div>
+                <div class="category-info">
+                    <h3>Communication</h3>
+                    <p>Send newsletters and messages</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="navigateTo('newsletter', 'campaigns')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-megaphone"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Send Newsletter</div>
+                        <div class="action-subtitle">Create and send campaigns</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="navigateTo('contacts', 'inbox')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-envelope"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Check Messages</div>
+                        <div class="action-subtitle">View contact form submissions</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="navigateTo('newsletter', 'templates')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-palette"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Email Templates</div>
+                        <div class="action-subtitle">Design newsletter templates</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- System Actions -->
+        <div class="action-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <i class="ph-bold ph-gear"></i>
+                </div>
+                <div class="category-info">
+                    <h3>System Maintenance</h3>
+                    <p>Manage system and performance</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="performAction('clearCache')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-broom"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Clear Cache</div>
+                        <div class="action-subtitle">Refresh system cache</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="performAction('rebuildSearch')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-magnifying-glass"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Rebuild Search</div>
+                        <div class="action-subtitle">Update search index</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="navigateTo('security', 'backup')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-database"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Backup Data</div>
+                        <div class="action-subtitle">Create system backup</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Analytics Actions -->
+        <div class="action-category">
+            <div class="category-header">
+                <div class="category-icon">
+                    <i class="ph-bold ph-chart-bar"></i>
+                </div>
+                <div class="category-info">
+                    <h3>Analytics & Reports</h3>
+                    <p>View insights and generate reports</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="navigateTo('analytics', 'traffic')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-bar-chart"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Traffic Report</div>
+                        <div class="action-subtitle">View visitor analytics</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="navigateTo('analytics', 'content')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-article"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Content Report</div>
+                        <div class="action-subtitle">Popular posts and engagement</div>
+                    </div>
+                </button>
+
+                <button class="action-btn secondary" onclick="performAction('exportReport')">
+                    <div class="action-icon">
+                        <i class="ph-bold ph-download"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Export Report</div>
+                        <div class="action-subtitle">Download analytics data</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Actions History -->
+    <div class="recent-actions">
+        <div class="section-header">
+            <h3>Recent Actions</h3>
+            <button class="clear-history-btn" onclick="clearActionHistory()">
+                <i class="ph-bold ph-trash"></i>
+                Clear History
+            </button>
+        </div>
+
+        <div class="actions-history" id="actionsHistory">
+            <!-- Action history items will be populated here -->
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+        <div class="stats-header">
+            <h3>Quick Stats</h3>
+            <span class="stats-updated" id="statsUpdated">Updated just now</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="ph-bold ph-article"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="pendingPosts">--</div>
+                    <div class="stat-label">Posts Awaiting Review</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="ph-bold ph-chat-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="pendingComments">--</div>
+                    <div class="stat-label">Comments to Moderate</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="ph-bold ph-envelope"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="unreadMessages">--</div>
+                    <div class="stat-label">Unread Messages</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="ph-bold ph-paper-plane-tilt"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="scheduledNewsletters">--</div>
+                    <div class="stat-label">Scheduled Newsletters</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quick-actions {
+        padding: 2rem;
+    }
+
+    /* Actions Grid */
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .action-category {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+        transition: all 0.2s ease;
+    }
+
+    .action-category:hover {
+        box-shadow: var(--admin-shadow-lg);
+        transform: translateY(-2px);
+    }
+
+    .category-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .category-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--admin-radius-lg);
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .category-info h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0 0 0.25rem 0;
+    }
+
+    .category-info p {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+        margin: 0;
+    }
+
+    .action-buttons {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: left;
+        width: 100%;
+    }
+
+    .action-btn:hover {
+        border-color: var(--admin-primary);
+        box-shadow: var(--admin-shadow-md);
+    }
+
+    .action-btn.primary {
+        border-color: var(--admin-primary);
+        background: linear-gradient(135deg, rgba(13, 55, 85, 0.05), rgba(184, 132, 177, 0.05));
+    }
+
+    .action-btn.secondary:hover {
+        background: var(--admin-bg);
+    }
+
+    .action-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .action-btn.primary .action-icon {
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+    }
+
+    .action-content {
+        flex: 1;
+    }
+
+    .action-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .action-subtitle {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    /* Recent Actions */
+    .recent-actions {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .clear-history-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--admin-error);
+        color: white;
+        border: none;
+        border-radius: var(--admin-radius-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .clear-history-btn:hover {
+        background: var(--admin-error);
+        opacity: 0.9;
+    }
+
+    .actions-history {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .action-history-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .action-history-item:last-child {
+        border-bottom: none;
+    }
+
+    .action-history-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .action-history-content {
+        flex: 1;
+    }
+
+    .action-history-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .action-history-meta {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+    }
+
+    /* Quick Stats */
+    .quick-stats {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+    }
+
+    .stats-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+
+    .stats-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .stats-updated {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .stat-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--admin-bg);
+        border-radius: var(--admin-radius-md);
+        border: 1px solid var(--admin-border);
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .stat-info {
+        flex: 1;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .quick-actions {
+            padding: 1rem;
+        }
+
+        .action-category {
+            margin-bottom: 1rem;
+        }
+
+        .action-buttons {
+            padding: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Quick Actions Page Initialization
+    function initOverviewActions() {
+        loadQuickStats();
+        loadActionHistory();
+        setupEventListeners();
+    }
+
+    async function loadQuickStats() {
+        try {
+            const response = await fetch('/api/admin/actions/quick-stats');
+            if (response.ok) {
+                const stats = await response.json();
+                updateQuickStats(stats);
+            }
+        } catch (error) {
+            console.error('Error loading quick stats:', error);
+        }
+    }
+
+    function updateQuickStats(stats) {
+        document.getElementById('pendingPosts').textContent = formatNumber(stats.pendingPosts || 0);
+        document.getElementById('pendingComments').textContent = formatNumber(stats.pendingComments || 0);
+        document.getElementById('unreadMessages').textContent = formatNumber(stats.unreadMessages || 0);
+        document.getElementById('scheduledNewsletters').textContent = formatNumber(stats.scheduledNewsletters || 0);
+
+        document.getElementById('statsUpdated').textContent = 'Updated just now';
+    }
+
+    async function loadActionHistory() {
+        try {
+            const response = await fetch('/api/admin/actions/history?limit=10');
+            if (response.ok) {
+                const history = await response.json();
+                updateActionHistory(history);
+            }
+        } catch (error) {
+            console.error('Error loading action history:', error);
+        }
+    }
+
+    function updateActionHistory(history) {
+        const container = document.getElementById('actionsHistory');
+        container.innerHTML = '';
+
+        if (!history || history.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: var(--admin-text-secondary);">
+                    <i class="ph-bold ph-clock" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <div>No recent actions</div>
+                </div>
+            `;
+            return;
+        }
+
+        history.forEach(action => {
+            const item = document.createElement('div');
+            item.className = 'action-history-item';
+            item.innerHTML = `
+                <div class="action-history-icon">
+                    <i class="ph-bold ${getActionIcon(action.type)}"></i>
+                </div>
+                <div class="action-history-content">
+                    <div class="action-history-title">${action.title}</div>
+                    <div class="action-history-meta">${formatTimeAgo(action.timestamp)}</div>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function getActionIcon(type) {
+        const icons = {
+            'post_created': 'ph-plus',
+            'comment_moderated': 'ph-chat-circle',
+            'newsletter_sent': 'ph-paper-plane-tilt',
+            'cache_cleared': 'ph-broom',
+            'search_rebuilt': 'ph-magnifying-glass',
+            'backup_created': 'ph-database'
+        };
+        return icons[type] || 'ph-circle';
+    }
+
+    async function performAction(actionType) {
+        try {
+            let endpoint = '';
+            let method = 'POST';
+            let successMessage = '';
+
+            switch (actionType) {
+                case 'clearCache':
+                    endpoint = '/api/admin/actions/clear-cache';
+                    successMessage = 'Cache cleared successfully';
+                    break;
+                case 'rebuildSearch':
+                    endpoint = '/api/admin/actions/rebuild-search';
+                    successMessage = 'Search index rebuilt successfully';
+                    break;
+                case 'exportReport':
+                    endpoint = '/api/admin/actions/export-report';
+                    method = 'GET';
+                    successMessage = 'Report exported successfully';
+                    break;
+                default:
+                    throw new Error('Unknown action type');
+            }
+
+            const response = await fetch(endpoint, { method });
+
+            if (response.ok) {
+                if (method === 'GET') {
+                    // Handle file download
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'report.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                }
+
+                showNotification(successMessage, 'success');
+                loadActionHistory(); // Refresh history
+            } else {
+                throw new Error('Action failed');
+            }
+
+        } catch (error) {
+            console.error('Error performing action:', error);
+            showNotification('Action failed. Please try again.', 'error');
+        }
+    }
+
+    async function clearActionHistory() {
+        if (!confirm('Are you sure you want to clear the action history?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/admin/actions/history', {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                updateActionHistory([]);
+                showNotification('Action history cleared successfully', 'success');
+            } else {
+                throw new Error('Failed to clear history');
+            }
+        } catch (error) {
+            console.error('Error clearing action history:', error);
+            showNotification('Failed to clear action history', 'error');
+        }
+    }
+
+    function setupEventListeners() {
+        // Action buttons are handled via onclick attributes in HTML
+        // Additional event listeners can be added here if needed
+    }
+
+    // Global functions for HTML onclick handlers
+    window.navigateTo = function(section, page) {
+        if (window.adminApp) {
+            window.adminApp.navigateTo(section, page);
+        }
+    };
+
+    window.performAction = performAction;
+    window.clearActionHistory = clearActionHistory;
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initOverviewActions);
+    } else {
+        initOverviewActions();
+    }
+</script>

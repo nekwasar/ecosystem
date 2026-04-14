@@ -1,0 +1,166 @@
+{% extends "base_store.html" %}
+
+{% block title %}Support Center | NekwasaR Store{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-base min-h-screen">
+    <div class="max-w-4xl mx-auto px-6">
+        <!-- Header -->
+        <div class="mb-20 text-center">
+            <h1 class="font-display font-black text-6xl text-t-bright uppercase tracking-tighter mb-6">Support <span
+                    class="text-accent">Center</span></h1>
+            <p class="text-t-medium text-xl font-inter max-w-2xl mx-auto leading-relaxed">
+                Need assistance with a purchase or have a technical question? Fill out the form below.
+            </p>
+        </div>
+
+        <!-- Contact Form -->
+        <div
+            class="bg-base-tint/50 backdrop-blur-xl border border-stroke-elements p-8 md:p-12 rounded-2xl shadow-2xl mb-20 max-w-2xl mx-auto">
+            <form id="contactForm" onsubmit="handleSupportSubmit(event)" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="name"
+                            class="text-xs font-bold font-display uppercase tracking-widest text-t-muted">Name</label>
+                        <input type="text" id="name" name="name" required
+                            class="w-full bg-base-shade border border-stroke-elements rounded-xl px-4 py-3 text-t-bright focus:border-accent outline-none transition-colors">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="email"
+                            class="text-xs font-bold font-display uppercase tracking-widest text-t-muted">Email</label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full bg-base-shade border border-stroke-elements rounded-xl px-4 py-3 text-t-bright focus:border-accent outline-none transition-colors">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="type"
+                        class="text-xs font-bold font-display uppercase tracking-widest text-t-muted">Inquiry
+                        Type</label>
+                    <select id="type" name="type" required
+                        class="w-full bg-base-shade border border-stroke-elements rounded-xl px-4 py-3 text-t-bright focus:border-accent outline-none transition-colors appearance-none">
+                        <option value="technical">Technical Issue</option>
+                        <option value="licensing">Licensing Question</option>
+                        <option value="billing">Billing & Refunds</option>
+                        <option value="enterprise">Enterprise/Reserved Asset Inquiry</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="message"
+                        class="text-xs font-bold font-display uppercase tracking-widest text-t-muted">Message</label>
+                    <textarea id="message" name="message" rows="5" required
+                        class="w-full bg-base-shade border border-stroke-elements rounded-xl px-4 py-3 text-t-bright focus:border-accent outline-none transition-colors resize-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-accent hover:bg-white text-white hover:text-black font-bold font-display uppercase tracking-wider py-4 rounded-xl transition-all shadow-lg hover:shadow-accent/20 flex items-center justify-center gap-2 group">
+                    <span>Send Message</span>
+                    <i class="ph-bold ph-paper-plane-right group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="space-y-8">
+            <h2 class="font-display font-bold text-3xl text-t-bright mb-10 text-center uppercase tracking-widest">
+                Frequently Asked Questions</h2>
+
+            <div class="space-y-4">
+                <details
+                    class="group bg-base-shade border border-stroke-elements rounded-xl overflow-hidden transition-all">
+                    <summary
+                        class="p-6 cursor-pointer flex justify-between items-center group-hover:bg-base-tint transition-colors">
+                        <span class="font-bold text-t-bright font-display text-lg tracking-tight">How do I access my
+                            downloads after purchase?</span>
+                        <i class="ph ph-plus text-accent group-open:rotate-45 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 pt-0 text-t-medium leading-relaxed font-inter">
+                        Once your payment is processed, you will receive an automated email with a secure link.
+                        Alternatively, log in to your dashboard and navigate to "My Orders" to download your assets
+                        anytime.
+                    </div>
+                </details>
+
+                <details
+                    class="group bg-base-shade border border-stroke-elements rounded-xl overflow-hidden transition-all">
+                    <summary
+                        class="p-6 cursor-pointer flex justify-between items-center group-hover:bg-base-tint transition-colors">
+                        <span class="font-bold text-t-bright font-display text-lg tracking-tight">Can I get a refund if
+                            the asset doesn't fit my needs?</span>
+                        <i class="ph ph-plus text-accent group-open:rotate-45 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 pt-0 text-t-medium leading-relaxed font-inter">
+                        Due to the nature of digital products, we generally do not offer refunds. We recommend reviewing
+                        descriptions and previews carefully. If there is a critical bug, contact us within 48 hours for
+                        a potential resolution or credit.
+                    </div>
+                </details>
+
+                <details
+                    class="group bg-base-shade border border-stroke-elements rounded-xl overflow-hidden transition-all">
+                    <summary
+                        class="p-6 cursor-pointer flex justify-between items-center group-hover:bg-base-tint transition-colors">
+                        <span class="font-bold text-t-bright font-display text-lg tracking-tight">Are the assets
+                            one-time purchases?</span>
+                        <i class="ph ph-plus text-accent group-open:rotate-45 transition-transform text-xl"></i>
+                    </summary>
+                    <div class="p-6 pt-0 text-t-medium leading-relaxed font-inter">
+                        Most assets are one-time payments. However, our Enterprise Apps and specific Service
+                        Subscriptions are recurring. Each product page clearly labels the billing scheme before you
+                        checkout.
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Response Time Note -->
+        <div class="mt-20 p-6 bg-base-tint/30 rounded-xl border border-dashed border-stroke-elements text-center">
+            <p class="text-sm text-t-muted italic font-inter italic">
+                Our support team typically responds to inquiries within <span class="text-t-bright font-bold">12-24
+                    hours</span>. For enterprise partners, prioritized response times apply.
+            </p>
+        </div>
+    </div>
+</section>
+
+<script>
+    async function handleSupportSubmit(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const originalText = btn.innerHTML;
+
+        btn.innerHTML = '<i class="ph-bold ph-spinner animate-spin text-xl"></i> Sending...';
+        btn.disabled = true;
+
+        try {
+            const formData = new FormData(e.target);
+            const payload = Object.fromEntries(formData.entries());
+
+            const res = await fetch('/api/contacts/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error("Failed to send message");
+
+            // Success
+            btn.innerHTML = '<i class="ph-bold ph-check text-xl"></i> Sent Successfully';
+            btn.classList.add('bg-green-500', 'border-green-500');
+            e.target.reset();
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.classList.remove('bg-green-500', 'border-green-500');
+            }, 3000);
+
+        } catch (error) {
+            alert("Error sending message. Please try again later.");
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+</script>
+{% endblock %}

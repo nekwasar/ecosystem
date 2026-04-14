@@ -1,0 +1,31 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/agent/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: |
+          cd services/agent
+          pip install -r requirements.txt
+      - run: |
+          docker build -t nekwasar-agent:${{ github.sha }} services/agent
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            docker stop ecosystem_agent || true
+            docker rm ecosystem_agent || true
+            docker run -d --name ecosystem_agent --network ecosystem_network -p 8002:8002 -e DATABASE_URL=${{ secrets.DATABASE_URL }} nekwasar-agent:${{ github.sha }}

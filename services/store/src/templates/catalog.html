@@ -1,0 +1,73 @@
+{% extends "base_store.html" %}
+
+{% block title %}Catalog | NekwasaR Store{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-8">
+    <!-- Sidebar Filters -->
+    <aside class="w-full lg:w-64 flex-shrink-0 space-y-8">
+        <div>
+            <h3
+                class="font-display font-bold text-t-bright mb-4 uppercase tracking-wider text-sm border-b border-stroke-elements pb-2">
+                Category</h3>
+            <div class="space-y-2">
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="radio" name="cat" class="accent-accent" checked>
+                    <span class="text-sm text-t-muted group-hover:text-white transition-colors">All Assets</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="radio" name="cat" class="accent-accent">
+                    <span class="text-sm text-t-muted group-hover:text-white transition-colors">Templates</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="radio" name="cat" class="accent-accent">
+                    <span class="text-sm text-t-muted group-hover:text-white transition-colors">SaaS & Apps</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer group">
+                    <input type="radio" name="cat" class="accent-amber-500">
+                    <span class="text-sm text-amber-500/80 group-hover:text-amber-500 transition-colors font-bold"><i
+                            class="ph-fill ph-lock-key"></i> Enterprise</span>
+                </label>
+            </div>
+        </div>
+
+        <div>
+            <h3
+                class="font-display font-bold text-t-bright mb-4 uppercase tracking-wider text-sm border-b border-stroke-elements pb-2">
+                Price Range</h3>
+            <div class="space-y-4">
+                <input type="range" min="0" max="5000"
+                    class="w-full accent-accent h-1 bg-base-tint rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-xs text-t-muted font-mono">
+                    <span>$0</span>
+                    <span>$5000+</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Grid -->
+    <div class="flex-grow">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="font-display font-bold text-2xl text-t-bright">All Assets</h1>
+            <div class="flex items-center gap-2 text-sm text-t-muted">
+                <span>Sort by:</span>
+                <select
+                    class="bg-base-tint border border-stroke-elements rounded-lg px-2 py-1 focus:outline-none focus:border-accent">
+                    <option>Newest</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Items injected by JS -->
+            <div class="col-span-full py-20 text-center animate-pulse">
+                <i class="ph ph-spinner text-4xl text-accent animate-spin mb-4"></i>
+                <p class="font-syne text-t-muted">Loading Catalog...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

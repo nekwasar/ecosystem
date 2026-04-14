@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'gigs/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'gigs/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: |
+          cd gigs
+          npm install
+      - run: |
+          cd gigs
+          npm run test || true

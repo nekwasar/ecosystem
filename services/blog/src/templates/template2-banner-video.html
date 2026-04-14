@@ -1,0 +1,1149 @@
+{% extends "./base_blog.html" %}
+
+{% block title %}{% if post_data %}{{ post_data.title }} | NekwasaR Blog{% else %}Building the Future: A Journey Through
+Innovation | NekwasaR Blog{% endif %}{% endblock %}
+{% block fluid_layout %}true{% endblock %}
+
+{% block head_extra %}
+<!-- SEO and Structured Data inherited from base_blog.html -->
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Override container constraints for full-width template */
+    /* Target the specific containers used in this template */
+    .main-content-layout,
+    .main-content-layout .content-grid {
+        max-width: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Ensure full width for the main layout sections */
+    .py-16.bg-white,
+    .py-8.sm\:py-12.lg\:py-16.bg-gray-50 {
+        max-width: none !important;
+        margin: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Override the max-width constraints from base CSS */
+    .main-content-layout .content-grid {
+        max-width: none !important;
+        padding: 0 1.5rem !important;
+    }
+
+    @media (min-width: 768px) {
+        .main-content-layout .content-grid {
+            padding: 0 2rem !important;
+        }
+    }
+</style>
+
+<!-- Introductory Section (now placed before hero) -->
+<section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-6 sm:px-6 lg:px-8">
+        <p class="text-lg text-gray-700 leading-relaxed mb-8">
+            {% if post_data and post_data.excerpt %}
+            {{ post_data.excerpt }}
+            {% else %}
+            Artificial Intelligence represents one of the most significant technological breakthroughs of our time.
+            As we stand at the precipice of a new digital age, AI is not just transforming how we work and live—it's
+            fundamentally reshaping the very fabric of human society. From healthcare to finance, education to
+            transportation, the ripple effects of AI innovation are felt across every industry.
+            {% endif %}
+        </p>
+        <div class="flex items-center gap-4 mb-12">
+            <span class="text-sm font-medium text-gray-600">Share:</span>
+            <button onclick="shareOnTwitter()" class="p-2 text-gray-600 hover:text-purple-600 transition-colors">
+                <i class="ph-bold ph-twitter-logo text-lg"></i>
+            </button>
+            <button onclick="shareOnLinkedIn()" class="p-2 text-gray-600 hover:text-purple-700 transition-colors">
+                <i class="ph-bold ph-linkedin-logo text-lg"></i>
+            </button>
+            <button onclick="shareOnFacebook()" class="p-2 text-gray-600 hover:text-purple-800 transition-colors">
+                <i class="ph-bold ph-facebook-logo text-lg"></i>
+            </button>
+            <button onclick="shareOnWhatsApp()" class="p-2 text-gray-600 hover:text-green-600 transition-colors">
+                <i class="ph-bold ph-whatsapp-logo text-lg"></i>
+            </button>
+        </div>
+        <div class="bg-gray-100 border border-gray-200 rounded-lg p-8 text-center">
+            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Advertisement</span>
+            <div class="mt-2 text-sm text-gray-600">Responsive Ad Banner</div>
+        </div>
+    </div>
+</section>
+
+<!-- Hero Video Section (intro first, video second) -->
+<section class="relative h-[60vh] sm:h-[70vh] min-h-[420px] sm:min-h-[520px] overflow-hidden" data-hero-video
+    data-video-mp4="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+    data-video-webm="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.webm"
+    data-video-poster="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920&h=1080&fit=crop&crop=center">
+    <div class="absolute inset-0">
+        <video id="heroVideo" autoplay muted loop playsinline
+            poster="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920&h=1080&fit=crop&crop=center"
+            class="w-full h-full object-cover">
+            <source data-role="video-mp4" type="video/mp4">
+            <source data-role="video-webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
+    </div>
+    <div class="absolute top-4 right-4 z-20 flex gap-2">
+        <button class="video-control-btn bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+            id="playPauseBtn" title="Play/Pause">
+            <i class="ph-bold ph-pause text-lg"></i>
+        </button>
+        <button class="video-control-btn bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+            id="muteBtn" title="Mute/Unmute">
+            <i class="ph-bold ph-speaker-simple-x text-lg"></i>
+        </button>
+        <button class="video-control-btn bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+            id="fullscreenBtn" title="Fullscreen">
+            <i class="ph-bold ph-expand text-lg"></i>
+        </button>
+    </div>
+    <div class="relative z-10 flex items-end h-full">
+        <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 pb-12 sm:pb-20 w-full">
+            <div class="max-w-4xl">
+                <div
+                    class="inline-flex items-center px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-medium mb-3 sm:mb-4">
+                    {% if post_data and post_data.tags %}{{ post_data.tags[0] }}{% else %}Technology{% endif %}
+                </div>
+                <h1
+                    class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 sm:mb-6">
+                    {% if post_data %}{{ post_data.title }}{% else %}Building the Future: A Journey Through Innovation{%
+                    endif %}
+                </h1>
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-white/90 text-xs sm:text-sm no-edit">
+                    <span class="flex items-center gap-2">
+                        <i class="ph-bold ph-user text-xs"></i>
+                        By {% if post_data %}{{ post_data.author }}{% else %}NekwasaR{% endif %}
+                    </span>
+                    <span class="text-white/60 hidden sm:inline">•</span>
+                    <span class="flex items-center gap-2">
+                        <i class="ph-bold ph-calendar text-xs"></i>
+                        {% if post_data and post_data.published_at %}
+                        {{ post_data.published_at | strftime('%B %d, %Y') }}
+                        {% else %}
+                        November 6, 2025
+                        {% endif %}
+                    </span>
+                    <span class="text-white/60 hidden sm:inline">•</span>
+                    <span class="flex items-center gap-2">
+                        <i class="ph-bold ph-clock text-xs"></i>
+                        12 min read
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Engagement Header Area -->
+<section class="bg-gray-50 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+            <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm text-gray-600">
+                <span class="flex items-center gap-2">
+                    <i class="ph-bold ph-chat-circle text-sm sm:text-base"></i>
+                    <span class="hidden sm:inline">47 Comments</span>
+                    <span class="sm:hidden">47</span>
+                </span>
+                <span class="flex items-center gap-2">
+                    <i class="ph-bold ph-eye text-sm sm:text-base"></i>
+                    <span class="hidden sm:inline">1.3k Views</span>
+                    <span class="sm:hidden">1.3k</span>
+                </span>
+                <span class="flex items-center gap-2 like-section" data-post-id="2">
+                    <button onclick="toggleLike()" class="flex items-center gap-2 hover:text-red-500 transition-colors">
+                        <i class="ph-bold ph-heart text-sm sm:text-base like-icon"></i>
+                        <span class="like-count hidden sm:inline">127</span>
+                        <span class="like-count sm:hidden">127</span>
+                        <span class="hidden sm:inline">Likes</span>
+                    </button>
+                </span>
+                <span class="flex items-center gap-2">
+                    <button onclick="openShareModal()"
+                        class="flex items-center gap-2 hover:text-purple-600 transition-colors">
+                        <i class="ph-bold ph-share-network text-sm sm:text-base"></i>
+                        <span class="hidden sm:inline">Share</span>
+                    </button>
+                </span>
+            </div>
+            <button onclick="scrollToComments()"
+                class="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors w-full sm:w-auto justify-center">
+                <i class="ph-bold ph-chat-circle-dots text-sm sm:text-base"></i>
+                <span class="hidden sm:inline">Join the Conversation</span>
+                <span class="sm:hidden">Comment</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content Layout -->
+<section class="py-12 sm:py-16 lg:py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+            <aside class="lg:col-span-3 order-2 lg:order-1">
+                <div class="sticky top-20 sm:top-24 space-y-6">
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="ph-bold ph-link text-base"></i>
+                            Related Posts
+                        </h3>
+                        <div class="space-y-4">
+                            <a href="/blog/ai-revolutionizing-healthcare" class="flex gap-3 group">
+                                <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=60&h=40&fit=crop"
+                                    class="w-15 h-10 rounded object-cover" alt="">
+                                <div>
+                                    <h4
+                                        class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                                        How AI is Revolutionizing Healthcare</h4>
+                                    <span class="text-xs text-gray-500">12.5k views</span>
+                                </div>
+                            </a>
+                            <a href="/blog/rise-of-quantum-computing" class="flex gap-3 group">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=60&h=40&fit=crop"
+                                    class="w-15 h-10 rounded object-cover" alt="">
+                                <div>
+                                    <h4
+                                        class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                                        The Rise of Quantum Computing</h4>
+                                    <span class="text-xs text-gray-500">8.9k views</span>
+                                </div>
+                            </a>
+                            <a href="/blog/machine-learning-ethics" class="flex gap-3 group">
+                                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=60&h=40&fit=crop"
+                                    class="w-15 h-10 rounded object-cover" alt="">
+                                <div>
+                                    <h4
+                                        class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                                        Machine Learning Ethics</h4>
+                                    <span class="text-xs text-gray-500">6.7k views</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            Trending Now
+                        </h3>
+                        <div class="space-y-4">
+                            <a href="/blog/ai-changing-finance" class="flex gap-3 group">
+                                <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=60&h=40&fit=crop"
+                                    class="w-15 h-10 rounded object-cover" alt="">
+                                <div>
+                                    <h4
+                                        class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                                        AI in Finance</h4>
+                                    <span class="text-xs text-gray-500">2.1k views</span>
+                                </div>
+                            </a>
+                            <a href="/blog/crypto-market-2025" class="flex gap-3 group">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=60&h=40&fit=crop"
+                                    class="w-15 h-10 rounded object-cover" alt="">
+                                <div>
+                                    <h4
+                                        class="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                                        Crypto Market Analysis</h4>
+                                    <span class="text-xs text-gray-500">1.8k views</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="lg:col-span-12 xl:col-span-10 xl:col-start-2 order-1 lg:order-2">
+                <article class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+                    <div class="p-6 sm:p-10">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">The Evolution of Wealth in 2025</h2>
+                        <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                            The billionaire landscape has undergone significant transformation. Technology, renewable
+                            energy, and digital innovation now dominate the narratives shaping the global economy.
+                        </p>
+                        <div class="bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg p-8 mb-8">
+                            <h3 class="text-2xl font-bold mb-3">The Power of Visual Storytelling</h3>
+                            <p class="text-lg leading-relaxed opacity-90 mb-5">
+                                Video content has revolutionized how we communicate complex ideas. Here we dive deep
+                                into the methodologies that drive innovation.
+                            </p>
+                            <video controls
+                                poster="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=450&fit=crop&crop=center"
+                                class="w-full rounded-lg shadow-lg">
+                                <source
+                                    src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+                                    type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+
+                        <div class="prose prose-lg max-w-none leading-relaxed text-gray-800">
+                            <h3 id="vision" class="text-2xl font-semibold text-gray-900">The Visionary's Perspective
+                            </h3>
+                            <p class="text-lg text-gray-700 leading-relaxed">
+                                Innovation begins with vision—the ability to see beyond the present constraints and
+                                imagine new possibilities.
+                            </p>
+                            <blockquote class="border-l-4 border-purple-500 pl-6 italic text-gray-700 my-6">
+                                "Innovation is about understanding people and solving their real problems in ways
+                                they've never imagined."
+                            </blockquote>
+                            <h3 class="text-2xl font-semibold text-gray-900 mt-8">Innovation in Action</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed">
+                                We studied teams that bring AI, deep tech, and human insight together to drive
+                                meaningful change.
+                            </p>
+                            <h3 class="text-2xl font-semibold text-gray-900 mt-8">The Human Element</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                High-performance teams combine psychological safety with a relentless focus on purpose.
+                            </p>
+
+                            <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 my-10 text-center">
+                                <i class="ph-bold ph-chat-circle-dots text-2xl text-purple-600 mb-3 block"></i>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">What do you think so far?</h3>
+                                <p class="text-gray-600 mb-4">Share your thoughts on the billionaire rankings</p>
+                                <button onclick="scrollToComments()"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors">
+                                    Leave a Comment
+                                </button>
+                            </div>
+
+                            <div class="bg-gray-100 border border-gray-200 rounded-lg p-8 text-center my-12">
+                                <span
+                                    class="text-xs font-medium text-gray-500 uppercase tracking-wide">Advertisement</span>
+                                <div class="mt-2 text-sm text-gray-600">Mid-Article Banner Ad</div>
+                            </div>
+
+                            <h3 class="text-xl font-semibold text-gray-900 mt-4">1. Elon Musk – $285 Billion</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                Musk continues to shepherd electric vehicles, space exploration, and AI research,
+                                leveraging bold narratives to keep communities aligned with his grand vision of a
+                                multiplanetary, automated future.
+                            </p>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-3">2. Jeff Bezos – $195 Billion</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                While building Blue Origin, Bezos keeps Amazon’s logistics automation and cloud
+                                infrastructure tightly focused, narrating every innovation as a customer-first
+                                evolution.
+                            </p>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-3">3. Bernard Arnault – $180 Billion</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                Arnault blends artistic direction with data-backed brand strategy, proving that
+                                culturally rich storytelling and innovation-driven craftsmanship can lift entire
+                                industries.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 my-12">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-4">The Future of Billionaire Wealth</h2>
+                            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                                As we look toward the future, several trends are likely to shape the billionaire
+                                landscape. Technology innovation, sustainable energy, and digital transformation will
+                                continue to create new opportunities for wealth creation.
+                            </p>
+
+                            <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Key Takeaways</h3>
+                                <ul class="space-y-2 text-sm text-gray-700">
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-purple-600 mt-1">•</span>
+                                        Technology and innovation remain the primary drivers of wealth creation.
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 mt-1">•</span>
+                                        Diversification across multiple industries provides stability.
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 mt-1">•</span>
+                                        Strategic philanthropy can enhance both social impact and financial strategy.
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <span class="text-blue-600 mt-1">•</span>
+                                        Adaptability to market changes is crucial for long-term success.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="text-center">
+                                <h4 class="text-lg font-semibold text-gray-900 mb-4">Share this article</h4>
+                                <div class="flex justify-center gap-3 flex-wrap">
+                                    <button onclick="shareOnTwitter()"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors">
+                                        <i class="ph-bold ph-twitter-logo text-base"></i>
+                                        Twitter
+                                    </button>
+                                    <button onclick="shareOnLinkedIn()"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-purple-700 text-white text-sm font-medium rounded-lg hover:bg-purple-800 transition-colors">
+                                        <i class="ph-bold ph-linkedin-logo text-base"></i>
+                                        LinkedIn
+                                    </button>
+                                    <button onclick="shareOnFacebook()"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-purple-800 text-white text-sm font-medium rounded-lg hover:bg-purple-900 transition-colors">
+                                        <i class="ph-bold ph-facebook-logo text-base"></i>
+                                        Facebook
+                                    </button>
+                                    <button onclick="shareOnWhatsApp()"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
+                                        <i class="ph-bold ph-whatsapp-logo text-base"></i>
+                                        WhatsApp
+                                    </button>
+                                    <button onclick="copyLink()"
+                                        class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors">
+                                        <i class="ph-bold ph-copy text-base"></i>
+                                        Copy Link
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <section id="comments" class="bg-white rounded-lg border border-gray-200 mt-6 no-edit">
+                    <div class="p-6">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5">
+                            <h2 class="text-xl font-bold text-gray-900">Join the Discussion</h2>
+                            <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold">47
+                                Comments</span>
+                        </div>
+                        <textarea
+                            class="w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base comment-textarea"
+                            rows="4" placeholder="Share your thoughts..."></textarea>
+                        <div class="text-right mt-3">
+                            <button onclick="openCommentModal()"
+                                class="px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors">
+                                Post Comment
+                            </button>
+                        </div>
+                        <div class="space-y-4 sm:space-y-6 mt-6" id="dynamic-comments-list">
+                            <!-- Comments will be loaded here dynamically -->
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <aside class="lg:col-span-3 order-3 no-edit">
+                <div class="sticky top-20 space-y-6">
+                    <div class="flex flex-col gap-3 mb-8">
+                        <a href="#" onclick="shareOnTwitter()"
+                            class="flex items-center justify-center w-12 h-12 bg-white border border-gray-200 rounded-full text-gray-600 hover:text-purple-600 hover:border-purple-600 transition-colors shadow-sm">
+                            <i class="ph-bold ph-twitter-logo text-lg"></i>
+                        </a>
+                        <a href="#" onclick="shareOnLinkedIn()"
+                            class="flex items-center justify-center w-12 h-12 bg-white border border-gray-200 rounded-full text-gray-600 hover:text-purple-700 hover:border-purple-700 transition-colors shadow-sm">
+                            <i class="ph-bold ph-linkedin-logo text-lg"></i>
+                        </a>
+                        <a href="#" onclick="shareOnFacebook()"
+                            class="flex items-center justify-center w-12 h-12 bg-white border border-gray-200 rounded-full text-gray-600 hover:text-purple-800 hover:border-purple-800 transition-colors shadow-sm">
+                            <i class="ph-bold ph-facebook-logo text-lg"></i>
+                        </a>
+                        <a href="#" onclick="shareOnWhatsApp()"
+                            class="flex items-center justify-center w-12 h-12 bg-white border border-gray-200 rounded-full text-gray-600 hover:text-green-600 hover:border-green-600 transition-colors shadow-sm">
+                            <i class="ph-bold ph-whatsapp-logo text-lg"></i>
+                        </a>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3">Stay Updated</h4>
+                        <p class="text-xs text-gray-600 mb-4">Get the latest insights on technology and wealth building.
+                        </p>
+                        <input type="email" placeholder="Your email address"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg mb-3 text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <button
+                            class="w-full px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors">
+                            Subscribe
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3">Follow NekwasaR</h4>
+                        <button onclick="openFollowModal()"
+                            class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors">
+                            <i class="ph-bold ph-user-plus text-base"></i>
+                            Follow
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-lg border border-gray-200 p-6 text-center editable">
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Sponsored</span>
+                        <p class="text-sm text-gray-600 mt-2">Sidebar Ad</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block footer_content %}
+<div class="footer-main">
+    <div class="footer-brand">
+        <div class="footer-logo">NekwasaR</div>
+        <p class="footer-description">Exploring the frontiers of technology, innovation, and digital transformation.</p>
+        <div class="footer-social">
+            <a href="https://www.reddit.com/user/nekwasar/" class="social-link" target="_blank"><i
+                    class="ph-bold ph-reddit-logo"></i></a>
+            <a href="https://www.facebook.com/nekwasar" class="social-link" target="_blank"><i
+                    class="ph-bold ph-facebook-logo"></i></a>
+            <a href="https://www.instagram.com/nekwasar" class="social-link" target="_blank"><i
+                    class="ph-bold ph-instagram-logo"></i></a>
+            <a href="https://wa.me/2348164806578" class="social-link" target="_blank"><i
+                    class="ph-bold ph-whatsapp-logo"></i></a>
+            <a href="https://x.com/nekwasar" class="social-link" target="_blank"><i class="ph-bold ph-x-logo"></i></a>
+        </div>
+    </div>
+    <div class="footer-links">
+        <div class="link-column">
+            <h4>PAGES</h4>
+            <a href="#technology">Technology</a>
+            <a href="#innovation">Innovation</a>
+            <a href="#business">Business</a>
+            <a href="#others">Others</a>
+        </div>
+        <div class="link-column">
+            <h4>LEGAL & PRIVACY</h4>
+            <a href="#copyright">Copyright</a>
+            <a href="#disclaimer">Disclaimer</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    (function () {
+        // Global variables
+        let currentPostId = null;
+        let replyToCommentId = null;
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            currentPostId = getPostIdFromURL();
+            if (currentPostId) {
+                loadComments(currentPostId);
+                setupCommentForm();
+            }
+        });
+
+        // Get post ID from URL
+        function getPostIdFromURL() {
+            const path = window.location.pathname;
+            const match = path.match(/^\/blog\/(\d+)/);
+            return match ? parseInt(match[1]) : (window.postData?.id || 2);
+        }
+
+        // Setup comment form
+        function setupCommentForm() {
+            const textarea = document.querySelector('.comment-textarea');
+            const submitBtn = document.querySelector('button[onclick="openCommentModal()"]');
+
+            if (textarea && submitBtn) {
+                submitBtn.onclick = function (e) {
+                    e.preventDefault();
+                    openCommentModal();
+                };
+            }
+        }
+
+        // Dynamic Comments Loading
+        async function loadComments(postId) {
+            try {
+                const commentsContainer = document.getElementById('dynamic-comments-list');
+                if (!commentsContainer) return;
+
+                // Show loading state
+                commentsContainer.innerHTML = '<div class="text-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div><p class="text-gray-500 mt-2">Loading comments...</p></div>';
+
+                const response = await fetch(`/api/blog/posts/${postId}/comments-tree`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                commentsContainer.innerHTML = '';
+
+                if (data.comments && data.comments.length > 0) {
+                    data.comments.forEach(comment => {
+                        const commentHtml = createCommentHTML(comment);
+                        commentsContainer.appendChild(commentHtml);
+                    });
+                } else {
+                    commentsContainer.innerHTML = '<div class="text-center py-8 text-gray-500"><i class="ph-bold ph-chat-circle text-4xl mb-4"></i><p>No comments yet. Be the first to share your thoughts!</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                const commentsContainer = document.getElementById('dynamic-comments-list');
+                if (commentsContainer) {
+                    commentsContainer.innerHTML = '<div class="text-center py-8 text-red-500"><i class="ph-bold ph-warning-circle text-4xl mb-4"></i><p>Failed to load comments. Please try again later.</p></div>';
+                }
+            }
+        }
+
+        function createCommentHTML(comment) {
+            const commentDiv = document.createElement('div');
+            commentDiv.className = 'flex gap-3 sm:gap-4 comment-item';
+            commentDiv.setAttribute('data-comment-id', comment.id);
+
+            const isReply = comment.parent_id && comment.parent_id !== null;
+            if (isReply) {
+                commentDiv.classList.add('ml-8', 'sm:ml-12');
+            }
+
+            commentDiv.innerHTML = `
+            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0 bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm">
+                ${(comment.author || 'A').charAt(0).toUpperCase()}
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2">
+                    <span class="font-semibold text-gray-900 text-sm sm:text-base">${escapeHtml(comment.author || 'Anonymous')}</span>
+                    <span class="text-gray-500 text-xs sm:text-sm">${formatDate(comment.created_at)}</span>
+                </div>
+                <p class="text-gray-700 mb-3 text-sm sm:text-base">${escapeHtml(comment.content || '')}</p>
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <button onclick="toggleCommentLike(${comment.id})" class="flex items-center gap-1 text-xs sm:text-sm text-gray-600 hover:text-red-500 transition-colors comment-like-btn">
+                        <i class="ph-bold ph-heart text-xs"></i>
+                        <span class="comment-like-count">0</span>
+                    </button>
+                    <button onclick="replyToComment(${comment.id})" class="text-xs sm:text-sm text-gray-600 hover:text-gray-900 transition-colors">Reply</button>
+                </div>
+                ${comment.replies && comment.replies.length > 0 ?
+                    `<div class="mt-4 space-y-4">${comment.replies.map(reply => createReplyHTML(reply)).join('')}</div>` :
+                    ''
+                }
+            </div>
+        `;
+
+            return commentDiv;
+        }
+
+        function createReplyHTML(reply) {
+            return `
+            <div class="flex gap-3 sm:gap-4 comment-item" data-comment-id="${reply.id}">
+                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex-shrink-0 bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-xs">
+                    ${(reply.author || 'A').charAt(0).toUpperCase()}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2">
+                        <span class="font-semibold text-gray-900 text-sm">${escapeHtml(reply.author || 'Anonymous')}</span>
+                        <span class="text-gray-500 text-xs">${formatDate(reply.created_at)}</span>
+                    </div>
+                    <p class="text-gray-700 mb-2 text-sm">${escapeHtml(reply.content || '')}</p>
+                    <div class="flex items-center gap-3">
+                        <button onclick="toggleCommentLike(${reply.id})" class="flex items-center gap-1 text-xs text-gray-600 hover:text-red-500 transition-colors comment-like-btn">
+                            <i class="ph-bold ph-heart text-xs"></i>
+                            <span class="comment-like-count">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Just now';
+
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffHours = diffMs / (1000 * 60 * 60);
+
+            if (diffHours < 1) {
+                const diffMins = Math.floor(diffMs / (1000 * 60));
+                return diffMins <= 1 ? 'Just now' : `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+            } else if (diffHours < 24) {
+                const hours = Math.floor(diffHours);
+                return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            } else {
+                const days = Math.floor(diffHours / 24);
+                if (days < 7) {
+                    return `${days} day${days > 1 ? 's' : ''} ago`;
+                }
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Comment submission
+        function openCommentModal() {
+            const textarea = document.querySelector('.comment-textarea');
+            const commentText = textarea ? textarea.value.trim() : '';
+
+            if (!commentText) {
+                showNotification('Please write a comment before submitting.', 'warning');
+                if (textarea) textarea.focus();
+                return;
+            }
+
+            // Store comment text and show modal
+            window.pendingComment = commentText;
+
+            // Simple inline modal
+            const modal = createInlineModal();
+            document.body.appendChild(modal);
+        }
+
+        function createInlineModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+                <h3 class="text-lg font-semibold mb-4">Add Your Comment</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                        <input type="text" id="commentName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Your name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email (optional)</label>
+                        <input type="email" id="commentEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="your@email.com">
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <button onclick="closeCommentModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+                    <button onclick="submitComment()" class="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">Post Comment</button>
+                </div>
+            </div>
+        `;
+
+            modal.onclick = function (e) {
+                if (e.target === modal) {
+                    closeCommentModal();
+                }
+            };
+
+            return modal;
+        }
+
+        function closeCommentModal() {
+            const modal = document.querySelector('.fixed.inset-0.bg-black\/50');
+            if (modal) {
+                modal.remove();
+            }
+            delete window.pendingComment;
+        }
+
+        async function submitComment() {
+            const name = document.getElementById('commentName').value.trim();
+            const email = document.getElementById('commentEmail').value.trim();
+            const content = window.pendingComment;
+
+            if (!name) {
+                showNotification('Please enter your name.', 'warning');
+                return;
+            }
+
+            if (!content) {
+                showNotification('No comment content found.', 'error');
+                return;
+            }
+
+            try {
+                // Show loading state
+                const submitBtn = document.querySelector('button[onclick="submitComment()"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Posting...';
+                submitBtn.disabled = true;
+
+                const commentData = {
+                    author_name: name,
+                    author_email: email || null,
+                    content: content,
+                    parent_id: replyToCommentId
+                };
+
+                const response = await fetch(`/api/blog/posts/${currentPostId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(commentData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                showNotification('Comment submitted successfully! It will be visible after moderation.', 'success');
+
+                // Clear form and close modal
+                const textarea = document.querySelector('.comment-textarea');
+                if (textarea) textarea.value = '';
+                closeCommentModal();
+
+                // Reload comments
+                setTimeout(() => {
+                    loadComments(currentPostId);
+                }, 1000);
+
+            } catch (error) {
+                console.error('Error submitting comment:', error);
+                showNotification('Failed to submit comment. Please try again.', 'error');
+            } finally {
+                // Reset button state
+                const submitBtn = document.querySelector('button[onclick="submitComment()"]');
+                if (submitBtn) {
+                    submitBtn.textContent = 'Post Comment';
+                    submitBtn.disabled = false;
+                }
+            }
+        }
+
+        // Reply functionality
+        function replyToComment(commentId) {
+            replyToCommentId = commentId;
+            const textarea = document.querySelector('.comment-textarea');
+            if (textarea) {
+                textarea.placeholder = `Replying to comment...`;
+                textarea.focus();
+                showNotification('Replying to comment. Enter your reply and click "Post Comment".', 'info');
+            }
+        }
+
+        // Like functionality
+        async function toggleCommentLike(commentId) {
+            try {
+                // For now, just toggle UI state
+                const commentItem = document.querySelector(`[data-comment-id="${commentId}"]`);
+                const likeBtn = commentItem.querySelector('.comment-like-btn');
+                const likeIcon = likeBtn.querySelector('i');
+                const likeCount = commentItem.querySelector('.comment-like-count');
+
+                const isLiked = likeIcon.classList.contains('text-red-500');
+                const currentCount = parseInt(likeCount.textContent) || 0;
+                const newCount = isLiked ? currentCount - 1 : currentCount + 1;
+
+                // Toggle visual state
+                if (isLiked) {
+                    likeIcon.classList.remove('text-red-500', 'ph-fill');
+                    likeIcon.classList.add('ph-bold');
+                } else {
+                    likeIcon.classList.add('text-red-500', 'ph-fill');
+                    likeIcon.classList.remove('ph-bold');
+                }
+
+                likeCount.textContent = newCount;
+
+                // Store in localStorage for now (could be enhanced to call backend)
+                const likedComments = JSON.parse(localStorage.getItem('likedComments') || '[]');
+                if (isLiked) {
+                    const index = likedComments.indexOf(commentId.toString());
+                    if (index > -1) likedComments.splice(index, 1);
+                } else {
+                    likedComments.push(commentId.toString());
+                }
+                localStorage.setItem('likedComments', JSON.stringify(likedComments));
+
+                showNotification(isLiked ? 'Comment unliked' : 'Comment liked', 'success');
+
+            } catch (error) {
+                console.error('Error toggling comment like:', error);
+                showNotification('Failed to like comment. Please try again.', 'error');
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+
+            const colors = {
+                success: 'bg-green-500 text-white',
+                error: 'bg-red-500 text-white',
+                warning: 'bg-yellow-500 text-white',
+                info: 'bg-blue-500 text-white'
+            };
+
+            notification.classList.add(...colors[type].split(' '));
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Auto remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Make functions global for button clicks
+        window.loadComments = loadComments;
+        window.openCommentModal = openCommentModal;
+        window.closeCommentModal = closeCommentModal;
+        window.submitComment = submitComment;
+        window.toggleCommentLike = toggleCommentLike;
+        window.replyToComment = replyToComment;
+
+        // Scroll to comments section
+        window.scrollToComments = function () {
+            const commentsSection = document.getElementById('comments');
+            if (commentsSection) {
+                commentsSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Focus on the comment textarea after scrolling
+                setTimeout(() => {
+                    const textarea = document.querySelector('.comment-textarea');
+                    if (textarea) {
+                        textarea.focus();
+                    }
+                }, 500);
+            }
+        };
+
+        // Share modal functionality
+        window.openShareModal = function () {
+            const modal = document.getElementById('shareModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            } else {
+                // Create modal if it doesn't exist
+                createShareModal();
+            }
+        };
+
+        window.closeShareModal = function () {
+            const modal = document.getElementById('shareModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        };
+
+        // Social sharing functions
+        window.shareOnTwitter = function () {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(document.title);
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+        };
+
+        window.shareOnLinkedIn = function () {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+        };
+
+        window.shareOnFacebook = function () {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        };
+
+        window.shareOnWhatsApp = function () {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(document.title + ' ' + window.location.href);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        };
+
+        window.copyLink = function () {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showNotification('Link copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('Failed to copy link', 'error');
+            });
+        };
+
+        // Additional share functions
+        window.shareOnReddit = function () {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            window.open(`https://reddit.com/submit?url=${url}&title=${title}`, '_blank');
+        };
+
+        window.shareOnTelegram = function () {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(document.title);
+            window.open(`https://t.me/share/url?url=${url}&text=${text}`, '_blank');
+        };
+
+        window.shareOnPinterest = function () {
+            const url = encodeURIComponent(window.location.href);
+            const description = encodeURIComponent(document.title);
+            const image = encodeURIComponent('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=630&fit=crop');
+            window.open(`https://pinterest.com/pin/create/button/?url=${url}&description=${description}&media=${image}`, '_blank');
+        };
+
+        window.shareOnTumblr = function () {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.title);
+            window.open(`https://www.tumblr.com/widgets/share/tool?canonicalUrl=${url}&title=${title}`, '_blank');
+        };
+
+        // Like functionality
+        // Like functionality
+        window.toggleLike = async function () {
+            const likeSection = document.querySelector('.like-section');
+            if (!likeSection) return;
+
+            const likeIcon = document.querySelector('.like-icon');
+            // FIX: Select ALL like-count elements to ensure both mobile and desktop views update
+            const likeCounts = document.querySelectorAll('.like-count');
+            const postId = likeSection.dataset.postId;
+
+            // Toggle liked state
+            const isLiked = likeIcon.classList.contains('text-red-500');
+            // Calculate new count based on the current text of the first element
+            const currentCount = parseInt(likeCounts[0].textContent.trim()) || 0;
+            const newCount = isLiked ? Math.max(0, currentCount - 1) : currentCount + 1;
+
+            // Update UI Icons
+            if (isLiked) {
+                likeIcon.classList.remove('text-red-500', 'ph-fill');
+                likeIcon.classList.add('ph-bold');
+            } else {
+                likeIcon.classList.add('text-red-500', 'ph-fill');
+                likeIcon.classList.remove('ph-bold');
+            }
+
+            // FIX: Update ALL like count elements
+            likeCounts.forEach(el => {
+                el.textContent = newCount;
+            });
+
+            // Show notification
+            showNotification(isLiked ? 'Post unliked' : 'Post liked', 'success');
+
+            // Store in localStorage (Optimistic)
+            const likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+            if (isLiked) {
+                const index = likedPosts.indexOf(postId);
+                if (index > -1) likedPosts.splice(index, 1);
+            } else {
+                likedPosts.push(postId);
+            }
+            localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+
+            // Server Sync (Fire and forget)
+            try {
+                // Try to get fingerprint from global function or fallback
+                let fingerprint = 'unknown_device';
+                if (window.getFingerprint) {
+                    fingerprint = await window.getFingerprint();
+                } else if (localStorage.getItem('user_fingerprint')) {
+                    fingerprint = localStorage.getItem('user_fingerprint');
+                } else {
+                    // Simple fallback if no fingerprint function available
+                    fingerprint = 'browser_' + navigator.userAgent.replace(/\s+/g, '') + '_' + screen.width;
+                }
+
+                const method = isLiked ? 'DELETE' : 'POST';
+                const url = `/api/blogs/${postId}/likes`;
+
+                let fetchUrl = url;
+                let fetchOptions = {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+
+                if (method === 'DELETE') {
+                    fetchUrl += `?fingerprint=${encodeURIComponent(fingerprint)}`;
+                } else {
+                    fetchOptions.body = JSON.stringify({ fingerprint, user_identifier: fingerprint });
+                }
+
+                await fetch(fetchUrl, fetchOptions);
+            } catch (e) {
+                console.error('Background sync failed:', e);
+            }
+        };
+
+        // Create share modal HTML
+        function createShareModal() {
+            const modal = document.createElement('div');
+            modal.id = 'shareModal';
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 hidden z-50';
+            modal.onclick = function (event) {
+                if (event.target === modal) {
+                    closeShareModal();
+                }
+            };
+
+            modal.innerHTML = `
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg max-w-sm sm:max-w-lg w-full mx-4 p-4 sm:p-6 relative" onclick="event.stopPropagation()">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center mb-4 sm:mb-6">
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900">Share this article</h3>
+                        <button onclick="closeShareModal()" class="text-gray-400 hover:text-gray-600 p-1">
+                            <i class="ph-bold ph-x text-lg sm:text-xl"></i>
+                        </button>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="text-center mb-4 sm:mb-6">
+                        <p class="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">Share this article with your network</p>
+
+                        <!-- Social Links -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-3 sm:mb-4">
+                            <button onclick="shareOnTwitter()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+                                <i class="ph-bold ph-twitter-logo text-xl sm:text-2xl text-blue-600"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">Twitter</span>
+                            </button>
+                            <button onclick="shareOnLinkedIn()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+                                <i class="ph-bold ph-linkedin-logo text-xl sm:text-2xl text-blue-700"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">LinkedIn</span>
+                            </button>
+                            <button onclick="shareOnFacebook()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+                                <i class="ph-bold ph-facebook-logo text-xl sm:text-2xl text-blue-800"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">Facebook</span>
+                            </button>
+                            <button onclick="shareOnWhatsApp()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors">
+                                <i class="ph-bold ph-whatsapp-logo text-xl sm:text-2xl text-green-600"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">WhatsApp</span>
+                            </button>
+                            <button onclick="shareOnReddit()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-orange-50 border border-orange-200 rounded-lg hover:bg-orange-100 transition-colors">
+                                <i class="ph-bold ph-reddit-logo text-xl sm:text-2xl text-orange-600"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">Reddit</span>
+                            </button>
+                            <button onclick="shareOnTelegram()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
+                                <i class="ph-bold ph-telegram-logo text-xl sm:text-2xl text-blue-500"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">Telegram</span>
+                            </button>
+                            <button onclick="shareOnPinterest()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors">
+                                <i class="ph-bold ph-pinterest-logo text-xl sm:text-2xl text-red-600"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">Pinterest</span>
+                            </button>
+                            <button onclick="shareOnTumblr()" class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 p-3 sm:p-4 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+                                <i class="ph-bold ph-tumblr-logo text-xl sm:text-2xl text-gray-700"></i>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">Tumblr</span>
+                            </button>
+                        </div>
+
+                        <!-- Copy Link -->
+                        <button onclick="copyLink()" class="w-full flex items-center justify-center gap-3 p-3 sm:p-4 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="ph-bold ph-copy text-xl sm:text-2xl text-gray-600"></i>
+                            <span class="text-sm font-medium text-gray-900">Copy Link</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            document.body.appendChild(modal);
+            modal.classList.remove('hidden');
+        }
+
+    })();
+</script>
+{% endblock %}

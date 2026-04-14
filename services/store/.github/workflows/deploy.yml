@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/store/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: |
+          cd services/store
+          pip install -r requirements.txt
+      - run: |
+          docker build -t nekwasar-store:${{ github.sha }} services/store
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /home/nekwasar/ecosystem
+            docker stop ecosystem_store || true
+            docker rm ecosystem_store || true
+            docker run -d --name ecosystem_store --network ecosystem_network -p 8004:8004 -e DATABASE_URL=${{ secrets.DATABASE_URL }} nekwasar-store:${{ github.sha }}

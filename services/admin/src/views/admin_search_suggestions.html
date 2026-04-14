@@ -1,0 +1,1227 @@
+
+<!-- Search Suggestions Management -->
+<div class="search-suggestions">
+    <div class="analytics-header">
+        <h1 class="page-title">Search Suggestions Management</h1>
+        <p class="page-subtitle">Configure and optimize search suggestions and auto-complete</p>
+    </div>
+
+    <!-- Suggestions Overview -->
+    <div class="suggestions-overview">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-lightbulb"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalSuggestions">0</div>
+                <div class="card-label">Total Suggestions</div>
+                <div class="card-trend" id="suggestionsTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+15.3%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-target"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="clickThroughRate">0%</div>
+                <div class="card-label">Click-through Rate</div>
+                <div class="card-trend" id="ctrTrend">
+                    <span>+8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-target"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="clickThroughRate">0%</div>
+                <div class="card-label">Click-through Rate</div>
+                <div class="card-trend" id="ctrTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+5.7%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgSuggestionTime">0ms</div>
+                <div class="card-label">Avg. Response Time</div>
+                <div class="card-trend" id="timeTrend">
+                    <i class="ph-bold ph-trend-down"></i>
+                    <span>-3.2%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestions Management Tabs -->
+    <div class="suggestions-tabs">
+        <div class="tabs-header">
+            <button class="tab-btn active" data-tab="popular">Popular Suggestions</button>
+            <button class="tab-btn" data-tab="custom">Custom Suggestions</button>
+            <button class="tab-btn" data-tab="blocked">Blocked Terms</button>
+            <button class="tab-btn" data-tab="analytics">Suggestion Analytics</button>
+        </div>
+
+        <div class="tabs-content">
+            <!-- Popular Suggestions Tab -->
+            <div class="tab-content active" id="popular-tab">
+                <div class="tab-header">
+                    <h3>Popular Search Suggestions</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn" id="refreshSuggestionsBtn">
+                            <i class="ph-bold ph-refresh"></i>
+                            Refresh
+                        </button>
+                        <button class="action-btn primary" id="addCustomSuggestionBtn">
+                            <i class="ph-bold ph-plus"></i>
+                            Add Custom
+                        </button>
+                    </div>
+                </div>
+                <div class="suggestions-list" id="popularSuggestions">
+                    <!-- Popular suggestions will be populated here -->
+                </div>
+            </div>
+
+            <!-- Custom Suggestions Tab -->
+            <div class="tab-content" id="custom-tab">
+                <div class="tab-header">
+                    <h3>Custom Search Suggestions</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn primary" id="newCustomSuggestionBtn">
+                            <i class="ph-bold ph-plus"></i>
+                            New Suggestion
+                        </button>
+                    </div>
+                </div>
+                <div class="custom-suggestions-list" id="customSuggestions">
+                    <!-- Custom suggestions will be populated here -->
+                </div>
+            </div>
+
+            <!-- Blocked Terms Tab -->
+            <div class="tab-content" id="blocked-tab">
+                <div class="tab-header">
+                    <h3>Blocked Search Terms</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn primary" id="addBlockedTermBtn">
+                            <i class="ph-bold ph-plus"></i>
+                            Add Blocked Term
+                        </button>
+                    </div>
+                </div>
+                <div class="blocked-terms-list" id="blockedTerms">
+                    <!-- Blocked terms will be populated here -->
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="analytics-tab">
+                <div class="tab-header">
+                    <h3>Suggestion Performance Analytics</h3>
+                    <div class="tab-actions">
+                        <select id="analyticsPeriod">
+                            <option value="7d">Last 7 days</option>
+                            <option value="30d">Last 30 days</option>
+                            <option value="90d">Last 90 days</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="analytics-content">
+                    <div class="analytics-chart">
+                        <canvas id="suggestionsChart"></canvas>
+                    </div>
+                    <div class="analytics-metrics" id="suggestionMetrics">
+                        <!-- Analytics metrics will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggestion Categories -->
+    <div class="suggestion-categories">
+        <div class="section-header">
+            <h3>Suggestion Categories</h3>
+            <button class="action-btn primary" id="addCategoryBtn">
+                <i class="ph-bold ph-plus"></i>
+                Add Category
+            </button>
+        </div>
+        <div class="categories-grid" id="suggestionCategories">
+            <!-- Categories will be populated here -->
+        </div>
+    </div>
+
+    <!-- Suggestion Testing -->
+    <div class="suggestion-testing">
+        <div class="section-header">
+            <h3>Test Search Suggestions</h3>
+        </div>
+        <div class="testing-interface">
+            <div class="test-input">
+                <input type="text" id="testQueryInput" placeholder="Type to test suggestions..." autocomplete="off">
+                <button class="test-btn" id="testSuggestionsBtn">
+                    <i class="ph-bold ph-magnifying-glass"></i>
+                </button>
+            </div>
+            <div class="test-results" id="testResults">
+                <!-- Test results will be shown here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.search-suggestions {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.page-title {
+    font: normal 700 2rem/1.2 var(--_font-accent);
+    color: var(--t-accent);
+    background: var(--t-accent);
+    background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font: normal 400 1.25rem/1.4 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Suggestions Overview */
+.suggestions-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.overview-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.overview-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.25rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-value {
+    font: normal 700 1.5rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.card-label {
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin-bottom: 0.25rem;
+}
+
+.card-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+.card-trend.negative {
+    color: var(--error, #ef4444);
+}
+
+/* Suggestions Tabs */
+.suggestions-tabs {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    margin-bottom: 2rem;
+}
+
+.tabs-header {
+    display: flex;
+    gap: 0.25rem;
+    padding: 1rem 1.5rem 0;
+    border-bottom: 1px solid var(--stroke-elements);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid transparent;
+    color: var(--t-medium);
+    font: normal 600 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tabs-content {
+    padding: 1.5rem;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Tab Header */
+.tab-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.tab-header h3 {
+    font: normal 600 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.tab-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--base);
+    color: var(--t-bright);
+    font: normal 600 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.action-btn:hover {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.action-btn.primary {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+/* Suggestions List */
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-rank {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: normal 700 1rem/1.2 var(--_font-accent);
+}
+
+.suggestion-content {
+    flex: 1;
+}
+
+.suggestion-text {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.suggestion-meta {
+    display: flex;
+    gap: 1rem;
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.suggestion-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 100px;
+}
+
+.suggestion-stat {
+    text-align: center;
+}
+
+.suggestion-stat-value {
+    font: normal 700 1rem/1.2 var(--_font-accent);
+    color: var(--accent);
+    display: block;
+}
+
+.suggestion-stat-label {
+    font: normal 400 0.75rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.suggestion-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.suggestion-action {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: var(--_radius-md);
+    background: var(--stroke-elements);
+    color: var(--t-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    font-size: 0.75rem;
+}
+
+.suggestion-action:hover {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+}
+
+/* Custom Suggestions */
+.custom-suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.custom-suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    background: var(--stroke-elements);
+}
+
+.custom-suggestion-content {
+    flex: 1;
+}
+
+.custom-suggestion-text {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.custom-suggestion-meta {
+    display: flex;
+    gap: 1rem;
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.custom-suggestion-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.custom-action-btn {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--base);
+    color: var(--t-bright);
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.custom-action-btn:hover {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.custom-action-btn.danger {
+    border-color: var(--error, #ef4444);
+    color: var(--error, #ef4444);
+}
+
+.custom-action-btn.danger:hover {
+    background: var(--error, #ef4444);
+    color: white;
+}
+
+/* Blocked Terms */
+.blocked-terms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.blocked-term-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--error, #ef4444);
+    border-radius: var(--_radius-lg);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.blocked-term-content {
+    flex: 1;
+}
+
+.blocked-term-text {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--error, #ef4444);
+    margin-bottom: 0.25rem;
+}
+
+.blocked-term-meta {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.blocked-term-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Analytics Content */
+.analytics-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+.analytics-chart {
+    height: 250px;
+    position: relative;
+}
+
+.analytics-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-md);
+}
+
+.metric-label {
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.metric-value {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Suggestion Categories */
+.suggestion-categories {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h3 {
+    font: normal 600 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.category-card {
+    background: var(--stroke-elements);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    padding: 1.25rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.category-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.category-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1rem;
+}
+
+.category-info {
+    flex: 1;
+}
+
+.category-name {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.category-count {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.category-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Suggestion Testing */
+.suggestion-testing {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    padding: 1.5rem;
+}
+
+.testing-interface {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.test-input {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.test-input input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--background);
+    color: var(--t-bright);
+    font: normal 400 1rem/1.2 var(--_font-default);
+}
+
+.test-input input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.test-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--accent);
+    border-radius: var(--_radius-md);
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.test-btn:hover {
+    background: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.test-results {
+    min-height: 150px;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    padding: 1rem;
+    background: var(--stroke-elements);
+}
+
+.test-result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: var(--base);
+    border-radius: var(--_radius-md);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.test-result-item:hover {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+}
+
+.test-result-text {
+    flex: 1;
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.test-result-item:hover .test-result-text {
+    color: var(--t-opp-bright);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .analytics-content {
+        grid-template-columns: 1fr;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs-header {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-suggestions {
+        padding: 0.75rem;
+    }
+
+    .suggestions-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .tab-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .tab-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .suggestion-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .suggestion-meta {
+        justify-content: center;
+    }
+
+    .custom-suggestion-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .blocked-term-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .metric-item {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .category-card {
+        text-align: center;
+    }
+
+    .test-input {
+        flex-direction: column;
+    }
+
+    .test-input input {
+        width: 100%;
+    }
+}
+</style>
+
+<script>
+// Search Suggestions Management
+document.addEventListener('DOMContentLoaded', function() {
+    initSearchSuggestions();
+});
+
+function initSearchSuggestions() {
+    loadSuggestionsData();
+    initTabNavigation();
+    initTestingInterface();
+}
+
+async function loadSuggestionsData() {
+    try {
+        const response = await fetch('/api/admin/search/suggestions');
+        if (response.ok) {
+            const data = await response.json();
+            updateSuggestionsOverview(data.overview);
+            updatePopularSuggestions(data.popular);
+            updateCustomSuggestions(data.custom);
+            updateBlockedTerms(data.blocked);
+            updateSuggestionAnalytics(data.analytics);
+            updateSuggestionCategories(data.categories);
+        }
+    } catch (error) {
+        console.error('Error loading suggestions data:', error);
+        showFallbackSuggestionsData();
+    }
+}
+
+function updateSuggestionsOverview(data) {
+    document.getElementById('totalSuggestions').textContent = data.totalSuggestions.toLocaleString();
+    document.getElementById('suggestionClicks').textContent = data.suggestionClicks.toLocaleString();
+    document.getElementById('clickThroughRate').textContent = data.clickThroughRate + '%';
+    document.getElementById('avgSuggestionTime').textContent = Math.round(data.avgSuggestionTime * 1000) + 'ms';
+
+    updateTrend('suggestionsTrend', data.suggestionsChange);
+    updateTrend('clicksTrend', data.clicksChange);
+    updateTrend('ctrTrend', data.ctrChange);
+    updateTrend('timeTrend', data.timeChange);
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    const icon = element.querySelector('i');
+
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change).toFixed(1) + '%';
+
+    if (change < 0) {
+        element.classList.add('negative');
+        icon.className = 'ph-bold ph-trend-down';
+    } else {
+        element.classList.remove('negative');
+        icon.className = 'ph-bold ph-trend-up';
+    }
+}
+
+function updatePopularSuggestions(suggestions) {
+    const container = document.getElementById('popularSuggestions');
+    container.innerHTML = suggestions.map((suggestion, index) => `
+        <div class="suggestion-item">
+            <div class="suggestion-rank">${index + 1}</div>
+            <div class="suggestion-content">
+                <div class="suggestion-text">${suggestion.text}</div>
+                <div class="suggestion-meta">
+                    <span>${suggestion.searches.toLocaleString()} searches</span>
+                    <span>${suggestion.clicks.toLocaleString()} clicks</span>
+                    <span>${suggestion.ctr}% CTR</span>
+                </div>
+            </div>
+            <div class="suggestion-stats">
+                <div class="suggestion-stat">
+                    <span class="suggestion-stat-value">${suggestion.conversions}</span>
+                    <span class="suggestion-stat-label">Conversions</span>
+                </div>
+            </div>
+            <div class="suggestion-actions">
+                <button class="suggestion-action" onclick="promoteSuggestion('${suggestion.text}')" title="Promote">
+                    <i class="ph-bold ph-arrow-up"></i>
+                </button>
+                <button class="suggestion-action" onclick="blockSuggestion('${suggestion.text}')" title="Block">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateCustomSuggestions(suggestions) {
+    const container = document.getElementById('customSuggestions');
+    container.innerHTML = suggestions.map(suggestion => `
+        <div class="custom-suggestion-item">
+            <div class="custom-suggestion-content">
+                <div class="custom-suggestion-text">${suggestion.text}</div>
+                <div class="custom-suggestion-meta">
+                    <span>Category: ${suggestion.category}</span>
+                    <span>Priority: ${suggestion.priority}</span>
+                    <span>Clicks: ${suggestion.clicks.toLocaleString()}</span>
+                </div>
+            </div>
+            <div class="custom-suggestion-actions">
+                <button class="custom-action-btn" onclick="editCustomSuggestion('${suggestion.id}')">Edit</button>
+                <button class="custom-action-btn danger" onclick="deleteCustomSuggestion('${suggestion.id}')">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateBlockedTerms(terms) {
+    const container = document.getElementById('blockedTerms');
+    container.innerHTML = terms.map(term => `
+        <div class="blocked-term-item">
+            <div class="blocked-term-content">
+                <div class="blocked-term-text">${term.text}</div>
+                <div class="blocked-term-meta">
+                    <span>Blocked by: ${term.blockedBy}</span>
+                    <span>Reason: ${term.reason}</span>
+                    <span>Blocked: ${formatDate(term.blockedAt)}</span>
+                </div>
+            </div>
+            <div class="blocked-term-actions">
+                <button class="custom-action-btn" onclick="unblockTerm('${term.id}')">Unblock</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateSuggestionAnalytics(analytics) {
+    // Update chart
+    const ctx = document.getElementById('suggestionsChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: analytics.labels,
+            datasets: [{
+                label: 'Suggestion Impressions',
+                data: analytics.impressions,
+                borderColor: 'var(--accent)',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Suggestion Clicks',
+                data: analytics.clicks,
+                borderColor: 'var(--secondary)',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Update metrics
+    const metricsContainer = document.getElementById('suggestionMetrics');
+    metricsContainer.innerHTML = `
+        <div class="metric-item">
+            <div class="metric-label">Total Impressions</div>
+            <div class="metric-value">${analytics.totalImpressions.toLocaleString()}</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-label">Total Clicks</div>
+            <div class="metric-value">${analytics.totalClicks.toLocaleString()}</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-label">Avg. CTR</div>
+            <div class="metric-value">${analytics.avgCTR}%</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-label">Top Suggestion</div>
+            <div class="metric-value">${analytics.topSuggestion}</div>
+        </div>
+    `;
+}
+
+function updateSuggestionCategories(categories) {
+    const container = document.getElementById('suggestionCategories');
+    container.innerHTML = categories.map(category => `
+        <div class="category-card">
+            <div class="category-header">
+                <div class="category-icon">
+                    <i class="ph-bold ${category.icon}"></i>
+                </div>
+                <div class="category-info">
+                    <div class="category-name">${category.name}</div>
+                    <div class="category-count">${category.suggestions} suggestions</div>
+                </div>
+            </div>
+            <div class="category-actions">
+                <button class="custom-action-btn" onclick="editCategory('${category.id}')">Edit</button>
+                <button class="custom-action-btn danger" onclick="deleteCategory('${category.id}')">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function initTabNavigation() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            const targetContent = document.getElementById(this.dataset.tab + '-tab');
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+
+    // Tab-specific event listeners
+    document.getElementById('refreshSuggestionsBtn').addEventListener('click', refreshSuggestions);
+    document.getElementById('addCustomSuggestionBtn').addEventListener('click', () => showAddSuggestionModal());
+    document.getElementById('newCustomSuggestionBtn').addEventListener('click', () => showAddSuggestionModal());
+    document.getElementById('addBlockedTermBtn').addEventListener('click', () => showAddBlockedTermModal());
+    document.getElementById('addCategoryBtn').addEventListener('click', () => showAddCategoryModal());
+
+    document.getElementById('analyticsPeriod').addEventListener('change', function() {
+        loadSuggestionAnalytics(this.value);
+    });
+}
+
+function initTestingInterface() {
+    const input = document.getElementById('testQueryInput');
+    const testBtn = document.getElementById('testSuggestionsBtn');
+
+    // Test on button click
+    testBtn.addEventListener('click', () => testSuggestions(input.value));
+
+    // Test on enter key
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            testSuggestions(this.value);
+        }
+    });
+
+    // Live testing (debounced)
+    let timeout;
+    input.addEventListener('input', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            if (this.value.length >= 2) {
+                testSuggestions(this.value);
+            }
+        }, 300);
+    });
+}
+
+async function testSuggestions(query) {
+    if (!query.trim()) {
+        document.getElementById('testResults').innerHTML = '<p>Type at least 2 characters to see suggestions</p>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/admin/search/test-suggestions?q=${encodeURIComponent(query)}`);
+        if (response.ok) {
+            const data = await response.json();
+            displayTestResults(data.suggestions);
+        }
+    } catch (error) {
+        console.error('Error testing suggestions:', error);
+    }
+}
+
+function displayTestResults(suggestions) {
+    const container = document.getElementById('testResults');
+
+    if (!suggestions || suggestions.length === 0) {
+        container.innerHTML = '<p>No suggestions found for this query</p>';
+        return;
+    }
+
+    container.innerHTML = suggestions.map(suggestion => `
+        <div class="test-result-item" onclick="selectTestSuggestion('${suggestion.text}')">
+            <div class="test-result-text">${suggestion.text}</div>
+            <div style="font-size: 0.875rem; color: var(--t-medium);">
+                ${suggestion.type} • ${suggestion.score} relevance
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectTestSuggestion(text) {
+    document.getElementById('testQueryInput').value = text;
+    showNotification(`Selected suggestion: "${text}"`, 'info');
+}
+
+// Action functions
+async function refreshSuggestions() {
+    showNotification('Refreshing suggestions...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/refresh-suggestions', { method: 'POST' });
+        if (response.ok) {
+            loadSuggestionsData();
+            showNotification('Suggestions refreshed successfully', 'success');
+        } else {
+            showNotification('Failed to refresh suggestions', 'error');
+        }
+    } catch (error) {
+        console.error('Error refreshing suggestions:', error);
+        showNotification('Error refreshing suggestions', 'error');
+    }
+}
+
+function promoteSuggestion(text) {
+    showNotification(`Promoting suggestion: "${text}"`, 'info');
+    // Implement promotion logic
+}
+
+function blockSuggestion(text) {
+    if (confirm(`Block suggestion "${text}"?`)) {
+        showNotification(`Blocked suggestion: "${text}"`, 'success');
+        // Implement blocking logic
+    }
+}
+
+function showAddSuggestionModal() {
+    showNotification('Add custom suggestion modal would open here', 'info');
+}
+
+function showAddBlockedTermModal() {
+    showNotification('Add blocked term modal would open here', 'info');
+}
+
+function showAddCategoryModal() {
+    showNotification('Add category modal would open here', 'info');
+}
+
+async function loadSuggestionAnalytics(period) {
+    try {
+        const response = await fetch(`/api/admin/search/suggestions/analytics?period=${period}`);
+        if (response.ok) {
+            const data = await response.json();
+            updateSuggestionAnalytics(data);
+        }
+    } catch (error) {
+        console.error('Error loading suggestion analytics:', error);
+    }
+}
+
+function formatDate(timestamp) {
+    return new Date(timestamp).toLocaleDateString();
+}
+
+function showNotification(message, type = 'info') {
+    // Use global notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+function showFallbackSuggestionsData() {
+    // Show sample data when API is not available
+    updateSuggestionsOverview({
+        totalSuggestions: 1250,
+        suggestionClicks: 8750,
+        clickThroughRate: 23.5,
+        avgSuggestionTime: 0.045,
+        suggestionsChange: 12.5,
+        clicksChange: 8.2,
+        ctrChange: 5.7,
+        timeChange: -3.2
+    });
+}
+</script>

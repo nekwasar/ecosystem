@@ -1,0 +1,511 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-6 md:p-8 lg:p-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Roles & Permissions</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Configure user roles and access control with precision</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Management Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Total Roles Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-key"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalRoles">3</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Total Roles</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="rolesChange">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Active Permissions Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-shield-check"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="activePermissions">24</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Active Permissions</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="permissionsChange">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+2 this week</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Users with Roles Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-orange-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-users-three"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="usersWithRoles">12</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Users with Roles</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-t-muted" id="usersChange">
+                            <i class="ph-bold ph-users text-base"></i>
+                            <span>Assigned</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Permission Groups Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-folder"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="permissionGroups">8</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Permission Groups</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-t-muted" id="groupsChange">
+                            <i class="ph-bold ph-folder text-base"></i>
+                            <span>Organized</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- Role Management Actions -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-key text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Role Management</h3>
+                            <p class="text-t-medium font-syne text-sm">Create, modify, and assign user roles and permissions</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="createRoleBtn">
+                            <i class="ph-bold ph-plus text-lg"></i>
+                            <span>Create Role</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="managePermissionsBtn">
+                            <i class="ph-bold ph-gear text-lg"></i>
+                            <span>Manage Permissions</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role Creation & Management -->
+            <div class="p-8">
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    <!-- Create New Role -->
+                    <div class="bg-base-tint/50 dark:bg-base-shade/50 rounded-xl p-6 border border-stroke-elements">
+                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6 flex items-center space-x-3">
+                            <i class="ph-bold ph-plus-circle text-accent"></i>
+                            <span>Create New Role</span>
+                        </h4>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Role Name</label>
+                                <input type="text" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne" placeholder="e.g., Content Editor">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Description</label>
+                                <textarea class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne resize-none" rows="3" placeholder="Describe the role's responsibilities..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-t-bright font-syne mb-4">Assign Permissions</label>
+                                <div class="space-y-3 max-h-48 overflow-y-auto">
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Read Users</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Create Users</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Edit Users</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Delete Users</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button class="w-full inline-flex items-center justify-center space-x-3 px-6 py-4 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne">
+                                <i class="ph-bold ph-plus text-lg"></i>
+                                <span>Create Role</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Existing Roles -->
+                    <div class="bg-base-tint/50 dark:bg-base-shade/50 rounded-xl p-6 border border-stroke-elements">
+                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6 flex items-center space-x-3">
+                            <i class="ph-bold ph-list text-accent"></i>
+                            <span>Existing Roles</span>
+                        </h4>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h5 class="font-bold text-t-bright font-syne">Super Admin</h5>
+                                    <span class="px-3 py-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full">Critical</span>
+                                </div>
+                                <p class="text-sm text-t-medium font-syne mb-3">Full system access and administration</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-t-muted font-syne">1 user assigned</span>
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-pencil text-sm"></i>
+                                        </button>
+                                        <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h5 class="font-bold text-t-bright font-syne">Admin</h5>
+                                    <span class="px-3 py-1 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold rounded-full">High</span>
+                                </div>
+                                <p class="text-sm text-t-medium font-syne mb-3">Administrative access with some restrictions</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-t-muted font-syne">3 users assigned</span>
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-pencil text-sm"></i>
+                                        </button>
+                                        <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h5 class="font-bold text-t-bright font-syne">Editor</h5>
+                                    <span class="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold rounded-full">Medium</span>
+                                </div>
+                                <p class="text-sm text-t-medium font-syne mb-3">Content creation and editing permissions</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-t-muted font-syne">8 users assigned</span>
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-pencil text-sm"></i>
+                                        </button>
+                                        <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Permission Matrix -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                        <i class="ph-bold ph-grid-four text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-t-bright font-syne">Permission Matrix</h3>
+                        <p class="text-t-medium font-syne text-sm">Detailed permission overview across all roles</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-base-tint/50 dark:bg-base-shade/50">
+                        <tr class="border-b border-stroke-elements">
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Permission</th>
+                            <th class="px-8 py-6 text-center text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Super Admin</th>
+                            <th class="px-8 py-6 text-center text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Admin</th>
+                            <th class="px-8 py-6 text-center text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Editor</th>
+                            <th class="px-8 py-6 text-center text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Viewer</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stroke-elements">
+                        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium">
+                            <td class="px-8 py-6 text-t-bright font-syne font-semibold">User Management</td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-minus text-t-muted text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-minus text-t-muted text-xl"></i></td>
+                        </tr>
+                        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium">
+                            <td class="px-8 py-6 text-t-bright font-syne font-semibold">Content Creation</td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-minus text-t-muted text-xl"></i></td>
+                        </tr>
+                        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium">
+                            <td class="px-8 py-6 text-t-bright font-syne font-semibold">System Settings</td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-minus text-t-muted text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-minus text-t-muted text-xl"></i></td>
+                        </tr>
+                        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium">
+                            <td class="px-8 py-6 text-t-bright font-syne font-semibold">Analytics Access</td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                        </tr>
+                        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium">
+                            <td class="px-8 py-6 text-t-bright font-syne font-semibold">Delete Content</td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-check text-green-500 text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-minus text-t-muted text-xl"></i></td>
+                            <td class="px-8 py-6 text-center"><i class="ph-bold ph-minus text-t-muted text-xl"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+</style>
+
+<script>
+// Role Management Page
+function initSecurityRoles() {
+    loadRoleData();
+    setupRoleEventListeners();
+}
+
+async function loadRoleData() {
+    try {
+        const response = await fetch('/api/admin/security/roles');
+        if (response.ok) {
+            const data = await response.json();
+            updateRoleStats(data.stats);
+            updateRoleMatrix(data.matrix);
+        } else {
+            showFallbackRoleData();
+        }
+    } catch (error) {
+        console.error('Error loading role data:', error);
+        showFallbackRoleData();
+    }
+}
+
+function updateRoleStats(stats) {
+    document.getElementById('totalRoles').textContent = stats.totalRoles || 3;
+    document.getElementById('activePermissions').textContent = stats.activePermissions || 24;
+    document.getElementById('usersWithRoles').textContent = stats.usersWithRoles || 12;
+    document.getElementById('permissionGroups').textContent = stats.permissionGroups || 8;
+}
+
+function updateRoleMatrix(matrix) {
+    // Update permission matrix with real data
+    console.log('Updating role matrix:', matrix);
+}
+
+function setupRoleEventListeners() {
+    // Create Role Button
+    document.getElementById('createRoleBtn').onclick = () => {
+        showCreateRoleModal();
+    };
+
+    // Manage Permissions Button
+    document.getElementById('managePermissionsBtn').onclick = () => {
+        showPermissionManager();
+    };
+}
+
+function showCreateRoleModal() {
+    showNotification('Create role modal would open here', 'info');
+}
+
+function showPermissionManager() {
+    showNotification('Permission manager would open here', 'info');
+}
+
+function showFallbackRoleData() {
+    // Show sample data when API is not available
+    updateRoleStats({
+        totalRoles: 3,
+        activePermissions: 24,
+        usersWithRoles: 12,
+        permissionGroups: 8
+    });
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSecurityRoles);
+} else {
+    initSecurityRoles();
+}
+</script>

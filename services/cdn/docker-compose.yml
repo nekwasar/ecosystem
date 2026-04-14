@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  cdn:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecosystem_cdn
+    restart: always
+    ports:
+      - "8006:8006"
+    environment:
+      - BUNNY_API_KEY=${BUNNY_API_KEY}
+      - BUNNY_STORAGE_ZONE=${BUNNY_STORAGE_ZONE}
+      - CDN_BASE_URL=${CDN_BASE_URL:-https://cdn.nekwasar.com}
+    networks:
+      - ecosystem_network
+
+networks:
+  ecosystem_network:
+    driver: bridge

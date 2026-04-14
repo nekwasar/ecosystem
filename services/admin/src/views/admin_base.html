@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NekwasaR Admin Dashboard</title>
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/bold/style.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Admin Styles -->
+    <style>
+        :root {
+            /* Import site theme variables */
+            --_size: 1.6rem;
+            --_font-default: "Syne", sans-serif;
+            --_font-accent: "Syne", sans-serif;
+            --_radius-s: 1.5rem;
+            --_radius-m: 2.2rem;
+            --_radius-l: 3rem;
+            --_radius-xl: 3.6rem;
+            --_animspeed-fast: 0.1s;
+            --_animspeed-medium: 0.3s;
+            --_animspeed-slow: 0.6s;
+            --_animbezier: cubic-bezier(0.23, 0.65, 0.74, 1.09);
+
+            /* Light color scheme */
+            --base--light: #e6ebf4;
+            --base-tint--light: #ebf0f7;
+            --base-shade--light: #bdc1c8;
+            --accent--light: #040113;
+            --secondary--light: #070225;
+            --secondary-rgba--light: rgba(7, 0, 17, 0.466);
+            --stroke-controls--light: #0d2455;
+            --stroke-controls-neutral--light: rgba(0, 0, 0, 0.3);
+            --stroke-elements--light: #d1d5e0;
+            --t-bright--light: #22232c;
+            --t-medium--light: #424550;
+            --t-muted--light: #666a79;
+            --t-accent--light: #070225;
+            --t-secondary--light: #040113;
+            --t-disabled--light: #717586;
+            --t-placeholder--light: #0d2455;
+            --base-opp--light: #111111;
+            --t-opp-bright--light: #ebf0f7;
+            --t-opp-medium--light: #C7C6D3;
+            --t-opp-muted--light: #A1A1AF;
+            --gradient-one--light: #CEC4EF;
+            --gradient-two--light: #f5c5cd;
+            --gradient-three--light: rgba(18, 8, 70, 0.466);
+
+            /* Dark color scheme */
+            --base--dark: #111111;
+            --base-tint--dark: #161616;
+            --base-shade--dark: #000000;
+            --accent--dark: rgba(104, 103, 105, 0.466);
+            --secondary--dark: rgba(242, 241, 248, 0.466);
+            --secondary-rgba--dark: rgba(206, 196, 239, 0.2);
+            --stroke-controls--dark: #4B4B51;
+            --stroke-controls-neutral--dark: rgba(255, 255, 255, 0.3);
+            --stroke-elements--dark: #303033;
+            --t-bright--dark: #e9e9f1;
+            --t-medium--dark: #C7C6D3;
+            --t-muted--dark: #A1A1AF;
+            --t-accent--dark: #E1BAC5;
+            --t-secondary--dark: rgba(71, 69, 80, 0.466);
+            --t-disabled--dark: #8B8A91;
+            --t-placeholder--dark: #58585E;
+            --base-opp--dark: #fafafa;
+            --t-opp-bright--dark: #121319;
+            --t-opp-medium--dark: #626577;
+            --t-opp-muted--dark: #717586;
+            --gradient-one--dark: #0d2455;
+            --gradient-two--dark: #E4B8BF;
+            --gradient-three--dark: #0b0236;
+
+            /* Permanent colors */
+            --per-base: #111111;
+            --per-base-tint: #212121;
+            --per-stroke-controls: rgba(255, 255, 255, 0.4);
+            --t-per-bright-light: #ffffff;
+            --t-per-medium-light: #f2f2f2;
+            --t-per-muted-light: #C7C6D3;
+            --t-per-bright-dark: #27293b;
+            --t-per-medium-dark: #626577;
+            --t-per-muted-dark: #717586;
+
+            /* Admin-specific variables using site theme */
+            --admin-sidebar-width: 280px;
+            --admin-sidebar-collapsed-width: 80px;
+            --admin-header-height: 70px;
+            --admin-radius-sm: var(--_radius-s);
+            --admin-radius-md: var(--_radius-m);
+            --admin-radius-lg: var(--_radius-l);
+            --admin-radius-xl: var(--_radius-xl);
+        }
+
+        /* Theme application */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --base: var(--base--light);
+                --base-tint: var(--base-tint--light);
+                --base-shade: var(--base-shade--light);
+                --accent: var(--accent--light);
+                --secondary: var(--secondary--light);
+                --secondary-rgba: var(--secondary-rgba--light);
+                --stroke-controls: var(--stroke-controls--light);
+                --stroke-controls-neutral: var(--stroke-controls-neutral--light);
+                --stroke-elements: var(--stroke-elements--light);
+                --t-bright: var(--t-bright--light);
+                --t-medium: var(--t-medium--light);
+                --t-muted: var(--t-muted--light);
+                --t-accent: var(--t-accent--light);
+                --t-secondary: var(--t-secondary--light);
+                --t-disabled: var(--t-disabled--light);
+                --t-placeholder: var(--t-placeholder--light);
+                --base-opp: var(--base-opp--light);
+                --t-opp-bright: var(--t-opp-bright--light);
+                --t-opp-medium: var(--t-opp-medium--light);
+                --t-opp-muted: var(--t-opp-muted--light);
+                --gradient-one: var(--gradient-one--light);
+                --gradient-two: var(--gradient-two--light);
+                --gradient-three: var(--gradient-three--light);
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --base: var(--base--dark);
+                --base-tint: var(--base-tint--dark);
+                --base-shade: var(--base-shade--dark);
+                --accent: var(--accent--dark);
+                --secondary: var(--secondary--dark);
+                --secondary-rgba: var(--secondary-rgba--dark);
+                --stroke-controls: var(--stroke-controls--dark);
+                --stroke-controls-neutral: var(--stroke-controls-neutral--dark);
+                --stroke-elements: var(--stroke-elements--dark);
+                --t-bright: var(--t-bright--dark);
+                --t-medium: var(--t-medium--dark);
+                --t-muted: var(--t-muted--dark);
+                --t-accent: var(--t-accent--dark);
+                --t-secondary: var(--t-secondary--dark);
+                --t-disabled: var(--t-disabled--dark);
+                --t-placeholder: var(--t-placeholder--dark);
+                --base-opp: var(--base-opp--dark);
+                --t-opp-bright: var(--t-opp-bright--dark);
+                --t-opp-medium: var(--t-opp-medium--dark);
+                --t-opp-muted: var(--t-opp-muted--dark);
+                --gradient-one: var(--gradient-one--dark);
+                --gradient-two: var(--gradient-two--dark);
+                --gradient-three: var(--gradient-three--dark);
+            }
+        }
+
+        [color-scheme=light] {
+            --base: var(--base--light);
+            --base-tint: var(--base-tint--light);
+            --base-shade: var(--base-shade--light);
+            --accent: var(--accent--light);
+            --secondary: var(--secondary--light);
+            --secondary-rgba: var(--secondary-rgba--light);
+            --stroke-controls: var(--stroke-controls--light);
+            --stroke-controls-neutral: var(--stroke-controls-neutral--light);
+            --stroke-elements: var(--stroke-elements--light);
+            --t-bright: var(--t-bright--light);
+            --t-medium: var(--t-medium--light);
+            --t-muted: var(--t-muted--light);
+            --t-accent: var(--t-accent--light);
+            --t-secondary: var(--t-secondary--light);
+            --t-disabled: var(--t-disabled--light);
+            --t-placeholder: var(--t-placeholder--light);
+            --base-opp: var(--base-opp--light);
+            --t-opp-bright: var(--t-opp-bright--light);
+            --t-opp-medium: var(--t-opp-medium--light);
+            --t-opp-muted: var(--t-opp-muted--light);
+            --gradient-one: var(--gradient-one--light);
+            --gradient-two: var(--gradient-two--light);
+            --gradient-three: var(--gradient-three--light);
+        }
+
+        [color-scheme=dark] {
+            --base: var(--base--dark);
+            --base-tint: var(--base-tint--dark);
+            --base-shade: var(--base-shade--dark);
+            --accent: var(--accent--dark);
+            --secondary: var(--secondary--dark);
+            --secondary-rgba: var(--secondary-rgba--dark);
+            --stroke-controls: var(--stroke-controls--dark);
+            --stroke-controls-neutral: var(--stroke-controls-neutral--dark);
+            --stroke-elements: var(--stroke-elements--dark);
+            --t-bright: var(--t-bright--dark);
+            --t-medium: var(--t-medium--dark);
+            --t-muted: var(--t-muted--dark);
+            --t-accent: var(--t-accent--dark);
+            --t-secondary: var(--t-secondary--dark);
+            --t-disabled: var(--t-disabled--dark);
+            --t-placeholder: var(--t-placeholder--dark);
+            --base-opp: var(--base-opp--dark);
+            --t-opp-bright: var(--t-opp-bright--dark);
+            --t-opp-medium: var(--t-opp-medium--dark);
+            --t-opp-muted: var(--t-opp-muted--dark);
+            --gradient-one: var(--gradient-one--dark);
+            --gradient-two: var(--gradient-two--dark);
+            --gradient-three: var(--gradient-three--dark);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--_font-default);
+            background: var(--base);
+            color: var(--t-bright);
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        /* Sidebar */
+        .admin-sidebar {
+            width: var(--admin-sidebar-width);
+            background: var(--base);
+            border-right: 1px solid var(--stroke-elements);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1050;
+            transition: width 0.3s ease, transform 0.3s ease;
+        }
+
+        .admin-sidebar-header {
+            padding: 0 1.5rem;
+            height: 70px;
+            /* var(--admin-header-height) */
+            border-bottom: 1px solid var(--stroke-elements);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.25rem;
+            color: var(--t-bright);
+        }
+
+        .brand-text {
+            font-family: var(--_font-accent);
+            font-weight: 700;
+        }
+
+        body.sidebar-collapsed .brand-logo {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .admin-sidebar-header {
+            padding: 0;
+            justify-content: center;
+        }
+
+        .sidebar-collapsed .sidebar-toggle-btn {
+            display: flex;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-section-header {
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all var(--_animspeed-medium) var(--_animbezier);
+            border-radius: 0 var(--_radius-s) var(--_radius-s) 0;
+            margin-right: 0.5rem;
+        }
+
+        .nav-section-header:hover {
+            background: var(--base-tint);
+        }
+
+        .nav-section-icon {
+            font-size: 1.25rem;
+            color: var(--t-medium);
+        }
+
+        .nav-section-label {
+            font: normal 600 0.735rem/1.2 var(--_font-default);
+            color: var(--t-bright);
+        }
+
+        .nav-section-toggle {
+            margin-left: auto;
+            font-size: 0.65625rem;
+            color: var(--t-muted);
+            transition: transform var(--_animspeed-medium) var(--_animbezier);
+        }
+
+        .nav-section.collapsed .nav-section-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .nav-section-children {
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .nav-section.collapsed .nav-section-children {
+            max-height: 0;
+        }
+
+        .nav-item {
+            padding: 0.5rem 1.5rem 0.5rem 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all var(--_animspeed-medium) var(--_animbezier);
+            border-radius: 0 var(--_radius-s) var(--_radius-s) 0;
+            margin-right: 0.5rem;
+        }
+
+        .nav-item:hover {
+            background: var(--base-tint);
+        }
+
+        .nav-item.active {
+            background: var(--accent);
+            background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            color: var(--t-opp-bright);
+        }
+
+        .nav-item.active .nav-item-icon,
+        .nav-item.active .nav-item-label {
+            color: var(--t-opp-bright);
+        }
+
+        .nav-item-icon {
+            font-size: 1rem;
+            color: var(--t-medium);
+        }
+
+        .nav-item-label {
+            font: normal 500 0.735rem/1.2 var(--_font-default);
+            color: var(--t-bright);
+        }
+
+        /* Main Content */
+        /* Main Content */
+        .admin-main {
+            flex: 1;
+            margin-left: var(--admin-sidebar-width);
+            transition: margin-left 0.3s ease;
+            width: calc(100% - var(--admin-sidebar-width));
+        }
+
+        /* desktop rules updated above */
+
+        /* Header */
+        .admin-header {
+            height: var(--admin-header-height);
+            background: var(--base);
+            border-bottom: 1px solid var(--stroke-elements);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--t-medium);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--_radius-s);
+            transition: all var(--_animspeed-medium) var(--_animbezier);
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--stroke-elements);
+            color: var(--t-bright);
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        .header-title {
+            font: normal 700 1.65rem/1.2 var(--_font-accent);
+            color: var(--t-accent);
+            background: var(--t-accent);
+            background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--t-medium);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--_radius-s);
+            transition: all var(--_animspeed-medium) var(--_animbezier);
+        }
+
+        .action-btn:hover {
+            background: var(--stroke-elements);
+            color: var(--t-bright);
+        }
+
+        .user-menu-container {
+            position: relative;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--_radius-m);
+            transition: all var(--_animspeed-medium) var(--_animbezier);
+            border: 1px solid transparent;
+        }
+
+        .user-menu:hover,
+        .user-menu.active {
+            background: var(--base-tint);
+            border-color: var(--stroke-elements);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--t-opp-bright);
+            font: normal 700 1.6rem/1 var(--_font-default);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .user-name {
+            font: normal 600 0.95rem/1.2 var(--_font-default);
+            color: var(--t-bright);
+        }
+
+        .user-role {
+            font: normal 400 0.8rem/1.2 var(--_font-default);
+            color: var(--t-medium);
+        }
+
+        /* User Dropdown */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 200px;
+            background: var(--base);
+            border: 1px solid var(--stroke-elements);
+            border-radius: var(--_radius-m);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--t-medium);
+            border-radius: var(--_radius-s);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background: var(--base-tint);
+            color: var(--t-bright);
+        }
+
+        .dropdown-item.danger {
+            color: #ef4444;
+        }
+
+        .dropdown-item.danger:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .dropdown-item.danger:hover {
+                background: rgba(239, 68, 68, 0.1);
+                color: #ef4444;
+            }
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--stroke-elements);
+            margin: 0.5rem 0;
+        }
+
+        /* Content Area */
+        .admin-content {
+            padding: 2rem;
+            max-width: 100%;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font: normal 400 1.05rem/1.2 var(--_font-default);
+            color: var(--t-medium);
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--t-bright);
+            font: normal 600 1.05rem/1.2 var(--_font-default);
+        }
+
+        .page-title {
+            font: normal 700 2.55rem/1.2 var(--_font-accent);
+            color: var(--t-accent);
+            background: var(--t-accent);
+            background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+            background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font: normal 400 1.35rem/1.4 var(--_font-default);
+            color: var(--t-medium);
+        }
+
+        .page-content {
+            background: var(--base);
+            border-radius: var(--_radius-l);
+            border: 1px solid var(--stroke-elements);
+            min-height: 600px;
+        }
+
+        /* Mobile Menu Button - Ensure icon is visible */
+        .mobile-menu-btn i {
+            font-size: 24px;
+            display: block;
+        }
+
+        /* Loading States */
+        .page-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--admin-border);
+            border-top: 3px solid var(--admin-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .brand-text-accent {
+            color: var(--accent);
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--t-muted);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+            margin-left: auto;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: var(--base-tint);
+            color: var(--t-bright);
+        }
+
+        .sidebar-collapsed .sidebar-toggle-btn {
+            transform: rotate(180deg);
+            margin: 0 auto;
+        }
+
+        /* Collapsed Sidebar Styles */
+        /* Sidebar Collapse Logic (Desktop Only) */
+        @media (min-width: 1025px) {
+            body.sidebar-collapsed {
+                --admin-sidebar-width: 80px;
+            }
+
+            body.sidebar-collapsed .nav-section-label,
+            body.sidebar-collapsed .nav-item-label,
+            body.sidebar-collapsed .brand-text,
+            body.sidebar-collapsed .nav-section-toggle,
+            body.sidebar-collapsed .sidebar-footer {
+                display: none !important;
+            }
+
+            body.sidebar-collapsed .admin-sidebar-header {
+                padding: 0 1rem;
+                justify-content: center;
+            }
+
+            body.sidebar-collapsed .nav-section-header,
+            body.sidebar-collapsed .nav-item {
+                padding: 0.75rem;
+                justify-content: center;
+                margin-right: 0.5rem;
+                margin-left: 0.5rem;
+                border-radius: var(--_radius-s);
+            }
+
+            body.sidebar-collapsed .brand-logo {
+                display: none !important;
+            }
+
+            body.sidebar-collapsed .sidebar-toggle-btn {
+                margin: 0;
+                transform: rotate(180deg);
+                width: 40px;
+                height: 40px;
+                background: var(--base-tint);
+                color: var(--t-bright);
+            }
+
+            body.sidebar-collapsed .nav-section {
+                margin-bottom: 8px;
+            }
+
+            /* Hover Tooltips for Collapsed Mode */
+            body.sidebar-collapsed .nav-item {
+                position: relative;
+            }
+
+            body.sidebar-collapsed .nav-item:hover::after {
+                content: attr(title);
+                position: absolute;
+                left: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                background: var(--base-opp);
+                color: var(--t-opp-bright);
+                padding: 4px 8px;
+                border-radius: 4px;
+                white-space: nowrap;
+                font-size: 12px;
+                z-index: 1000;
+                margin-left: 10px;
+                pointer-events: none;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+
+            body.sidebar-collapsed .admin-main {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+
+            body.sidebar-collapsed .admin-sidebar {
+                width: 80px;
+                transform: none;
+            }
+        }
+
+        .loading-text {
+            color: var(--t-medium);
+            font: normal 400 1.05rem/1.2 var(--_font-default);
+        }
+
+        /* Responsive */
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                width: 280px !important;
+                /* Force width on mobile */
+            }
+
+            .admin-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .sidebar-toggle-btn {
+                display: none;
+            }
+
+            .mobile-close-btn {
+                display: block;
+            }
+        }
+
+        /* Mobile Overlay */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            /* Below sidebar (1050), above header (999) */
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .mobile-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-close-btn {
+            display: none;
+            /* Hidden by default (desktop) */
+            background: none;
+            border: none;
+            color: var(--t-muted);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .header-right {
+                gap: 0.5rem;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .header-right {
+                gap: 0.5rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-muted {
+            color: var(--admin-text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Mobile Overlay -->
+        <div id="mobileOverlay" class="mobile-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-sidebar-header">
+                <div class="brand-logo">
+                    <i class="ph-bold ph-planet" style="color: var(--accent);"></i>
+                    <div class="brand-text"> <span class="brand-text-accent">Admin</span></div>
+                </div>
+                <button class="sidebar-toggle-btn" onclick="toggleGlobalSidebar()" title="Toggle Sidebar">
+                    <i class="ph-bold ph-caret-double-left"></i>
+                </button>
+                <!-- Mobile Close Button -->
+                <button class="mobile-close-btn" id="mobileCloseBtn" title="Close Menu">
+                    <i class="ph-bold ph-caret-double-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav" id="sidebarNav">
+                <!-- Navigation will be populated by JavaScript -->
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main" id="adminMain">
+            <!-- Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="ph-bold ph-list"></i>
+                    </button>
+                    <div>
+                        <h1 class="header-title" id="headerTitle">Dashboard</h1>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="action-btn" id="themeToggle" title="Toggle Theme">
+                            <i class="ph-bold ph-moon-stars"></i>
+                        </button>
+                        <button class="action-btn" id="notificationsBtn" title="Notifications">
+                            <i class="ph-bold ph-bell"></i>
+                        </button>
+                    </div>
+
+                    <div class="user-menu-container">
+                        <div class="user-menu" id="userMenu" onclick="toggleUserDropdown(event)">
+                            <div class="user-avatar" id="headerUserInitial">U</div>
+                            <div class="user-info">
+                                <div class="user-name" id="headerUserName">Loading...</div>
+                                <div class="user-role" id="headerUserRole">...</div>
+                            </div>
+                            <i class="ph-bold ph-caret-down" id="userMenuCaret"></i>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="user-dropdown" id="userDropdown">
+                            <div class="dropdown-item" onclick="alert('Profile management coming soon!')">
+                                <i class="ph-bold ph-user-circle"></i>
+                                <span>My Profile</span>
+                            </div>
+                            <div class="dropdown-item" onclick="alert('Settings coming soon!')">
+                                <i class="ph-bold ph-gear"></i>
+                                <span>Settings</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item danger" onclick="logoutGlobal()">
+                                <i class="ph-bold ph-sign-out"></i>
+                                <span>Sign Out</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="admin-content">
+                <div class="content-header">
+                    <nav class="breadcrumb" id="breadcrumb">
+                        <div class="breadcrumb-item">
+                            <i class="ph-bold ph-house"></i>
+                            <span>Dashboard</span>
+                        </div>
+                        <div class="breadcrumb-item active">
+                            <span>Overview</span>
+                        </div>
+                    </nav>
+
+                    <h2 class="page-title" id="pageTitle">Dashboard Overview</h2>
+                    <p class="page-subtitle" id="pageSubtitle">Welcome to your admin dashboard</p>
+                </div>
+
+                <div class="page-content" id="pageContent">
+                    <!-- Page content will be loaded here -->
+                    <!-- Content will be loaded here -->
+                    <div class="flex items-center justify-center min-h-96">
+                        <p class="text-slate-500">Select a section from the sidebar to begin.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Admin JavaScript -->
+    <script>
+        // Global Sidebar Toggle Logic
+        function toggleGlobalSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+            const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+            localStorage.setItem('adminSidebarCollapsed', isCollapsed);
+        }
+
+        // Initialize State on Load
+        (function () {
+            const savedState = localStorage.getItem('adminSidebarCollapsed');
+            if (savedState === 'true') {
+                document.body.classList.add('sidebar-collapsed');
+            }
+        })();
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const adminSidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+
+        // Navigation Configuration
+        const navigationConfig = {
+            overview: {
+                label: "Overview",
+                icon: "ph-house",
+                children: {
+                    home: { label: "Dashboard Home", icon: "ph-squares-four" },
+                    status: { label: "System Status", icon: "ph-activity" },
+                    actions: { label: "Quick Actions", icon: "ph-bolt" },
+                    activity: { label: "Recent Activity", icon: "ph-clock" }
+                }
+            },
+            analytics: {
+                label: "Analytics",
+                icon: "ph-chart-bar",
+                children: {
+                    traffic: { label: "Traffic Analytics", icon: "ph-bar-chart" },
+                    content: { label: "Content Performance", icon: "ph-article" },
+                    behavior: { label: "User Behavior", icon: "ph-users" },
+                    revenue: { label: "Revenue Analytics", icon: "ph-currency-dollar" },
+                    seo: { label: "SEO Performance", icon: "ph-search" },
+                    social: { label: "Social Media", icon: "ph-share-network" },
+                    reports: { label: "Custom Reports", icon: "ph-file-text" }
+                }
+            },
+            contacts: {
+                label: "Contacts",
+                icon: "ph-envelope",
+                children: {
+                    inbox: { label: "Inbox", icon: "ph-inbox" },
+                    archived: { label: "Archived", icon: "ph-archive" },
+                    spam: { label: "Spam", icon: "ph-shield-x" },
+                    templates: { label: "Templates", icon: "ph-file" },
+                    categories: { label: "Categories", icon: "ph-tag" },
+                    export: { label: "Export", icon: "ph-download" },
+                    settings: { label: "Settings", icon: "ph-gear" }
+                }
+            },
+            store: {
+                label: "Store",
+                icon: "ph-shopping-bag",
+                children: {
+                    products: { label: "Products", icon: "ph-package" },
+                    categories: { label: "Categories", icon: "ph-squares-four" },
+                    orders: { label: "Orders", icon: "ph-shopping-cart" },
+                    inventory: { label: "Inventory", icon: "ph-warehouse" },
+                    customers: { label: "Customers", icon: "ph-users" },
+                    discounts: { label: "Discounts", icon: "ph-percent" },
+                    shipping: { label: "Shipping", icon: "ph-truck" },
+                    payments: { label: "Payments", icon: "ph-credit-card" },
+                    reports: { label: "Reports", icon: "ph-chart-line" }
+                }
+            },
+            media: {
+                label: "Media",
+                icon: "ph-image",
+                children: {
+                    manager: {
+                        label: "Library",
+                        icon: "ph-images"
+                    }
+                }
+            },
+            blog: {
+                label: "Blog",
+                icon: "ph-newspaper",
+                children: {
+                    posts: { label: "Posts", icon: "ph-article" },
+                    editor: { label: "Editor", icon: "ph-pencil" },
+                    comments: { label: "Comments", icon: "ph-chat" },
+                    drafts: { label: "Drafts", icon: "ph-file" },
+                    scheduled: { label: "Scheduled", icon: "ph-clock" },
+                    categories: { label: "Categories", icon: "ph-tag" },
+                    tags: { label: "Tags", icon: "ph-hashtag" },
+                    media: { label: "Media", icon: "ph-images" },
+                    authors: { label: "Authors", icon: "ph-users-three" }
+                }
+            },
+            newsletter: {
+                label: "Newsletter",
+                icon: "ph-paper-plane-tilt",
+                children: {
+                    subscribers: { label: "Subscribers", icon: "ph-users" },
+                    campaigns: { label: "Campaigns", icon: "ph-megaphone" },
+                    templates: { label: "Templates", icon: "ph-palette" },
+                    automation: { label: "Automation", icon: "ph-robot" },
+                    analytics: { label: "Analytics", icon: "ph-chart-bar" },
+                    segments: { label: "Segments", icon: "ph-funnel" },
+                    abtesting: { label: "A/B Testing", icon: "ph-split" },
+                    settings: { label: "Settings", icon: "ph-gear" }
+                }
+            },
+            security: {
+                label: "Security",
+                icon: "ph-shield",
+                children: {
+                    users: { label: "Users", icon: "ph-users" },
+                    roles: { label: "Roles & Permissions", icon: "ph-key" },
+                    logins: { label: "Login History", icon: "ph-clock-counter-clockwise" },
+                    settings: { label: "Security Settings", icon: "ph-gear" },
+                    apikeys: { label: "API Keys", icon: "ph-key" },
+                    audit: { label: "Audit Logs", icon: "ph-file-text" },
+                    backup: { label: "Backup & Recovery", icon: "ph-database" },
+                    firewall: { label: "Firewall", icon: "ph-shield-check" }
+                }
+            },
+            search: {
+                label: "Search",
+                icon: "ph-magnifying-glass",
+                children: {
+                    overview: { label: "Search Overview", icon: "ph-chart-bar" },
+                    performance: { label: "Search Performance", icon: "ph-chart-bar" },
+                    queries: { label: "Query Analytics", icon: "ph-bar-chart" },
+                    filters: { label: "Filters & Facets", icon: "ph-funnel" },
+                    suggestions: { label: "Suggestions", icon: "ph-lightbulb" },
+                    settings: { label: "Search Settings", icon: "ph-gear" }
+                }
+            }
+        };
+
+        // Admin Application State
+        class AdminApp {
+            constructor() {
+                this.currentSection = 'overview';
+                this.currentPage = 'home';
+                this.theme = localStorage.getItem('admin-theme') || 'light';
+                this.init();
+            }
+
+            init() {
+                this.setupNavigation();
+                this.setupEventListeners();
+                this.loadTheme();
+                this.loadInitialPage();
+            }
+
+            setupNavigation() {
+                const navContainer = document.getElementById('sidebarNav');
+                navContainer.innerHTML = '';
+
+                Object.entries(navigationConfig).forEach(([sectionKey, section]) => {
+                    const sectionElement = this.createNavSection(sectionKey, section);
+                    navContainer.appendChild(sectionElement);
+                });
+
+                // Initialize navigation state - only expand current section
+                this.updateNavigationState();
+            }
+
+            createNavSection(sectionKey, section) {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'nav-section';
+                sectionDiv.dataset.section = sectionKey;
+
+                const header = document.createElement('div');
+                header.className = 'nav-section-header';
+                header.onclick = () => this.toggleSection(sectionKey);
+
+                header.innerHTML = `
+                    <i class="ph-bold ${section.icon} nav-section-icon"></i>
+                    <span class="nav-section-label">${section.label}</span>
+                    <i class="ph-bold ph-caret-down nav-section-toggle"></i>
+                `;
+
+                const children = document.createElement('div');
+                children.className = 'nav-section-children';
+
+                Object.entries(section.children).forEach(([pageKey, page]) => {
+                    const item = document.createElement('div');
+                    item.className = 'nav-item';
+                    item.dataset.section = sectionKey;
+                    item.dataset.page = pageKey;
+                    item.onclick = () => this.navigateTo(sectionKey, pageKey);
+                    item.title = page.label; // Add title for tooltip in collapsed mode
+
+                    item.innerHTML = `
+                        <i class="ph-bold ${page.icon} nav-item-icon"></i>
+                        <span class="nav-item-label">${page.label}</span>
+                    `;
+
+                    children.appendChild(item);
+                });
+
+                sectionDiv.appendChild(header);
+                sectionDiv.appendChild(children);
+
+                return sectionDiv;
+            }
+
+            toggleSection(sectionKey) {
+                // Close all other sections first
+                document.querySelectorAll('.nav-section').forEach(sec => {
+                    if (sec.dataset.section !== sectionKey) {
+                        sec.classList.add('collapsed');
+                    }
+                });
+
+                // Toggle the clicked section
+                const section = document.querySelector(`[data-section="${sectionKey}"]`);
+                section.classList.toggle('collapsed');
+            }
+
+            navigateTo(section, page) {
+                // Update active states
+                document.querySelectorAll('.nav-item.active').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                const targetItem = document.querySelector(`[data-section="${section}"][data-page="${page}"]`);
+                if (targetItem) {
+                    targetItem.classList.add('active');
+                }
+
+                // Update state
+                this.currentSection = section;
+                this.currentPage = page;
+
+                // Update navigation state (expand/collapse sections)
+                this.updateNavigationState();
+
+                // Update URL (without page reload)
+                const newUrl = `/admin/${section}/${page}`;
+                window.history.pushState({ section, page }, '', newUrl);
+
+                // Load page content
+                this.loadPage(section, page);
+            }
+
+            async loadPage(section, page) {
+                const contentContainer = document.getElementById('pageContent');
+
+                console.log(`🗓️ LOADING PAGE - Section: ${section}, Page: ${page}`);
+
+                // Show loading placeholder
+                contentContainer.innerHTML = `
+                    <div class="flex items-center justify-center min-h-96">
+                        <p class="text-slate-500">${navigationConfig[section].children[page].label} content will be displayed here.</p>
+                    </div>
+                `;
+
+                try {
+                    // Load page template
+                    const templateName = `admin_${section}_${page}.html`;
+                    const token = localStorage.getItem('token');
+
+                    console.log(`📄 TEMPLATE REQUEST - Template: ${templateName}, Token available: ${!!token}`);
+                    console.log(`🔐 TEMPLATE REQUEST - Authorization header: ${token ? 'Bearer ' + token.substring(0, 20) + '...' : 'No token'}`);
+
+                    const response = await fetch(`/templates/${templateName}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    console.log(`📡 TEMPLATE RESPONSE - Status: ${response.status}, OK: ${response.ok}`);
+                    console.log(`📡 TEMPLATE RESPONSE - Headers:`, [...response.headers.entries()]);
+
+                    if (response.ok) {
+                        const html = await response.text();
+                        console.log(`✅ TEMPLATE LOADED - Content length: ${html.length} characters`);
+                        contentContainer.innerHTML = html;
+
+                        // Execute inline/external scripts from the loaded template so global functions (e.g., initBlogPosts, wizard bootstraps) are available
+                        try {
+                            const scripts = contentContainer.querySelectorAll('script');
+                            scripts.forEach((oldScript) => {
+                                const s = document.createElement('script');
+                                // Copy attributes (type, src, etc.)
+                                for (const attr of oldScript.attributes) {
+                                    s.setAttribute(attr.name, attr.value);
+                                }
+                                if (oldScript.src) {
+                                    s.src = oldScript.src;
+                                    s.async = false;
+                                } else {
+                                    s.textContent = oldScript.textContent || '';
+                                }
+                                oldScript.parentNode.replaceChild(s, oldScript);
+                            });
+                        } catch (e) {
+                            console.warn('⚠️ Failed to execute template scripts:', e);
+                        }
+
+                        // Update header and breadcrumb
+                        this.updateHeader(section, page);
+                        this.updateBreadcrumb(section, page);
+
+                        // Initialize page-specific functionality
+                        this.initPage(section, page);
+
+                        console.log(`🎉 PAGE LOADED SUCCESSFULLY - ${section}/${page}`);
+                    } else if (response.status === 401) {
+                        console.log(`❌ TEMPLATE REQUEST FAILED - 401 Unauthorized`);
+                        console.log(`❌ TOKEN EXPIRED OR INVALID - Clearing token and redirecting to login`);
+
+                        // Token expired or invalid
+                        localStorage.removeItem('token');
+                        window.location.href = '/admin/login';
+                        return;
+                    } else {
+                        console.log(`❌ TEMPLATE LOAD ERROR - Status: ${response.status}`);
+                        console.log(`❌ ERROR BODY:`, await response.text());
+                        throw new Error(`Template not found: ${templateName}`);
+                    }
+                } catch (error) {
+                    console.error('💥 PAGE LOAD ERROR:', error);
+                    console.error('💥 ERROR TYPE:', error.constructor.name);
+                    console.error('💥 ERROR MESSAGE:', error.message);
+                    contentContainer.innerHTML = `
+                        <div class="page-loading">
+                            <div class="loading-text" style="color: var(--admin-error);">
+                                Error loading page. Please try again.
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            updateHeader(section, page) {
+                const sectionData = navigationConfig[section];
+                const pageData = sectionData.children[page];
+
+                document.getElementById('headerTitle').textContent = pageData.label;
+                document.getElementById('pageTitle').textContent = pageData.label;
+                document.getElementById('pageSubtitle').textContent = `Manage ${sectionData.label.toLowerCase()}`;
+            }
+
+            updateBreadcrumb(section, page) {
+                const sectionData = navigationConfig[section];
+                const pageData = sectionData.children[page];
+
+                const breadcrumb = document.getElementById('breadcrumb');
+                breadcrumb.innerHTML = `
+                    <div class="breadcrumb-item">
+                        <i class="ph-bold ph-house"></i>
+                        <span>Dashboard</span>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <span>${sectionData.label}</span>
+                    </div>
+                    <div class="breadcrumb-item active">
+                        <span>${pageData.label}</span>
+                    </div>
+                `;
+            }
+
+            initPage(section, page) {
+                // Initialize page-specific functionality
+                const initFunction = `init${section.charAt(0).toUpperCase() + section.slice(1)}${page.charAt(0).toUpperCase() + page.slice(1)}`;
+                if (typeof window[initFunction] === 'function') {
+                    window[initFunction]();
+                }
+            }
+
+            setupEventListeners() {
+                // Mobile menu
+                document.getElementById('mobileMenuBtn').onclick = () => {
+                    this.toggleMobileSidebar();
+                };
+
+                // Mobile Overlay Click
+                const overlay = document.getElementById('mobileOverlay');
+                if (overlay) {
+                    overlay.onclick = () => {
+                        this.toggleMobileSidebar();
+                    };
+                }
+
+                // Mobile Close Button
+                const closeBtn = document.getElementById('mobileCloseBtn');
+                if (closeBtn) {
+                    closeBtn.onclick = () => {
+                        this.toggleMobileSidebar();
+                    }
+                }
+
+                // Theme toggle
+                document.getElementById('themeToggle').onclick = () => {
+                    this.toggleTheme();
+                };
+
+                // Handle browser back/forward
+                window.onpopstate = (event) => {
+                    if (event.state) {
+                        this.navigateTo(event.state.section, event.state.page);
+                    }
+                };
+            }
+
+            toggleMobileSidebar() {
+                const sidebar = document.getElementById('adminSidebar');
+                const overlay = document.getElementById('mobileOverlay');
+                sidebar.classList.toggle('mobile-open');
+                if (overlay) overlay.classList.toggle('show');
+            }
+
+            toggleTheme() {
+                this.theme = this.theme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('color-scheme', this.theme);
+                localStorage.setItem('admin-theme', this.theme);
+
+                const themeIcon = document.querySelector('#themeToggle i');
+                themeIcon.className = this.theme === 'light' ?
+                    'ph-bold ph-moon-stars' : 'ph-bold ph-sun';
+            }
+
+            loadTheme() {
+                document.documentElement.setAttribute('color-scheme', this.theme);
+                const themeIcon = document.querySelector('#themeToggle i');
+                themeIcon.className = this.theme === 'light' ?
+                    'ph-bold ph-moon-stars' : 'ph-bold ph-sun';
+            }
+
+            updateNavigationState() {
+                // Collapse all sections first
+                document.querySelectorAll('.nav-section').forEach(section => {
+                    section.classList.add('collapsed');
+                });
+
+                // Expand only the current section
+                const currentSection = document.querySelector(`[data-section="${this.currentSection}"]`);
+                if (currentSection) {
+                    currentSection.classList.remove('collapsed');
+                }
+            }
+
+            loadInitialPage() {
+                // If URL already points to a section/page, load that. Otherwise default to overview/home.
+                const path = window.location.pathname;
+                const match = path.match(/^\/admin\/([^\/]+)\/([^\/]+)/);
+                if (match) {
+                    const section = match[1];
+                    const page = match[2];
+                    if (navigationConfig[section] && navigationConfig[section].children[page]) {
+                        this.navigateTo(section, page);
+                        return;
+                    }
+                }
+                this.loadPage('overview', 'home');
+            }
+
+            showUserMenu() {
+                // Now handled by toggleUserDropdown
+            }
+
+            async logout() {
+                try {
+                    const token = localStorage.getItem('token');
+                    if (token) {
+                        await fetch('/admin/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Logout error:', error);
+                } finally {
+                    localStorage.removeItem('token');
+                    window.location.href = '/admin';
+                }
+            }
+        }
+
+        // Global Logout Function
+        async function logoutGlobal() {
+            if (window.adminApp) {
+                await window.adminApp.logout();
+            } else {
+                localStorage.removeItem('token');
+                window.location.href = '/admin';
+            }
+        }
+
+        // User Dropdown Logic
+        function toggleUserDropdown(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            const menu = document.getElementById('userMenu');
+            dropdown.classList.toggle('show');
+            menu.classList.toggle('active');
+
+            // Rotate caret
+            const caret = document.getElementById('userMenuCaret');
+            if (dropdown.classList.contains('show')) {
+                caret.style.transform = 'rotate(180deg)';
+            } else {
+                caret.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('userDropdown');
+            const menu = document.getElementById('userMenu');
+            if (dropdown && dropdown.classList.contains('show') && !menu.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+                menu.classList.remove('active');
+                document.getElementById('userMenuCaret').style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Initialize admin app when DOM is ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 ADMIN BASE LOADED - Starting authentication check');
+
+            // Check authentication status on page load
+            try {
+                const token = localStorage.getItem('token');
+                console.log('🔍 TOKEN CHECK - Token found:', !!token);
+                console.log('🔍 TOKEN PREVIEW - First 20 chars:', token ? token.substring(0, 20) + '...' : 'No token');
+
+                if (!token) {
+                    console.log('❌ NO TOKEN FOUND - Redirecting to login');
+                    redirectToLogin();
+                    return;
+                }
+
+                console.log('🔐 SENDING AUTH CHECK REQUEST - URL: /admin/check-auth');
+                let response = await fetch('/admin/check-auth', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Rec 7: If unauthorized, try to refresh the token using HttpOnly refresh cookie
+                if (response.status === 401) {
+                    console.log('🔄 Access Token expired, attempting refresh...');
+                    const refreshed = await refreshAccessToken();
+                    if (refreshed) {
+                        console.log('✅ Refresh successful, retrying auth check...');
+                        response = await fetch('/admin/check-auth');
+                    }
+                }
+
+                if (!response.ok) {
+                    console.log('❌ AUTH CHECK FAILED - Redirecting to login');
+                    localStorage.removeItem('token');
+                    redirectToLogin();
+                    return;
+                }
+
+                const authData = await response.json();
+                console.log('✅ AUTH CHECK SUCCESS - User authenticated:', authData.user.username);
+
+                // Populate User Info
+                const userName = authData.user.username || 'Admin';
+                const isSuperUser = authData.user.is_superuser;
+
+                const nameEl = document.getElementById('headerUserName');
+                const initialEl = document.getElementById('headerUserInitial');
+                const roleEl = document.getElementById('headerUserRole');
+
+                if (nameEl) nameEl.textContent = userName;
+                if (initialEl) initialEl.textContent = userName.charAt(0).toUpperCase();
+                if (roleEl) roleEl.textContent = isSuperUser ? 'Super Admin' : 'Editor';
+
+                setupSessionTimeout();
+
+            } catch (error) {
+                console.error('💥 AUTH CHECK ERROR:', error);
+                localStorage.removeItem('token');
+                redirectToLogin();
+                return;
+            }
+
+            console.log('🎯 INITIALIZING ADMIN APP');
+            window.adminApp = new AdminApp();
+        });
+
+        async function refreshAccessToken() {
+            try {
+                const res = await fetch('/api/auth/refresh', { method: 'POST' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.access_token) localStorage.setItem('token', data.access_token);
+                    return true;
+                }
+                return false;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function redirectToLogin() {
+            // Show session expired message
+            window.location.href = '/admin';
+        }
+
+        function setupSessionTimeout() {
+            console.log('⏰ SETTING UP SESSION TIMEOUT - 2 hours');
+
+            // Set timeout for 2 hours (7200000 ms)
+            const sessionTimeout = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
+            setTimeout(() => {
+                console.log('⏰ SESSION TIMEOUT REACHED - Clearing session');
+                localStorage.removeItem('token');
+                alert('Your session has expired. Please login again.');
+                redirectToLogin();
+            }, sessionTimeout);
+
+            // Also check for activity and refresh session if needed
+            let lastActivity = Date.now();
+            const activityThreshold = 30 * 60 * 1000; // 30 minutes
+
+            const checkActivity = () => {
+                const now = Date.now();
+                if (now - lastActivity > activityThreshold) {
+                    console.log('🔄 REFRESHING SESSION - User activity detected');
+                    // Could implement session refresh here
+                    lastActivity = now;
+                }
+                setTimeout(checkActivity, 60000); // Check every minute
+            };
+
+            // Track user activity
+            ['click', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+                document.addEventListener(event, () => {
+                    lastActivity = Date.now();
+                }, true);
+            });
+
+            checkActivity();
+        }
+
+        // Global utility functions
+        function formatNumber(num) {
+            return new Intl.NumberFormat().format(num);
+        }
+
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString();
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+
+        function showNotification(message, type = 'info') {
+            // TODO: Implement notification system
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
+    </script>
+</body>
+
+</html>

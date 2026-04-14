@@ -1,0 +1,1378 @@
+<div class="analytics-reports">
+    <div class="analytics-header">
+        <h1 class="page-title">Custom Reports</h1>
+        <p class="page-subtitle">Create, customize, and export detailed analytics reports</p>
+    </div>
+
+    <!-- Report Builder -->
+    <div class="report-builder">
+        <div class="builder-header">
+            <h2>Report Builder</h2>
+            <button class="create-report-btn" id="createReportBtn">
+                <i class="ph-bold ph-plus"></i>
+                Create New Report
+            </button>
+        </div>
+
+        <div class="builder-content">
+            <!-- Report Configuration -->
+            <div class="report-config">
+                <div class="config-section">
+                    <h3>Report Settings</h3>
+                    <div class="config-grid">
+                        <div class="config-item">
+                            <label for="reportName">Report Name</label>
+                            <input type="text" id="reportName" placeholder="Enter report name">
+                        </div>
+                        <div class="config-item">
+                            <label for="reportType">Report Type</label>
+                            <select id="reportType">
+                                <option value="overview">Overview Report</option>
+                                <option value="traffic">Traffic Analysis</option>
+                                <option value="content">Content Performance</option>
+                                <option value="user">User Behavior</option>
+                                <option value="revenue">Revenue Analysis</option>
+                                <option value="seo">SEO Performance</option>
+                                <option value="social">Social Media</option>
+                                <option value="custom">Custom Report</option>
+                            </select>
+                        </div>
+                        <div class="config-item">
+                            <label for="dateRange">Date Range</label>
+                            <select id="dateRange">
+                                <option value="7d">Last 7 days</option>
+                                <option value="30d">Last 30 days</option>
+                                <option value="90d">Last 90 days</option>
+                                <option value="1y">Last year</option>
+                                <option value="custom">Custom range</option>
+                            </select>
+                        </div>
+                        <div class="config-item">
+                            <label for="reportFormat">Export Format</label>
+                            <select id="reportFormat">
+                                <option value="pdf">PDF</option>
+                                <option value="excel">Excel</option>
+                                <option value="csv">CSV</option>
+                                <option value="json">JSON</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Selection -->
+                <div class="config-section">
+                    <h3>Select Metrics</h3>
+                    <div class="metrics-grid" id="metricsGrid">
+                        <!-- Metrics checkboxes will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="config-section">
+                    <h3>Filters & Segments</h3>
+                    <div class="filters-grid">
+                        <div class="filter-item">
+                            <label>Traffic Source</label>
+                            <div class="filter-options" id="sourceFilters">
+                                <!-- Source filter options will be populated here -->
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <label>Device Type</label>
+                            <div class="filter-options" id="deviceFilters">
+                                <!-- Device filter options will be populated here -->
+                            </div>
+                        </div>
+                        <div class="filter-item">
+                            <label>Geographic Region</label>
+                            <div class="filter-options" id="geoFilters">
+                                <!-- Geographic filter options will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Preview -->
+            <div class="report-preview">
+                <div class="preview-header">
+                    <h3>Report Preview</h3>
+                    <div class="preview-actions">
+                        <button class="preview-btn" id="refreshPreview">
+                            <i class="ph-bold ph-arrow-clockwise"></i>
+                            Refresh
+                        </button>
+                        <button class="preview-btn primary" id="generateReport">
+                            <i class="ph-bold ph-file-pdf"></i>
+                            Generate Report
+                        </button>
+                    </div>
+                </div>
+                <div class="preview-content" id="reportPreview">
+                    <!-- Report preview will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saved Reports -->
+    <div class="saved-reports">
+        <div class="section-header">
+            <h2>Saved Reports</h2>
+            <div class="reports-filters">
+                <button class="reports-filter-btn active" data-type="all">All Reports</button>
+                <button class="reports-filter-btn" data-type="recent">Recent</button>
+                <button class="reports-filter-btn" data-type="scheduled">Scheduled</button>
+                <button class="reports-filter-btn" data-type="shared">Shared</button>
+            </div>
+        </div>
+
+        <div class="reports-grid" id="savedReportsGrid">
+            <!-- Saved reports will be populated here -->
+        </div>
+    </div>
+
+    <!-- Report Templates -->
+    <div class="report-templates">
+        <div class="section-header">
+            <h2>Report Templates</h2>
+        </div>
+
+        <div class="templates-grid">
+            <div class="template-card">
+                <div class="template-icon">
+                    <i class="ph-bold ph-chart-bar"></i>
+                </div>
+                <div class="template-content">
+                    <h4>Monthly Overview</h4>
+                    <p>Comprehensive monthly performance report</p>
+                    <div class="template-metrics">15 metrics • 8 charts</div>
+                </div>
+                <button class="template-btn" data-template="monthly">Use Template</button>
+            </div>
+
+            <div class="template-card">
+                <div class="template-icon">
+                    <i class="ph-bold ph-trend-up"></i>
+                </div>
+                <div class="template-content">
+                    <h4>Growth Report</h4>
+                    <p>Track growth metrics and trends</p>
+                    <div class="template-metrics">12 metrics • 6 charts</div>
+                </div>
+                <button class="template-btn" data-template="growth">Use Template</button>
+            </div>
+
+            <div class="template-card">
+                <div class="template-icon">
+                    <i class="ph-bold ph-users"></i>
+                </div>
+                <div class="template-content">
+                    <h4>User Analysis</h4>
+                    <p>Detailed user behavior and demographics</p>
+                    <div class="template-metrics">18 metrics • 10 charts</div>
+                </div>
+                <button class="template-btn" data-template="user">Use Template</button>
+            </div>
+
+            <div class="template-card">
+                <div class="template-icon">
+                    <i class="ph-bold ph-currency-dollar"></i>
+                </div>
+                <div class="template-content">
+                    <h4>Revenue Report</h4>
+                    <p>Financial performance and ROI analysis</p>
+                    <div class="template-metrics">10 metrics • 7 charts</div>
+                </div>
+                <button class="template-btn" data-template="revenue">Use Template</button>
+            </div>
+
+            <div class="template-card">
+                <div class="template-icon">
+                    <i class="ph-bold ph-target"></i>
+                </div>
+                <div class="template-content">
+                    <h4>SEO Report</h4>
+                    <p>Search engine optimization performance</p>
+                    <div class="template-metrics">14 metrics • 9 charts</div>
+                </div>
+                <button class="template-btn" data-template="seo">Use Template</button>
+            </div>
+
+            <div class="template-card">
+                <div class="template-icon">
+                    <i class="ph-bold ph-share"></i>
+                </div>
+                <div class="template-content">
+                    <h4>Social Media Report</h4>
+                    <p>Social media engagement and performance</p>
+                    <div class="template-metrics">16 metrics • 8 charts</div>
+                </div>
+                <button class="template-btn" data-template="social">Use Template</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scheduled Reports -->
+    <div class="scheduled-reports">
+        <div class="section-header">
+            <h2>Scheduled Reports</h2>
+            <button class="schedule-btn" id="scheduleReportBtn">
+                <i class="ph-bold ph-calendar-plus"></i>
+                Schedule Report
+            </button>
+        </div>
+
+        <div class="schedule-list" id="scheduledReportsList">
+            <!-- Scheduled reports will be populated here -->
+        </div>
+    </div>
+
+    <!-- Report History -->
+    <div class="report-history">
+        <div class="section-header">
+            <h2>Report History</h2>
+            <div class="history-filters">
+                <input type="text" placeholder="Search reports..." id="historySearch">
+                <select id="historySort">
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                    <option value="name">By name</option>
+                    <option value="type">By type</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="history-table" id="reportHistoryTable">
+            <!-- Report history will be populated here -->
+        </div>
+    </div>
+</div>
+
+<style>
+.analytics-reports {
+    padding: 2rem;
+}
+
+.analytics-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font-size: 0.875rem;
+    color: var(--admin-text-secondary);
+}
+
+/* Report Builder */
+.report-builder {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-lg);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.builder-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.builder-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0;
+}
+
+.create-report-btn {
+    background: var(--admin-primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.create-report-btn:hover {
+    background: var(--admin-primary);
+    opacity: 0.9;
+}
+
+.builder-content {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Report Configuration */
+.report-config {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.config-section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0 0 1rem 0;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.config-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.config-item label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--admin-text-primary);
+}
+
+.config-item input,
+.config-item select {
+    padding: 0.5rem;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-md);
+    background: var(--admin-surface);
+    color: var(--admin-text-primary);
+    font-size: 0.875rem;
+}
+
+.config-item input:focus,
+.config-item select:focus {
+    outline: none;
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px rgba(13, 55, 85, 0.1);
+}
+
+/* Metrics Grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.metric-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.metric-item:hover {
+    background: var(--admin-bg);
+}
+
+.metric-item.selected {
+    background: var(--admin-primary);
+    color: white;
+    border-color: var(--admin-primary);
+}
+
+.metric-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--admin-border);
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+.metric-item.selected .metric-checkbox::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 2px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+/* Filters Grid */
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.filter-item label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--admin-text-primary);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-option {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--admin-text-secondary);
+}
+
+.filter-option.selected {
+    background: var(--admin-primary);
+    color: white;
+    border-color: var(--admin-primary);
+}
+
+/* Report Preview */
+.report-preview {
+    background: var(--admin-bg);
+    border-radius: var(--admin-radius-md);
+}
+
+.preview-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preview-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.preview-btn {
+    background: none;
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text-secondary);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.preview-btn.primary {
+    background: var(--admin-primary);
+    color: white;
+    border-color: var(--admin-primary);
+}
+
+.preview-btn:hover {
+    transform: translateY(-1px);
+}
+
+.preview-content {
+    min-height: 400px;
+    background: var(--admin-surface);
+    border-radius: var(--admin-radius-sm);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--admin-text-secondary);
+}
+
+.preview-content i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.preview-content p {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Saved Reports */
+.saved-reports {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-lg);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.saved-reports .section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.saved-reports .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0;
+}
+
+.reports-filters {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.reports-filter-btn {
+    background: none;
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.reports-filter-btn.active {
+    background: var(--admin-primary);
+    color: white;
+    border-color: var(--admin-primary);
+}
+
+.reports-grid {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.report-card {
+    background: var(--admin-bg);
+    border-radius: var(--admin-radius-md);
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+    border: 1px solid var(--admin-border);
+}
+
+.report-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.report-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0;
+}
+
+.report-type {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--admin-primary);
+    background: rgba(13, 55, 85, 0.1);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--admin-radius-sm);
+}
+
+.report-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.report-date {
+    font-size: 0.875rem;
+    color: var(--admin-text-secondary);
+}
+
+.report-size {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+}
+
+.report-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.report-action-btn {
+    background: none;
+    border: none;
+    color: var(--admin-text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--admin-radius-sm);
+    transition: all 0.2s ease;
+}
+
+.report-action-btn:hover {
+    background: var(--admin-border);
+    color: var(--admin-text-primary);
+}
+
+/* Report Templates */
+.report-templates {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-lg);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.report-templates .section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    margin-bottom: 0;
+}
+
+.report-templates .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0;
+}
+
+.templates-grid {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.template-card {
+    background: var(--admin-bg);
+    border-radius: var(--admin-radius-md);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.2s ease;
+    border: 1px solid var(--admin-border);
+}
+
+.template-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.template-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--admin-radius-lg);
+    background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.template-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.template-content p {
+    font-size: 0.875rem;
+    color: var(--admin-text-secondary);
+    margin: 0 0 0.5rem 0;
+}
+
+.template-metrics {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--admin-primary);
+}
+
+.template-btn {
+    background: var(--admin-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-top: auto;
+}
+
+.template-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 55, 85, 0.3);
+}
+
+/* Scheduled Reports */
+.scheduled-reports {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-lg);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.scheduled-reports .section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.scheduled-reports .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0;
+}
+
+.schedule-btn {
+    background: var(--admin-secondary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.schedule-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 132, 177, 0.3);
+}
+
+.schedule-list {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    background: var(--admin-bg);
+    border-radius: var(--admin-radius-md);
+    transition: all 0.2s ease;
+    border: 1px solid var(--admin-border);
+}
+
+.schedule-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-info {
+    flex: 1;
+}
+
+.schedule-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.schedule-details {
+    font-size: 0.875rem;
+    color: var(--admin-text-secondary);
+}
+
+.schedule-status {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--admin-success);
+}
+
+/* Report History */
+.report-history {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-lg);
+    overflow: hidden;
+}
+
+.report-history .section-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    margin-bottom: 0;
+}
+
+.report-history .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin: 0;
+}
+
+.history-filters {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+#historySearch {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-md);
+    background: var(--admin-surface);
+    color: var(--admin-text-primary);
+    font-size: 0.875rem;
+}
+
+#historySort {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-md);
+    background: var(--admin-surface);
+    color: var(--admin-text-primary);
+    font-size: 0.875rem;
+}
+
+.history-table {
+    margin-top: 0;
+    overflow-x: auto;
+}
+
+.history-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.history-table th {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    background: var(--admin-bg);
+}
+
+.history-table td {
+    font-size: 0.875rem;
+    color: var(--admin-text-secondary);
+}
+
+.history-table tr:hover td {
+    background: var(--admin-bg);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .builder-content {
+        grid-template-columns: 1fr;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .analytics-reports {
+        padding: 1rem;
+    }
+
+    .builder-header,
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .reports-filters,
+    .history-filters {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .templates-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .preview-actions {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
+<script>
+// Custom Reports JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initCustomReports();
+});
+
+function initCustomReports() {
+    loadReportBuilder();
+    loadSavedReports();
+    loadReportTemplates();
+    loadScheduledReports();
+    loadReportHistory();
+
+    // Event listeners
+    document.getElementById('createReportBtn').addEventListener('click', createNewReport);
+    document.getElementById('generateReport').addEventListener('click', generateReport);
+    document.getElementById('refreshPreview').addEventListener('click', refreshPreview);
+    document.getElementById('scheduleReportBtn').addEventListener('click', scheduleReport);
+
+    // Template buttons
+    document.querySelectorAll('.template-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            loadTemplate(this.dataset.template);
+        });
+    });
+
+    // Filter buttons
+    document.querySelectorAll('.reports-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.reports-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            filterReports(this.dataset.type);
+        });
+    });
+}
+
+function loadReportBuilder() {
+    // Load available metrics
+    fetch('/api/analytics/reports/metrics')
+        .then(response => response.json())
+        .then(data => {
+            populateMetrics(data.metrics);
+            populateFilters(data.filters);
+        })
+        .catch(error => {
+            console.error('Error loading report builder:', error);
+            showFallbackReportBuilder();
+        });
+}
+
+function populateMetrics(metrics) {
+    const container = document.getElementById('metricsGrid');
+    container.innerHTML = metrics.map(metric => `
+        <div class="metric-item" data-metric="${metric.id}">
+            <div class="metric-checkbox"></div>
+            <div class="metric-label">${metric.name}</div>
+        </div>
+    `).join('');
+
+    // Add click handlers for metric selection
+    document.querySelectorAll('.metric-item').forEach(item => {
+        item.addEventListener('click', function() {
+            this.classList.toggle('selected');
+            updatePreview();
+        });
+    });
+}
+
+function populateFilters(filters) {
+    populateFilterOptions('sourceFilters', filters.sources);
+    populateFilterOptions('deviceFilters', filters.devices);
+    populateFilterOptions('geoFilters', filters.regions);
+}
+
+function populateFilterOptions(containerId, options) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = options.map(option => `
+        <span class="filter-option" data-value="${option.id}">${option.name}</span>
+    `).join('');
+
+    // Add click handlers for filter selection
+    container.querySelectorAll('.filter-option').forEach(option => {
+        option.addEventListener('click', function() {
+            this.classList.toggle('selected');
+            updatePreview();
+        });
+    });
+}
+
+function loadSavedReports() {
+    fetch('/api/analytics/reports/saved')
+        .then(response => response.json())
+        .then(data => {
+            populateSavedReports(data.reports);
+        })
+        .catch(error => {
+            console.error('Error loading saved reports:', error);
+        });
+}
+
+function populateSavedReports(reports) {
+    const container = document.getElementById('savedReportsGrid');
+    container.innerHTML = reports.map(report => `
+        <div class="report-card">
+            <div class="report-header">
+                <div class="report-title">${report.name}</div>
+                <div class="report-type">${report.type}</div>
+            </div>
+            <div class="report-meta">
+                <div class="report-date">${formatDate(report.created)}</div>
+                <div class="report-size">${report.size}</div>
+            </div>
+            <div class="report-actions">
+                <button class="report-action-btn" data-action="view" data-id="${report.id}">
+                    <i class="ph-bold ph-eye"></i>
+                </button>
+                <button class="report-action-btn" data-action="download" data-id="${report.id}">
+                    <i class="ph-bold ph-download"></i>
+                </button>
+                <button class="report-action-btn" data-action="delete" data-id="${report.id}">
+                    <i class="ph-bold ph-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function loadReportTemplates() {
+    // Templates are static in HTML, but could be loaded dynamically
+}
+
+function loadScheduledReports() {
+    fetch('/api/analytics/reports/scheduled')
+        .then(response => response.json())
+        .then(data => {
+            populateScheduledReports(data.schedules);
+        })
+        .catch(error => {
+            console.error('Error loading scheduled reports:', error);
+        });
+}
+
+function populateScheduledReports(schedules) {
+    const container = document.getElementById('scheduledReportsList');
+    container.innerHTML = schedules.map(schedule => `
+        <div class="schedule-item">
+            <div class="schedule-info">
+                <div class="schedule-name">${schedule.name}</div>
+                <div class="schedule-details">${schedule.frequency} • Next run: ${formatDate(schedule.nextRun)}</div>
+            </div>
+            <div class="schedule-status">${schedule.status}</div>
+        </div>
+    `).join('');
+}
+
+function loadReportHistory() {
+    fetch('/api/analytics/reports/history')
+        .then(response => response.json())
+        .then(data => {
+            populateReportHistory(data.history);
+        })
+        .catch(error => {
+            console.error('Error loading report history:', error);
+        });
+}
+
+function populateReportHistory(history) {
+    const container = document.getElementById('reportHistoryTable');
+    const tableHTML = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Report Name</th>
+                    <th>Type</th>
+                    <th>Generated</th>
+                    <th>Size</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${history.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.type}</td>
+                        <td>${formatDate(item.generated)}</td>
+                        <td>${item.size}</td>
+                        <td>
+                            <button class="report-action-btn" data-action="download" data-id="${item.id}">
+                                <i class="ph-bold ph-download"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+    container.innerHTML = tableHTML;
+}
+
+function createNewReport() {
+    // Reset form
+    document.getElementById('reportName').value = '';
+    document.getElementById('reportType').value = 'overview';
+    document.getElementById('dateRange').value = '30d';
+    document.getElementById('reportFormat').value = 'pdf';
+
+    // Clear selections
+    document.querySelectorAll('.metric-item.selected').forEach(item => {
+        item.classList.remove('selected');
+    });
+    document.querySelectorAll('.filter-option.selected').forEach(option => {
+        option.classList.remove('selected');
+    });
+
+    // Clear preview
+    document.getElementById('reportPreview').innerHTML = `
+        <i class="ph-bold ph-file-text"></i>
+        <p>Report preview will appear here</p>
+    `;
+}
+
+function generateReport() {
+    const config = getReportConfig();
+    if (!config.name.trim()) {
+        alert('Please enter a report name');
+        return;
+    }
+
+    // Show loading
+    const btn = document.getElementById('generateReport');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="ph-bold ph-spinner ph-spinner-spin"></i> Generating...';
+    btn.disabled = true;
+
+    fetch('/api/analytics/reports/generate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config)
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${config.name}.${config.format}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        // Reset button
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+
+        // Refresh saved reports
+        loadSavedReports();
+    })
+    .catch(error => {
+        console.error('Error generating report:', error);
+        alert('Error generating report. Please try again.');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    });
+}
+
+function getReportConfig() {
+    const selectedMetrics = Array.from(document.querySelectorAll('.metric-item.selected'))
+        .map(item => item.dataset.metric);
+
+    const selectedSources = Array.from(document.querySelectorAll('#sourceFilters .filter-option.selected'))
+        .map(option => option.dataset.value);
+
+    const selectedDevices = Array.from(document.querySelectorAll('#deviceFilters .filter-option.selected'))
+        .map(option => option.dataset.value);
+
+    const selectedRegions = Array.from(document.querySelectorAll('#geoFilters .filter-option.selected'))
+        .map(option => option.dataset.value);
+
+    return {
+        name: document.getElementById('reportName').value,
+        type: document.getElementById('reportType').value,
+        dateRange: document.getElementById('dateRange').value,
+        format: document.getElementById('reportFormat').value,
+        metrics: selectedMetrics,
+        filters: {
+            sources: selectedSources,
+            devices: selectedDevices,
+            regions: selectedRegions
+        }
+    };
+}
+
+function updatePreview() {
+    const config = getReportConfig();
+    // Update preview based on configuration
+    document.getElementById('reportPreview').innerHTML = `
+        <div style="text-align: center; color: var(--t-medium);">
+            <i class="ph-bold ph-chart-bar" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+            <p>Preview for "${config.name || 'Untitled Report'}"</p>
+            <small>${config.metrics.length} metrics selected</small>
+        </div>
+    `;
+}
+
+function refreshPreview() {
+    updatePreview();
+}
+
+function scheduleReport() {
+    // Open scheduling modal/form
+    alert('Schedule report functionality would open a modal here');
+}
+
+function loadTemplate(templateType) {
+    // Load predefined template configuration
+    const templates = {
+        monthly: {
+            name: 'Monthly Overview Report',
+            type: 'overview',
+            metrics: ['pageviews', 'users', 'sessions', 'bounceRate']
+        },
+        growth: {
+            name: 'Growth Analysis Report',
+            type: 'traffic',
+            metrics: ['newUsers', 'returningUsers', 'conversionRate']
+        },
+        user: {
+            name: 'User Behavior Report',
+            type: 'user',
+            metrics: ['sessionDuration', 'pageDepth', 'deviceTypes']
+        },
+        revenue: {
+            name: 'Revenue Performance Report',
+            type: 'revenue',
+            metrics: ['totalRevenue', 'orders', 'avgOrderValue']
+        },
+        seo: {
+            name: 'SEO Performance Report',
+            type: 'seo',
+            metrics: ['organicTraffic', 'keywordRankings', 'backlinks']
+        },
+        social: {
+            name: 'Social Media Report',
+            type: 'social',
+            metrics: ['followers', 'engagement', 'impressions']
+        }
+    };
+
+    const template = templates[templateType];
+    if (template) {
+        document.getElementById('reportName').value = template.name;
+        document.getElementById('reportType').value = template.type;
+
+        // Select template metrics
+        document.querySelectorAll('.metric-item').forEach(item => {
+            const metricId = item.dataset.metric;
+            if (template.metrics.includes(metricId)) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
+        });
+
+        updatePreview();
+    }
+}
+
+function filterReports(type) {
+    // Filter saved reports by type
+    const cards = document.querySelectorAll('.report-card');
+    cards.forEach(card => {
+        const reportType = card.querySelector('.report-type').textContent.toLowerCase();
+        if (type === 'all' || reportType.includes(type)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+function formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString();
+}
+
+function showFallbackReportBuilder() {
+    // Show sample metrics when API is not available
+    const sampleMetrics = [
+        { id: 'pageviews', name: 'Page Views' },
+        { id: 'users', name: 'Unique Users' },
+        { id: 'sessions', name: 'Sessions' },
+        { id: 'bounceRate', name: 'Bounce Rate' },
+        { id: 'conversionRate', name: 'Conversion Rate' },
+        { id: 'revenue', name: 'Revenue' }
+    ];
+
+    populateMetrics(sampleMetrics);
+}
+</script>

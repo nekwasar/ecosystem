@@ -1,0 +1,95 @@
+<section id="route-latest" data-route="latest" data-title="Latest Stories | NekwasaR Blog" data-description="Fresh insights across technology, leadership, and innovation." class="py-16 bg-base">
+<div class="section-container space-y-10">
+    <div class="rounded-[2.5rem] p-10 bg-gradient-to-br from-gradient-one to-gradient-two text-white shadow-lg shadow-accent/30">
+        <div class="space-y-3">
+            <p class="uppercase text-xs tracking-[0.4em]">Latest</p>
+            <h1 class="text-4xl font-semibold font-syne">Fresh stories, weekly perspectives</h1>
+            <p class="text-lg text-white/90 max-w-3xl">Real-time briefs, short-form features, and rapid commentary that help you stay ahead of technology, leadership, and cultural shifts.</p>
+        </div>
+        <div class="mt-8 grid gap-6 lg:grid-cols-3">
+            {% for idx in range(1,4) %}
+            <article class="bg-white/10 backdrop-blur rounded-[1.5rem] p-5 border border-white/20 flex flex-col justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.4em] text-white/80">Flash Brief</p>
+                    <h3 class="text-2xl font-semibold mt-3">Article {{ idx }} highlight</h3>
+                    <p class="mt-3 text-sm text-white/80 leading-relaxed">A concise rundown of the newest breakthroughs and what they mean for leaders.</p>
+                </div>
+                <div class="mt-6 flex items-center justify-between">
+                    <span class="text-xs text-white/70">Updated 9 mins ago</span>
+                    <span class="text-xs font-semibold uppercase tracking-wide">Read</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="rounded-[2.5rem] bg-base-tint border border-stroke-elements p-8 space-y-6">
+        <div class="flex flex-col gap-2">
+            <p class="text-xs uppercase tracking-[0.5em] text-t-accent">Spotlight slider</p>
+            <h2 class="text-3xl font-semibold text-t-bright">Stories moving the needle</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            <article class="bg-white rounded-[1.5rem] border border-stroke-elements overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="h-52 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=450&fit=crop')"></div>
+                <div class="p-6 space-y-4">
+                    <div class="text-xs uppercase tracking-[0.4em] text-t-muted">AI</div>
+                    <h3 class="text-2xl font-semibold text-t-bright">The new wave of adaptive intelligence</h3>
+                    <p class="text-sm leading-relaxed text-t-medium">Why the latest AI models are shifting from prediction to explanation.</p>
+                    <div class="flex items-center justify-between text-xs text-t-muted">
+                        <span>4.8k views</span>
+                        <span>6 min read</span>
+                    </div>
+                </div>
+            </article>
+            <article class="bg-white rounded-[1.5rem] border border-stroke-elements overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="h-52 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=800&h=450&fit=crop')"></div>
+                <div class="p-6 space-y-4">
+                    <div class="text-xs uppercase tracking-[0.4em] text-t-muted">Future of Work</div>
+                    <h3 class="text-2xl font-semibold text-t-bright">Remote collaboration, reimagined</h3>
+                    <p class="text-sm leading-relaxed text-t-medium">Three design principles for running high-performing distributed teams.</p>
+                    <div class="flex items-center justify-between text-xs text-t-muted">
+                        <span>3.1k views</span>
+                        <span>5 min read</span>
+                    </div>
+                </div>
+            </article>
+            <article class="bg-white rounded-[1.5rem] border border-stroke-elements overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="h-52 bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=450&fit=crop')"></div>
+                <div class="p-6 space-y-4">
+                    <div class="text-xs uppercase tracking-[0.4em] text-t-muted">Strategy</div>
+                    <h3 class="text-2xl font-semibold text-t-bright">From idea to investor-ready pitch</h3>
+                    <p class="text-sm leading-relaxed text-t-medium">A tactical checklist for translating early-stage research into conviction.</p>
+                    <div class="flex items-center justify-between text-xs text-t-muted">
+                        <span>2.7k views</span>
+                        <span>7 min read</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <div class="rounded-[2rem] bg-white border border-stroke-elements p-8 shadow-sm">
+        <div class="flex items-between justify-between">
+            <h3 class="text-2xl font-semibold text-t-bright">Weekly dispatch</h3>
+            <span class="text-xs uppercase tracking-[0.5em] text-t-muted">curated</span>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-6 mt-6">
+            {% for number in ['01','02','03','04'] %}
+            <article class="flex flex-col gap-3">
+                <div class="flex items-center justify-between text-xs">
+                    <span class="text-t-accent font-semibold">{{ number }}</span>
+                    <span class="text-t-muted">Insight series</span>
+                </div>
+                <h4 class="text-xl font-semibold text-t-bright">Topic headline {{ number }}</h4>
+                <p class="text-sm text-t-medium">A crisp summary of the key signal and why it deserves your attention this week.</p>
+                <div class="text-xs text-t-muted flex items-center gap-3">
+                    <span>Published Nov {{ 10 + loop.index }}</span>
+                    <span>•</span>
+                    <span>Estimated 4 min read</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</section>

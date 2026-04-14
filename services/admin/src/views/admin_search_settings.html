@@ -1,0 +1,1188 @@
+<!-- Search Settings -->
+<div class="search-settings">
+    <div class="analytics-header">
+        <h1 class="page-title">Search Settings</h1>
+        <p class="page-subtitle">Configure search engine behavior and preferences</p>
+    </div>
+
+    <!-- Settings Tabs -->
+    <div class="settings-tabs">
+        <div class="tabs-header">
+            <button class="tab-btn active" data-tab="general">General</button>
+            <button class="tab-btn" data-tab="indexing">Indexing</button>
+            <button class="tab-btn" data-tab="ranking">Ranking</button>
+            <button class="tab-btn" data-tab="interface">Interface</button>
+            <button class="tab-btn" data-tab="advanced">Advanced</button>
+        </div>
+
+        <div class="tabs-content">
+            <!-- General Settings Tab -->
+            <div class="tab-content active" id="general-tab">
+                <div class="settings-section">
+                    <h3>General Search Settings</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Search Engine Status</div>
+                                <div class="setting-description">Enable or disable the search functionality</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="searchEnabled" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Default Search Operator</div>
+                                <div class="setting-description">Default boolean operator for multi-term queries</div>
+                            </div>
+                            <div class="setting-control">
+                                <select id="defaultOperator">
+                                    <option value="AND">AND (all terms required)</option>
+                                    <option value="OR" selected>OR (any term matches)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Minimum Query Length</div>
+                                <div class="setting-description">Minimum characters required to perform a search</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="number" id="minQueryLength" value="2" min="1" max="5">
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Maximum Results per Page</div>
+                                <div class="setting-description">Number of results to show per page</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="number" id="resultsPerPage" value="20" min="5" max="100">
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Search Timeout</div>
+                                <div class="setting-description">Maximum time to wait for search results (seconds)</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="number" id="searchTimeout" value="5" min="1" max="30" step="0.5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indexing Settings Tab -->
+            <div class="tab-content" id="indexing-tab">
+                <div class="settings-section">
+                    <h3>Search Indexing Settings</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Auto-Indexing</div>
+                                <div class="setting-description">Automatically index new content</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="autoIndexing" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Index Update Frequency</div>
+                                <div class="setting-description">How often to check for content updates</div>
+                            </div>
+                            <div class="setting-control">
+                                <select id="indexFrequency">
+                                    <option value="realtime">Real-time</option>
+                                    <option value="hourly" selected>Hourly</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Index Content Types</div>
+                                <div class="setting-description">Which content types to include in search</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" name="contentTypes" value="posts" checked> Blog Posts</label>
+                                    <label><input type="checkbox" name="contentTypes" value="pages" checked> Pages</label>
+                                    <label><input type="checkbox" name="contentTypes" value="comments"> Comments</label>
+                                    <label><input type="checkbox" name="contentTypes" value="tags" checked> Tags</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Index Size Limit</div>
+                                <div class="setting-description">Maximum index size before optimization</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="number" id="indexSizeLimit" value="100" min="10" max="1000" step="10">
+                                <span class="unit">MB</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Stop Words</div>
+                                <div class="setting-description">Common words to exclude from indexing</div>
+                            </div>
+                            <div class="setting-control">
+                                <textarea id="stopWords" rows="3" placeholder="the, a, an, and, or, but...">the, a, an, and, or, but, in, on, at, to, for, of, with, by</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Index Management</h3>
+                    <div class="index-actions">
+                        <button class="action-btn" id="rebuildIndexBtn">
+                            <i class="ph-bold ph-refresh"></i>
+                            Rebuild Index
+                        </button>
+                        <button class="action-btn" id="optimizeIndexBtn">
+                            <i class="ph-bold ph-wrench"></i>
+                            Optimize Index
+                        </button>
+                        <button class="action-btn" id="clearIndexBtn">
+                            <i class="ph-bold ph-trash"></i>
+                            Clear Index
+                        </button>
+                        <button class="action-btn" id="exportIndexBtn">
+                            <i class="ph-bold ph-download"></i>
+                            Export Index
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ranking Settings Tab -->
+            <div class="tab-content" id="ranking-tab">
+                <div class="settings-section">
+                    <h3>Search Result Ranking</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Ranking Algorithm</div>
+                                <div class="setting-description">Algorithm used to rank search results</div>
+                            </div>
+                            <div class="setting-control">
+                                <select id="rankingAlgorithm">
+                                    <option value="bm25" selected>BM25</option>
+                                    <option value="tfidf">TF-IDF</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Title Weight</div>
+                                <div class="setting-description">Importance of title matches in ranking</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="range" id="titleWeight" min="1" max="10" value="8" step="0.5">
+                                <span class="range-value" id="titleWeightValue">8.0</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Content Weight</div>
+                                <div class="setting-description">Importance of content matches in ranking</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="range" id="contentWeight" min="1" max="10" value="5" step="0.5">
+                                <span class="range-value" id="contentWeightValue">5.0</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Recency Weight</div>
+                                <div class="setting-description">Importance of content freshness in ranking</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="range" id="recencyWeight" min="1" max="10" value="3" step="0.5">
+                                <span class="range-value" id="recencyWeightValue">3.0</span>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Popularity Weight</div>
+                                <div class="setting-description">Importance of content popularity in ranking</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="range" id="popularityWeight" min="1" max="10" value="4" step="0.5">
+                                <span class="range-value" id="popularityWeightValue">4.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Result Boosting</h3>
+                    <div class="boosting-rules" id="boostingRules">
+                        <!-- Boosting rules will be populated here -->
+                    </div>
+                    <button class="action-btn primary" id="addBoostingRuleBtn">
+                        <i class="ph-bold ph-plus"></i>
+                        Add Boosting Rule
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interface Settings Tab -->
+            <div class="tab-content" id="interface-tab">
+                <div class="settings-section">
+                    <h3>Search Interface Settings</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Show Suggestions</div>
+                                <div class="setting-description">Display search suggestions as user types</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="showSuggestions" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Highlight Results</div>
+                                <div class="setting-description">Highlight search terms in results</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="highlightResults" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Show Filters</div>
+                                <div class="setting-description">Display filter options in search results</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="showFilters" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Show Result Stats</div>
+                                <div class="setting-description">Display result count and timing information</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="showResultStats" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Infinite Scroll</div>
+                                <div class="setting-description">Load more results automatically on scroll</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="infiniteScroll">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Search Input Placeholder</div>
+                                <div class="setting-description">Text shown in empty search input</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="text" id="searchPlaceholder" value="Search articles, topics, and more..." style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings Tab -->
+            <div class="tab-content" id="advanced-tab">
+                <div class="settings-section">
+                    <h3>Advanced Search Settings</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Enable Fuzzy Search</div>
+                                <div class="setting-description">Allow approximate matching for typos</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="fuzzySearch" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Fuzzy Search Distance</div>
+                                <div class="setting-description">Maximum edit distance for fuzzy matching</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="number" id="fuzzyDistance" value="2" min="1" max="5">
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Stemming Language</div>
+                                <div class="setting-description">Language for word stemming</div>
+                            </div>
+                            <div class="setting-control">
+                                <select id="stemmingLanguage">
+                                    <option value="english" selected>English</option>
+                                    <option value="french">French</option>
+                                    <option value="german">German</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Cache Results</div>
+                                <div class="setting-description">Cache search results for performance</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="cacheResults" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Cache TTL</div>
+                                <div class="setting-description">How long to cache search results (minutes)</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="number" id="cacheTTL" value="30" min="5" max="1440">
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Log Search Queries</div>
+                                <div class="setting-description">Store search queries for analytics</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="logQueries" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Search Analytics</h3>
+                    <div class="analytics-settings">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Analytics Retention</div>
+                                <div class="setting-description">How long to keep search analytics data</div>
+                            </div>
+                            <div class="setting-control">
+                                <select id="analyticsRetention">
+                                    <option value="30">30 days</option>
+                                    <option value="90" selected>90 days</option>
+                                    <option value="365">1 year</option>
+                                    <option value="unlimited">Unlimited</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Track User Behavior</div>
+                                <div class="setting-description">Monitor user interactions with search results</div>
+                            </div>
+                            <div class="setting-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="trackBehavior" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Actions -->
+    <div class="settings-actions">
+        <button class="action-btn secondary" id="resetSettingsBtn">
+            <i class="ph-bold ph-arrow-counter-clockwise"></i>
+            Reset to Defaults
+        </button>
+        <button class="action-btn primary" id="saveSettingsBtn">
+            <i class="ph-bold ph-check"></i>
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<style>
+.search-settings {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.page-title {
+    font: normal 700 2rem/1.2 var(--_font-accent);
+    color: var(--t-accent);
+    background: var(--t-accent);
+    background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font: normal 400 1.25rem/1.4 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Settings Tabs */
+.settings-tabs {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    margin-bottom: 2rem;
+}
+
+.tabs-header {
+    display: flex;
+    gap: 0.25rem;
+    padding: 1rem 1.5rem 0;
+    border-bottom: 1px solid var(--stroke-elements);
+    overflow-x: auto;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid transparent;
+    color: var(--t-medium);
+    font: normal 600 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    white-space: nowrap;
+}
+
+.tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tabs-content {
+    padding: 1.5rem;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Settings Sections */
+.settings-section {
+    margin-bottom: 2rem;
+}
+
+.settings-section h3 {
+    font: normal 600 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0 0 1.5rem 0;
+}
+
+.settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.setting-item:hover {
+    background: var(--stroke-elements);
+}
+
+.setting-info {
+    flex: 1;
+}
+
+.setting-label {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.setting-description {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.setting-control {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 150px;
+}
+
+.setting-control select,
+.setting-control input[type="number"],
+.setting-control input[type="text"] {
+    padding: 0.5rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--background);
+    color: var(--t-bright);
+    font-size: 0.75rem;
+    min-width: 120px;
+}
+
+.setting-control select:focus,
+.setting-control input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.setting-control textarea {
+    padding: 0.5rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--background);
+    color: var(--t-bright);
+    font-size: 0.75rem;
+    font-family: inherit;
+    resize: vertical;
+    min-width: 200px;
+}
+
+.setting-control textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--stroke-elements);
+    transition: 0.3s;
+    border-radius: 20px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--accent);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* Range Inputs */
+.setting-control input[type="range"] {
+    flex: 1;
+    max-width: 100px;
+}
+
+.range-value {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--accent);
+    min-width: 30px;
+    text-align: center;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Unit Span */
+.unit {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Index Actions */
+.index-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--base);
+    color: var(--t-bright);
+    font: normal 600 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.action-btn:hover {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.action-btn.primary {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+/* Boosting Rules */
+.boosting-rules {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.boosting-rule {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--stroke-elements);
+}
+
+.boosting-rule-info {
+    flex: 1;
+}
+
+.boosting-rule-condition {
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.boosting-rule-boost {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.boosting-rule-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Settings Actions */
+.settings-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.action-btn.secondary {
+    background: var(--stroke-elements);
+    color: var(--t-bright);
+    border-color: var(--stroke-elements);
+}
+
+.action-btn.secondary:hover {
+    background: var(--error, #ef4444);
+    color: white;
+    border-color: var(--error, #ef4444);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .tabs-header {
+        flex-wrap: wrap;
+    }
+
+    .setting-item {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .setting-control {
+        justify-content: center;
+        min-width: auto;
+    }
+
+    .index-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .boosting-rule {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-settings {
+        padding: 0.75rem;
+    }
+
+    .settings-group {
+        gap: 1rem;
+    }
+
+    .setting-item {
+        padding: 1rem;
+    }
+
+    .tabs-content {
+        padding: 1rem;
+    }
+
+    .settings-actions {
+        flex-direction: column;
+    }
+
+    .checkbox-group {
+        align-items: flex-start;
+    }
+}
+</style>
+
+<script>
+// Search Settings
+document.addEventListener('DOMContentLoaded', function() {
+    initSearchSettings();
+});
+
+function initSearchSettings() {
+    loadSettingsData();
+    initTabNavigation();
+    initRangeInputs();
+    initSettingsActions();
+}
+
+async function loadSettingsData() {
+    try {
+        const response = await fetch('/api/admin/search/settings');
+        if (response.ok) {
+            const data = await response.json();
+            populateSettings(data);
+        }
+    } catch (error) {
+        console.error('Error loading settings data:', error);
+        showFallbackSettings();
+    }
+}
+
+function populateSettings(data) {
+    // General settings
+    document.getElementById('searchEnabled').checked = data.general.enabled;
+    document.getElementById('defaultOperator').value = data.general.defaultOperator;
+    document.getElementById('minQueryLength').value = data.general.minQueryLength;
+    document.getElementById('resultsPerPage').value = data.general.resultsPerPage;
+    document.getElementById('searchTimeout').value = data.general.searchTimeout;
+
+    // Indexing settings
+    document.getElementById('autoIndexing').checked = data.indexing.autoIndexing;
+    document.getElementById('indexFrequency').value = data.indexing.indexFrequency;
+    document.getElementById('indexSizeLimit').value = data.indexing.indexSizeLimit;
+    document.getElementById('stopWords').value = data.indexing.stopWords;
+
+    // Content types checkboxes
+    document.querySelectorAll('input[name="contentTypes"]').forEach(checkbox => {
+        checkbox.checked = data.indexing.contentTypes.includes(checkbox.value);
+    });
+
+    // Ranking settings
+    document.getElementById('rankingAlgorithm').value = data.ranking.algorithm;
+    document.getElementById('titleWeight').value = data.ranking.titleWeight;
+    document.getElementById('contentWeight').value = data.ranking.contentWeight;
+    document.getElementById('recencyWeight').value = data.ranking.recencyWeight;
+    document.getElementById('popularityWeight').value = data.ranking.popularityWeight;
+
+    updateRangeValues();
+
+    // Populate boosting rules
+    populateBoostingRules(data.ranking.boostingRules);
+
+    // Interface settings
+    document.getElementById('showSuggestions').checked = data.interface.showSuggestions;
+    document.getElementById('highlightResults').checked = data.interface.highlightResults;
+    document.getElementById('showFilters').checked = data.interface.showFilters;
+    document.getElementById('showResultStats').checked = data.interface.showResultStats;
+    document.getElementById('infiniteScroll').checked = data.interface.infiniteScroll;
+    document.getElementById('searchPlaceholder').value = data.interface.searchPlaceholder;
+
+    // Advanced settings
+    document.getElementById('fuzzySearch').checked = data.advanced.fuzzySearch;
+    document.getElementById('fuzzyDistance').value = data.advanced.fuzzyDistance;
+    document.getElementById('stemmingLanguage').value = data.advanced.stemmingLanguage;
+    document.getElementById('cacheResults').checked = data.advanced.cacheResults;
+    document.getElementById('cacheTTL').value = data.advanced.cacheTTL;
+    document.getElementById('logQueries').checked = data.advanced.logQueries;
+    document.getElementById('analyticsRetention').value = data.advanced.analyticsRetention;
+    document.getElementById('trackBehavior').checked = data.advanced.trackBehavior;
+}
+
+function populateBoostingRules(rules) {
+    const container = document.getElementById('boostingRules');
+    container.innerHTML = rules.map(rule => `
+        <div class="boosting-rule">
+            <div class="boosting-rule-info">
+                <div class="boosting-rule-condition">${rule.condition}</div>
+                <div class="boosting-rule-boost">Boost: ${rule.boost}x</div>
+            </div>
+            <div class="boosting-rule-actions">
+                <button class="action-btn" onclick="editBoostingRule('${rule.id}')">Edit</button>
+                <button class="action-btn secondary" onclick="deleteBoostingRule('${rule.id}')">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function initTabNavigation() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            const targetContent = document.getElementById(this.dataset.tab + '-tab');
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+}
+
+function initRangeInputs() {
+    // Update range value displays
+    document.querySelectorAll('input[type="range"]').forEach(range => {
+        range.addEventListener('input', function() {
+            updateRangeValue(this.id);
+        });
+    });
+
+    updateRangeValues();
+}
+
+function updateRangeValues() {
+    document.querySelectorAll('input[type="range"]').forEach(range => {
+        updateRangeValue(range.id);
+    });
+}
+
+function updateRangeValue(rangeId) {
+    const range = document.getElementById(rangeId);
+    const valueElement = document.getElementById(rangeId + 'Value');
+    if (valueElement) {
+        valueElement.textContent = parseFloat(range.value).toFixed(1);
+    }
+}
+
+function initSettingsActions() {
+    document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+    document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+
+    // Index management actions
+    document.getElementById('rebuildIndexBtn').addEventListener('click', rebuildIndex);
+    document.getElementById('optimizeIndexBtn').addEventListener('click', optimizeIndex);
+    document.getElementById('clearIndexBtn').addEventListener('click', clearIndex);
+    document.getElementById('exportIndexBtn').addEventListener('click', exportIndex);
+
+    // Boosting rule actions
+    document.getElementById('addBoostingRuleBtn').addEventListener('click', () => showAddBoostingRuleModal());
+}
+
+async function saveSettings() {
+    const settings = collectSettingsData();
+
+    showNotification('Saving settings...', 'info');
+
+    try {
+        const response = await fetch('/api/admin/search/settings', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settings)
+        });
+
+        if (response.ok) {
+            showNotification('Settings saved successfully', 'success');
+        } else {
+            showNotification('Failed to save settings', 'error');
+        }
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        showNotification('Error saving settings', 'error');
+    }
+}
+
+function collectSettingsData() {
+    return {
+        general: {
+            enabled: document.getElementById('searchEnabled').checked,
+            defaultOperator: document.getElementById('defaultOperator').value,
+            minQueryLength: parseInt(document.getElementById('minQueryLength').value),
+            resultsPerPage: parseInt(document.getElementById('resultsPerPage').value),
+            searchTimeout: parseFloat(document.getElementById('searchTimeout').value)
+        },
+        indexing: {
+            autoIndexing: document.getElementById('autoIndexing').checked,
+            indexFrequency: document.getElementById('indexFrequency').value,
+            contentTypes: Array.from(document.querySelectorAll('input[name="contentTypes"]:checked')).map(cb => cb.value),
+            indexSizeLimit: parseInt(document.getElementById('indexSizeLimit').value),
+            stopWords: document.getElementById('stopWords').value
+        },
+        ranking: {
+            algorithm: document.getElementById('rankingAlgorithm').value,
+            titleWeight: parseFloat(document.getElementById('titleWeight').value),
+            contentWeight: parseFloat(document.getElementById('contentWeight').value),
+            recencyWeight: parseFloat(document.getElementById('recencyWeight').value),
+            popularityWeight: parseFloat(document.getElementById('popularityWeight').value),
+            boostingRules: [] // Would be populated from UI
+        },
+        interface: {
+            showSuggestions: document.getElementById('showSuggestions').checked,
+            highlightResults: document.getElementById('highlightResults').checked,
+            showFilters: document.getElementById('showFilters').checked,
+            showResultStats: document.getElementById('showResultStats').checked,
+            infiniteScroll: document.getElementById('infiniteScroll').checked,
+            searchPlaceholder: document.getElementById('searchPlaceholder').value
+        },
+        advanced: {
+            fuzzySearch: document.getElementById('fuzzySearch').checked,
+            fuzzyDistance: parseInt(document.getElementById('fuzzyDistance').value),
+            stemmingLanguage: document.getElementById('stemmingLanguage').value,
+            cacheResults: document.getElementById('cacheResults').checked,
+            cacheTTL: parseInt(document.getElementById('cacheTTL').value),
+            logQueries: document.getElementById('logQueries').checked,
+            analyticsRetention: document.getElementById('analyticsRetention').value,
+            trackBehavior: document.getElementById('trackBehavior').checked
+        }
+    };
+}
+
+async function resetSettings() {
+    if (confirm('Are you sure you want to reset all settings to defaults?')) {
+        showNotification('Resetting settings...', 'info');
+
+        try {
+            const response = await fetch('/api/admin/search/settings/reset', { method: 'POST' });
+            if (response.ok) {
+                loadSettingsData();
+                showNotification('Settings reset to defaults', 'success');
+            } else {
+                showNotification('Failed to reset settings', 'error');
+            }
+        } catch (error) {
+            console.error('Error resetting settings:', error);
+            showNotification('Error resetting settings', 'error');
+        }
+    }
+}
+
+// Index management functions
+async function rebuildIndex() {
+    showNotification('Rebuilding search index...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/index/rebuild', { method: 'POST' });
+        if (response.ok) {
+            showNotification('Index rebuilt successfully', 'success');
+        } else {
+            showNotification('Failed to rebuild index', 'error');
+        }
+    } catch (error) {
+        console.error('Error rebuilding index:', error);
+        showNotification('Error rebuilding index', 'error');
+    }
+}
+
+async function optimizeIndex() {
+    showNotification('Optimizing search index...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/index/optimize', { method: 'POST' });
+        if (response.ok) {
+            showNotification('Index optimized successfully', 'success');
+        } else {
+            showNotification('Failed to optimize index', 'error');
+        }
+    } catch (error) {
+        console.error('Error optimizing index:', error);
+        showNotification('Error optimizing index', 'error');
+    }
+}
+
+async function clearIndex() {
+    if (confirm('Are you sure you want to clear the search index? This will remove all indexed content.')) {
+        showNotification('Clearing search index...', 'info');
+        try {
+            const response = await fetch('/api/admin/search/index/clear', { method: 'POST' });
+            if (response.ok) {
+                showNotification('Index cleared successfully', 'success');
+            } else {
+                showNotification('Failed to clear index', 'error');
+            }
+        } catch (error) {
+            console.error('Error clearing index:', error);
+            showNotification('Error clearing index', 'error');
+        }
+    }
+}
+
+async function exportIndex() {
+    showNotification('Exporting search index...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/index/export');
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `search-index-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            showNotification('Index exported successfully', 'success');
+        } else {
+            showNotification('Failed to export index', 'error');
+        }
+    } catch (error) {
+        console.error('Error exporting index:', error);
+        showNotification('Error exporting index', 'error');
+    }
+}
+
+// Modal functions (placeholders)
+function showAddBoostingRuleModal() {
+    showNotification('Add boosting rule modal would open here', 'info');
+}
+
+function editBoostingRule(ruleId) {
+    showNotification(`Edit boosting rule ${ruleId} modal would open here`, 'info');
+}
+
+function deleteBoostingRule(ruleId) {
+    if (confirm('Delete this boosting rule?')) {
+        showNotification(`Boosting rule ${ruleId} deleted`, 'success');
+    }
+}
+
+function showNotification(message, type = 'info') {
+    // Use global notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+function showFallbackSettings() {
+    // Show default settings when API is not available
+    console.log('Using fallback settings');
+}
+</script>

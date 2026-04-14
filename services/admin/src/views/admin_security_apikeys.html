@@ -1,0 +1,696 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-6 md:p-8 lg:p-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">API Keys</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Manage API keys, access tokens, and third-party integrations</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Key Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Total API Keys Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-key"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalApiKeys">12</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Total API Keys</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="keysChange">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+3 this month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Active Keys Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-check-circle"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="activeKeys">10</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Active Keys</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="activeChange">
+                            <i class="ph-bold ph-circle text-base"></i>
+                            <span>Operational</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Expired Keys Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-orange-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-clock-afternoon"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="expiredKeys">2</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Expired Keys</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-orange-500 dark:text-orange-400" id="expiredChange">
+                            <i class="ph-bold ph-warning text-base"></i>
+                            <span>Needs Attention</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- API Calls Today Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-bar-chart"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="apiCallsToday">1,247</div>
+                        <div class="text-base text-t-medium font-syne mb-3">API Calls Today</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="callsChange">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+15%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- API Key Management -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-key text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">API Key Management</h3>
+                            <p class="text-t-medium font-syne text-sm">Create, configure, and monitor API keys and access tokens</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="createApiKeyBtn">
+                            <i class="ph-bold ph-plus text-lg"></i>
+                            <span>Create API Key</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="managePermissionsBtn">
+                            <i class="ph-bold ph-gear text-lg"></i>
+                            <span>Manage Permissions</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Key Creation Form -->
+            <div class="p-8 border-b border-stroke-elements">
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    <!-- Create New API Key -->
+                    <div class="bg-base-tint/50 dark:bg-base-shade/50 rounded-xl p-6 border border-stroke-elements">
+                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6 flex items-center space-x-3">
+                            <i class="ph-bold ph-plus-circle text-accent"></i>
+                            <span>Create New API Key</span>
+                        </h4>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Key Name</label>
+                                <input type="text" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne" placeholder="e.g., Production API Key">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Description</label>
+                                <textarea class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne resize-none" rows="3" placeholder="Describe the purpose of this API key..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-t-bright font-syne mb-4">Permissions</label>
+                                <div class="space-y-3 max-h-48 overflow-y-auto">
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Read Access</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Write Access</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Delete Access</span>
+                                    </label>
+                                    <label class="flex items-center space-x-3 p-3 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements cursor-pointer hover:bg-base-shade dark:hover:bg-base transition-all duration-medium">
+                                        <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0">
+                                        <span class="text-t-bright font-syne">Admin Access</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Expiration</label>
+                                    <select class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne">
+                                        <option value="never">Never</option>
+                                        <option value="30days">30 Days</option>
+                                        <option value="90days">90 Days</option>
+                                        <option value="1year">1 Year</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-t-bright font-syne mb-2">Rate Limit</label>
+                                    <select class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne">
+                                        <option value="1000">1,000/hour</option>
+                                        <option value="5000">5,000/hour</option>
+                                        <option value="10000">10,000/hour</option>
+                                        <option value="unlimited">Unlimited</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="w-full inline-flex items-center justify-center space-x-3 px-6 py-4 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne">
+                                <i class="ph-bold ph-plus text-lg"></i>
+                                <span>Create API Key</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- API Key List -->
+                    <div class="bg-base-tint/50 dark:bg-base-shade/50 rounded-xl p-6 border border-stroke-elements">
+                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6 flex items-center space-x-3">
+                            <i class="ph-bold ph-list text-accent"></i>
+                            <span>Active API Keys</span>
+                        </h4>
+                        <div class="space-y-4 max-h-96 overflow-y-auto">
+                            <div class="p-4 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                            <i class="ph-bold ph-check text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-t-bright font-syne">Production API Key</h5>
+                                            <p class="text-sm text-t-medium font-syne">Created 2 days ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-eye text-sm"></i>
+                                        </button>
+                                        <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-t-muted font-syne">
+                                    <span class="font-mono bg-base-shade dark:bg-base px-2 py-1 rounded">nekw_****************************</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-3">
+                                    <span class="text-xs text-t-muted font-syne">1,247 calls today</span>
+                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">Active</span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-base dark:bg-base-tint rounded-lg border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                            <i class="ph-bold ph-check text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-t-bright font-syne">Development API Key</h5>
+                                            <p class="text-sm text-t-medium font-syne">Created 1 week ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-eye text-sm"></i>
+                                        </button>
+                                        <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-t-muted font-syne">
+                                    <span class="font-mono bg-base-shade dark:bg-base px-2 py-1 rounded">nekw_****************************</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-3">
+                                    <span class="text-xs text-t-muted font-syne">89 calls today</span>
+                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">Active</span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-base dark:bg-base-tint rounded-lg border border-orange-500/20 hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                                            <i class="ph-bold ph-clock text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-t-bright font-syne">Legacy API Key</h5>
+                                            <p class="text-sm text-t-medium font-syne">Expires in 7 days</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-pencil text-sm"></i>
+                                        </button>
+                                        <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                            <i class="ph-bold ph-trash text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="text-xs text-t-muted font-syne">
+                                    <span class="font-mono bg-base-shade dark:bg-base px-2 py-1 rounded">nekw_****************************</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-3">
+                                    <span class="text-xs text-t-muted font-syne">23 calls today</span>
+                                    <span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs font-bold rounded-full">Expiring</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Usage Analytics -->
+            <div class="p-8">
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    <!-- Usage Statistics -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">API Usage Statistics</h4>
+
+                        <div class="space-y-4">
+                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h5 class="font-semibold text-t-bright font-syne">Total API Calls (24h)</h5>
+                                    <span class="text-2xl font-bold text-accent font-syne">1,247</span>
+                                </div>
+                                <div class="w-full bg-base-shade dark:bg-base rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-accent to-secondary h-2 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-t-muted font-syne mt-2">
+                                    <span>0</span>
+                                    <span>1,660 calls (75%)</span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h5 class="font-semibold text-t-bright font-syne">Error Rate</h5>
+                                    <span class="text-2xl font-bold text-green-500 font-syne">0.2%</span>
+                                </div>
+                                <div class="w-full bg-base-shade dark:bg-base rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full" style="width: 2%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-t-muted font-syne mt-2">
+                                    <span>0%</span>
+                                    <span>3 errors (0.2%)</span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h5 class="font-semibold text-t-bright font-syne">Average Response Time</h5>
+                                    <span class="text-2xl font-bold text-blue-500 font-syne">145ms</span>
+                                </div>
+                                <div class="w-full bg-base-shade dark:bg-base rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-t-muted font-syne mt-2">
+                                    <span>0ms</span>
+                                    <span>170ms average</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent API Calls -->
+                    <div class="space-y-6">
+                        <h4 class="text-xl font-bold text-t-bright font-syne mb-6">Recent API Calls</h4>
+
+                        <div class="space-y-3 max-h-80 overflow-y-auto">
+                            <div class="p-3 bg-base-tint/50 dark:bg-base-shade/50 rounded-lg border border-stroke-elements">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-t-bright font-syne">GET /api/users</span>
+                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">200</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-t-muted font-syne">
+                                    <span>2 minutes ago</span>
+                                    <span>145ms</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-base-tint/50 dark:bg-base-shade/50 rounded-lg border border-stroke-elements">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-t-bright font-syne">POST /api/content</span>
+                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">201</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-t-muted font-syne">
+                                    <span>5 minutes ago</span>
+                                    <span>203ms</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-base-tint/50 dark:bg-base-shade/50 rounded-lg border border-red-500/20">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-t-bright font-syne">GET /api/admin/users</span>
+                                    <span class="px-2 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded-full">403</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-t-muted font-syne">
+                                    <span>8 minutes ago</span>
+                                    <span>89ms</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-base-tint/50 dark:bg-base-shade/50 rounded-lg border border-stroke-elements">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-t-bright font-syne">PUT /api/profile</span>
+                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">200</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-t-muted font-syne">
+                                    <span>12 minutes ago</span>
+                                    <span>167ms</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-base-tint/50 dark:bg-base-shade/50 rounded-lg border border-stroke-elements">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-semibold text-t-bright font-syne">GET /api/analytics</span>
+                                    <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">200</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-t-muted font-syne">
+                                    <span>15 minutes ago</span>
+                                    <span>134ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third-Party Integrations -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                        <i class="ph-bold ph-plug text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-t-bright font-syne">Third-Party Integrations</h3>
+                        <p class="text-t-medium font-syne text-sm">Manage external service integrations and webhook configurations</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <!-- Integration Card -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <i class="ph-bold ph-github-logo text-blue-500 text-xl"></i>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                            </label>
+                        </div>
+                        <h4 class="font-bold text-t-bright font-syne mb-2">GitHub Integration</h4>
+                        <p class="text-sm text-t-medium font-syne mb-4">Sync repositories and manage webhooks for automated deployments.</p>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">Connected</span>
+                            <span class="text-xs text-t-muted font-syne">Last sync: 2h ago</span>
+                        </div>
+                    </div>
+
+                    <!-- Integration Card -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <i class="ph-bold ph-whatsapp-logo text-green-500 text-xl"></i>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer">
+                                <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                            </label>
+                        </div>
+                        <h4 class="font-bold text-t-bright font-syne mb-2">WhatsApp Business</h4>
+                        <p class="text-sm text-t-medium font-syne mb-4">Send automated notifications and handle customer support via WhatsApp.</p>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 bg-slate-500/20 text-slate-400 text-xs font-bold rounded-full">Not Connected</span>
+                            <span class="text-xs text-t-muted font-syne">Setup required</span>
+                        </div>
+                    </div>
+
+                    <!-- Integration Card -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <i class="ph-bold ph-slack-logo text-purple-500 text-xl"></i>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                            </label>
+                        </div>
+                        <h4 class="font-bold text-t-bright font-syne mb-2">Slack Integration</h4>
+                        <p class="text-sm text-t-medium font-syne mb-4">Receive notifications and manage team communications through Slack.</p>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full">Connected</span>
+                            <span class="text-xs text-t-muted font-syne">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+</style>
+
+<script>
+// API Keys Page
+function initSecurityApiKeys() {
+    loadApiKeyData();
+    setupApiKeyEventListeners();
+}
+
+async function loadApiKeyData() {
+    try {
+        const response = await fetch('/api/admin/security/apikeys');
+        if (response.ok) {
+            const data = await response.json();
+            updateApiKeyStats(data.stats);
+            updateApiKeyList(data.keys);
+        } else {
+            showFallbackApiKeyData();
+        }
+    } catch (error) {
+        console.error('Error loading API key data:', error);
+        showFallbackApiKeyData();
+    }
+}
+
+function updateApiKeyStats(stats) {
+    document.getElementById('totalApiKeys').textContent = stats.totalApiKeys || 12;
+    document.getElementById('activeKeys').textContent = stats.activeKeys || 10;
+    document.getElementById('expiredKeys').textContent = stats.expiredKeys || 2;
+    document.getElementById('apiCallsToday').textContent = stats.apiCallsToday || '1,247';
+}
+
+function updateApiKeyList(keys) {
+    // Update API key list with real data
+    console.log('Updating API key list:', keys);
+}
+
+function setupApiKeyEventListeners() {
+    // Create API Key Button
+    document.getElementById('createApiKeyBtn').onclick = () => {
+        showCreateApiKeyModal();
+    };
+
+    // Manage Permissions Button
+    document.getElementById('managePermissionsBtn').onclick = () => {
+        showPermissionManager();
+    };
+}
+
+function showCreateApiKeyModal() {
+    showNotification('Create API key modal would open here', 'info');
+}
+
+function showPermissionManager() {
+    showNotification('Permission manager would open here', 'info');
+}
+
+function showFallbackApiKeyData() {
+    // Show sample data when API is not available
+    updateApiKeyStats({
+        totalApiKeys: 12,
+        activeKeys: 10,
+        expiredKeys: 2,
+        apiCallsToday: '1,247'
+    });
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSecurityApiKeys);
+} else {
+    initSecurityApiKeys();
+}
+
+function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+</script>

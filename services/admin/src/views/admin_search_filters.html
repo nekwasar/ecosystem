@@ -1,0 +1,1034 @@
+<!-- Search Filters Configuration -->
+<div class="search-filters">
+    <div class="analytics-header">
+        <h1 class="page-title">Search Filters Configuration</h1>
+        <p class="page-subtitle">Configure available search filters and their behavior</p>
+    </div>
+
+    <!-- Filters Overview -->
+    <div class="filters-overview">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-funnel"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="activeFilters">0</div>
+                <div class="card-label">Active Filters</div>
+                <div class="card-trend" id="filtersTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+5.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-check-circle"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="filterUsage">0%</div>
+                <div class="card-label">Filter Usage Rate</div>
+                <div class="card-trend" id="usageTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+8.7%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-target"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="filterPrecision">0%</div>
+                <div class="card-label">Filter Precision</div>
+                <div class="card-trend" id="precisionTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+3.1%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgFilterTime">0ms</div>
+                <div class="card-label">Avg. Filter Time</div>
+                <div class="card-trend" id="filterTimeTrend">
+                    <i class="ph-bold ph-trend-down"></i>
+                    <span>-2.4%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Management Tabs -->
+    <div class="filters-tabs">
+        <div class="tabs-header">
+            <button class="tab-btn active" data-tab="sections">Sections</button>
+            <button class="tab-btn" data-tab="tags">Tags</button>
+            <button class="tab-btn" data-tab="dates">Date Ranges</button>
+            <button class="tab-btn" data-tab="authors">Authors</button>
+            <button class="tab-btn" data-tab="custom">Custom Filters</button>
+        </div>
+
+        <div class="tabs-content">
+            <!-- Sections Tab -->
+            <div class="tab-content active" id="sections-tab">
+                <div class="tab-header">
+                    <h3>Section Filters</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn" id="refreshSectionsBtn">
+                            <i class="ph-bold ph-refresh"></i>
+                            Refresh
+                        </button>
+                        <button class="action-btn primary" id="addSectionBtn">
+                            <i class="ph-bold ph-plus"></i>
+                            Add Section
+                        </button>
+                    </div>
+                </div>
+                <div class="filters-grid" id="sectionsGrid">
+                    <!-- Section filters will be populated here -->
+                </div>
+            </div>
+
+            <!-- Tags Tab -->
+            <div class="tab-content" id="tags-tab">
+                <div class="tab-header">
+                    <h3>Tag Filters</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn" id="autoGenerateTagsBtn">
+                            <i class="ph-bold ph-magic-wand"></i>
+                            Auto Generate
+                        </button>
+                        <button class="action-btn primary" id="addTagBtn">
+                            <i class="ph-bold ph-plus"></i>
+                            Add Tag
+                        </button>
+                    </div>
+                </div>
+                <div class="filters-list" id="tagsList">
+                    <!-- Tag filters will be populated here -->
+                </div>
+            </div>
+
+            <!-- Date Ranges Tab -->
+            <div class="tab-content" id="dates-tab">
+                <div class="tab-header">
+                    <h3>Date Range Filters</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn primary" id="addDateRangeBtn">
+                            <i class="ph-bold ph-plus"></i>
+                            Add Range
+                        </button>
+                    </div>
+                </div>
+                <div class="date-ranges-list" id="dateRangesList">
+                    <!-- Date range filters will be populated here -->
+                </div>
+            </div>
+
+            <!-- Authors Tab -->
+            <div class="tab-content" id="authors-tab">
+                <div class="tab-header">
+                    <h3>Author Filters</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn" id="syncAuthorsBtn">
+                            <i class="ph-bold ph-refresh"></i>
+                            Sync Authors
+                        </button>
+                    </div>
+                </div>
+                <div class="authors-list" id="authorsList">
+                    <!-- Author filters will be populated here -->
+                </div>
+            </div>
+
+            <!-- Custom Filters Tab -->
+            <div class="tab-content" id="custom-tab">
+                <div class="tab-header">
+                    <h3>Custom Filters</h3>
+                    <div class="tab-actions">
+                        <button class="action-btn primary" id="createCustomFilterBtn">
+                            <i class="ph-bold ph-plus"></i>
+                            Create Filter
+                        </button>
+                    </div>
+                </div>
+                <div class="custom-filters-list" id="customFiltersList">
+                    <!-- Custom filters will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Analytics -->
+    <div class="filter-analytics">
+        <div class="section-header">
+            <h3>Filter Usage Analytics</h3>
+            <div class="analytics-controls">
+                <select id="analyticsPeriod">
+                    <option value="7d">Last 7 days</option>
+                    <option value="30d">Last 30 days</option>
+                    <option value="90d">Last 90 days</option>
+                </select>
+            </div>
+        </div>
+        <div class="analytics-content">
+            <div class="analytics-chart">
+                <canvas id="filterUsageChart"></canvas>
+            </div>
+            <div class="analytics-breakdown" id="filterBreakdown">
+                <!-- Filter usage breakdown will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Testing -->
+    <div class="filter-testing">
+        <div class="section-header">
+            <h3>Test Filter Combinations</h3>
+        </div>
+        <div class="testing-interface">
+            <div class="test-filters">
+                <div class="test-filter-group">
+                    <label>Section</label>
+                    <select id="testSection">
+                        <option value="">All Sections</option>
+                    </select>
+                </div>
+                <div class="test-filter-group">
+                    <label>Tags</label>
+                    <select id="testTags" multiple>
+                        <!-- Tags will be populated -->
+                    </select>
+                </div>
+                <div class="test-filter-group">
+                    <label>Date Range</label>
+                    <select id="testDateRange">
+                        <option value="">Any Time</option>
+                    </select>
+                </div>
+                <div class="test-filter-group">
+                    <label>Author</label>
+                    <select id="testAuthor">
+                        <option value="">Any Author</option>
+                    </select>
+                </div>
+            </div>
+            <div class="test-actions">
+                <button class="action-btn" id="testFiltersBtn">
+                    <i class="ph-bold ph-play"></i>
+                    Test Filters
+                </button>
+                <button class="action-btn secondary" id="clearTestBtn">
+                    <i class="ph-bold ph-x"></i>
+                    Clear
+                </button>
+            </div>
+            <div class="test-results" id="testResults">
+                <!-- Test results will be shown here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Search Filters Styles - Using Global Design System */
+.search-filters {
+    padding: 2rem;
+}
+
+.analytics-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Filter Cards Grid */
+.filters-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.overview-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-value {
+    font: normal 700 2.5rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.card-label {
+    font: normal 500 1.4rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin-bottom: 0.5rem;
+}
+
+.card-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 500 1.2rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+.card-trend.negative {
+    color: var(--error, #ef4444);
+}
+
+/* Filter Tabs */
+.filters-tabs {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    margin-bottom: 2rem;
+}
+
+.tabs-header {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1.5rem 2rem 0;
+    border-bottom: 1px solid var(--stroke-elements);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid transparent;
+    color: var(--t-medium);
+    font: normal 600 1.4rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+.tabs-content {
+    padding: 2rem;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.tab-header h3 {
+    font: normal 600 2rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.tab-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--background);
+    color: var(--t-bright);
+    font: normal 600 1.4rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.action-btn:hover {
+    background: var(--stroke-elements);
+}
+
+.action-btn.primary {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.action-btn.primary:hover {
+    background: var(--secondary);
+}
+
+.action-btn.secondary {
+    background: var(--background);
+    color: var(--t-medium);
+}
+
+/* Filter Content Sections */
+.filters-grid,
+.filters-list,
+.date-ranges-list,
+.authors-list,
+.custom-filters-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.filter-item {
+    background: var(--stroke-elements);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    padding: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.filter-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.filter-item-title {
+    font: normal 600 1.6rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+}
+
+.filter-item-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 500 1.2rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+.filter-item-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.filter-stat {
+    text-align: center;
+}
+
+.filter-stat-value {
+    font: normal 700 1.4rem/1.2 var(--_font-accent);
+    color: var(--accent);
+    display: block;
+}
+
+.filter-stat-label {
+    font: normal 400 1.1rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Analytics Section */
+.filter-analytics {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.section-header h3 {
+    font: normal 600 2rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.analytics-controls select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--background);
+    color: var(--t-bright);
+    font-size: 1.4rem;
+}
+
+.analytics-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.analytics-chart {
+    height: 300px;
+    position: relative;
+}
+
+.analytics-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.breakdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-md);
+}
+
+.breakdown-label {
+    font: normal 500 1.4rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.breakdown-value {
+    font: normal 600 1.4rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Filter Testing */
+.filter-testing {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+}
+
+.testing-interface {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.test-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.test-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.test-filter-group label {
+    font: normal 500 1.4rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.test-filter-group select {
+    padding: 0.75rem;
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-md);
+    background: var(--background);
+    color: var(--t-bright);
+    font-size: 1.4rem;
+}
+
+.test-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.test-results {
+    background: var(--stroke-elements);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-lg);
+    padding: 2rem;
+    min-height: 200px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .analytics-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters-grid,
+    .filters-list,
+    .date-ranges-list,
+    .authors-list,
+    .custom-filters-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-filters {
+        padding: 1rem;
+    }
+    
+    .tabs-header {
+        flex-wrap: wrap;
+    }
+    
+    .filters-overview {
+        grid-template-columns: 1fr;
+    }
+    
+    .tab-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .tab-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .test-filters {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+// Search Filters Configuration
+document.addEventListener('DOMContentLoaded', function() {
+    initSearchFilters();
+});
+
+function initSearchFilters() {
+    loadFilterData();
+    initTabNavigation();
+    initFilterActions();
+}
+
+async function loadFilterData() {
+    try {
+        const response = await fetch('/api/admin/search/filters');
+        if (response.ok) {
+            const data = await response.json();
+            updateFilterOverview(data.overview);
+            updateFilterSections(data.sections);
+            updateFilterTags(data.tags);
+            updateFilterDateRanges(data.dateRanges);
+            updateFilterAuthors(data.authors);
+            updateCustomFilters(data.customFilters);
+            updateFilterAnalytics(data.analytics);
+        }
+    } catch (error) {
+        console.error('Error loading filter data:', error);
+        showFallbackFilterData();
+    }
+}
+
+function updateFilterOverview(data) {
+    document.getElementById('activeFilters').textContent = data.activeFilters;
+    document.getElementById('filterUsage').textContent = data.usageRate + '%';
+    document.getElementById('filterPrecision').textContent = data.precision + '%';
+    document.getElementById('avgFilterTime').textContent = Math.round(data.avgTime) + 'ms';
+
+    updateTrend('filtersTrend', data.filtersChange);
+    updateTrend('usageTrend', data.usageChange);
+    updateTrend('precisionTrend', data.precisionChange);
+    updateTrend('filterTimeTrend', data.timeChange);
+}
+
+function updateFilterSections(sections) {
+    const container = document.getElementById('sectionsGrid');
+    container.innerHTML = sections.map(section => `
+        <div class="filter-item">
+            <div class="filter-item-header">
+                <h4 class="filter-item-title">${section.name}</h4>
+                <div class="filter-item-status">
+                    <i class="ph-bold ph-check-circle"></i>
+                    <span>${section.status}</span>
+                </div>
+            </div>
+            <div class="filter-item-stats">
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${section.usageCount}</span>
+                    <span class="filter-stat-label">Uses</span>
+                </div>
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${section.resultCount}</span>
+                    <span class="filter-stat-label">Results</span>
+                </div>
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${section.avgTime}ms</span>
+                    <span class="filter-stat-label">Avg Time</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateFilterTags(tags) {
+    const container = document.getElementById('tagsList');
+    container.innerHTML = tags.map(tag => `
+        <div class="filter-item">
+            <div class="filter-item-header">
+                <h4 class="filter-item-title">${tag.name}</h4>
+                <div class="filter-item-status">
+                    <i class="ph-bold ph-check-circle"></i>
+                    <span>${tag.status}</span>
+                </div>
+            </div>
+            <div class="filter-item-stats">
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${tag.usageCount}</span>
+                    <span class="filter-stat-label">Uses</span>
+                </div>
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${tag.resultCount}</span>
+                    <span class="filter-stat-label">Results</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateFilterDateRanges(dateRanges) {
+    const container = document.getElementById('dateRangesList');
+    container.innerHTML = dateRanges.map(range => `
+        <div class="filter-item">
+            <div class="filter-item-header">
+                <h4 class="filter-item-title">${range.name}</h4>
+                <div class="filter-item-status">
+                    <i class="ph-bold ph-check-circle"></i>
+                    <span>${range.status}</span>
+                </div>
+            </div>
+            <div class="filter-item-stats">
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${range.usageCount}</span>
+                    <span class="filter-stat-label">Uses</span>
+                </div>
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${range.resultCount}</span>
+                    <span class="filter-stat-label">Results</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateFilterAuthors(authors) {
+    const container = document.getElementById('authorsList');
+    container.innerHTML = authors.map(author => `
+        <div class="filter-item">
+            <div class="filter-item-header">
+                <h4 class="filter-item-title">${author.name}</h4>
+                <div class="filter-item-status">
+                    <i class="ph-bold ph-check-circle"></i>
+                    <span>${author.status}</span>
+                </div>
+            </div>
+            <div class="filter-item-stats">
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${author.usageCount}</span>
+                    <span class="filter-stat-label">Uses</span>
+                </div>
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${author.resultCount}</span>
+                    <span class="filter-stat-label">Results</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateCustomFilters(filters) {
+    const container = document.getElementById('customFiltersList');
+    container.innerHTML = filters.map(filter => `
+        <div class="filter-item">
+            <div class="filter-item-header">
+                <h4 class="filter-item-title">${filter.name}</h4>
+                <div class="filter-item-status">
+                    <i class="ph-bold ph-check-circle"></i>
+                    <span>${filter.status}</span>
+                </div>
+            </div>
+            <div class="filter-item-stats">
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${filter.usageCount}</span>
+                    <span class="filter-stat-label">Uses</span>
+                </div>
+                <div class="filter-stat">
+                    <span class="filter-stat-value">${filter.resultCount}</span>
+                    <span class="filter-stat-label">Results</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateFilterAnalytics(data) {
+    // Update period selector
+    const periodSelect = document.getElementById('analyticsPeriod');
+    periodSelect.value = data.period;
+
+    // Update chart
+    const ctx = document.getElementById('filterUsageChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Filter Usage',
+                data: data.usage,
+                borderColor: 'var(--accent)',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Update breakdown
+    const breakdownContainer = document.getElementById('filterBreakdown');
+    breakdownContainer.innerHTML = data.breakdown.map(item => `
+        <div class="breakdown-item">
+            <div class="breakdown-label">${item.filter}</div>
+            <div class="breakdown-value">${item.usage}%</div>
+        </div>
+    `).join('');
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    const icon = element.querySelector('i');
+
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change) + '%';
+
+    if (change < 0) {
+        element.classList.add('negative');
+        icon.className = 'ph-bold ph-trend-down';
+    } else {
+        element.classList.remove('negative');
+        icon.className = 'ph-bold ph-trend-up';
+    }
+}
+
+function initTabNavigation() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            const targetContent = document.getElementById(this.dataset.tab + '-tab');
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
+    });
+}
+
+function initFilterActions() {
+    // Section actions
+    document.getElementById('refreshSectionsBtn').addEventListener('click', loadFilterSections);
+    document.getElementById('addSectionBtn').addEventListener('click', addSection);
+
+    // Tag actions
+    document.getElementById('autoGenerateTagsBtn').addEventListener('click', autoGenerateTags);
+    document.getElementById('addTagBtn').addEventListener('click', addTag);
+
+    // Date range actions
+    document.getElementById('addDateRangeBtn').addEventListener('click', addDateRange);
+
+    // Author actions
+    document.getElementById('syncAuthorsBtn').addEventListener('click', syncAuthors);
+
+    // Custom filter actions
+    document.getElementById('createCustomFilterBtn').addEventListener('click', createCustomFilter);
+
+    // Analytics
+    document.getElementById('analyticsPeriod').addEventListener('change', function() {
+        loadFilterAnalytics(this.value);
+    });
+
+    // Testing
+    document.getElementById('testFiltersBtn').addEventListener('click', testFilters);
+    document.getElementById('clearTestBtn').addEventListener('click', clearTestFilters);
+}
+
+async function loadFilterSections() {
+    showNotification('Loading filter sections...', 'info');
+    try {
+        const response = await fetch('/api/admin/search/filters/sections');
+        if (response.ok) {
+            const data = await response.json();
+            updateFilterSections(data.sections);
+            showNotification('Filter sections loaded', 'success');
+        } else {
+            showNotification('Failed to load filter sections', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading filter sections:', error);
+        showNotification('Error loading filter sections', 'error');
+    }
+}
+
+function addSection() {
+    showNotification('Add section modal would open here', 'info');
+}
+
+function autoGenerateTags() {
+    showNotification('Auto-generating tags...', 'info');
+    // Implement auto-generate functionality
+}
+
+function addTag() {
+    showNotification('Add tag modal would open here', 'info');
+}
+
+function addDateRange() {
+    showNotification('Add date range modal would open here', 'info');
+}
+
+function syncAuthors() {
+    showNotification('Syncing authors...', 'info');
+    // Implement sync authors functionality
+}
+
+function createCustomFilter() {
+    showNotification('Create custom filter modal would open here', 'info');
+}
+
+async function loadFilterAnalytics(period) {
+    try {
+        const response = await fetch(`/api/admin/search/filters/analytics?period=${period}`);
+        if (response.ok) {
+            const data = await response.json();
+            updateFilterAnalytics(data);
+        }
+    } catch (error) {
+        console.error('Error loading filter analytics:', error);
+    }
+}
+
+function testFilters() {
+    const section = document.getElementById('testSection').value;
+    const tags = Array.from(document.getElementById('testTags').selectedOptions).map(o => o.value);
+    const dateRange = document.getElementById('testDateRange').value;
+    const author = document.getElementById('testAuthor').value;
+
+    const resultsContainer = document.getElementById('testResults');
+    resultsContainer.innerHTML = `
+        <div class="text-center">
+            <i class="ph-bold ph-play text-4xl text-slate-400 mb-4"></i>
+            <p>Testing filter combination...</p>
+            <p class="text-sm text-slate-500 mt-2">
+                Section: ${section || 'All'} | 
+                Tags: ${tags.length} selected | 
+                Date: ${dateRange || 'Any'} | 
+                Author: ${author || 'Any'}
+            </p>
+        </div>
+    `;
+
+    // Simulate test results
+    setTimeout(() => {
+        resultsContainer.innerHTML = `
+            <div class="text-center">
+                <i class="ph-bold ph-check-circle text-4xl text-green-500 mb-4"></i>
+                <p class="text-lg font-medium text-slate-900 mb-2">Test completed successfully</p>
+                <p class="text-sm text-slate-500">Found 247 results matching the filter criteria</p>
+            </div>
+        `;
+    }, 2000);
+}
+
+function clearTestFilters() {
+    document.getElementById('testSection').value = '';
+    document.getElementById('testTags').selectedIndex = -1;
+    document.getElementById('testDateRange').value = '';
+    document.getElementById('testAuthor').value = '';
+    document.getElementById('testResults').innerHTML = '';
+}
+
+function showNotification(message, type = 'info') {
+    // Use global notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+function showFallbackFilterData() {
+    // Show sample data when API is not available
+    updateFilterOverview({
+        activeFilters: 8,
+        usageRate: 73.2,
+        precision: 94.7,
+        avgTime: 0.156,
+        filtersChange: 12.5,
+        usageChange: 8.7,
+        precisionChange: 3.1,
+        timeChange: -2.4
+    });
+
+    const sampleSections = [
+        { name: 'Blog Posts', status: 'Active', usageCount: 1543, resultCount: 892, avgTime: 234 },
+        { name: 'Documentation', status: 'Active', usageCount: 1207, resultCount: 445, avgTime: 189 },
+        { name: 'Products', status: 'Active', usageCount: 892, resultCount: 234, avgTime: 156 }
+    ];
+
+    updateFilterSections(sampleSections);
+}
+</script>

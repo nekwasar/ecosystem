@@ -1,0 +1,78 @@
+{% extends "base_blog.html" %}
+
+{% block title %}Privacy Policy | NekwasaR Blog{% endblock %}
+
+{% block description %}Privacy policy for the NekwasaR Blog platform, outlining how we handle your data and cookies.{%
+endblock %}
+
+{% block content %}
+<div class="pt-32 pb-20 px-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-16 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold font-syne mb-6 text-t-bright">Privacy Policy</h1>
+            <p class="text-xl text-t-medium">Last updated: January 5, 2026</p>
+        </div>
+
+        <!-- Glass Content Card -->
+        <div
+            class="bg-base-tint/50 backdrop-blur-xl border border-stroke-elements rounded-3xl p-8 md:p-12 shadow-2xl space-y-12">
+
+            <section class="space-y-4">
+                <h2 class="text-2xl md:text-3xl font-bold font-syne text-accent">1. Data We Collect</h2>
+                <p class="text-lg leading-relaxed text-t-medium">
+                    To ensure the integrity and security of our platform, we collect minimal but necessary information:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-lg text-t-medium ml-4">
+                    <li><strong>Device Metadata</strong>: We use device fingerprinting (hardware configuration, browser
+                        version) to prevent spam in likes and unique view counts.</li>
+                    <li><strong>Usage Data</strong>: IP addresses and access times are logged for security and
+                        brute-force protection.</li>
+                    <li><strong>Direct Information</strong>: If you subscribe to our newsletter, we store your email
+                        address and name.</li>
+                </ul>
+            </section>
+
+            <section class="space-y-4">
+                <h2 class="text-2xl md:text-3xl font-bold font-syne text-accent">2. Use of Cookies</h2>
+                <p class="text-lg leading-relaxed text-t-medium">
+                    We use cookies primarily for security and session management:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-lg text-t-medium ml-4">
+                    <li><strong>Authentication</strong>: Secure, HttpOnly cookies store your session tokens.</li>
+                    <li><strong>Preferences</strong>: Cookies may be used to remember your theme choice (Light/Dark
+                        mode).</li>
+                </ul>
+            </section>
+
+            <section class="space-y-4">
+                <h2 class="text-2xl md:text-3xl font-bold font-syne text-accent">3. Third-Party Services</h2>
+                <p class="text-lg leading-relaxed text-t-medium">
+                    We use <strong>Brevo</strong> for transactional emails and newsletter delivery. Your email is shared
+                    with Brevo only if you explicitly subscribe. We do not sell your personal data to advertisers.
+                </p>
+            </section>
+
+            <section class="space-y-4">
+                <h2 class="text-2xl md:text-3xl font-bold font-syne text-accent">4. Security</h2>
+                <p class="text-lg leading-relaxed text-t-medium">
+                    We implement industry-standard security measures, including bcrypt password hashing, JWT
+                    authentication, and rate limiting to protect your information.
+                </p>
+            </section>
+
+            <section class="space-y-4">
+                <h2 class="text-2xl md:text-3xl font-bold font-syne text-accent">5. Your Rights</h2>
+                <p class="text-lg leading-relaxed text-t-medium">
+                    You have the right to request deletion of your data or unsubscribe from our newsletter at any time.
+                    For such requests, please contact us via the contact form on our main portfolio.
+                </p>
+            </section>
+
+            <div class="pt-8 border-t border-stroke-elements text-center">
+                <p class="text-t-muted">© 2026 NekwasaR. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

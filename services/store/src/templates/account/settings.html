@@ -1,0 +1,56 @@
+{% extends "account/base.html" %}
+
+{% block dashboard_content %}
+<h2 class="font-display font-bold text-3xl text-t-bright mb-6">Settings</h2>
+
+<div class="space-y-8 max-w-2xl">
+    <!-- Profile -->
+    <section class="glass-panel p-8 rounded-2xl border border-stroke-elements">
+        <h3 class="font-bold text-xl text-t-bright mb-6 border-b border-stroke-elements pb-2">Profile Details</h3>
+
+        <div class="space-y-4">
+            <div class="flex items-center gap-6 mb-6">
+                <div
+                    class="w-16 h-16 rounded-full bg-accent flex items-center justify-center text-white font-bold text-2xl uppercase">
+                    U</div>
+                <button class="text-sm text-accent hover:text-white font-bold">Change Avatar</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-t-muted uppercase tracking-wider mb-2">Display
+                        Name</label>
+                    <input type="text" value="User Account"
+                        class="w-full bg-base-shade border border-stroke-elements rounded-xl px-4 py-3 text-t-bright focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-t-muted uppercase tracking-wider mb-2">Email
+                        Address</label>
+                    <input type="email" value="user@example.com" disabled
+                        class="w-full bg-base-shade/50 border border-stroke-elements rounded-xl px-4 py-3 text-t-muted cursor-not-allowed">
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button
+                    class="px-6 py-3 bg-white/5 hover:bg-accent text-t-bright hover:text-white font-bold rounded-xl border border-stroke-elements hover:border-accent transition-all">Save
+                    Changes</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security -->
+    <section class="glass-panel p-8 rounded-2xl border border-red-500/20">
+        <h3 class="font-bold text-xl text-t-bright mb-6 border-b border-stroke-elements pb-2">Danger Zone</h3>
+
+        <div class="flex items-center justify-between">
+            <div>
+                <h4 class="font-bold text-t-bright">Delete Account</h4>
+                <p class="text-sm text-t-muted">Permanently remove your data and licenses.</p>
+            </div>
+            <button
+                class="px-4 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white font-bold rounded-lg border border-red-500/20 transition-all text-sm">Delete</button>
+        </div>
+    </section>
+</div>
+{% endblock %}

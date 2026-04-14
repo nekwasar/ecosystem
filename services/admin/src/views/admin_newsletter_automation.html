@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automations | Newsletter Pro</title>
+    <script>
+        // Synchronous theme detection to prevent flickering
+        (function () {
+            const theme = localStorage.getItem('admin.theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+        })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .premium-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        .trigger-card {
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .trigger-card:hover {
+            transform: translateY(-2px);
+            border-color: #6366f1;
+        }
+
+        .trigger-card.selected {
+            background: #eef2ff;
+            border-color: #6366f1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .trigger-card.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: #6366f1;
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+
+<body class="bg-[#f8fafc] dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Header with Dual Buttons -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <div>
+                <h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+                    Marketing <span class="text-brand-600">Automation</span>
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-lg">Manage flows, welcome sequences, and triggered
+                    events.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Button: Default Workflow -->
+                <button onclick="openCreateStep(1)"
+                    class="group relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-white rounded-xl bg-gradient-to-br from-brand-600 to-indigo-600 focus:ring-4 focus:outline-none focus:ring-brand-300 dark:focus:ring-brand-800 transition-all duration-300 hover:scale-105 active:scale-95">
+                    <span
+                        class="relative px-6 py-3 transition-all ease-in duration-75 bg-brand-600 dark:bg-brand-600 rounded-xl group-hover:bg-opacity-0 flex items-center gap-2">
+                        <i class="ph-bold ph-gear-six text-xl"></i>
+                        <span class="text-base font-semibold">Set Default Workflow</span>
+                    </span>
+                </button>
+
+                <!-- Button: Targeted Workflow (Coming Later) -->
+                <button onclick="alert('Targeted Workflows with advanced segmentation are coming in the next update!')"
+                    class="px-6 py-3.5 border-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-bold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center gap-2">
+                    <i class="ph-bold ph-plus-circle text-xl"></i>
+                    <span>Create Targeted Workflow</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <!-- Total Automations -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                        <i class="ph-bold ph-robot text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Workflows</p>
+                        <h3 class="text-2xl font-bold mt-0.5" id="statTotalAutomations">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Workflows -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                        <i class="ph-bold ph-lightning text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Active</p>
+                        <h3 class="text-2xl font-bold mt-0.5" id="statActiveAutomations">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Queue -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                        <i class="ph-bold ph-hourglass text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Queue</p>
+                        <h3 class="text-2xl font-bold mt-0.5" id="statPendingQueue">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Sent -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400">
+                        <i class="ph-bold ph-check-circle text-2xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Sent</p>
+                        <h3 class="text-2xl font-bold mt-0.5" id="statHistorySent">0</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automation List -->
+        <div class="space-y-4" id="automationList">
+            <!-- Content will be injected here -->
+            <div class="flex flex-col items-center justify-center py-20 grayscale opacity-40">
+                <i class="ph-duotone ph-spinner-gap animate-spin text-5xl mb-4 text-brand-600"></i>
+                <p class="text-lg font-bold text-slate-900 dark:text-white">Initializing Automation Engine...</p>
+            </div>
+        </div>
+
+        <!-- Empty State (Hidden) -->
+        <div id="emptyState"
+            class="hidden glass premium-shadow border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl p-20 flex flex-col items-center justify-center text-center">
+            <div class="w-24 h-24 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-6">
+                <i class="ph-duotone ph-robot text-5xl text-slate-400"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">No Automations Active</h3>
+            <p class="text-slate-500 dark:text-slate-400 max-w-sm mb-8">It looks like your newsletter is still running
+                manually. Set up your first automation to save time.</p>
+            <button onclick="openCreateStep(1)"
+                class="px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition-all hover:shadow-lg">
+                Get Started
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Create Workflow Modal (Multi-step) -->
+    <dialog id="createModal"
+        class="rounded-3xl p-0 overflow-hidden shadow-2xl w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+
+        <div class="flex flex-col h-full">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white" id="modalTitle">Default Workflow Setup</h3>
+                <button onclick="closeModal()"
+                    class="w-10 h-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
+                    <i class="ph-bold ph-x text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content (Step 1: Select Trigger) -->
+            <div id="step1" class="p-8">
+                <p class="text-slate-600 dark:text-slate-400 mb-6 font-medium uppercase text-xs tracking-widest">Step 1:
+                    Choose a Trigger</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Trigger: Welcome -->
+                    <div onclick="selectTrigger('welcome')" id="trigger-welcome"
+                        class="trigger-card p-5 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex flex-col gap-3 group">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400 group-hover:scale-110 transition-transform">
+                            <i class="ph-bold ph-user-plus text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white">New Subscriber</h4>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Runs immediately when
+                                someone joins your newsletter list.</p>
+                        </div>
+                    </div>
+
+                    <!-- Trigger: Post Published -->
+                    <div onclick="selectTrigger('post_published')" id="trigger-post_published"
+                        class="trigger-card p-5 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex flex-col gap-3 group">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                            <i class="ph-bold ph-newspaper text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white">Post Published</h4>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Auto-notify your list
+                                immediately when you publish a new article.</p>
+                        </div>
+                    </div>
+
+                    <!-- Trigger: Segment Added (Commented out) -->
+                    <!-- 
+                    <div onclick="selectTrigger('segment_added')" id="trigger-segment_added"
+                        class="trigger-card p-5 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex flex-col gap-3 group">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                            <i class="ph-bold ph-users-three text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-400 flex items-center gap-2">
+                                Added to Segment
+                                <span
+                                    class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-400 rounded-md">Coming
+                                    Soon</span>
+                            </h4>
+                            <p class="text-sm text-slate-400 dark:text-slate-500 leading-relaxed italic">Trigger when
+                                a user is moved to a specific mailing segment.</p>
+                        </div>
+                    </div>
+                    -->
+
+                    <!-- Trigger: Click (Commented out) -->
+                    <!-- 
+                    <div onclick="selectTrigger('link_click')" id="trigger-link_click"
+                        class="trigger-card p-5 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex flex-col gap-3 group">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+                            <i class="ph-bold ph-cursor-click text-2xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-slate-400 flex items-center gap-2">
+                                Link Click
+                                <span
+                                    class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-400 rounded-md">Coming
+                                    Soon</span>
+                            </h4>
+                            <p class="text-sm text-slate-400 dark:text-slate-500 leading-relaxed italic">Send follow-ups
+                                based on what users click in your emails.</p>
+                        </div>
+                    </div>
+                    -->
+                </div>
+                <div class="mt-8 flex justify-end">
+                    <button onclick="goToStep(2)" id="nextBtn" disabled
+                        class="px-8 py-3 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold rounded-xl transition-all disabled:opacity-50">
+                        Continue to Configuration
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Content (Step 2: Configure & Save) -->
+            <div id="step2" class="p-8 hidden">
+                <p class="text-slate-600 dark:text-slate-400 mb-6 font-medium uppercase text-xs tracking-widest">Step 2:
+                    Set the Action</p>
+                <form id="createForm" onsubmit="handleCreate(event)" class="space-y-6">
+                    <input type="hidden" name="trigger_type" id="selectedTrigger">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Internal
+                                Name</label>
+                            <input type="text" name="name" required placeholder="e.g. 5-Day Welcome Sequence"
+                                class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-brand-500 focus:outline-none transition-colors">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Sender
+                                Name</label>
+                            <input type="text" name="sender_name" required placeholder="e.g. NekwasaR Team"
+                                class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-brand-500 focus:outline-none transition-colors">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Email Subject
+                            Line</label>
+                        <input type="text" name="subject" required placeholder="e.g. Welcome to the Tribe! 🎁"
+                            class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-brand-500 focus:outline-none transition-colors">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Wait before
+                                sending</label>
+                            <div class="relative">
+                                <input type="number" name="delay_hours" value="0" min="0" required
+                                    class="w-full pl-5 pr-12 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:border-brand-500 focus:outline-none transition-colors">
+                                <span
+                                    class="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-slate-400">hours</span>
+                            </div>
+                            <p class="text-xs text-slate-400">Set to 0 for immediate sending.</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-bold text-slate-900 dark:text-slate-300">Select Email
+                                Template</label>
+                            <select name="template_id" id="templateSelect" required
+                                class="w-full px-5 py-4 rounded-xl border-2 border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 appearance-none focus:border-brand-500 focus:outline-none transition-colors">
+                                <option value="">Loading templates...</option>
+                            </select>
+                            <div id="templateError"
+                                class="hidden text-xs text-rose-500 font-medium flex items-center gap-1 mt-1">
+                                <i class="ph-bold ph-warning-circle"></i>
+                                <span id="templateErrorMsg">Error loading templates</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 flex justify-between gap-4">
+                        <button type="button" onclick="goToStep(1)"
+                            class="px-6 py-4 rounded-xl font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                            Back
+                        </button>
+                        <button type="submit"
+                            class="px-10 py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-brand-500/20 active:scale-95">
+                            Launch Automation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </dialog>
+
+    <script>
+        console.log('🚀 AUTOMATION SCRIPT INITIALIZING...');
+
+        var allAutomations = [];
+        var allTemplates = [];
+        var selectedTriggerType = null;
+        var modal = document.getElementById('createModal');
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            console.log('✅ Document already loaded - Triggering Init immediately');
+            init();
+        }
+
+        async function init() {
+            // Run all fetches, but don't let one failure block everything
+            try {
+                await Promise.allSettled([fetchAutomations(), fetchTemplates(), fetchStats()]);
+                render();
+            } catch (e) {
+                console.error('Init error:', e);
+                render(); // Try to render anyway
+            }
+        }
+
+        async function fetchStats() {
+            try {
+                console.log('📊 [Dashboard] Fetching Stats...');
+                const res = await fetch('/api/newsletter/admin/automations/stats', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('statPendingQueue').innerText = data.stats.pending_queue;
+                    document.getElementById('statHistorySent').innerText = data.stats.total_sent;
+                    console.log('📊 Stats Updated:', data.stats);
+                } else {
+                    console.error('📊 Stats API Error:', data.detail);
+                }
+            } catch (e) {
+                console.error('📊 Stats Fetch Exception:', e);
+            }
+        }
+
+        async function fetchAutomations() {
+            try {
+                console.log('🤖 [Dashboard] Fetching Automations...');
+                const res = await fetch('/api/newsletter/admin/automations', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    allAutomations = data.automations || [];
+                    console.log('🤖 Automations Loaded:', allAutomations.length);
+                } else {
+                    console.error('🤖 Automations API Error:', data.detail);
+                }
+
+                document.getElementById('statTotalAutomations').innerText = allAutomations.length;
+                document.getElementById('statActiveAutomations').innerText = allAutomations.filter(a => a.is_active).length;
+            } catch (e) {
+                console.error('🤖 Automations Fetch Exception:', e);
+            }
+        }
+
+        async function fetchTemplates() {
+            const sel = document.getElementById('templateSelect');
+            const errDiv = document.getElementById('templateError');
+            const errMsg = document.getElementById('templateErrorMsg');
+
+            try {
+                console.group('🔧 [AutomationWizard] Fetching Templates');
+                console.log('Endpoint: /api/newsletter/admin/templates');
+
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.warn('No token found in localStorage!');
+                }
+
+                const res = await fetch('/api/newsletter/admin/templates', {
+                    headers: { 'Authorization': `Bearer ${token || ''}` }
+                });
+
+                console.log('HTTP Status:', res.status);
+
+                if (!res.ok) {
+                    const errBody = await res.text();
+                    console.error('Fetch Failed. Body:', errBody);
+                    throw new Error(`Server returned ${res.status}: ${errBody.substring(0, 100)}`);
+                }
+
+                const data = await res.json();
+                console.log('Data Received:', data);
+
+                if (data.success) {
+                    allTemplates = data.templates || [];
+                    console.log('Template Count:', allTemplates.length);
+
+                    if (allTemplates.length === 0) {
+                        sel.innerHTML = '<option value="">No templates found</option>';
+                        errDiv.classList.remove('hidden');
+                        errMsg.innerText = "You haven't created any templates yet.";
+                    } else {
+                        sel.innerHTML = '<option value="">Choose a template...</option>';
+                        allTemplates.forEach(t => {
+                            sel.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+                        });
+                        errDiv.classList.add('hidden');
+                    }
+                } else {
+                    console.error('API Error:', data.detail || 'Access denied');
+                    throw new Error(data.detail || 'API returned success: false');
+                }
+            } catch (e) {
+                console.error('🚨 fetchTemplates Exception:', e);
+                sel.innerHTML = `<option value="">Fetch Failed</option>`;
+                errDiv.classList.remove('hidden');
+                errMsg.innerText = `Error: ${e.message}`;
+            } finally {
+                console.groupEnd();
+            }
+        }
+
+        function render() {
+            const listContainer = document.getElementById('automationList');
+            listContainer.innerHTML = '';
+
+            if (allAutomations.length === 0) {
+                document.getElementById('emptyState').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('emptyState').classList.add('hidden');
+
+            allAutomations.forEach(auto => {
+                // Use loose equality (==) just in case types mismatch (string vs int)
+                const tpl = allTemplates.find(t => t.id == auto.template_id);
+                const tplName = tpl ? tpl.name : (auto.template_id ? `Template #${auto.template_id} (Unresolved)` : 'No Template Set');
+
+                // Icon Logic
+                let triggerIcon = 'ph-bold ph-robot';
+                let triggerColor = 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400';
+                let triggerName = auto.trigger_type || 'Unknown Trigger';
+
+                if (auto.trigger_type === 'welcome') {
+                    triggerIcon = 'ph-bold ph-user-plus';
+                    triggerColor = 'bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400';
+                    triggerName = 'New Subscriber';
+                }
+
+                const card = document.createElement('div');
+                card.className = "glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl overflow-hidden group hover:border-brand-500/50 transition-all";
+                card.innerHTML = `
+                    <div class="p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div class="flex items-start sm:items-center gap-5">
+                            <div class="w-14 h-14 rounded-2xl ${triggerColor} flex items-center justify-center shrink-0">
+                                <i class="${triggerIcon} text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white group-hover:text-brand-500 transition-colors">${auto.name}</h3>
+                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 -mt-1 italic">"${auto.subject || 'No subject set'}"</p>
+                                <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-slate-500 dark:text-slate-400">
+                                    <div class="flex items-center gap-1.5 text-sm">
+                                        <i class="ph-bold ph-user"></i>
+                                        Sender: <span class="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider ml-0.5">${auto.sender_name || 'System Default'}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-sm">
+                                        <i class="ph-fill ph-circle text-[8px] text-brand-500"></i>
+                                        Triggered by <span class="font-bold text-slate-900 dark:text-white uppercase text-[10px] tracking-wider ml-0.5">${triggerName}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-sm">
+                                        <i class="ph-bold ph-paper-plane-tilt"></i>
+                                        Delay: <span class="font-bold text-slate-900 dark:text-white">${auto.delay_hours} hours</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-sm">
+                                        <i class="ph-bold ph-file-text"></i>
+                                        Template: <span class="font-bold text-slate-900 dark:text-white underline decoration-brand-500/30 underline-offset-4">${tplName}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between sm:justify-end gap-6 pt-6 lg:pt-0 border-t lg:border-t-0 border-slate-100 dark:border-slate-700">
+                            <div class="flex flex-col items-end">
+                                <span class="text-[10px] font-bold uppercase text-slate-400 tracking-widest mb-1.5">Workflow Status</span>
+                                <div class="flex items-center gap-3">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" ${auto.is_active ? 'checked' : ''} onchange="toggleWorkflow(${auto.id}, this.checked)" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-brand-600"></div>
+                                    </label>
+                                    <span class="text-sm font-bold ${auto.is_active ? 'text-emerald-500' : 'text-slate-400'}">${auto.is_active ? 'Active' : 'Paused'}</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <button onclick="deleteAutomation(${auto.id})" class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-900/10 text-rose-500 hover:bg-rose-500 hover:text-white flex items-center justify-center transition-all border border-rose-100/50 dark:border-rose-900/20">
+                                    <i class="ph-bold ph-trash text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        function openCreateStep(step) {
+            goToStep(step);
+            modal.showModal();
+        }
+
+        function closeModal() {
+            modal.close();
+            resetModal();
+        }
+
+        function resetModal() {
+            selectedTriggerType = null;
+            document.querySelectorAll('.trigger-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('createForm').reset();
+        }
+
+        function goToStep(step) {
+            if (step === 1) {
+                document.getElementById('step1').classList.remove('hidden');
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('modalTitle').innerText = 'Select a Trigger';
+            } else if (step === 2) {
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+                document.getElementById('modalTitle').innerText = 'Flow Configuration';
+                document.getElementById('selectedTrigger').value = selectedTriggerType;
+            }
+        }
+
+        function selectTrigger(type) {
+            // Prevent choosing "coming soon" triggers for now
+            const allowed = ['welcome', 'post_published'];
+            if (!allowed.includes(type)) return;
+
+            selectedTriggerType = type;
+            document.querySelectorAll('.trigger-card').forEach(c => c.classList.remove('selected'));
+            document.getElementById('trigger-' + type).classList.add('selected');
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').classList.remove('bg-slate-200', 'text-slate-500');
+            document.getElementById('nextBtn').classList.add('bg-brand-600', 'text-white', 'hover:shadow-lg');
+        }
+
+        async function handleCreate(e) {
+            e.preventDefault();
+            const fd = new FormData(e.target);
+
+            try {
+                const res = await fetch('/api/newsletter/admin/automations', {
+                    method: 'POST',
+                    body: fd,
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeModal();
+                    await init();
+                } else {
+                    alert('Configuration Error: ' + (data.detail || 'Data validation failed'));
+                }
+            } catch (err) { console.error(err); alert('Network connection lost'); }
+        }
+
+        async function toggleWorkflow(id, active) {
+            try {
+                const res = await fetch(`/api/newsletter/admin/automations/${id}/toggle`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ is_active: active }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                    }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    // Update state visually or re-init
+                    await init();
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        async function deleteAutomation(id) {
+            if (!confirm('Are you sure you want to delete this automation flow? This cannot be undone.')) return;
+            try {
+                const res = await fetch(`/api/newsletter/admin/automations/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) init();
+            } catch (e) { console.error(e); }
+        }
+    </script>
+</body>
+
+</html>

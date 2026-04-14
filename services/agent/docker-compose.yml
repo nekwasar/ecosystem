@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecosystem_agent
+    restart: always
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://ecosystem:password@postgres:5432/agent_db}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - ecosystem_network
+
+networks:
+  ecosystem_network:
+    driver: bridge

@@ -1,0 +1,1085 @@
+<!-- Retro Drafts Management System -->
+<div class="retro-drafts-container">
+    <!-- Retro CRT Header -->
+    <div class="retro-header">
+        <div class="retro-title-bar">
+            <div class="retro-title-left">
+                <div class="retro-title-icon">📝</div>
+                <h2 class="retro-title">DRAFT STORAGE SYSTEM v2.1</h2>
+            </div>
+            <div class="retro-title-right">
+                <div class="retro-status-led status-active"></div>
+                <span class="retro-status-text">AUTO-SAVE ACTIVE</span>
+            </div>
+        </div>
+        <div class="retro-menu-bar">
+            <div class="retro-menu-item active">FILES</div>
+            <div class="retro-menu-item">EDIT</div>
+            <div class="retro-menu-item">SEARCH</div>
+            <div class="retro-menu-item">HELP</div>
+        </div>
+    </div>
+
+    <!-- Main Retro Interface -->
+    <div class="retro-main-panel">
+        <!-- Left Sidebar - Quick Actions -->
+        <div class="retro-sidebar">
+            <div class="retro-panel-title">QUICK ACTIONS</div>
+            <div class="retro-actions-list">
+                <button class="retro-action-btn">
+                    <span class="retro-action-icon">📄</span>
+                    <span class="retro-action-text">NEW DRAFT</span>
+                </button>
+                <button class="retro-action-btn">
+                    <span class="retro-action-icon">🔍</span>
+                    <span class="retro-action-text">SEARCH</span>
+                </button>
+                <button class="retro-action-btn">
+                    <span class="retro-action-icon">💾</span>
+                    <span class="retro-action-text">EXPORT</span>
+                </button>
+                <button class="retro-action-btn retro-danger">
+                    <span class="retro-action-icon">🗑️</span>
+                    <span class="retro-action-text">CLEANUP</span>
+                </button>
+            </div>
+
+            <!-- Retro Storage Stats -->
+            <div class="retro-panel-title">STORAGE</div>
+            <div class="retro-storage-info">
+                <div class="retro-storage-item">
+                    <span class="retro-label">TOTAL DRAFTS:</span>
+                    <span class="retro-value">24</span>
+                </div>
+                <div class="retro-storage-item">
+                    <span class="retro-label">AUTO-SAVED:</span>
+                    <span class="retro-value">18</span>
+                </div>
+                <div class="retro-storage-item">
+                    <span class="retro-label">LAST SAVE:</span>
+                    <span class="retro-value retro-timer">2m ago</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Drafts List -->
+        <div class="retro-content-panel">
+            <!-- View Controls -->
+            <div class="retro-view-controls">
+                <div class="retro-view-mode">
+                    <button class="retro-view-btn active">📁 LIST VIEW</button>
+                    <button class="retro-view-btn">🔲 GRID VIEW</button>
+                </div>
+                <div class="retro-sort-controls">
+                    <label class="retro-label">SORT BY:</label>
+                    <select class="retro-select">
+                        <option>Last Modified</option>
+                        <option>Creation Date</option>
+                        <option>Title A-Z</option>
+                        <option>Completion %</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Drafts List -->
+            <div class="retro-drafts-list">
+                <!-- Header -->
+                <div class="retro-list-header">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox" id="selectAll">
+                        <label for="selectAll" class="retro-checkbox-label"></label>
+                    </div>
+                    <div class="retro-col-title">TITLE</div>
+                    <div class="retro-col-category">CATEGORY</div>
+                    <div class="retro-col-progress">PROGRESS</div>
+                    <div class="retro-col-saved">LAST SAVED</div>
+                    <div class="retro-col-actions">ACTIONS</div>
+                </div>
+
+                <!-- Draft Items -->
+                <div class="retro-draft-item" data-draft-id="1">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox">
+                    </div>
+                    <div class="retro-col-title">
+                        <div class="retro-title-main">AI Ethics in 2025: Navigating the Future</div>
+                        <div class="retro-title-meta">Auto-saved • 1,247 words</div>
+                    </div>
+                    <div class="retro-col-category">
+                        <span class="retro-category-tag ai-tag">AI & Technology</span>
+                    </div>
+                    <div class="retro-col-progress">
+                        <div class="retro-progress-bar">
+                            <div class="retro-progress-fill" style="width: 75%"></div>
+                        </div>
+                        <span class="retro-progress-text">75%</span>
+                    </div>
+                    <div class="retro-col-saved">
+                        <div class="retro-timestamp">2m ago</div>
+                        <div class="retro-save-status saved"></div>
+                    </div>
+                    <div class="retro-col-actions">
+                        <button class="retro-action-icon-btn" title="Edit Draft">✏️</button>
+                        <button class="retro-action-icon-btn" title="Preview">👁️</button>
+                        <button class="retro-action-icon-btn" title="Publish">📤</button>
+                        <button class="retro-action-icon-btn retro-danger" title="Delete">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="retro-draft-item" data-draft-id="2">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox">
+                    </div>
+                    <div class="retro-col-title">
+                        <div class="retro-title-main">Building Billion-Dollar Startups: The Complete Guide</div>
+                        <div class="retro-title-meta">Auto-saved • 2,156 words</div>
+                    </div>
+                    <div class="retro-col-category">
+                        <span class="retro-category-tag startup-tag">Innovation</span>
+                    </div>
+                    <div class="retro-col-progress">
+                        <div class="retro-progress-bar">
+                            <div class="retro-progress-fill" style="width: 90%"></div>
+                        </div>
+                        <span class="retro-progress-text">90%</span>
+                    </div>
+                    <div class="retro-col-saved">
+                        <div class="retro-timestamp">8m ago</div>
+                        <div class="retro-save-status saved"></div>
+                    </div>
+                    <div class="retro-col-actions">
+                        <button class="retro-action-icon-btn" title="Edit Draft">✏️</button>
+                        <button class="retro-action-icon-btn" title="Preview">👁️</button>
+                        <button class="retro-action-icon-btn" title="Publish">📤</button>
+                        <button class="retro-action-icon-btn retro-danger" title="Delete">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="retro-draft-item" data-draft-id="3">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox">
+                    </div>
+                    <div class="retro-col-title">
+                        <div class="retro-title-main">Modern Web Development: React vs Vue in 2025</div>
+                        <div class="retro-title-meta">Auto-saved • 856 words</div>
+                    </div>
+                    <div class="retro-col-category">
+                        <span class="retro-category-tag web-tag">Web Development</span>
+                    </div>
+                    <div class="retro-col-progress">
+                        <div class="retro-progress-bar">
+                            <div class="retro-progress-fill" style="width: 45%"></div>
+                        </div>
+                        <span class="retro-progress-text">45%</span>
+                    </div>
+                    <div class="retro-col-saved">
+                        <div class="retro-timestamp">15m ago</div>
+                        <div class="retro-save-status warning"></div>
+                    </div>
+                    <div class="retro-col-actions">
+                        <button class="retro-action-icon-btn" title="Edit Draft">✏️</button>
+                        <button class="retro-action-icon-btn" title="Preview">👁️</button>
+                        <button class="retro-action-icon-btn" title="Publish">📤</button>
+                        <button class="retro-action-icon-btn retro-danger" title="Delete">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="retro-draft-item" data-draft-id="4">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox">
+                    </div>
+                    <div class="retro-col-title">
+                        <div class="retro-title-main">Cloud Computing Security: Best Practices</div>
+                        <div class="retro-title-meta">Auto-saved • 1,432 words</div>
+                    </div>
+                    <div class="retro-col-category">
+                        <span class="retro-category-tag security-tag">Security</span>
+                    </div>
+                    <div class="retro-col-progress">
+                        <div class="retro-progress-bar">
+                            <div class="retro-progress-fill" style="width: 60%"></div>
+                        </div>
+                        <span class="retro-progress-text">60%</span>
+                    </div>
+                    <div class="retro-col-saved">
+                        <div class="retro-timestamp">32m ago</div>
+                        <div class="retro-save-status warning"></div>
+                    </div>
+                    <div class="retro-col-actions">
+                        <button class="retro-action-icon-btn" title="Edit Draft">✏️</button>
+                        <button class="retro-action-icon-btn" title="Preview">👁️</button>
+                        <button class="retro-action-icon-btn" title="Publish">📤</button>
+                        <button class="retro-action-icon-btn retro-danger" title="Delete">🗑️</button>
+                    </div>
+                </div>
+
+                <div class="retro-draft-item" data-draft-id="5">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox">
+                    </div>
+                    <div class="retro-col-title">
+                        <div class="retro-title-main">Mobile App Development Trends for 2025</div>
+                        <div class="retro-title-meta">Auto-saved • 723 words</div>
+                    </div>
+                    <div class="retro-col-category">
+                        <span class="retro-category-tag mobile-tag">Mobile</span>
+                    </div>
+                    <div class="retro-col-progress">
+                        <div class="retro-progress-bar">
+                            <div class="retro-progress-fill" style="width: 30%"></div>
+                        </div>
+                        <span class="retro-progress-text">30%</span>
+                    </div>
+                    <div class="retro-col-saved">
+                        <div class="retro-timestamp">1h ago</div>
+                        <div class="retro-save-status warning"></div>
+                    </div>
+                    <div class="retro-col-actions">
+                        <button class="retro-action-icon-btn" title="Edit Draft">✏️</button>
+                        <button class="retro-action-icon-btn" title="Preview">👁️</button>
+                        <button class="retro-action-icon-btn" title="Publish">📤</button>
+                        <button class="retro-action-icon-btn retro-danger" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="retro-pagination">
+                <div class="retro-pagination-info">
+                    <span class="retro-label">DISPLAYING:</span>
+                    <span class="retro-value">1-5 OF 24 DRAFTS</span>
+                </div>
+                <div class="retro-pagination-controls">
+                    <button class="retro-page-btn" disabled>◀ PREV</button>
+                    <div class="retro-page-numbers">
+                        <button class="retro-page-number active">1</button>
+                        <button class="retro-page-number">2</button>
+                        <button class="retro-page-number">3</button>
+                        <button class="retro-page-number">4</button>
+                        <button class="retro-page-number">5</button>
+                    </div>
+                    <button class="retro-page-btn">NEXT ▶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-save Notification -->
+    <div class="retro-autosave-notification">
+        <div class="retro-notification-content">
+            <span class="retro-notification-icon">💾</span>
+            <span class="retro-notification-text">Draft auto-saved 2 minutes ago</span>
+        </div>
+    </div>
+</div>
+
+<!-- Retro Styles (Scoped to drafts page only) -->
+<style>
+/* Retro Drafts Management Styles - Scoped to this page only */
+.retro-drafts-container {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+    color: #00ff00;
+    padding: 0;
+    margin: 0;
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    overflow: hidden;
+    min-height: 600px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Retro CRT Effects */
+.retro-drafts-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.retro-drafts-container * {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+
+/* Retro Header */
+.retro-header {
+    background: linear-gradient(90deg, #0f0f0f, #1f1f1f);
+    border-bottom: 1px solid #00ff00;
+    padding: 8px 12px;
+}
+
+.retro-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.retro-title-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.retro-title-icon {
+    font-size: 16px;
+}
+
+.retro-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #00ff00;
+    text-shadow: 0 0 8px #00ff00;
+    margin: 0;
+}
+
+.retro-title-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.retro-status-led {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.status-active {
+    background: #00ff00;
+    color: #00ff00;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+.retro-status-text {
+    font-size: 11px;
+    color: #00ff00;
+}
+
+.retro-menu-bar {
+    display: flex;
+    gap: 16px;
+}
+
+.retro-menu-item {
+    font-size: 12px;
+    color: #888;
+    cursor: pointer;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.retro-menu-item:hover,
+.retro-menu-item.active {
+    color: #00ff00;
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+/* Main Panel */
+.retro-main-panel {
+    display: flex;
+    min-height: 500px;
+}
+
+/* Sidebar */
+.retro-sidebar {
+    width: 220px;
+    background: #0a0a0a;
+    border-right: 1px solid #00ff00;
+    padding: 12px;
+}
+
+.retro-panel-title {
+    font-size: 11px;
+    color: #00ff00;
+    font-weight: bold;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #00ff00;
+    text-transform: uppercase;
+}
+
+.retro-actions-list {
+    margin-bottom: 16px;
+}
+
+.retro-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    background: transparent;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 8px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.retro-action-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+}
+
+.retro-action-btn.retro-danger:hover {
+    border-color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+}
+
+.retro-storage-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.retro-storage-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+}
+
+.retro-label {
+    color: #888;
+}
+
+.retro-value {
+    color: #00ff00;
+    font-weight: bold;
+}
+
+.retro-timer {
+    animation: blink 1s infinite;
+}
+
+/* Content Panel */
+.retro-content-panel {
+    flex: 1;
+    padding: 12px;
+    background: #0f0f0f;
+}
+
+/* View Controls */
+.retro-view-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #333;
+}
+
+.retro-view-mode {
+    display: flex;
+    gap: 4px;
+}
+
+.retro-view-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.retro-view-btn:hover,
+.retro-view-btn.active {
+    color: #00ff00;
+    border-color: #00ff00;
+}
+
+.retro-sort-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.retro-select {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 11px;
+}
+
+/* Drafts List */
+.retro-drafts-list {
+    border: 1px solid #333;
+}
+
+.retro-list-header {
+    display: grid;
+    grid-template-columns: 40px 2fr 1fr 120px 120px 120px;
+    gap: 8px;
+    background: #1a1a1a;
+    padding: 8px;
+    border-bottom: 1px solid #00ff00;
+    font-size: 10px;
+    font-weight: bold;
+    color: #00ff00;
+    text-transform: uppercase;
+}
+
+.retro-draft-item {
+    display: grid;
+    grid-template-columns: 40px 2fr 1fr 120px 120px 120px;
+    gap: 8px;
+    padding: 8px;
+    border-bottom: 1px solid #222;
+    transition: all 0.2s;
+}
+
+.retro-draft-item:hover {
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.retro-draft-item.selected {
+    background: rgba(0, 255, 0, 0.15);
+    border-color: #00ff00;
+}
+
+/* Retro Checkbox */
+.retro-checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #333;
+    background: #0a0a0a;
+    cursor: pointer;
+}
+
+.retro-checkbox:checked {
+    background: #00ff00;
+    border-color: #00ff00;
+}
+
+/* Title Column */
+.retro-title-main {
+    font-weight: bold;
+    color: #00ff00;
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.retro-title-meta {
+    font-size: 10px;
+    color: #888;
+}
+
+/* Category Tags */
+.retro-category-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: 1px solid;
+}
+
+.ai-tag {
+    background: rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+    border-color: #00ffff;
+}
+
+.startup-tag {
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+    border-color: #ffd700;
+}
+
+.web-tag {
+    background: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+    border-color: #00ff00;
+}
+
+.security-tag {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff0000;
+    border-color: #ff0000;
+}
+
+.mobile-tag {
+    background: rgba(255, 0, 255, 0.2);
+    color: #ff00ff;
+    border-color: #ff00ff;
+}
+
+/* Progress Bar */
+.retro-progress-bar {
+    width: 60px;
+    height: 8px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    position: relative;
+}
+
+.retro-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff00, #88ff88);
+    transition: width 0.3s;
+}
+
+.retro-progress-text {
+    font-size: 9px;
+    color: #00ff00;
+    font-weight: bold;
+}
+
+/* Timestamp and Status */
+.retro-timestamp {
+    font-size: 10px;
+    color: #888;
+}
+
+.retro-save-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 4px;
+}
+
+.retro-save-status.saved {
+    background: #00ff00;
+    box-shadow: 0 0 4px #00ff00;
+}
+
+.retro-save-status.warning {
+    background: #ffaa00;
+    box-shadow: 0 0 4px #ffaa00;
+}
+
+/* Action Buttons */
+.retro-col-actions {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.retro-action-icon-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #00ff00;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: all 0.2s;
+}
+
+.retro-action-icon-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.2);
+}
+
+.retro-action-icon-btn.retro-danger:hover {
+    border-color: #ff4444;
+    background: rgba(255, 68, 68, 0.2);
+    color: #ff4444;
+}
+
+/* Pagination */
+.retro-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background: #1a1a1a;
+    border-top: 1px solid #333;
+}
+
+.retro-pagination-info {
+    display: flex;
+    gap: 8px;
+    font-size: 10px;
+}
+
+.retro-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.retro-page-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    transition: all 0.2s;
+}
+
+.retro-page-btn:hover:not(:disabled),
+.retro-page-btn:disabled {
+    color: #00ff00;
+    border-color: #00ff00;
+}
+
+.retro-page-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.retro-page-numbers {
+    display: flex;
+    gap: 2px;
+}
+
+.retro-page-number {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-size: 10px;
+    transition: all 0.2s;
+}
+
+.retro-page-number:hover,
+.retro-page-number.active {
+    color: #00ff00;
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+/* Auto-save Notification */
+.retro-autosave-notification {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #00ff00;
+    border-radius: 4px;
+    padding: 8px 12px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.retro-notification-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #00ff00;
+}
+
+/* Grid View Styles */
+.retro-drafts-list.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+    padding: 12px;
+}
+
+.retro-drafts-list.grid-view .retro-draft-item {
+    border: 1px solid #333;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .retro-drafts-container {
+        border-color: #00ff00;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .retro-main-panel {
+        flex-direction: column;
+    }
+    
+    .retro-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #00ff00;
+    }
+    
+    .retro-list-header,
+    .retro-draft-item {
+        grid-template-columns: 30px 2fr 1fr 80px 80px 80px;
+        font-size: 10px;
+    }
+    
+    .retro-view-controls {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Scrollbar Styling */
+.retro-drafts-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.retro-drafts-container::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.retro-drafts-container::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 4px;
+}
+
+.retro-drafts-container::-webkit-scrollbar-thumb:hover {
+    background: #88ff88;
+}
+</style>
+
+<!-- Retro Drafts JavaScript -->
+<script>
+function initBlogDrafts() {
+    console.log('Initializing Retro Drafts Management System...');
+    
+    // Update auto-save timer
+    function updateAutoSaveTimer() {
+        const timerElements = document.querySelectorAll('.retro-timer');
+        timerElements.forEach(el => {
+            // This would be connected to actual auto-save functionality
+            console.log('Auto-save timer updated');
+        });
+    }
+    
+    // Draft item interactions
+    function setupDraftInteractions() {
+        const draftItems = document.querySelectorAll('.retro-draft-item');
+        draftItems.forEach(item => {
+            const checkbox = item.querySelector('.retro-checkbox');
+            
+            checkbox?.addEventListener('change', function() {
+                if (this.checked) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+                updateBulkActions();
+            });
+            
+            // Action buttons
+            const actionButtons = item.querySelectorAll('.retro-action-icon-btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const action = this.title;
+                    const draftId = item.dataset.draftId;
+                    handleDraftAction(action, draftId);
+                });
+            });
+        });
+    }
+    
+    function updateBulkActions() {
+        const selectedItems = document.querySelectorAll('.retro-draft-item.selected');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        
+        // Update "select all" checkbox
+        if (selectAllCheckbox) {
+            selectAllCheckbox.checked = selectedItems.length > 0;
+        }
+        
+        // Show/hide bulk action buttons based on selection
+        // This would be implemented for real bulk operations
+    }
+    
+    function handleDraftAction(action, draftId) {
+        console.log(`Executing ${action} for draft ${draftId}`);
+        
+        switch(action) {
+            case 'Edit Draft':
+                // Navigate to draft editor
+                window.location.href = `/admin/blog/posts/edit/${draftId}`;
+                break;
+            case 'Preview':
+                // Open preview modal
+                showDraftPreview(draftId);
+                break;
+            case 'Publish':
+                // Show publish confirmation
+                showPublishDialog(draftId);
+                break;
+            case 'Delete':
+                // Show delete confirmation
+                showDeleteDialog(draftId);
+                break;
+        }
+    }
+    
+    function showDraftPreview(draftId) {
+        // Implementation for draft preview modal
+        console.log(`Showing preview for draft ${draftId}`);
+    }
+    
+    function showPublishDialog(draftId) {
+        // Implementation for publish confirmation dialog
+        console.log(`Showing publish dialog for draft ${draftId}`);
+    }
+    
+    function showDeleteDialog(draftId) {
+        // Implementation for delete confirmation dialog
+        console.log(`Showing delete dialog for draft ${draftId}`);
+    }
+    
+    // View mode switching
+    function setupViewControls() {
+        const viewButtons = document.querySelectorAll('.retro-view-btn');
+        const draftsList = document.querySelector('.retro-drafts-list');
+        
+        viewButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                viewButtons.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Toggle view mode
+                if (this.textContent.includes('GRID')) {
+                    draftsList.classList.add('grid-view');
+                } else {
+                    draftsList.classList.remove('grid-view');
+                }
+            });
+        });
+    }
+    
+    // Quick actions
+    function setupQuickActions() {
+        const actionButtons = document.querySelectorAll('.retro-action-btn');
+        actionButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.querySelector('.retro-action-text').textContent;
+                console.log(`Executing quick action: ${action}`);
+                
+                switch(action) {
+                    case 'NEW DRAFT':
+                        window.location.href = '/admin/blog/posts/new';
+                        break;
+                    case 'SEARCH':
+                        // Open search modal
+                        break;
+                    case 'EXPORT':
+                        // Export drafts functionality
+                        break;
+                    case 'CLEANUP':
+                        // Clean up old drafts
+                        break;
+                }
+            });
+        });
+    }
+    
+    // Pagination
+    function setupPagination() {
+        const pageNumbers = document.querySelectorAll('.retro-page-number');
+        const prevBtn = document.querySelector('.retro-page-btn');
+        const nextBtn = document.querySelectorAll('.retro-page-btn')[1];
+        
+        pageNumbers.forEach(page => {
+            page.addEventListener('click', function() {
+                pageNumbers.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                // Load page data
+                console.log(`Loading page ${this.textContent}`);
+            });
+        });
+        
+        prevBtn?.addEventListener('click', function() {
+            if (!this.disabled) {
+                // Previous page logic
+                console.log('Previous page');
+            }
+        });
+        
+        nextBtn?.addEventListener('click', function() {
+            // Next page logic
+            console.log('Next page');
+        });
+    }
+    
+    // Select all functionality
+    function setupSelectAll() {
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.retro-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                    const item = checkbox.closest('.retro-draft-item');
+                    if (this.checked) {
+                        item.classList.add('selected');
+                    } else {
+                        item.classList.remove('selected');
+                    }
+                });
+                updateBulkActions();
+            });
+        }
+    }
+    
+    // Initialize all functionality
+    setupDraftInteractions();
+    setupViewControls();
+    setupQuickActions();
+    setupPagination();
+    setupSelectAll();
+    
+    // Auto-save timer updates
+    setInterval(updateAutoSaveTimer, 60000); // Update every minute
+    
+    console.log('Retro Drafts Management System initialized successfully');
+}
+
+// Initialize when page is loaded
+document.addEventListener('DOMContentLoaded', initBlogDrafts);
+</script>

@@ -1,0 +1,883 @@
+<div class="analytics-traffic">
+    <div class="analytics-header">
+        <h1 class="page-title">Traffic Analytics</h1>
+        <p class="page-subtitle">Detailed insights into your website traffic patterns</p>
+    </div>
+
+    <!-- Traffic Overview Cards -->
+    <div class="traffic-overview">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-globe"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalPageviews">0</div>
+                <div class="card-label">Total Pageviews</div>
+                <div class="card-trend" id="pageviewsTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+12.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-users"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="uniqueUsers">0</div>
+                <div class="card-label">Unique Users</div>
+                <div class="card-trend" id="usersTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgSessionDuration">0m 0s</div>
+                <div class="card-label">Avg. Session Duration</div>
+                <div class="card-trend" id="sessionTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+15.3%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-sign-out"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="bounceRate">0%</div>
+                <div class="card-label">Bounce Rate</div>
+                <div class="card-trend negative" id="bounceTrend">
+                    <i class="ph-bold ph-trend-down"></i>
+                    <span>-5.1%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Traffic Chart -->
+    <div class="traffic-chart-section">
+        <div class="chart-header">
+            <h2>Traffic Trends</h2>
+            <div class="chart-filters">
+                <button class="filter-btn active" data-period="7d">7 Days</button>
+                <button class="filter-btn" data-period="30d">30 Days</button>
+                <button class="filter-btn" data-period="90d">90 Days</button>
+                <button class="filter-btn" data-period="1y">1 Year</button>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="trafficTrendsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Traffic Breakdown -->
+    <div class="traffic-breakdown">
+        <div class="breakdown-card">
+            <div class="card-header">
+                <h3>Traffic Sources</h3>
+            </div>
+            <div class="source-breakdown">
+                <div class="source-item">
+                    <div class="source-info">
+                        <div class="source-name">Direct</div>
+                        <div class="source-percentage" id="directPercentage">0%</div>
+                    </div>
+                    <div class="source-bar">
+                        <div class="source-fill direct" id="directBar"></div>
+                    </div>
+                </div>
+                <div class="source-item">
+                    <div class="source-info">
+                        <div class="source-name">Search Engines</div>
+                        <div class="source-percentage" id="searchPercentage">0%</div>
+                    </div>
+                    <div class="source-bar">
+                        <div class="source-fill search" id="searchBar"></div>
+                    </div>
+                </div>
+                <div class="source-item">
+                    <div class="source-info">
+                        <div class="source-name">Social Media</div>
+                        <div class="source-percentage" id="socialPercentage">0%</div>
+                    </div>
+                    <div class="source-bar">
+                        <div class="source-fill social" id="socialBar"></div>
+                    </div>
+                </div>
+                <div class="source-item">
+                    <div class="source-info">
+                        <div class="source-name">Referrals</div>
+                        <div class="source-percentage" id="referralPercentage">0%</div>
+                    </div>
+                    <div class="source-bar">
+                        <div class="source-fill referral" id="referralBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="breakdown-card">
+            <div class="card-header">
+                <h3>Device Types</h3>
+            </div>
+            <div class="device-breakdown">
+                <div class="device-item">
+                    <div class="device-icon">
+                        <i class="ph-bold ph-device-desktop"></i>
+                    </div>
+                    <div class="device-info">
+                        <div class="device-name">Desktop</div>
+                        <div class="device-stats" id="desktopStats">0% (0)</div>
+                    </div>
+                </div>
+                <div class="device-item">
+                    <div class="device-icon">
+                        <i class="ph-bold ph-device-tablet"></i>
+                    </div>
+                    <div class="device-info">
+                        <div class="device-name">Tablet</div>
+                        <div class="device-stats" id="tabletStats">0% (0)</div>
+                    </div>
+                </div>
+                <div class="device-item">
+                    <div class="device-icon">
+                        <i class="ph-bold ph-device-mobile"></i>
+                    </div>
+                    <div class="device-info">
+                        <div class="device-name">Mobile</div>
+                        <div class="device-stats" id="mobileStats">0% (0)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Geographic Data -->
+    <div class="geographic-section">
+        <div class="geo-header">
+            <h2>Geographic Distribution</h2>
+        </div>
+        <div class="geo-content">
+            <div class="countries-list" id="topCountries">
+                <!-- Country items will be populated here -->
+            </div>
+            <div class="world-map-placeholder">
+                <div class="map-placeholder">
+                    <i class="ph-bold ph-globe-hemisphere-west"></i>
+                    <p>Interactive world map coming soon</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Activity -->
+    <div class="realtime-section">
+        <div class="realtime-header">
+            <h2>Real-time Activity</h2>
+            <div class="realtime-status">
+                <div class="status-indicator active"></div>
+                <span>Live</span>
+            </div>
+        </div>
+        <div class="realtime-content">
+            <div class="realtime-metric">
+                <div class="metric-icon">
+                    <i class="ph-bold ph-eye"></i>
+                </div>
+                <div class="metric-info">
+                    <div class="metric-value" id="activeUsers">0</div>
+                    <div class="metric-label">Active Users</div>
+                </div>
+            </div>
+            <div class="realtime-metric">
+                <div class="metric-icon">
+                    <i class="ph-bold ph-cursor"></i>
+                </div>
+                <div class="metric-info">
+                    <div class="metric-value" id="currentPageviews">0</div>
+                    <div class="metric-label">Current Pageviews</div>
+                </div>
+            </div>
+            <div class="realtime-metric">
+                <div class="metric-icon">
+                    <i class="ph-bold ph-clock"></i>
+                </div>
+                <div class="metric-info">
+                    <div class="metric-value" id="avgLoadTime">0ms</div>
+                    <div class="metric-label">Avg. Load Time</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.analytics-traffic {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.page-title {
+    font: normal 700 2.38rem/1.2 var(--_font-accent);
+    color: var(--t-accent);
+    background: var(--t-accent);
+    background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font: normal 400 1.26rem/1.4 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Traffic Overview Cards */
+.traffic-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.overview-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 2rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-value {
+    font: normal 700 1.96rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.card-label {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin-bottom: 0.5rem;
+}
+
+.card-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 500 0.84rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+.card-trend.negative {
+    color: var(--error, #ef4444);
+}
+
+/* Traffic Chart Section */
+.traffic-chart-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.chart-header h2 {
+    font: normal 600 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.chart-filters {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    background: none;
+    border: 1px solid var(--stroke-elements);
+    color: var(--t-medium);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--_radius-m);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+}
+
+.filter-btn.active {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.chart-container {
+    height: 400px;
+    position: relative;
+}
+
+/* Traffic Breakdown */
+.traffic-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.breakdown-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+}
+
+.card-header h3 {
+    font: normal 600 1.4rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0 0 2rem 0;
+}
+
+/* Source Breakdown */
+.source-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.source-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.source-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.source-name {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.source-percentage {
+    font: normal 600 0.98rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+.source-bar {
+    height: 8px;
+    background: var(--stroke-elements);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.source-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width var(--_animspeed-slow) var(--_animbezier);
+}
+
+.source-fill.direct { background: var(--accent); }
+.source-fill.search { background: var(--secondary); }
+.source-fill.social { background: var(--success, #10b981); }
+.source-fill.referral { background: var(--warning, #f59e0b); }
+
+/* Device Breakdown */
+.device-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.device-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.device-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+}
+
+.device-info {
+    flex: 1;
+}
+
+.device-name {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.device-stats {
+    font: normal 400 0.84rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Geographic Section */
+.geographic-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.geo-header h2 {
+    font: normal 600 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0 0 2rem 0;
+}
+
+.geo-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.countries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.country-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: var(--_radius-m);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.country-item:hover {
+    background: var(--stroke-elements);
+}
+
+.country-name {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.country-visitors {
+    font: normal 600 0.98rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+.world-map-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+}
+
+.map-placeholder {
+    text-align: center;
+    color: var(--t-medium);
+}
+
+.map-placeholder i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.map-placeholder p {
+    font: normal 500 1.12rem/1.2 var(--_font-default);
+    margin: 0;
+}
+
+/* Real-time Section */
+.realtime-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+}
+
+.realtime-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.realtime-header h2 {
+    font: normal 600 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.realtime-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success, #10b981);
+}
+
+.status-indicator.active {
+    animation: pulse 2s infinite;
+}
+
+.realtime-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.realtime-metric {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.metric-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+}
+
+.metric-info {
+    flex: 1;
+}
+
+.metric-value {
+    font: normal 700 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font: normal 400 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .traffic-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .geo-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .analytics-traffic {
+        padding: 1rem;
+    }
+
+    .traffic-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .chart-filters {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .realtime-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .realtime-content {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+// Traffic Analytics JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initTrafficAnalytics();
+});
+
+function initTrafficAnalytics() {
+    loadTrafficData();
+    initChartFilters();
+    initRealTimeUpdates();
+}
+
+function loadTrafficData(period = '30d') {
+    fetch(`/api/analytics/traffic?period=${period}`)
+        .then(response => response.json())
+        .then(data => {
+            updateTrafficOverview(data.overview);
+            updateTrafficChart(data.chart);
+            updateSourceBreakdown(data.sources);
+            updateDeviceBreakdown(data.devices);
+            updateGeographicData(data.geographic);
+            updateRealTimeMetrics(data.realtime);
+        })
+        .catch(error => {
+            console.error('Error loading traffic data:', error);
+            showFallbackTrafficData();
+        });
+}
+
+function updateTrafficOverview(overview) {
+    document.getElementById('totalPageviews').textContent = overview.pageviews.toLocaleString();
+    document.getElementById('uniqueUsers').textContent = overview.users.toLocaleString();
+    document.getElementById('avgSessionDuration').textContent = formatDuration(overview.sessionDuration);
+    document.getElementById('bounceRate').textContent = overview.bounceRate + '%';
+
+    updateTrend('pageviewsTrend', overview.pageviewsChange);
+    updateTrend('usersTrend', overview.usersChange);
+    updateTrend('sessionTrend', overview.sessionChange);
+    updateTrend('bounceTrend', overview.bounceChange);
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    const icon = element.querySelector('i');
+
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change).toFixed(1) + '%';
+
+    if (change < 0) {
+        element.classList.add('negative');
+        icon.className = 'ph-bold ph-trend-down';
+    } else {
+        element.classList.remove('negative');
+        icon.className = 'ph-bold ph-trend-up';
+    }
+}
+
+function updateTrafficChart(chartData) {
+    const ctx = document.getElementById('trafficTrendsChart').getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (window.trafficChart) {
+        window.trafficChart.destroy();
+    }
+
+    window.trafficChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Pageviews',
+                data: chartData.pageviews,
+                borderColor: 'var(--accent)',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Unique Users',
+                data: chartData.users,
+                borderColor: 'var(--secondary)',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updateSourceBreakdown(sources) {
+    const total = sources.direct + sources.search + sources.social + sources.referral;
+
+    updateSourceBar('direct', sources.direct, total);
+    updateSourceBar('search', sources.search, total);
+    updateSourceBar('social', sources.social, total);
+    updateSourceBar('referral', sources.referral, total);
+}
+
+function updateSourceBar(type, value, total) {
+    const percentage = total > 0 ? (value / total * 100) : 0;
+    document.getElementById(`${type}Percentage`).textContent = Math.round(percentage) + '%';
+    document.getElementById(`${type}Bar`).style.width = percentage + '%';
+}
+
+function updateDeviceBreakdown(devices) {
+    const total = devices.desktop + devices.tablet + devices.mobile;
+
+    updateDeviceStats('desktop', devices.desktop, total);
+    updateDeviceStats('tablet', devices.tablet, total);
+    updateDeviceStats('mobile', devices.mobile, total);
+}
+
+function updateDeviceStats(type, count, total) {
+    const percentage = total > 0 ? (count / total * 100) : 0;
+    document.getElementById(`${type}Stats`).textContent = `${Math.round(percentage)}% (${count.toLocaleString()})`;
+}
+
+function updateGeographicData(geographic) {
+    const container = document.getElementById('topCountries');
+    container.innerHTML = geographic.countries.map(country => `
+        <div class="country-item">
+            <div class="country-name">${country.name}</div>
+            <div class="country-visitors">${country.visitors.toLocaleString()}</div>
+        </div>
+    `).join('');
+}
+
+function updateRealTimeMetrics(realtime) {
+    document.getElementById('activeUsers').textContent = realtime.activeUsers.toLocaleString();
+    document.getElementById('currentPageviews').textContent = realtime.pageviews.toLocaleString();
+    document.getElementById('avgLoadTime').textContent = realtime.loadTime + 'ms';
+}
+
+function initChartFilters() {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadTrafficData(this.dataset.period);
+        });
+    });
+}
+
+function initRealTimeUpdates() {
+    // Update real-time metrics every 30 seconds
+    setInterval(() => {
+        fetch('/api/analytics/realtime')
+            .then(response => response.json())
+            .then(data => updateRealTimeMetrics(data))
+            .catch(error => console.error('Error updating real-time metrics:', error));
+    }, 30000);
+}
+
+function formatDuration(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}m ${remainingSeconds}s`;
+}
+
+function showFallbackTrafficData() {
+    // Show sample data when API is not available
+    updateTrafficOverview({
+        pageviews: 45231,
+        users: 32145,
+        sessionDuration: 184,
+        bounceRate: 42.3,
+        pageviewsChange: 12.5,
+        usersChange: 8.2,
+        sessionChange: 15.3,
+        bounceChange: -5.1
+    });
+
+    updateSourceBreakdown({
+        direct: 12543,
+        search: 18432,
+        social: 6234,
+        referral: 8022
+    });
+
+    updateDeviceBreakdown({
+        desktop: 18432,
+        tablet: 4523,
+        mobile: 22276
+    });
+}
+</script>

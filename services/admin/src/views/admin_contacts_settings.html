@@ -1,0 +1,1111 @@
+<!-- Contact Settings -->
+<div class="contacts-settings">
+    <!-- Settings Header -->
+    <div class="settings-header">
+        <div class="header-content">
+            <h2>Contact Settings</h2>
+            <p>Configure contact form behavior, notifications, and automation</p>
+        </div>
+        <div class="header-actions">
+            <button class="action-btn secondary" id="resetSettingsBtn">
+                <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                Reset to Defaults
+            </button>
+            <button class="action-btn primary" id="saveSettingsBtn">
+                <i class="ph-bold ph-floppy-disk"></i>
+                Save Settings
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Navigation -->
+    <div class="settings-nav">
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="general">
+                <i class="ph-bold ph-gear"></i>
+                General
+            </button>
+            <button class="nav-tab" data-tab="notifications">
+                <i class="ph-bold ph-bell"></i>
+                Notifications
+            </button>
+            <button class="nav-tab" data-tab="automation">
+                <i class="ph-bold ph-robot"></i>
+                Automation
+            </button>
+            <button class="nav-tab" data-tab="security">
+                <i class="ph-bold ph-shield"></i>
+                Security
+            </button>
+            <button class="nav-tab" data-tab="integrations">
+                <i class="ph-bold ph-plug"></i>
+                Integrations
+            </button>
+        </div>
+    </div>
+
+    <!-- Settings Content -->
+    <div class="settings-content">
+        <!-- General Settings -->
+        <div class="settings-section active" id="general-section">
+            <div class="section-header">
+                <h3>General Settings</h3>
+                <p>Basic contact form configuration</p>
+            </div>
+
+            <div class="settings-group">
+                <h4>Contact Form</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="contactFormEnabled">Enable Contact Form</label>
+                        <p>Allow visitors to send messages through the contact form</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="contactFormEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="requiredFields">Required Fields</label>
+                        <p>Select which fields must be filled</p>
+                    </div>
+                    <div class="setting-control">
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked disabled>
+                                <span>Name</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked disabled>
+                                <span>Email</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked>
+                                <span>Subject</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" checked>
+                                <span>Message</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="maxMessageLength">Maximum Message Length</label>
+                        <p>Limit the number of characters in messages</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="number" id="maxMessageLength" value="1000" min="100" max="10000">
+                        <span class="input-help">characters</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4>Response Settings</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="autoResponseEnabled">Auto-Response</label>
+                        <p>Send automatic confirmation emails to senders</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="autoResponseEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="autoResponseTemplate">Auto-Response Template</label>
+                        <p>Template to use for automatic responses</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="autoResponseTemplate">
+                            <option value="">Select template...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="responseDelay">Response Delay</label>
+                        <p>Delay before sending auto-response (seconds)</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="number" id="responseDelay" value="5" min="0" max="300">
+                        <span class="input-help">seconds</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Settings -->
+        <div class="settings-section" id="notifications-section">
+            <div class="section-header">
+                <h3>Notification Settings</h3>
+                <p>Configure how and when you receive notifications</p>
+            </div>
+
+            <div class="settings-group">
+                <h4>Email Notifications</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="emailNotificationsEnabled">Email Notifications</label>
+                        <p>Receive email notifications for new messages</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="emailNotificationsEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="notificationEmail">Notification Email</label>
+                        <p>Email address to receive notifications</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="email" id="notificationEmail" placeholder="admin@example.com">
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="notificationFrequency">Notification Frequency</label>
+                        <p>How often to send notification emails</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="notificationFrequency">
+                            <option value="immediate">Immediate</option>
+                            <option value="hourly">Hourly Digest</option>
+                            <option value="daily">Daily Digest</option>
+                            <option value="weekly">Weekly Digest</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4>Priority Notifications</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="highPriorityNotifications">High Priority Alerts</label>
+                        <p>Send immediate notifications for high priority messages</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="highPriorityNotifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="spamNotifications">Spam Notifications</label>
+                        <p>Notify when messages are marked as spam</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="spamNotifications">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automation Settings -->
+        <div class="settings-section" id="automation-section">
+            <div class="section-header">
+                <h3>Automation Settings</h3>
+                <p>Configure automatic message processing and routing</p>
+            </div>
+
+            <div class="settings-group">
+                <h4>Auto-Categorization</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="autoCategorizationEnabled">Enable Auto-Categorization</label>
+                        <p>Automatically categorize messages based on content</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="autoCategorizationEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="autoCategorizationConfidence">Confidence Threshold</label>
+                        <p>Minimum confidence level for auto-categorization</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="range" id="autoCategorizationConfidence" min="0.1" max="1" step="0.1" value="0.7">
+                        <span class="range-value">70%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4>Auto-Assignment</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="autoAssignmentEnabled">Enable Auto-Assignment</label>
+                        <p>Automatically assign messages to team members</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="autoAssignmentEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="assignmentMethod">Assignment Method</label>
+                        <p>How to assign messages to team members</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="assignmentMethod">
+                            <option value="round-robin">Round Robin</option>
+                            <option value="workload">By Workload</option>
+                            <option value="category">By Category</option>
+                            <option value="random">Random</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4>Auto-Archiving</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="autoArchiveEnabled">Enable Auto-Archiving</label>
+                        <p>Automatically archive old messages</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="autoArchiveEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="autoArchiveDays">Archive After</label>
+                        <p>Number of days before auto-archiving</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="number" id="autoArchiveDays" value="30" min="1" max="365">
+                        <span class="input-help">days</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="settings-section" id="security-section">
+            <div class="section-header">
+                <h3>Security Settings</h3>
+                <p>Configure security measures for contact forms</p>
+            </div>
+
+            <div class="settings-group">
+                <h4>Spam Protection</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="captchaEnabled">CAPTCHA</label>
+                        <p>Require CAPTCHA verification for form submissions</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="captchaEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="honeypotEnabled">Honeypot Protection</label>
+                        <p>Use hidden fields to detect spam bots</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="honeypotEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="rateLimitingEnabled">Rate Limiting</label>
+                        <p>Limit the number of submissions per IP address</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="rateLimitingEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="maxSubmissionsPerHour">Max Submissions per Hour</label>
+                        <p>Maximum submissions allowed per IP per hour</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="number" id="maxSubmissionsPerHour" value="10" min="1" max="100">
+                        <span class="input-help">submissions</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4>Content Filtering</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="blockedWordsEnabled">Blocked Words Filter</label>
+                        <p>Filter messages containing blocked words</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="blockedWordsEnabled" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="blockedWordsList">Blocked Words</label>
+                        <p>Comma-separated list of blocked words</p>
+                    </div>
+                    <div class="setting-control">
+                        <textarea id="blockedWordsList" rows="3" placeholder="spam, viagra, casino..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integrations Settings -->
+        <div class="settings-section" id="integrations-section">
+            <div class="section-header">
+                <h3>Integrations</h3>
+                <p>Connect with external services and tools</p>
+            </div>
+
+            <div class="settings-group">
+                <h4>Email Service</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="emailService">Email Service Provider</label>
+                        <p>Service used to send emails</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="emailService">
+                            <option value="smtp">SMTP</option>
+                            <option value="sendgrid">SendGrid</option>
+                            <option value="mailgun">Mailgun</option>
+                            <option value="ses">Amazon SES</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="smtpHost">SMTP Host</label>
+                        <p>SMTP server hostname</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="text" id="smtpHost" placeholder="smtp.example.com">
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="smtpPort">SMTP Port</label>
+                        <p>SMTP server port</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="number" id="smtpPort" value="587" min="1" max="65535">
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4>CRM Integration</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="crmIntegrationEnabled">CRM Integration</label>
+                        <p>Sync contacts with CRM system</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="crmIntegrationEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="crmProvider">CRM Provider</label>
+                        <p>CRM system to integrate with</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="crmProvider">
+                            <option value="salesforce">Salesforce</option>
+                            <option value="hubspot">HubSpot</option>
+                            <option value="pipedrive">Pipedrive</option>
+                            <option value="zoho">Zoho CRM</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h4>Analytics Integration</h4>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="googleAnalyticsEnabled">Google Analytics</label>
+                        <p>Track contact form conversions</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle">
+                            <input type="checkbox" id="googleAnalyticsEnabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <label for="gaTrackingId">Google Analytics ID</label>
+                        <p>Your Google Analytics tracking ID</p>
+                    </div>
+                    <div class="setting-control">
+                        <input type="text" id="gaTrackingId" placeholder="GA-XXXXXXXXX">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contacts-settings {
+        padding: 2rem;
+    }
+
+    /* Settings Header */
+    .settings-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .header-content h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .header-content p {
+        color: var(--admin-text-secondary);
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .action-btn.primary {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .action-btn.secondary {
+        background: var(--admin-secondary);
+        color: white;
+        border-color: var(--admin-secondary);
+    }
+
+    /* Settings Navigation */
+    .settings-nav {
+        margin-bottom: 2rem;
+    }
+
+    .nav-tabs {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .nav-tab {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: var(--admin-text-secondary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .nav-tab:hover {
+        color: var(--admin-text-primary);
+        background: var(--admin-background);
+    }
+
+    .nav-tab.active {
+        color: var(--admin-primary);
+        border-bottom-color: var(--admin-primary);
+    }
+
+    /* Settings Content */
+    .settings-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .settings-section {
+        display: none;
+    }
+
+    .settings-section.active {
+        display: block;
+    }
+
+    .section-header {
+        margin-bottom: 2rem;
+    }
+
+    .section-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .section-header p {
+        color: var(--admin-text-secondary);
+        margin: 0;
+    }
+
+    .settings-group {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .settings-group h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0 0 1.5rem 0;
+    }
+
+    .setting-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .setting-item:last-child {
+        border-bottom: none;
+    }
+
+    .setting-info {
+        flex: 1;
+        max-width: 60%;
+    }
+
+    .setting-info label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .setting-info p {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+        margin: 0;
+    }
+
+    .setting-control {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+
+    .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--admin-border);
+        transition: 0.3s;
+        border-radius: 24px;
+    }
+
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+        background-color: var(--admin-primary);
+    }
+
+    input:checked + .toggle-slider:before {
+        transform: translateX(20px);
+    }
+
+    /* Form Controls */
+    .setting-control input[type="number"],
+    .setting-control input[type="email"],
+    .setting-control input[type="text"],
+    .setting-control select,
+    .setting-control textarea {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-background);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+    }
+
+    .setting-control input:focus,
+    .setting-control select:focus,
+    .setting-control textarea:focus {
+        outline: none;
+        border-color: var(--admin-primary);
+    }
+
+    .setting-control textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .input-help {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+    }
+
+    /* Checkbox Group */
+    .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+        cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        border: 1px solid var(--admin-border);
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"]:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Range Input */
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 120px;
+        height: 6px;
+        border-radius: 3px;
+        background: var(--admin-border);
+        outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--admin-primary);
+        cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--admin-primary);
+        cursor: pointer;
+        border: none;
+    }
+
+    .range-value {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+        min-width: 35px;
+        text-align: center;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .nav-tabs {
+            flex-wrap: wrap;
+        }
+
+        .setting-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .setting-info {
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contacts-settings {
+            padding: 1rem;
+        }
+
+        .settings-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .settings-group {
+            padding: 1rem;
+        }
+
+        .checkbox-group {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+</style>
+
+<script>
+    // Contact Settings Management
+    let currentSettings = {};
+
+    function initContactsSettings() {
+        loadSettings();
+        setupEventListeners();
+    }
+
+    async function loadSettings() {
+        try {
+            const response = await fetch('/api/admin/contacts/settings');
+            if (response.ok) {
+                const settings = await response.json();
+                currentSettings = settings;
+                populateSettings(settings);
+            }
+        } catch (error) {
+            console.error('Error loading settings:', error);
+        }
+    }
+
+    function populateSettings(settings) {
+        // General settings
+        document.getElementById('contactFormEnabled').checked = settings.contactFormEnabled ?? true;
+        document.getElementById('maxMessageLength').value = settings.maxMessageLength ?? 1000;
+        document.getElementById('autoResponseEnabled').checked = settings.autoResponseEnabled ?? true;
+        document.getElementById('responseDelay').value = settings.responseDelay ?? 5;
+
+        // Notifications
+        document.getElementById('emailNotificationsEnabled').checked = settings.emailNotificationsEnabled ?? true;
+        document.getElementById('notificationEmail').value = settings.notificationEmail ?? '';
+        document.getElementById('notificationFrequency').value = settings.notificationFrequency ?? 'immediate';
+        document.getElementById('highPriorityNotifications').checked = settings.highPriorityNotifications ?? true;
+        document.getElementById('spamNotifications').checked = settings.spamNotifications ?? false;
+
+        // Automation
+        document.getElementById('autoCategorizationEnabled').checked = settings.autoCategorizationEnabled ?? true;
+        document.getElementById('autoCategorizationConfidence').value = settings.autoCategorizationConfidence ?? 0.7;
+        updateRangeValue('autoCategorizationConfidence');
+
+        document.getElementById('autoAssignmentEnabled').checked = settings.autoAssignmentEnabled ?? false;
+        document.getElementById('assignmentMethod').value = settings.assignmentMethod ?? 'round-robin';
+
+        document.getElementById('autoArchiveEnabled').checked = settings.autoArchiveEnabled ?? false;
+        document.getElementById('autoArchiveDays').value = settings.autoArchiveDays ?? 30;
+
+        // Security
+        document.getElementById('captchaEnabled').checked = settings.captchaEnabled ?? true;
+        document.getElementById('honeypotEnabled').checked = settings.honeypotEnabled ?? true;
+        document.getElementById('rateLimitingEnabled').checked = settings.rateLimitingEnabled ?? true;
+        document.getElementById('maxSubmissionsPerHour').value = settings.maxSubmissionsPerHour ?? 10;
+        document.getElementById('blockedWordsEnabled').checked = settings.blockedWordsEnabled ?? true;
+        document.getElementById('blockedWordsList').value = settings.blockedWordsList ?? '';
+
+        // Integrations
+        document.getElementById('emailService').value = settings.emailService ?? 'smtp';
+        document.getElementById('smtpHost').value = settings.smtpHost ?? '';
+        document.getElementById('smtpPort').value = settings.smtpPort ?? 587;
+        document.getElementById('crmIntegrationEnabled').checked = settings.crmIntegrationEnabled ?? false;
+        document.getElementById('crmProvider').value = settings.crmProvider ?? 'salesforce';
+        document.getElementById('googleAnalyticsEnabled').checked = settings.googleAnalyticsEnabled ?? false;
+        document.getElementById('gaTrackingId').value = settings.gaTrackingId ?? '';
+
+        // Load templates and categories
+        loadTemplates();
+        loadCategories();
+    }
+
+    async function loadTemplates() {
+        try {
+            const response = await fetch('/api/admin/contacts/templates');
+            if (response.ok) {
+                const data = await response.json();
+                const select = document.getElementById('autoResponseTemplate');
+                select.innerHTML = '<option value="">Select template...</option>';
+
+                data.templates.forEach(template => {
+                    const option = document.createElement('option');
+                    option.value = template.id;
+                    option.textContent = template.name;
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading templates:', error);
+        }
+    }
+
+    async function loadCategories() {
+        try {
+            const response = await fetch('/api/admin/contacts/categories');
+            if (response.ok) {
+                const data = await response.json();
+                // Categories are used in various places if needed
+            }
+        } catch (error) {
+            console.error('Error loading categories:', error);
+        }
+    }
+
+    function setupEventListeners() {
+        // Navigation tabs
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                document.querySelectorAll('.settings-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                const targetSection = document.getElementById(tab.dataset.tab + '-section');
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+            });
+        });
+
+        // Range inputs
+        document.querySelectorAll('input[type="range"]').forEach(range => {
+            range.addEventListener('input', () => updateRangeValue(range.id));
+        });
+
+        // Action buttons
+        document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+        document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+    }
+
+    function updateRangeValue(rangeId) {
+        const range = document.getElementById(rangeId);
+        const value = document.querySelector(`[for="${rangeId}"] + .setting-control .range-value`);
+        if (value) {
+            value.textContent = Math.round(range.value * 100) + '%';
+        }
+    }
+
+    async function saveSettings() {
+        const settings = {
+            // General
+            contactFormEnabled: document.getElementById('contactFormEnabled').checked,
+            maxMessageLength: parseInt(document.getElementById('maxMessageLength').value),
+            autoResponseEnabled: document.getElementById('autoResponseEnabled').checked,
+            autoResponseTemplate: document.getElementById('autoResponseTemplate').value,
+            responseDelay: parseInt(document.getElementById('responseDelay').value),
+
+            // Notifications
+            emailNotificationsEnabled: document.getElementById('emailNotificationsEnabled').checked,
+            notificationEmail: document.getElementById('notificationEmail').value,
+            notificationFrequency: document.getElementById('notificationFrequency').value,
+            highPriorityNotifications: document.getElementById('highPriorityNotifications').checked,
+            spamNotifications: document.getElementById('spamNotifications').checked,
+
+            // Automation
+            autoCategorizationEnabled: document.getElementById('autoCategorizationEnabled').checked,
+            autoCategorizationConfidence: parseFloat(document.getElementById('autoCategorizationConfidence').value),
+            autoAssignmentEnabled: document.getElementById('autoAssignmentEnabled').checked,
+            assignmentMethod: document.getElementById('assignmentMethod').value,
+            autoArchiveEnabled: document.getElementById('autoArchiveEnabled').checked,
+            autoArchiveDays: parseInt(document.getElementById('autoArchiveDays').value),
+
+            // Security
+            captchaEnabled: document.getElementById('captchaEnabled').checked,
+            honeypotEnabled: document.getElementById('honeypotEnabled').checked,
+            rateLimitingEnabled: document.getElementById('rateLimitingEnabled').checked,
+            maxSubmissionsPerHour: parseInt(document.getElementById('maxSubmissionsPerHour').value),
+            blockedWordsEnabled: document.getElementById('blockedWordsEnabled').checked,
+            blockedWordsList: document.getElementById('blockedWordsList').value,
+
+            // Integrations
+            emailService: document.getElementById('emailService').value,
+            smtpHost: document.getElementById('smtpHost').value,
+            smtpPort: parseInt(document.getElementById('smtpPort').value),
+            crmIntegrationEnabled: document.getElementById('crmIntegrationEnabled').checked,
+            crmProvider: document.getElementById('crmProvider').value,
+            googleAnalyticsEnabled: document.getElementById('googleAnalyticsEnabled').checked,
+            gaTrackingId: document.getElementById('gaTrackingId').value
+        };
+
+        try {
+            const response = await fetch('/api/admin/contacts/settings', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            });
+
+            if (response.ok) {
+                currentSettings = settings;
+                showNotification('Settings saved successfully', 'success');
+            } else {
+                showNotification('Failed to save settings', 'error');
+            }
+        } catch (error) {
+            console.error('Error saving settings:', error);
+            showNotification('Error saving settings', 'error');
+        }
+    }
+
+    async function resetSettings() {
+        if (confirm('Are you sure you want to reset all settings to defaults? This action cannot be undone.')) {
+            try {
+                const response = await fetch('/api/admin/contacts/settings/reset', {
+                    method: 'POST'
+                });
+
+                if (response.ok) {
+                    loadSettings();
+                    showNotification('Settings reset to defaults', 'success');
+                }
+            } catch (error) {
+                console.error('Error resetting settings:', error);
+                showNotification('Error resetting settings', 'error');
+            }
+        }
+    }
+
+    function showNotification(message, type = 'info') {
+        // Use global notification system
+        console.log(`${type.toUpperCase()}: ${message}`);
+    }
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContactsSettings);
+    } else {
+        initContactsSettings();
+    }
+</script>

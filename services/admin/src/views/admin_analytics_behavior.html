@@ -1,0 +1,899 @@
+<div class="analytics-behavior">
+    <div class="analytics-header">
+        <h1 class="page-title">User Behavior Analytics</h1>
+        <p class="page-subtitle">Deep insights into how users interact with your content</p>
+    </div>
+
+    <!-- Behavior Overview -->
+    <div class="behavior-overview">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-mouse"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalClicks">0</div>
+                <div class="card-label">Total Clicks</div>
+                <div class="card-trend" id="clicksTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+12.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-cursor"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgScrollDepth">0%</div>
+                <div class="card-label">Avg. Scroll Depth</div>
+                <div class="card-trend" id="scrollTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-clock-counter-clockwise"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgTimeToClick">0s</div>
+                <div class="card-label">Avg. Time to First Click</div>
+                <div class="card-trend" id="timeToClickTrend">
+                    <i class="ph-bold ph-trend-down"></i>
+                    <span>-5.7%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-eye-closed"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="attentionSpan">0m</div>
+                <div class="card-label">Avg. Attention Span</div>
+                <div class="card-trend" id="attentionTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+15.3%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Flow Analysis -->
+    <div class="flow-section">
+        <div class="section-header">
+            <h2>User Flow Analysis</h2>
+            <div class="flow-filters">
+                <button class="flow-filter-btn active" data-flow="landing">Landing Pages</button>
+                <button class="flow-filter-btn" data-flow="exit">Exit Pages</button>
+                <button class="flow-filter-btn" data-flow="conversion">Conversion Paths</button>
+            </div>
+        </div>
+        <div class="flow-visualization" id="userFlow">
+            <!-- Flow visualization will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Interaction Heatmaps -->
+    <div class="heatmaps-section">
+        <div class="section-header">
+            <h2>Interaction Heatmaps</h2>
+            <div class="heatmap-filters">
+                <button class="heatmap-filter-btn active" data-type="clicks">Click Heatmap</button>
+                <button class="heatmap-filter-btn" data-type="scroll">Scroll Depth</button>
+                <button class="heatmap-filter-btn" data-type="attention">Attention Map</button>
+            </div>
+        </div>
+        <div class="heatmap-container">
+            <div class="heatmap-placeholder" id="interactionHeatmap">
+                <div class="heatmap-visual">
+                    <i class="ph-bold ph-grid-four"></i>
+                    <p>Interactive heatmap visualization</p>
+                    <small>Click patterns and user interactions</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Engagement -->
+    <div class="engagement-section">
+        <div class="section-header">
+            <h2>Content Engagement Patterns</h2>
+        </div>
+        <div class="engagement-grid">
+            <!-- Reading Patterns -->
+            <div class="engagement-card">
+                <div class="card-header">
+                    <h3>Reading Patterns</h3>
+                </div>
+                <div class="reading-patterns" id="readingPatterns">
+                    <!-- Reading pattern data will be populated here -->
+                </div>
+            </div>
+
+            <!-- Click Patterns -->
+            <div class="engagement-card">
+                <div class="card-header">
+                    <h3>Click Patterns</h3>
+                </div>
+                <div class="click-heatmap" id="clickPatterns">
+                    <!-- Click pattern visualization will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Time-based Engagement -->
+            <div class="engagement-card">
+                <div class="card-header">
+                    <h3>Time-based Engagement</h3>
+                </div>
+                <div class="time-engagement" id="timeEngagement">
+                    <!-- Time-based engagement chart will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Behavioral Segmentation -->
+    <div class="segmentation-section">
+        <div class="section-header">
+            <h2>User Segmentation</h2>
+        </div>
+        <div class="segmentation-grid">
+            <div class="segment-card">
+                <div class="segment-header">
+                    <div class="segment-icon">
+                        <i class="ph-bold ph-lightning"></i>
+                    </div>
+                    <div class="segment-info">
+                        <h4>Power Users</h4>
+                        <div class="segment-count" id="powerUsersCount">0</div>
+                    </div>
+                </div>
+                <div class="segment-metrics">
+                    <div class="metric">High engagement, frequent visits</div>
+                    <div class="metric-value" id="powerUsersEngagement">95% engagement rate</div>
+                </div>
+            </div>
+
+            <div class="segment-card">
+                <div class="segment-header">
+                    <div class="segment-icon">
+                        <i class="ph-bold ph-clock"></i>
+                    </div>
+                    <div class="segment-info">
+                        <h4>Casual Readers</h4>
+                        <div class="segment-count" id="casualUsersCount">0</div>
+                    </div>
+                </div>
+                <div class="segment-metrics">
+                    <div class="metric">Regular but shorter visits</div>
+                    <div class="metric-value" id="casualUsersFrequency">2-3 visits/week</div>
+                </div>
+            </div>
+
+            <div class="segment-card">
+                <div class="segment-header">
+                    <div class="segment-icon">
+                        <i class="ph-bold ph-magnifying-glass"></i>
+                    </div>
+                    <div class="segment-info">
+                        <h4>Search-Driven</h4>
+                        <div class="segment-count" id="searchUsersCount">0</div>
+                    </div>
+                </div>
+                <div class="segment-metrics">
+                    <div class="metric">Find content via search</div>
+                    <div class="metric-value" id="searchUsersConversion">78% conversion rate</div>
+                </div>
+            </div>
+
+            <div class="segment-card">
+                <div class="segment-header">
+                    <div class="segment-icon">
+                        <i class="ph-bold ph-share"></i>
+                    </div>
+                    <div class="segment-info">
+                        <h4>Social Referrals</h4>
+                        <div class="segment-count" id="socialUsersCount">0</div>
+                    </div>
+                </div>
+                <div class="segment-metrics">
+                    <div class="metric">Come from social media</div>
+                    <div class="metric-value" id="socialUsersEngagement">82% engagement rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Behavioral Insights -->
+    <div class="insights-section">
+        <div class="section-header">
+            <h2>Behavioral Insights</h2>
+        </div>
+        <div class="insights-grid">
+            <div class="insight-card">
+                <div class="insight-icon">
+                    <i class="ph-bold ph-target"></i>
+                </div>
+                <div class="insight-content">
+                    <h4>Content Performance</h4>
+                    <p>Articles with images get 40% more engagement than text-only posts</p>
+                    <div class="insight-metric">+40% engagement with visuals</div>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">
+                    <i class="ph-bold ph-timer"></i>
+                </div>
+                <div class="insight-content">
+                    <h4>Optimal Reading Time</h4>
+                    <p>Users spend 3-5 minutes on average reading your content</p>
+                    <div class="insight-metric">3-5 min average session</div>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">
+                    <i class="ph-bold ph-device-mobile"></i>
+                </div>
+                <div class="insight-content">
+                    <h4>Mobile Behavior</h4>
+                    <p>Mobile users scroll 15% faster and click 20% more links</p>
+                    <div class="insight-metric">20% higher click rate on mobile</div>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">
+                    <i class="ph-bold ph-trend-up"></i>
+                </div>
+                <div class="insight-content">
+                    <h4>Peak Engagement</h4>
+                    <p>Users are most active between 2-4 PM and 7-9 PM</p>
+                    <div class="insight-metric">Peak hours: 2-4 PM, 7-9 PM</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.analytics-behavior {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.page-title {
+    font: normal 700 2.38rem/1.2 var(--_font-accent);
+    color: var(--t-accent);
+    background: var(--t-accent);
+    background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font: normal 400 1.26rem/1.4 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Behavior Overview */
+.behavior-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.overview-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 2rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-value {
+    font: normal 700 1.96rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.card-label {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin-bottom: 0.5rem;
+}
+
+.card-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 500 0.84rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+.card-trend.negative {
+    color: var(--error, #ef4444);
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font: normal 600 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.flow-filters, .heatmap-filters {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.flow-filter-btn, .heatmap-filter-btn {
+    background: none;
+    border: 1px solid var(--stroke-elements);
+    color: var(--t-medium);
+    padding: 0.5rem 1rem;
+    border-radius: var(--_radius-s);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+}
+
+.flow-filter-btn.active, .heatmap-filter-btn.active {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+/* Flow Visualization */
+.flow-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.flow-visualization {
+    min-height: 400px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+}
+
+.flow-placeholder {
+    text-align: center;
+    color: var(--t-medium);
+}
+
+.flow-placeholder i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.flow-placeholder p {
+    font: normal 500 1.12rem/1.2 var(--_font-default);
+    margin: 0 0 0.5rem 0;
+}
+
+.flow-placeholder small {
+    font: normal 400 0.91rem/1.2 var(--_font-default);
+}
+
+/* Heatmaps Section */
+.heatmaps-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.heatmap-container {
+    height: 500px;
+    position: relative;
+}
+
+.heatmap-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+}
+
+.heatmap-visual {
+    text-align: center;
+    color: var(--t-medium);
+}
+
+.heatmap-visual i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.heatmap-visual p {
+    font: normal 500 1.12rem/1.2 var(--_font-default);
+    margin: 0 0 0.5rem 0;
+}
+
+.heatmap-visual small {
+    font: normal 400 0.91rem/1.2 var(--_font-default);
+}
+
+/* Engagement Section */
+.engagement-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.engagement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.engagement-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+}
+
+.card-header h3 {
+    font: normal 600 1.26rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0 0 2rem 0;
+}
+
+.reading-patterns, .click-heatmap, .time-engagement {
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--base);
+    border-radius: var(--_radius-s);
+    color: var(--t-medium);
+}
+
+.reading-patterns i, .click-heatmap i, .time-engagement i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.reading-patterns p, .click-heatmap p, .time-engagement p {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    margin: 0;
+}
+
+/* Segmentation Section */
+.segmentation-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.segmentation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.segment-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.segment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.segment-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.segment-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+}
+
+.segment-info h4 {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0 0 0.5rem 0;
+}
+
+.segment-count {
+    font: normal 700 1.4rem/1.2 var(--_font-accent);
+    color: var(--accent);
+}
+
+.segment-metrics {
+    color: var(--t-medium);
+}
+
+.segment-metrics .metric {
+    font: normal 400 0.91rem/1.2 var(--_font-default);
+    margin-bottom: 0.5rem;
+}
+
+.segment-metrics .metric-value {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+/* Insights Section */
+.insights-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.insight-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.insight-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.insight-content {
+    flex: 1;
+}
+
+.insight-content h4 {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0 0 0.5rem 0;
+}
+
+.insight-content p {
+    font: normal 400 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin: 0 0 1rem 0;
+}
+
+.insight-metric {
+    font: normal 500 0.91rem/1.2 var(--_font-default);
+    color: var(--accent);
+    background: var(--base);
+    padding: 0.5rem 1rem;
+    border-radius: var(--_radius-s);
+    display: inline-block;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .engagement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .segmentation-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .analytics-behavior {
+        padding: 1rem;
+    }
+
+    .behavior-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .segmentation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .flow-filters, .heatmap-filters {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .insight-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .segment-header {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+// User Behavior Analytics JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initBehaviorAnalytics();
+});
+
+function initBehaviorAnalytics() {
+    loadBehaviorData();
+    initFlowFilters();
+    initHeatmapFilters();
+}
+
+function loadBehaviorData() {
+    fetch('/api/analytics/behavior')
+        .then(response => response.json())
+        .then(data => {
+            updateBehaviorOverview(data.overview);
+            updateUserFlow(data.flow);
+            updateInteractionHeatmap(data.heatmap);
+            updateEngagementPatterns(data.engagement);
+            updateSegmentation(data.segmentation);
+            updateBehavioralInsights(data.insights);
+        })
+        .catch(error => {
+            console.error('Error loading behavior data:', error);
+            showFallbackBehaviorData();
+        });
+}
+
+function updateBehaviorOverview(overview) {
+    document.getElementById('totalClicks').textContent = overview.totalClicks.toLocaleString();
+    document.getElementById('avgScrollDepth').textContent = overview.avgScrollDepth + '%';
+    document.getElementById('avgTimeToClick').textContent = overview.avgTimeToClick + 's';
+    document.getElementById('attentionSpan').textContent = formatDuration(overview.attentionSpan);
+
+    updateTrend('clicksTrend', overview.clicksChange);
+    updateTrend('scrollTrend', overview.scrollChange);
+    updateTrend('timeToClickTrend', overview.timeToClickChange);
+    updateTrend('attentionTrend', overview.attentionChange);
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    const icon = element.querySelector('i');
+
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change).toFixed(1) + '%';
+
+    if (change < 0) {
+        element.classList.add('negative');
+        icon.className = 'ph-bold ph-trend-down';
+    } else {
+        element.classList.remove('negative');
+        icon.className = 'ph-bold ph-trend-up';
+    }
+}
+
+function updateUserFlow(flowData) {
+    const container = document.getElementById('userFlow');
+    // Render user flow visualization
+    container.innerHTML = `
+        <div class="flow-placeholder">
+            <i class="ph-bold ph-graph"></i>
+            <p>User Flow Visualization</p>
+            <small>Interactive flow chart showing user navigation paths</small>
+        </div>
+    `;
+}
+
+function updateInteractionHeatmap(heatmapData) {
+    const container = document.getElementById('interactionHeatmap');
+    // Render heatmap visualization
+    container.innerHTML = `
+        <div class="heatmap-visual">
+            <i class="ph-bold ph-grid-four"></i>
+            <p>Interaction Heatmap</p>
+            <small>Visual representation of user clicks and interactions</small>
+        </div>
+    `;
+}
+
+function updateEngagementPatterns(engagementData) {
+    // Update reading patterns
+    const readingContainer = document.getElementById('readingPatterns');
+    readingContainer.innerHTML = `
+        <i class="ph-bold ph-book-open"></i>
+        <p>Reading Pattern Analysis</p>
+    `;
+
+    // Update click patterns
+    const clickContainer = document.getElementById('clickPatterns');
+    clickContainer.innerHTML = `
+        <i class="ph-bold ph-cursor"></i>
+        <p>Click Pattern Visualization</p>
+    `;
+
+    // Update time engagement
+    const timeContainer = document.getElementById('timeEngagement');
+    timeContainer.innerHTML = `
+        <i class="ph-bold ph-clock"></i>
+        <p>Time-based Engagement Chart</p>
+    `;
+}
+
+function updateSegmentation(segmentationData) {
+    document.getElementById('powerUsersCount').textContent = segmentationData.powerUsers.toLocaleString();
+    document.getElementById('casualUsersCount').textContent = segmentationData.casualUsers.toLocaleString();
+    document.getElementById('searchUsersCount').textContent = segmentationData.searchUsers.toLocaleString();
+    document.getElementById('socialUsersCount').textContent = segmentationData.socialUsers.toLocaleString();
+
+    document.getElementById('powerUsersEngagement').textContent = segmentationData.powerUsersEngagement;
+    document.getElementById('casualUsersFrequency').textContent = segmentationData.casualUsersFrequency;
+    document.getElementById('searchUsersConversion').textContent = segmentationData.searchUsersConversion;
+    document.getElementById('socialUsersEngagement').textContent = segmentationData.socialUsersEngagement;
+}
+
+function updateBehavioralInsights(insights) {
+    // Insights are static in the template for now
+    // Could be made dynamic based on data
+}
+
+function initFlowFilters() {
+    document.querySelectorAll('.flow-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.flow-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadUserFlowData(this.dataset.flow);
+        });
+    });
+}
+
+function initHeatmapFilters() {
+    document.querySelectorAll('.heatmap-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.heatmap-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadHeatmapData(this.dataset.type);
+        });
+    });
+}
+
+function loadUserFlowData(flowType) {
+    fetch(`/api/analytics/behavior/flow?type=${flowType}`)
+        .then(response => response.json())
+        .then(data => updateUserFlow(data))
+        .catch(error => console.error('Error loading flow data:', error));
+}
+
+function loadHeatmapData(heatmapType) {
+    fetch(`/api/analytics/behavior/heatmap?type=${heatmapType}`)
+        .then(response => response.json())
+        .then(data => updateInteractionHeatmap(data))
+        .catch(error => console.error('Error loading heatmap data:', error));
+}
+
+function formatDuration(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes}m`;
+}
+
+function showFallbackBehaviorData() {
+    // Show sample data when API is not available
+    updateBehaviorOverview({
+        totalClicks: 45231,
+        avgScrollDepth: 67,
+        avgTimeToClick: 12,
+        attentionSpan: 184,
+        clicksChange: 12.5,
+        scrollChange: 8.2,
+        timeToClickChange: -5.7,
+        attentionChange: 15.3
+    });
+
+    updateSegmentation({
+        powerUsers: 1234,
+        casualUsers: 5678,
+        searchUsers: 2341,
+        socialUsers: 3456,
+        powerUsersEngagement: '95% engagement rate',
+        casualUsersFrequency: '2-3 visits/week',
+        searchUsersConversion: '78% conversion rate',
+        socialUsersEngagement: '82% engagement rate'
+    });
+}
+</script>

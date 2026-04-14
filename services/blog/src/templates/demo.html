@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" color-scheme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Templates Demo - NekwasaR</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Professional blog template system showcasing three distinct templates for different content types. Built to match NekwasaR's portfolio brand.">
+    <meta name="author" content="NekwasaR">
+    <meta name="keywords" content="blog templates, demo, portfolio, design system, responsive">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NekwasaR Blog Templates - Professional Design System">
+    <meta property="og:description" content="Explore our professional blog template system featuring three distinct templates with modern design and seamless interactions.">
+    <meta property="og:image" content="https://nekwasar.com/blog-templates/images/demo-hero.jpg">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NekwasaR Blog Templates - Professional Design System">
+    <meta name="twitter:description" content="Explore our professional blog template system featuring three distinct templates with modern design and seamless interactions.">
+    <meta name="twitter:image" content="https://nekwasar.com/blog-templates/images/demo-hero.jpg">
+    
+    <!-- Fonts - Portfolio Consistent -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/bold/style.css">
+    
+    <!-- Template Styles -->
+    <link rel="stylesheet" href="css/blog-templates.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://nekwasar.com/favicon.png" sizes="any">
+    
+    <style>
+        /* Demo-specific styles */
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .demo-hero {
+            text-align: center;
+            padding: 8rem 0 4rem;
+            background: linear-gradient(135deg, var(--gradient-one), var(--gradient-two));
+            color: var(--t-opp-bright);
+            border-radius: var(--_radius-xl);
+            margin: 2rem 0 6rem;
+        }
+        
+        .demo-hero h1 {
+            color: var(--t-opp-bright);
+            background: none;
+            -webkit-text-fill-color: var(--t-opp-bright);
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .demo-hero p {
+            font-size: 1.8rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin: 4rem 0 6rem;
+        }
+        
+        .template-card {
+            background: var(--base);
+            border: 1px solid var(--stroke-elements);
+            border-radius: var(--_radius-xl);
+            padding: 3rem;
+            transition: all 0.3s var(--_animbezier);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--stroke-controls);
+        }
+        
+        .template-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+        }
+        
+        .template-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .template-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            border-radius: var(--_radius-l);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            color: var(--t-opp-bright);
+            font-size: 2.4rem;
+        }
+        
+        .template-title {
+            font: normal 700 2.2rem/1.2 var(--_font-accent);
+            color: var(--t-bright);
+            margin: 0;
+        }
+        
+        .template-description {
+            font-size: 1.6rem;
+            line-height: 1.5;
+            color: var(--t-medium);
+            margin-bottom: 2rem;
+        }
+        
+        .template-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2.5rem;
+        }
+        
+        .template-features li {
+            font-size: 1.4rem;
+            color: var(--t-medium);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .template-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .template-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .demo-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--base);
+            border: 1px solid var(--stroke-controls);
+            color: var(--t-accent);
+            text-decoration: none;
+            border-radius: var(--_radius-s);
+            font: normal 600 1.4rem/1 var(--_font-default);
+            transition: all 0.3s var(--_animbezier);
+        }
+        
+        .demo-btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: var(--t-opp-bright);
+            border-color: transparent;
+        }
+        
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .features-section {
+            background: var(--base-tint);
+            padding: 6rem 2rem;
+            border-radius: var(--_radius-xl);
+            margin: 4rem 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-item {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--t-opp-bright);
+            font-size: 2.8rem;
+        }
+        
+        .feature-title {
+            font: normal 700 1.8rem/1.2 var(--_font-accent);
+            color: var(--t-bright);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-description {
+            font-size: 1.4rem;
+            color: var(--t-medium);
+            line-height: 1.5;
+        }
+        
+        .tech-section {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .tech-item {
+            padding: 1rem 2rem;
+            background: var(--base);
+            border: 1px solid var(--stroke-elements);
+            border-radius: var(--_radius-m);
+            color: var(--t-medium);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-hero h1 {
+                font-size: 3rem;
+            }
+            
+            .templates-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .tech-stack {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Demo Hero -->
+        <section class="demo-hero">
+            <h1>Professional Blog Templates</h1>
+            <p>A complete design system with three distinct templates, built to match the NekwasaR portfolio brand. Perfect for modern blogging and content creation.</p>
+            <div class="banner-meta" style="justify-content: center; color: var(--t-opp-bright); opacity: 0.9;">
+                <span><i class="ph-bold ph-code"></i> HTML5 + CSS3 + JavaScript</span>
+                <span><i class="ph-bold ph-device-mobile"></i> Fully Responsive</span>
+                <span><i class="ph-bold ph-palette"></i> Brand Consistent</span>
+            </div>
+        </section>
+        
+        <!-- Template Cards -->
+        <section class="templates-grid">
+            <!-- Template 1 -->
+            <div class="template-card">
+                <div class="template-header">
+                    <div class="template-icon">
+                        <i class="ph-bold ph-image"></i>
+                    </div>
+                    <div>
+                        <h3 class="template-title">Template 1: Banner Image + Text</h3>
+                    </div>
+                </div>
+                <p class="template-description">
+                    Perfect for storytelling articles, comprehensive guides, and in-depth analysis. Features a hero banner with professional typography and content structure.
+                </p>
+                <ul class="template-features">
+                    <li>Hero banner with full-width image</li>
+                    <li>Professional typography hierarchy</li>
+                    <li>Table of contents navigation</li>
+                    <li>Content cards with metadata</li>
+                    <li>Social sharing integration</li>
+                    <li>Newsletter subscription</li>
+                </ul>
+                <div class="template-actions">
+                    <a href="template1-banner-image.html" class="demo-btn primary" target="_blank">
+                        <i class="ph-bold ph-eye"></i>
+                        View Template
+                    </a>
+                    <a href="template1-banner-image.html" class="demo-btn" download>
+                        <i class="ph-bold ph-download-simple"></i>
+                        Download
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Template 2 -->
+            <div class="template-card">
+                <div class="template-header">
+                    <div class="template-icon">
+                        <i class="ph-bold ph-video"></i>
+                    </div>
+                    <div>
+                        <h3 class="template-title">Template 2: Banner Video + Text</h3>
+                    </div>
+                </div>
+                <p class="template-description">
+                    Ideal for dynamic demonstrations, process explanations, and immersive content. Features full-screen video background with interactive controls.
+                </p>
+                <ul class="template-features">
+                    <li>Full-screen video background</li>
+                    <li>Interactive video controls</li>
+                    <li>Multiple media integration points</li>
+                    <li>Smooth video transitions</li>
+                    <li>Content sections with embeds</li>
+                    <li>Video-focused design</li>
+                </ul>
+                <div class="template-actions">
+                    <a href="template2-banner-video.html" class="demo-btn primary" target="_blank">
+                        <i class="ph-bold ph-eye"></i>
+                        View Template
+                    </a>
+                    <a href="template2-banner-video.html" class="demo-btn" download>
+                        <i class="ph-bold ph-download-simple"></i>
+                        Download
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Template 3 -->
+            <div class="template-card">
+                <div class="template-header">
+                    <div class="template-icon">
+                        <i class="ph-bold ph-list-numbers"></i>
+                    </div>
+                    <div>
+                        <h3 class="template-title">Template 3: Listing Template</h3>
+                    </div>
+                </div>
+                <p class="template-description">
+                    Excellent for "Top 10" lists, ranking articles, and comparison guides. Features numbered items with visual hierarchy and quick navigation.
+                </p>
+                <ul class="template-features">
+                    <li>Numbered list items (01-10)</li>
+                    <li>Alternating content layout</li>
+                    <li>Quick navigation sidebar</li>
+                    <li>Responsive grid system</li>
+                    <li>Interactive hover effects</li>
+                    <li>Perfect for rankings</li>
+                </ul>
+                <div class="template-actions">
+                    <a href="template3-listing.html" class="demo-btn primary" target="_blank">
+                        <i class="ph-bold ph-eye"></i>
+                        View Template
+                    </a>
+                    <a href="template3-listing.html" class="demo-btn" download>
+                        <i class="ph-bold ph-download-simple"></i>
+                        Download
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 style="text-align: center; color: var(--t-accent); margin-bottom: 1rem;">System Features</h2>
+            <p style="text-align: center; font-size: 1.6rem; color: var(--t-medium); max-width: 600px; margin: 0 auto 3rem;">
+                Every template includes a comprehensive set of modern features for an exceptional user experience.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="ph-bold ph-device-mobile"></i>
+                    </div>
+                    <h4 class="feature-title">Responsive Design</h4>
+                    <p class="feature-description">Optimized for all devices and screen sizes with mobile-first approach</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="ph-bold ph-palette"></i>
+                    </div>
+                    <h4 class="feature-title">Brand Consistent</h4>
+                    <p class="feature-description">Matches NekwasaR portfolio colors, typography, and visual identity</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="ph-bold ph-speedometer"></i>
+                    </div>
+                    <h4 class="feature-title">Performance Optimized</h4>
+                    <p class="feature-description">Fast loading times with optimized assets and efficient code</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="ph-bold ph-shield-check"></i>
+                    </div>
+                    <h4 class="feature-title">SEO Ready</h4>
+                    <p class="feature-description">Built-in SEO optimization with social sharing meta tags</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="ph-bold ph-handshake"></i>
+                    </div>
+                    <h4 class="feature-title">Interactive</h4>
+                    <p class="feature-description">Smooth scrolling, animations, and engaging user interactions</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="ph-bold ph-universal-access"></i>
+                    </div>
+                    <h4 class="feature-title">Accessible</h4>
+                    <p class="feature-description">WCAG compliant with proper semantic HTML and keyboard navigation</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Technology Section -->
+        <section class="tech-section">
+            <h2 style="color: var(--t-accent); margin-bottom: 1rem;">Built With Modern Technology</h2>
+            <p style="font-size: 1.6rem; color: var(--t-medium);">Leveraging the latest web standards for optimal performance and maintainability</p>
+            
+            <div class="tech-stack">
+                <div class="tech-item">HTML5</div>
+                <div class="tech-item">CSS3</div>
+                <div class="tech-item">Vanilla JavaScript</div>
+                <div class="tech-item">CSS Grid</div>
+                <div class="tech-item">Flexbox</div>
+                <div class="tech-item">Custom Properties</div>
+                <div class="tech-item">Phosphor Icons</div>
+                <div class="tech-item">Google Fonts</div>
+            </div>
+        </section>
+        
+        <!-- Quick Start Section -->
+        <section style="background: var(--base); padding: 4rem; border-radius: var(--_radius-xl); border: 1px solid var(--stroke-elements); text-align: center; margin: 4rem 0;">
+            <h2 style="color: var(--t-accent); margin-bottom: 1rem;">Ready to Get Started?</h2>
+            <p style="font-size: 1.6rem; color: var(--t-medium); margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Choose a template that fits your content type, customize it to your needs, and start creating amazing blog content that matches your brand.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="template1-banner-image.html" class="banner-cta" style="background: linear-gradient(135deg, var(--accent), var(--secondary)); padding: 1.5rem 3rem; font-size: 1.6rem;">
+                    <span>Try Template 1</span>
+                    <i class="ph-bold ph-arrow-right"></i>
+                </a>
+                <a href="template2-banner-video.html" class="banner-cta" style="background: linear-gradient(135deg, var(--accent), var(--secondary)); padding: 1.5rem 3rem; font-size: 1.6rem;">
+                    <span>Try Template 2</span>
+                    <i class="ph-bold ph-arrow-right"></i>
+                </a>
+                <a href="template3-listing.html" class="banner-cta" style="background: linear-gradient(135deg, var(--accent), var(--secondary)); padding: 1.5rem 3rem; font-size: 1.6rem;">
+                    <span>Try Template 3</span>
+                    <i class="ph-bold ph-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Social Share -->
+    <div class="social-share">
+        <a href="#" class="social-share-btn" title="Share on Twitter">
+            <i class="ph-bold ph-twitter-logo"></i>
+        </a>
+        <a href="#" class="social-share-btn" title="Share on LinkedIn">
+            <i class="ph-bold ph-linkedin-logo"></i>
+        </a>
+        <a href="#" class="social-share-btn" title="Share on Facebook">
+            <i class="ph-bold ph-facebook-logo"></i>
+        </a>
+        <a href="#" class="social-share-btn" title="Copy Link">
+            <i class="ph-bold ph-link"></i>
+        </a>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/blog-templates.js"></script>
+    <script>
+        // Demo-specific interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate template cards on scroll
+            const cards = document.querySelectorAll('.template-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 200);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s var(--_animbezier)';
+                observer.observe(card);
+            });
+            
+            // Handle download buttons
+            document.querySelectorAll('.demo-btn[download]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get the template URL
+                    const templateUrl = this.href;
+                    const fileName = templateUrl.split('/').pop();
+                    
+                    // Create a temporary link to download
+                    const link = document.createElement('a');
+                    link.href = templateUrl;
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // Show feedback
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="ph-bold ph-check" style="color: #22c55e;"></i> Downloaded';
+                    this.style.color = '#22c55e';
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.color = '';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

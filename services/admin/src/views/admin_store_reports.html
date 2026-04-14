@@ -1,0 +1,238 @@
+<!-- Tailwind Configuration Script -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    'syne': ['Syne', 'sans-serif'],
+                },
+                colors: {
+                    'base': 'var(--base)',
+                    'base-tint': 'var(--base-tint)',
+                    'base-shade': 'var(--base-shade)',
+                    'accent': 'var(--accent)',
+                    'secondary': 'var(--secondary)',
+                    't-bright': 'var(--t-bright)',
+                    't-medium': 'var(--t-medium)',
+                    't-muted': 'var(--t-muted)',
+                    't-opp-bright': 'var(--t-opp-bright)',
+                    'stroke-elements': 'var(--stroke-elements)',
+                    'gradient-one': 'var(--gradient-one)',
+                    'gradient-two': 'var(--gradient-two)',
+                }
+            }
+        }
+    }
+</script>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div
+    class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-4 md:p-6 lg:p-12">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold font-syne text-t-bright">Reports</h1>
+                <p class="text-t-medium font-syne">Sales analytics and performance metrics</p>
+            </div>
+            <button onclick="loadReports()"
+                class="px-6 py-3 bg-base-tint border border-stroke-elements text-t-bright font-bold rounded-xl shadow-lg hover:bg-base-shade transition-all duration-medium flex items-center gap-2">
+                <i class="ph-bold ph-arrows-clockwise"></i>
+                <span>Refresh Data</span>
+            </button>
+        </div>
+
+        <!-- KPI Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Revenue -->
+            <div
+                class="p-6 bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-green-500/20 text-green-500 flex items-center justify-center text-2xl shadow-lg">
+                        <i class="ph-bold ph-currency-dollar"></i>
+                    </div>
+                    <div>
+                        <p class="text-t-muted text-sm font-bold uppercase tracking-wider">Total Revenue</p>
+                        <h3 id="statRevenue" class="text-2xl font-bold text-t-bright font-syne">--</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders -->
+            <div
+                class="p-6 bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-500 flex items-center justify-center text-2xl shadow-lg">
+                        <i class="ph-bold ph-shopping-cart"></i>
+                    </div>
+                    <div>
+                        <p class="text-t-muted text-sm font-bold uppercase tracking-wider">Total Orders</p>
+                        <h3 id="statOrders" class="text-2xl font-bold text-t-bright font-syne">--</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers -->
+            <div
+                class="p-6 bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-500 flex items-center justify-center text-2xl shadow-lg">
+                        <i class="ph-bold ph-users"></i>
+                    </div>
+                    <div>
+                        <p class="text-t-muted text-sm font-bold uppercase tracking-wider">Customers</p>
+                        <h3 id="statCustomers" class="text-2xl font-bold text-t-bright font-syne">--</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div
+                class="p-6 bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center text-2xl shadow-lg">
+                        <i class="ph-bold ph-package"></i>
+                    </div>
+                    <div>
+                        <p class="text-t-muted text-sm font-bold uppercase tracking-wider">Active Products</p>
+                        <h3 id="statProducts" class="text-2xl font-bold text-t-bright font-syne">--</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Chart -->
+        <div
+            class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-xl p-6 md:p-8">
+            <h3 class="text-xl font-bold text-t-bright font-syne mb-6">Revenue - Last 7 Days</h3>
+            <div class="relative h-80 w-full">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var revenueChartInstance = revenueChartInstance || null;
+
+    window.initStoreReports = function () {
+        console.log('🚀 Init Store Reports Triggered');
+        loadReports();
+    }
+
+    async function loadReports() {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/admin/store/reports/summary', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.detail || 'Failed to fetch reports');
+
+            // Update Stats
+            document.getElementById('statRevenue').textContent = formatCurrency(data.revenue);
+            document.getElementById('statOrders').textContent = data.orders;
+            document.getElementById('statCustomers').textContent = data.customers;
+            document.getElementById('statProducts').textContent = data.products;
+
+            // Render Chart
+            renderChart(data.chart);
+
+        } catch (e) {
+            console.error(e);
+            alert('Error loading reports: ' + e.message);
+        }
+    }
+
+    function renderChart(chartData) {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+
+        if (revenueChartInstance) {
+            revenueChartInstance.destroy();
+        }
+
+        // Gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.5)'); // Emerald Start
+        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)'); // Transparent End
+
+        revenueChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: chartData.data,
+                    borderColor: '#10b981', // Emerald 500
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#ffffff',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            callback: function (value) {
+                                return '$' + value;
+                            },
+                            color: '#9ca3af'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#9ca3af'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    }
+</script>

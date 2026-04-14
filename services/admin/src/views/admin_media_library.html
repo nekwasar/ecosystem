@@ -1,0 +1,1553 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+        'bounce-in': 'bounceIn 0.4s ease-out forwards',
+        'pulse-slow': 'pulse 3s ease-in-out infinite',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium overflow-hidden">
+    <div class="flex h-screen">
+        <!-- Sidebar - Folder Tree -->
+        <div class="w-80 bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border-r border-stroke-elements flex flex-col">
+            <!-- Sidebar Header -->
+            <div class="p-6 border-b border-stroke-elements">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright">
+                            <i class="ph-bold ph-folder-open text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-t-bright font-syne">Media Library</h3>
+                            <p class="text-sm text-t-medium font-syne">Organize your files</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-base-tint/30 dark:bg-base-shade/30 rounded-lg p-3 text-center">
+                        <div class="text-lg font-bold text-t-bright font-syne" id="totalFiles">0</div>
+                        <div class="text-xs text-t-medium font-syne">Files</div>
+                    </div>
+                    <div class="bg-base-tint/30 dark:bg-base-shade/30 rounded-lg p-3 text-center">
+                        <div class="text-lg font-bold text-t-bright font-syne" id="totalFolders">0</div>
+                        <div class="text-xs text-t-medium font-syne">Folders</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Folder Tree -->
+            <div class="flex-1 overflow-y-auto p-4">
+                <div class="space-y-2">
+                    <!-- Root/All Files -->
+                    <div class="folder-item active" data-folder="all">
+                        <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-base-tint/50 dark:hover:bg-base-shade/50 cursor-pointer transition-all duration-medium">
+                            <i class="ph-bold ph-house text-t-accent"></i>
+                            <span class="text-sm font-medium text-t-bright font-syne">All Files</span>
+                            <span class="ml-auto text-xs text-t-medium font-syne" id="allCount">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Recent -->
+                    <div class="folder-item" data-folder="recent">
+                        <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-base-tint/50 dark:hover:bg-base-shade/50 cursor-pointer transition-all duration-medium">
+                            <i class="ph-bold ph-clock text-t-accent"></i>
+                            <span class="text-sm font-medium text-t-bright font-syne">Recent</span>
+                            <span class="ml-auto text-xs text-t-medium font-syne" id="recentCount">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Folder Structure -->
+                    <div class="mt-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-semibold text-t-bright font-syne uppercase tracking-wide">Folders</h4>
+                            <button class="w-6 h-6 bg-accent/10 hover:bg-accent/20 text-accent rounded flex items-center justify-center transition-all duration-medium" onclick="createNewFolder()" title="Create Folder">
+                                <i class="ph-bold ph-plus text-xs"></i>
+                            </button>
+                        </div>
+                        <div id="folderTree" class="space-y-1">
+                            <!-- Folders will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Button -->
+            <div class="p-4 border-t border-stroke-elements">
+                <button class="w-full bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-medium font-syne" onclick="openUploadModal()">
+                    <i class="ph-bold ph-upload text-sm mr-2"></i>
+                    Upload Files
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Toolbar -->
+            <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border-b border-stroke-elements p-4">
+                <div class="flex items-center justify-between">
+                    <!-- Breadcrumb -->
+                    <div class="flex items-center space-x-2">
+                        <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="goBack()" title="Back">
+                            <i class="ph-bold ph-arrow-left text-sm"></i>
+                        </button>
+                        <div class="flex items-center space-x-2 text-sm text-t-medium font-syne">
+                            <span>Media Library</span>
+                            <i class="ph-bold ph-caret-right"></i>
+                            <span id="currentFolderName">All Files</span>
+                        </div>
+                    </div>
+
+                    <!-- View Controls -->
+                    <div class="flex items-center space-x-2">
+                        <!-- Search -->
+                        <div class="relative">
+                            <input type="text" class="w-64 pl-10 pr-4 py-2 bg-base dark:bg-base-tint border border-stroke-elements rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-muted text-sm" id="searchMedia" placeholder="Search files...">
+                            <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-t-muted"></i>
+                        </div>
+
+                        <!-- View Modes -->
+                        <div class="flex items-center space-x-1 bg-base-tint dark:bg-base-shade rounded-lg p-1">
+                            <button class="view-mode-btn active" data-view="grid" title="Grid View">
+                                <i class="ph-bold ph-squares-four text-sm"></i>
+                            </button>
+                            <button class="view-mode-btn" data-view="list" title="List View">
+                                <i class="ph-bold ph-list text-sm"></i>
+                            </button>
+                            <button class="view-mode-btn" data-view="carousel" title="Carousel View">
+                                <i class="ph-bold ph-slideshow text-sm"></i>
+                            </button>
+                            <button class="view-mode-btn" data-view="masonry" title="Masonry View">
+                                <i class="ph-bold ph-grid-four text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- Sort -->
+                        <select class="px-3 py-2 bg-base dark:bg-base-tint border border-stroke-elements rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright text-sm appearance-none cursor-pointer" id="sortBy">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="name-asc">Name A-Z</option>
+                            <option value="name-desc">Name Z-A</option>
+                            <option value="size-desc">Largest First</option>
+                            <option value="size-asc">Smallest First</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <!-- Grid View -->
+                <div id="gridView" class="view-container active">
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6" id="mediaGrid">
+                        <!-- Media items will be populated here -->
+                    </div>
+                </div>
+
+                <!-- List View -->
+                <div id="listView" class="view-container hidden">
+                    <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-base-tint/30 dark:bg-base-shade/30">
+                                    <tr>
+                                        <th class="px-6 py-4 text-left text-sm font-semibold text-t-bright font-syne">File</th>
+                                        <th class="px-6 py-4 text-left text-sm font-semibold text-t-bright font-syne">Name</th>
+                                        <th class="px-6 py-4 text-left text-sm font-semibold text-t-bright font-syne">Size</th>
+                                        <th class="px-6 py-4 text-left text-sm font-semibold text-t-bright font-syne">Type</th>
+                                        <th class="px-6 py-4 text-left text-sm font-semibold text-t-bright font-syne">Modified</th>
+                                        <th class="px-6 py-4 text-left text-sm font-semibold text-t-bright font-syne">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mediaList" class="divide-y divide-stroke-elements">
+                                    <!-- List items will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carousel View -->
+                <div id="carouselView" class="view-container hidden">
+                    <div class="relative">
+                        <button class="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-medium z-10" onclick="prevSlide()">
+                            <i class="ph-bold ph-caret-left"></i>
+                        </button>
+                        <button class="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all duration-medium z-10" onclick="nextSlide()">
+                            <i class="ph-bold ph-caret-right"></i>
+                        </button>
+                        <div class="overflow-hidden rounded-xl">
+                            <div id="carouselContainer" class="flex transition-transform duration-500 ease-in-out">
+                                <!-- Carousel items will be populated here -->
+                            </div>
+                        </div>
+                        <div class="flex justify-center mt-4 space-x-2" id="carouselDots">
+                            <!-- Dots will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Masonry View -->
+                <div id="masonryView" class="view-container hidden">
+                    <div class="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6 space-y-6" id="mediaMasonry">
+                        <!-- Masonry items will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="text-center py-16 hidden" id="emptyState">
+                    <div class="w-24 h-24 bg-base-tint dark:bg-base-shade rounded-3xl flex items-center justify-center shadow-xl mx-auto mb-6">
+                        <i class="ph-bold ph-image text-4xl text-t-muted opacity-60"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-t-bright font-syne mb-4">No files found</h3>
+                    <p class="text-base text-t-medium font-syne max-w-md mx-auto mb-6">This folder is empty. Upload some files or create a new folder to get started.</p>
+                    <button class="bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne" onclick="openUploadModal()">
+                        <i class="ph-bold ph-upload text-sm mr-2"></i>
+                        Upload Files
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" id="uploadModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <h3 class="text-xl font-bold text-t-bright font-syne">Upload Files</h3>
+                <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closeUploadModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <!-- Upload Area -->
+                <div class="border-2 border-dashed border-stroke-elements rounded-xl p-12 text-center hover:border-accent transition-all duration-medium cursor-pointer" id="uploadArea">
+                    <div class="w-16 h-16 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-4">
+                        <i class="ph-bold ph-upload text-3xl text-t-muted"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-t-bright font-syne mb-2">Drop files here or click to browse</h4>
+                    <p class="text-t-medium font-syne text-sm mb-4">Supports images, videos, documents, and more</p>
+                    <input type="file" id="fileInput" multiple class="hidden" accept="image/*,video/*,audio/*,application/*">
+                    <button class="bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold py-2 px-4 rounded-lg transition-all duration-medium font-syne" onclick="document.getElementById('fileInput').click()">
+                        Choose Files
+                    </button>
+                </div>
+
+                <!-- Upload Progress -->
+                <div class="mt-6 hidden" id="uploadProgress">
+                    <div class="space-y-3" id="uploadQueue">
+                        <!-- Upload items will be shown here -->
+                    </div>
+                </div>
+
+                <!-- Folder Selection -->
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-t-bright font-syne mb-2">Upload to folder</label>
+                    <select class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright appearance-none cursor-pointer" id="uploadFolder">
+                        <option value="all">All Files</option>
+                        <!-- Folders will be populated here -->
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Folder Modal -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" id="folderModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-md w-full">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <h3 class="text-xl font-bold text-t-bright font-syne">Create Folder</h3>
+                <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closeFolderModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-t-bright font-syne mb-2">Folder Name</label>
+                        <input type="text" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-muted" id="folderName" placeholder="Enter folder name">
+                    </div>
+                </div>
+                <div class="flex items-center justify-end space-x-3 mt-6">
+                    <button class="px-4 py-2 bg-base-tint dark:bg-base-shade border border-stroke-elements text-t-bright rounded-lg hover:bg-base-shade dark:hover:bg-base transition-all duration-medium font-syne" onclick="closeFolderModal()">Cancel</button>
+                    <button class="px-4 py-2 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright rounded-lg transition-all duration-medium font-syne" onclick="createFolder()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Media Details Modal -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" id="mediaModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <h3 class="text-xl font-bold text-t-bright font-syne" id="mediaModalTitle">Media Details</h3>
+                <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closeMediaModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Media Preview -->
+                    <div>
+                        <div class="bg-base-tint/30 dark:bg-base-shade/30 rounded-xl p-4 mb-4">
+                            <div id="mediaPreview" class="aspect-video bg-base dark:bg-base-tint rounded-lg flex items-center justify-center">
+                                <!-- Media preview will be shown here -->
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold py-2 px-4 rounded-lg transition-all duration-medium font-syne text-sm" onclick="copyMediaUrl()">
+                                <i class="ph-bold ph-copy text-sm mr-1"></i>
+                                Copy URL
+                            </button>
+                            <button class="flex-1 bg-base-tint dark:bg-base-shade border border-stroke-elements text-t-bright font-semibold py-2 px-4 rounded-lg hover:bg-base-shade dark:hover:bg-base transition-all duration-medium font-syne text-sm" onclick="downloadMedia()">
+                                <i class="ph-bold ph-download text-sm mr-1"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Media Info -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">File Name</label>
+                            <p class="text-t-bright font-syne" id="mediaFileName">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">File Size</label>
+                            <p class="text-t-bright font-syne" id="mediaFileSize">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">Dimensions</label>
+                            <p class="text-t-bright font-syne" id="mediaDimensions">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">Type</label>
+                            <p class="text-t-bright font-syne" id="mediaType">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">Uploaded</label>
+                            <p class="text-t-bright font-syne" id="mediaUploaded">-</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">Alt Text</label>
+                            <input type="text" class="w-full px-3 py-2 bg-base dark:bg-base-tint border border-stroke-elements rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright text-sm" id="mediaAltText" placeholder="Alternative text for accessibility">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">Caption</label>
+                            <textarea class="w-full px-3 py-2 bg-base dark:bg-base-tint border border-stroke-elements rounded-lg focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright text-sm resize-none" id="mediaCaption" rows="3" placeholder="Optional caption"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end space-x-3 mt-6">
+                    <button class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-medium font-syne" onclick="deleteMedia()">
+                        <i class="ph-bold ph-trash text-sm mr-1"></i>
+                        Delete
+                    </button>
+                    <button class="px-4 py-2 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright rounded-lg transition-all duration-medium font-syne" onclick="updateMedia()">
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+/* View Mode Buttons */
+.view-mode-btn {
+    @apply w-8 h-8 flex items-center justify-center rounded text-t-medium hover:text-t-bright hover:bg-accent/10 transition-all duration-medium cursor-pointer;
+}
+
+.view-mode-btn.active {
+    @apply bg-accent text-t-opp-bright;
+}
+
+/* Folder Items */
+.folder-item.active {
+    @apply bg-accent/10 border-l-4 border-accent;
+}
+
+.folder-item.active .folder-item-content {
+    @apply text-accent;
+}
+
+/* Media Items */
+.media-item {
+    @apply relative group cursor-pointer overflow-hidden rounded-xl bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements hover:scale-105 hover:-translate-y-1 transition-all duration-medium shadow-lg hover:shadow-xl;
+}
+
+.media-item.selected {
+    @apply ring-2 ring-accent ring-offset-2 ring-offset-base;
+}
+
+.media-item-overlay {
+    @apply absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-all duration-medium flex items-center justify-center;
+}
+
+.media-item-actions {
+    @apply flex space-x-2;
+}
+
+.media-item img, .media-item video {
+    @apply w-full h-48 object-cover;
+}
+
+/* List View */
+.media-list-item {
+    @apply hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium;
+}
+
+/* Carousel */
+.carousel-item {
+    @apply flex-shrink-0 w-full aspect-video bg-base dark:bg-base-tint rounded-xl overflow-hidden;
+}
+
+.carousel-dots .dot {
+    @apply w-3 h-3 rounded-full bg-t-muted cursor-pointer transition-all duration-medium;
+}
+
+.carousel-dots .dot.active {
+    @apply bg-accent;
+}
+
+/* Masonry */
+.media-masonry-item {
+    @apply break-inside-avoid mb-6;
+}
+
+/* Upload Area */
+.upload-area.dragover {
+    @apply border-accent bg-accent/5;
+}
+
+/* Progress Bars */
+.upload-progress-bar {
+    @apply w-full bg-base-tint dark:bg-base-shade rounded-full h-2 overflow-hidden;
+}
+
+.upload-progress-fill {
+    @apply h-full bg-gradient-to-r from-accent to-secondary transition-all duration-300;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+/* Enhanced scrollbar */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+</style>
+
+<script>
+// Media Library Management Page
+let allMedia = [];
+let currentFolder = 'all';
+let currentView = 'grid';
+let selectedMedia = new Set();
+let carouselIndex = 0;
+
+function initMediaLibrary() {
+    console.log('🐛 MEDIA JS: initMediaLibrary() called');
+    loadMediaData();
+    setupEventListeners();
+    setupDragAndDrop();
+    console.log('🐛 MEDIA JS: initMediaLibrary() completed');
+}
+
+async function loadMediaData() {
+    console.log('🐛 MEDIA JS: loadMediaData() started');
+    console.log('🐛 MEDIA JS: Current URL:', window.location.href);
+    console.log('🐛 MEDIA JS: Fetch API available:', typeof fetch !== 'undefined');
+    
+    try {
+        console.log('🐛 MEDIA JS: Making API request to /api/content/media');
+        const response = await fetch('/api/content/media');
+        console.log('🐛 MEDIA JS: Response received:', response.status, response.statusText);
+        console.log('🐛 MEDIA JS: Response headers:', Object.fromEntries(response.headers.entries()));
+        
+        if (response.ok) {
+            console.log('🐛 MEDIA JS: Response is OK, parsing JSON...');
+            const data = await response.json();
+            console.log('🐛 MEDIA JS: JSON data parsed:', data);
+            console.log('🐛 MEDIA JS: Data type:', typeof data);
+            console.log('🐛 MEDIA JS: Data keys:', Object.keys(data));
+            
+            allMedia = data.media || [];
+            console.log('🐛 MEDIA JS: Media files loaded:', allMedia.length);
+            console.log('🐛 MEDIA JS: Media data:', allMedia);
+            
+            updateStats(data.stats);
+            console.log('🐛 MEDIA JS: Stats updated');
+            
+            renderFolders(data.folders || []);
+            console.log('🐛 MEDIA JS: Folders rendered');
+            
+            renderMedia();
+            console.log('🐛 MEDIA JS: Media rendered');
+        } else {
+            console.log('🐛 MEDIA JS: API response not OK, status:', response.status);
+            console.log('🐛 MEDIA JS: Response text:', await response.text());
+            console.log('🐛 MEDIA JS: Loading fallback data');
+            showFallbackMediaData();
+        }
+    } catch (error) {
+        console.log('🐛 MEDIA JS: Exception occurred during API call:', error);
+        console.log('🐛 MEDIA JS: Error name:', error.name);
+        console.log('🐛 MEDIA JS: Error message:', error.message);
+        console.log('🐛 MEDIA JS: Error stack:', error.stack);
+        console.log('🐛 MEDIA JS: Loading fallback data due to error');
+        showFallbackMediaData();
+    }
+    
+    console.log('🐛 MEDIA JS: loadMediaData() completed');
+}
+
+function updateStats(stats) {
+    console.log('🐛 MEDIA JS: updateStats() called');
+    console.log('🐛 MEDIA JS: Stats received:', stats);
+    
+    const totalFilesElement = document.getElementById('totalFiles');
+    const totalFoldersElement = document.getElementById('totalFolders');
+    const allCountElement = document.getElementById('allCount');
+    const recentCountElement = document.getElementById('recentCount');
+    
+    console.log('🐛 MEDIA JS: Stats elements found:', {
+        totalFiles: !!totalFilesElement,
+        totalFolders: !!totalFoldersElement,
+        allCount: !!allCountElement,
+        recentCount: !!recentCountElement
+    });
+    
+    if (totalFilesElement) {
+        totalFilesElement.textContent = formatNumber(stats.totalFiles || 0);
+        console.log('🐛 MEDIA JS: Updated totalFiles:', stats.totalFiles || 0);
+    }
+    
+    if (totalFoldersElement) {
+        totalFoldersElement.textContent = formatNumber(stats.totalFolders || 0);
+        console.log('🐛 MEDIA JS: Updated totalFolders:', stats.totalFolders || 0);
+    }
+    
+    if (allCountElement) {
+        allCountElement.textContent = formatNumber(stats.totalFiles || 0);
+        console.log('🐛 MEDIA JS: Updated allCount:', stats.totalFiles || 0);
+    }
+    
+    if (recentCountElement) {
+        recentCountElement.textContent = formatNumber(stats.recentFiles || 0);
+        console.log('🐛 MEDIA JS: Updated recentCount:', stats.recentFiles || 0);
+    }
+    
+    console.log('🐛 MEDIA JS: updateStats() completed');
+}
+
+function renderFolders(folders) {
+    console.log('🐛 MEDIA JS: renderFolders() called');
+    console.log('🐛 MEDIA JS: Folders received:', folders);
+    console.log('🐛 MEDIA JS: Folders count:', folders.length);
+    
+    const folderTree = document.getElementById('folderTree');
+    console.log('🐛 MEDIA JS: Folder tree element:', folderTree);
+    
+    if (!folderTree) {
+        console.error('🐛 MEDIA JS: ERROR - Folder tree element not found!');
+        return;
+    }
+    
+    folderTree.innerHTML = '';
+    console.log('🐛 MEDIA JS: Cleared folder tree');
+
+    folders.forEach((folder, index) => {
+        console.log(`🐛 MEDIA JS: Rendering folder ${index + 1}:`, folder);
+        
+        const folderElement = document.createElement('div');
+        folderElement.className = 'folder-item';
+        folderElement.dataset.folder = folder.id;
+        console.log(`🐛 MEDIA JS: Created folder element for ${folder.name} with ID ${folder.id}`);
+
+        folderElement.innerHTML = `
+            <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-base-tint/50 dark:hover:bg-base-shade/50 cursor-pointer transition-all duration-medium group">
+                <i class="ph-bold ph-folder text-t-accent group-hover:text-accent transition-colors"></i>
+                <span class="text-sm font-medium text-t-bright font-syne flex-1 truncate">${folder.name}</span>
+                <span class="text-xs text-t-medium font-syne">${formatNumber(folder.count || 0)}</span>
+                <div class="opacity-0 group-hover:opacity-100 flex space-x-1 ml-2">
+                    <button class="w-5 h-5 hover:bg-base-tint dark:hover:bg-base-shade rounded flex items-center justify-center transition-all duration-medium" onclick="renameFolder('${folder.id}', event)" title="Rename">
+                        <i class="ph-bold ph-pencil text-xs"></i>
+                    </button>
+                    <button class="w-5 h-5 hover:bg-red-500/20 text-red-500 rounded flex items-center justify-center transition-all duration-medium" onclick="deleteFolder('${folder.id}', event)" title="Delete">
+                        <i class="ph-bold ph-trash text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        folderElement.onclick = () => {
+            console.log(`🐛 MEDIA JS: Folder ${folder.name} clicked`);
+            selectFolder(folder.id, folder.name);
+        };
+        
+        folderTree.appendChild(folderElement);
+        console.log(`🐛 MEDIA JS: Added folder ${folder.name} to tree`);
+    });
+    
+    console.log('🐛 MEDIA JS: renderFolders() completed');
+}
+
+function renderMedia() {
+    console.log('🐛 MEDIA JS: renderMedia() called');
+    console.log('🐛 MEDIA JS: Current folder filter:', currentFolder);
+    console.log('🐛 MEDIA JS: Current view mode:', currentView);
+    console.log('🐛 MEDIA JS: Total media files available:', allMedia ? allMedia.length : 'null/undefined');
+    
+    const filteredMedia = filterMedia();
+    console.log('🐛 MEDIA JS: Filtered media count:', filteredMedia.length);
+    
+    const sortedMedia = sortMedia(filteredMedia);
+    console.log('🐛 MEDIA JS: Sorted media count:', sortedMedia.length);
+
+    // Update empty state
+    const emptyState = document.getElementById('emptyState');
+    console.log('🐛 MEDIA JS: Empty state element:', emptyState);
+    
+    if (sortedMedia.length === 0) {
+        console.log('🐛 MEDIA JS: No media to display - showing empty state');
+        emptyState.classList.remove('hidden');
+    } else {
+        console.log('🐛 MEDIA JS: Has media to display - hiding empty state');
+        emptyState.classList.add('hidden');
+    }
+
+    // Render based on current view
+    console.log('🐛 MEDIA JS: Rendering view:', currentView);
+    switch (currentView) {
+        case 'grid':
+            console.log('🐛 MEDIA JS: Calling renderGridView with', sortedMedia.length, 'items');
+            renderGridView(sortedMedia);
+            break;
+        case 'list':
+            console.log('🐛 MEDIA JS: Calling renderListView with', sortedMedia.length, 'items');
+            renderListView(sortedMedia);
+            break;
+        case 'carousel':
+            console.log('🐛 MEDIA JS: Calling renderCarouselView with', sortedMedia.length, 'items');
+            renderCarouselView(sortedMedia);
+            break;
+        case 'masonry':
+            console.log('🐛 MEDIA JS: Calling renderMasonryView with', sortedMedia.length, 'items');
+            renderMasonryView(sortedMedia);
+            break;
+        default:
+            console.warn('🐛 MEDIA JS: Unknown view mode:', currentView);
+    }
+    
+    console.log('🐛 MEDIA JS: renderMedia() completed');
+}
+
+function renderGridView(media) {
+    const grid = document.getElementById('mediaGrid');
+    grid.innerHTML = '';
+
+    media.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = `media-item ${selectedMedia.has(item.id) ? 'selected' : ''}`;
+        itemElement.dataset.mediaId = item.id;
+
+        itemElement.innerHTML = `
+            <div class="relative overflow-hidden rounded-xl">
+                ${getMediaPreview(item)}
+                <div class="media-item-overlay">
+                    <div class="media-item-actions">
+                        <button class="w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg flex items-center justify-center transition-all duration-medium" onclick="viewMediaDetails('${item.id}', event)" title="Details">
+                            <i class="ph-bold ph-info text-sm"></i>
+                        </button>
+                        <button class="w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg flex items-center justify-center transition-all duration-medium" onclick="downloadMedia('${item.id}', event)" title="Download">
+                            <i class="ph-bold ph-download text-sm"></i>
+                        </button>
+                        <button class="w-10 h-10 bg-red-500/20 hover:bg-red-500/30 backdrop-blur-sm text-white rounded-lg flex items-center justify-center transition-all duration-medium" onclick="deleteMedia('${item.id}', event)" title="Delete">
+                            <i class="ph-bold ph-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute top-2 left-2">
+                    <input type="checkbox" class="media-checkbox" ${selectedMedia.has(item.id) ? 'checked' : ''} onchange="toggleMediaSelection('${item.id}')">
+                </div>
+            </div>
+            <div class="p-3">
+                <div class="text-sm font-medium text-t-bright font-syne truncate" title="${item.name}">${item.name}</div>
+                <div class="text-xs text-t-medium font-syne">${formatFileSize(item.size)} • ${formatDate(item.uploadedAt)}</div>
+            </div>
+        `;
+
+        itemElement.onclick = (e) => {
+            if (!e.target.classList.contains('media-checkbox') && !e.target.closest('.media-item-actions')) {
+                toggleMediaSelection(item.id);
+            }
+        };
+
+        grid.appendChild(itemElement);
+    });
+}
+
+function renderListView(media) {
+    const list = document.getElementById('mediaList');
+    list.innerHTML = '';
+
+    media.forEach(item => {
+        const row = document.createElement('tr');
+        row.className = 'media-list-item';
+
+        row.innerHTML = `
+            <td class="px-6 py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-base-tint dark:bg-base-shade rounded-lg flex items-center justify-center overflow-hidden">
+                        ${getMediaIcon(item.type)}
+                    </div>
+                    <input type="checkbox" class="media-checkbox" ${selectedMedia.has(item.id) ? 'checked' : ''} onchange="toggleMediaSelection('${item.id}')">
+                </div>
+            </td>
+            <td class="px-6 py-4">
+                <div class="text-sm font-medium text-t-bright font-syne">${item.name}</div>
+            </td>
+            <td class="px-6 py-4 text-sm text-t-medium font-syne">${formatFileSize(item.size)}</td>
+            <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide font-syne ${getTypeBadgeClass(item.type)}">
+                    ${item.type}
+                </span>
+            </td>
+            <td class="px-6 py-4 text-sm text-t-medium font-syne">${formatDate(item.uploadedAt)}</td>
+            <td class="px-6 py-4">
+                <div class="flex items-center space-x-2">
+                    <button class="w-8 h-8 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="viewMediaDetails('${item.id}', event)" title="Details">
+                        <i class="ph-bold ph-info text-sm"></i>
+                    </button>
+                    <button class="w-8 h-8 bg-green-500/10 hover:bg-green-500/20 text-green-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="downloadMedia('${item.id}', event)" title="Download">
+                        <i class="ph-bold ph-download text-sm"></i>
+                    </button>
+                    <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="deleteMedia('${item.id}', event)" title="Delete">
+                        <i class="ph-bold ph-trash text-sm"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+
+        list.appendChild(row);
+    });
+}
+
+function renderCarouselView(media) {
+    const container = document.getElementById('carouselContainer');
+    const dots = document.getElementById('carouselDots');
+
+    container.innerHTML = '';
+    dots.innerHTML = '';
+
+    media.forEach((item, index) => {
+        // Carousel item
+        const itemElement = document.createElement('div');
+        itemElement.className = 'carousel-item';
+        itemElement.innerHTML = `
+            <div class="relative h-full">
+                ${getMediaPreview(item, 'carousel')}
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
+                    <h3 class="text-white text-xl font-bold font-syne mb-2">${item.name}</h3>
+                    <p class="text-white/80 text-sm font-syne">${formatFileSize(item.size)} • ${formatDate(item.uploadedAt)}</p>
+                </div>
+            </div>
+        `;
+        container.appendChild(itemElement);
+
+        // Dot
+        const dot = document.createElement('button');
+        dot.className = `dot ${index === carouselIndex ? 'active' : ''}`;
+        dot.onclick = () => goToSlide(index);
+        dots.appendChild(dot);
+    });
+
+    updateCarouselPosition();
+}
+
+function renderMasonryView(media) {
+    const masonry = document.getElementById('mediaMasonry');
+    masonry.innerHTML = '';
+
+    media.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'media-masonry-item';
+
+        itemElement.innerHTML = `
+            <div class="media-item ${selectedMedia.has(item.id) ? 'selected' : ''}" data-media-id="${item.id}">
+                <div class="relative overflow-hidden rounded-xl">
+                    ${getMediaPreview(item)}
+                    <div class="media-item-overlay">
+                        <div class="media-item-actions">
+                            <button class="w-8 h-8 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg flex items-center justify-center transition-all duration-medium" onclick="viewMediaDetails('${item.id}', event)" title="Details">
+                                <i class="ph-bold ph-info text-sm"></i>
+                            </button>
+                            <button class="w-8 h-8 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-lg flex items-center justify-center transition-all duration-medium" onclick="downloadMedia('${item.id}', event)" title="Download">
+                                <i class="ph-bold ph-download text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="absolute top-2 left-2">
+                        <input type="checkbox" class="media-checkbox" ${selectedMedia.has(item.id) ? 'checked' : ''} onchange="toggleMediaSelection('${item.id}')">
+                    </div>
+                </div>
+                <div class="p-3">
+                    <div class="text-sm font-medium text-t-bright font-syne truncate" title="${item.name}">${item.name}</div>
+                    <div class="text-xs text-t-medium font-syne">${formatFileSize(item.size)}</div>
+                </div>
+            </div>
+        `;
+
+        itemElement.onclick = (e) => {
+            if (!e.target.classList.contains('media-checkbox') && !e.target.closest('.media-item-actions')) {
+                toggleMediaSelection(item.id);
+            }
+        };
+
+        masonry.appendChild(itemElement);
+    });
+}
+
+function getMediaPreview(item, view = 'grid') {
+    const baseClasses = view === 'carousel' ? 'w-full h-full object-cover' : 'w-full h-48 object-cover';
+
+    if (item.type.startsWith('image/')) {
+        return `<img src="${item.url}" alt="${item.name}" class="${baseClasses}" loading="lazy">`;
+    } else if (item.type.startsWith('video/')) {
+        return `
+            <video class="${baseClasses}" controls>
+                <source src="${item.url}" type="${item.type}">
+            </video>
+        `;
+    } else {
+        return `
+            <div class="w-full h-full bg-base-tint dark:bg-base-shade flex items-center justify-center">
+                <div class="text-center">
+                    ${getMediaIcon(item.type, 'text-4xl')}
+                    <div class="text-sm font-medium text-t-bright font-syne mt-2">${item.type.split('/')[1].toUpperCase()}</div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function getMediaIcon(type, sizeClass = 'text-lg') {
+    if (type.startsWith('image/')) {
+        return `<i class="ph-bold ph-image ${sizeClass} text-blue-500"></i>`;
+    } else if (type.startsWith('video/')) {
+        return `<i class="ph-bold ph-video ${sizeClass} text-red-500"></i>`;
+    } else if (type.startsWith('audio/')) {
+        return `<i class="ph-bold ph-music-note ${sizeClass} text-green-500"></i>`;
+    } else if (type.includes('pdf')) {
+        return `<i class="ph-bold ph-file-pdf ${sizeClass} text-red-600"></i>`;
+    } else if (type.includes('document') || type.includes('word')) {
+        return `<i class="ph-bold ph-file-doc ${sizeClass} text-blue-600"></i>`;
+    } else {
+        return `<i class="ph-bold ph-file ${sizeClass} text-gray-500"></i>`;
+    }
+}
+
+function getTypeBadgeClass(type) {
+    if (type.startsWith('image/')) {
+        return 'bg-blue-500/10 text-blue-500 border border-blue-500/20';
+    } else if (type.startsWith('video/')) {
+        return 'bg-red-500/10 text-red-500 border border-red-500/20';
+    } else if (type.startsWith('audio/')) {
+        return 'bg-green-500/10 text-green-500 border border-green-500/20';
+    } else {
+        return 'bg-gray-500/10 text-gray-500 border border-gray-500/20';
+    }
+}
+
+function setupEventListeners() {
+    console.log('🐛 MEDIA JS: setupEventListeners() called');
+    
+    // View mode buttons
+    const viewButtons = document.querySelectorAll('.view-mode-btn');
+    console.log('🐛 MEDIA JS: Found', viewButtons.length, 'view mode buttons');
+    viewButtons.forEach(btn => {
+        btn.onclick = () => {
+            console.log('🐛 MEDIA JS: View button clicked:', btn.dataset.view);
+            switchView(btn.dataset.view);
+        };
+    });
+
+    // Search
+    const searchInput = document.getElementById('searchMedia');
+    console.log('🐛 MEDIA JS: Search input element:', searchInput);
+    if (searchInput) {
+        searchInput.oninput = debounce((e) => {
+            console.log('🐛 MEDIA JS: Search input changed:', e.target.value);
+            renderMedia();
+        }, 300);
+    } else {
+        console.error('🐛 MEDIA JS: Search input element not found!');
+    }
+
+    // Sort
+    const sortSelect = document.getElementById('sortBy');
+    console.log('🐛 MEDIA JS: Sort select element:', sortSelect);
+    if (sortSelect) {
+        sortSelect.onchange = () => {
+            console.log('🐛 MEDIA JS: Sort changed:', sortSelect.value);
+            renderMedia();
+        };
+    } else {
+        console.error('🐛 MEDIA JS: Sort select element not found!');
+    }
+
+    // Folder selection
+    const folderItems = document.querySelectorAll('.folder-item');
+    console.log('🐛 MEDIA JS: Found', folderItems.length, 'folder items');
+    folderItems.forEach(item => {
+        item.onclick = () => {
+            console.log('🐛 MEDIA JS: Folder item clicked:', item.dataset.folder);
+            selectFolder(item.dataset.folder);
+        };
+    });
+    
+    console.log('🐛 MEDIA JS: setupEventListeners() completed');
+}
+
+function setupDragAndDrop() {
+    const uploadArea = document.getElementById('uploadArea');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        uploadArea.classList.add('dragover');
+    }
+
+    function unhighlight(e) {
+        uploadArea.classList.remove('dragover');
+    }
+
+    uploadArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+}
+
+function switchView(view) {
+    currentView = view;
+
+    // Update button states
+    document.querySelectorAll('.view-mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-view="${view}"]`).classList.add('active');
+
+    // Show/hide views
+    document.querySelectorAll('.view-container').forEach(container => {
+        container.classList.add('hidden');
+    });
+    document.getElementById(`${view}View`).classList.remove('hidden');
+
+    renderMedia();
+}
+
+function selectFolder(folderId, folderName = 'All Files') {
+    currentFolder = folderId;
+    document.getElementById('currentFolderName').textContent = folderName;
+
+    // Update active folder
+    document.querySelectorAll('.folder-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    document.querySelector(`[data-folder="${folderId}"]`).classList.add('active');
+
+    renderMedia();
+}
+
+function filterMedia() {
+    console.log('🐛 MEDIA JS: filterMedia() called');
+    console.log('🐛 MEDIA JS: Input allMedia count:', allMedia ? allMedia.length : 'null/undefined');
+    console.log('🐛 MEDIA JS: Current folder filter:', currentFolder);
+    
+    let filtered = allMedia;
+    console.log('🐛 MEDIA JS: Starting with filtered:', filtered ? filtered.length : 'null/undefined');
+
+    // Filter by folder
+    if (currentFolder !== 'all') {
+        console.log('🐛 MEDIA JS: Filtering by folder:', currentFolder);
+        if (currentFolder === 'recent') {
+            console.log('🐛 MEDIA JS: Filtering for recent files (last 7 days)');
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            console.log('🐛 MEDIA JS: Week ago date:', weekAgo.toISOString());
+            
+            filtered = filtered.filter(item => {
+                const itemDate = new Date(item.uploadedAt);
+                const isRecent = itemDate >= weekAgo;
+                console.log(`🐛 MEDIA JS: File ${item.name}: uploaded ${itemDate.toISOString()} isRecent=${isRecent}`);
+                return isRecent;
+            });
+        } else {
+            console.log('🐛 MEDIA JS: Filtering for folder ID:', currentFolder);
+            filtered = filtered.filter(item => {
+                const matches = item.folderId === currentFolder;
+                console.log(`🐛 MEDIA JS: File ${item.name}: folderId=${item.folderId} matches=${matches}`);
+                return matches;
+            });
+        }
+    } else {
+        console.log('🐛 MEDIA JS: No folder filtering (showing all files)');
+    }
+
+    // Filter by search
+    const searchInput = document.getElementById('searchMedia');
+    if (searchInput) {
+        const searchTerm = searchInput.value.toLowerCase();
+        console.log('🐛 MEDIA JS: Search term:', searchTerm);
+        
+        if (searchTerm) {
+            console.log('🐛 MEDIA JS: Applying search filter');
+            filtered = filtered.filter(item => {
+                const matchesName = item.name.toLowerCase().includes(searchTerm);
+                const matchesType = item.type.toLowerCase().includes(searchTerm);
+                const matches = matchesName || matchesType;
+                console.log(`🐛 MEDIA JS: File ${item.name}: nameMatch=${matchesName}, typeMatch=${matchesType}, overall=${matches}`);
+                return matches;
+            });
+        } else {
+            console.log('🐛 MEDIA JS: No search term - no search filtering applied');
+        }
+    } else {
+        console.warn('🐛 MEDIA JS: Search input element not found!');
+    }
+
+    console.log('🐛 MEDIA JS: Final filtered count:', filtered.length);
+    console.log('🐛 MEDIA JS: filterMedia() completed');
+    return filtered;
+}
+
+function sortMedia(media) {
+    console.log('🐛 MEDIA JS: sortMedia() called');
+    console.log('🐛 MEDIA JS: Input media count:', media.length);
+    
+    const sortSelect = document.getElementById('sortBy');
+    const sortBy = sortSelect ? sortSelect.value : 'date-desc';
+    console.log('🐛 MEDIA JS: Sort criteria:', sortBy);
+    
+    const sorted = [...media];
+    console.log('🐛 MEDIA JS: Created sorted array copy');
+
+    sorted.sort((a, b) => {
+        let comparison = 0;
+        switch (sortBy) {
+            case 'date-desc':
+                comparison = new Date(b.uploadedAt) - new Date(a.uploadedAt);
+                console.log(`🐛 MEDIA JS: Comparing dates: ${a.name} (${a.uploadedAt}) vs ${b.name} (${b.uploadedAt}) = ${comparison}`);
+                break;
+            case 'date-asc':
+                comparison = new Date(a.uploadedAt) - new Date(b.uploadedAt);
+                console.log(`🐛 MEDIA JS: Comparing dates: ${a.name} (${a.uploadedAt}) vs ${b.name} (${b.uploadedAt}) = ${comparison}`);
+                break;
+            case 'name-asc':
+                comparison = a.name.localeCompare(b.name);
+                console.log(`🐛 MEDIA JS: Comparing names: "${a.name}" vs "${b.name}" = ${comparison}`);
+                break;
+            case 'name-desc':
+                comparison = b.name.localeCompare(a.name);
+                console.log(`🐛 MEDIA JS: Comparing names: "${b.name}" vs "${a.name}" = ${comparison}`);
+                break;
+            case 'size-desc':
+                comparison = b.size - a.size;
+                console.log(`🐛 MEDIA JS: Comparing sizes: ${a.name} (${a.size}) vs ${b.name} (${b.size}) = ${comparison}`);
+                break;
+            case 'size-asc':
+                comparison = a.size - b.size;
+                console.log(`🐛 MEDIA JS: Comparing sizes: ${a.name} (${a.size}) vs ${b.name} (${b.size}) = ${comparison}`);
+                break;
+            default:
+                console.warn(`🐛 MEDIA JS: Unknown sort criteria: ${sortBy}, returning 0`);
+                comparison = 0;
+        }
+        return comparison;
+    });
+
+    console.log('🐛 MEDIA JS: Sorted media count:', sorted.length);
+    console.log('🐛 MEDIA JS: First few sorted items:', sorted.slice(0, 3).map(item => item.name));
+    console.log('🐛 MEDIA JS: sortMedia() completed');
+    return sorted;
+}
+
+function toggleMediaSelection(mediaId) {
+    if (selectedMedia.has(mediaId)) {
+        selectedMedia.delete(mediaId);
+    } else {
+        selectedMedia.add(mediaId);
+    }
+    renderMedia();
+}
+
+function openUploadModal() {
+    document.getElementById('uploadModal').classList.remove('hidden');
+}
+
+function closeUploadModal() {
+    document.getElementById('uploadModal').classList.add('hidden');
+}
+
+function createNewFolder() {
+    document.getElementById('folderModal').classList.remove('hidden');
+}
+
+function closeFolderModal() {
+    document.getElementById('folderModal').classList.add('hidden');
+}
+
+function createFolder() {
+    const folderName = document.getElementById('folderName').value.trim();
+    if (!folderName) {
+        showNotification('Please enter a folder name', 'error');
+        return;
+    }
+
+    showNotification(`Folder "${folderName}" created successfully`, 'success');
+    closeFolderModal();
+    document.getElementById('folderName').value = '';
+    loadMediaData(); // Refresh
+}
+
+function viewMediaDetails(mediaId, event) {
+    if (event) event.stopPropagation();
+    const media = allMedia.find(m => m.id === mediaId);
+    if (media) {
+        document.getElementById('mediaModalTitle').textContent = media.name;
+        document.getElementById('mediaFileName').textContent = media.name;
+        document.getElementById('mediaFileSize').textContent = formatFileSize(media.size);
+        document.getElementById('mediaDimensions').textContent = media.dimensions || 'N/A';
+        document.getElementById('mediaType').textContent = media.type;
+        document.getElementById('mediaUploaded').textContent = formatDate(media.uploadedAt);
+        document.getElementById('mediaAltText').value = media.altText || '';
+        document.getElementById('mediaCaption').value = media.caption || '';
+
+        const preview = document.getElementById('mediaPreview');
+        preview.innerHTML = getMediaPreview(media, 'modal');
+
+        document.getElementById('mediaModal').dataset.mediaId = mediaId;
+        document.getElementById('mediaModal').classList.remove('hidden');
+    }
+}
+
+function closeMediaModal() {
+    document.getElementById('mediaModal').classList.add('hidden');
+}
+
+function updateMedia() {
+    const mediaId = document.getElementById('mediaModal').dataset.mediaId;
+    const altText = document.getElementById('mediaAltText').value;
+    const caption = document.getElementById('mediaCaption').value;
+
+    showNotification('Media updated successfully', 'success');
+    closeMediaModal();
+    loadMediaData(); // Refresh
+}
+
+function deleteMedia(mediaId, event) {
+    if (event) event.stopPropagation();
+    if (confirm('Are you sure you want to delete this file?')) {
+        showNotification('File deleted successfully', 'success');
+        loadMediaData(); // Refresh
+    }
+}
+
+function downloadMedia(mediaId, event) {
+    if (event) event.stopPropagation();
+    const media = allMedia.find(m => m.id === mediaId);
+    if (media) {
+        // Create download link
+        const link = document.createElement('a');
+        link.href = media.url;
+        link.download = media.name;
+        link.click();
+    }
+}
+
+function copyMediaUrl(mediaId) {
+    const media = allMedia.find(m => m.id === mediaId || document.getElementById('mediaModal').dataset.mediaId);
+    if (media) {
+        navigator.clipboard.writeText(media.url).then(() => {
+            showNotification('URL copied to clipboard', 'success');
+        });
+    }
+}
+
+function goBack() {
+    selectFolder('all', 'All Files');
+}
+
+function prevSlide() {
+    const media = filterMedia();
+    if (carouselIndex > 0) {
+        carouselIndex--;
+        updateCarouselPosition();
+    }
+}
+
+function nextSlide() {
+    const media = filterMedia();
+    if (carouselIndex < media.length - 1) {
+        carouselIndex++;
+        updateCarouselPosition();
+    }
+}
+
+function goToSlide(index) {
+    carouselIndex = index;
+    updateCarouselPosition();
+}
+
+function updateCarouselPosition() {
+    const container = document.getElementById('carouselContainer');
+    container.style.transform = `translateX(-${carouselIndex * 100}%)`;
+
+    // Update dots
+    document.querySelectorAll('.carousel-dots .dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === carouselIndex);
+    });
+}
+
+function handleFiles(files) {
+    const uploadProgress = document.getElementById('uploadProgress');
+    const uploadQueue = document.getElementById('uploadQueue');
+
+    uploadProgress.classList.remove('hidden');
+    uploadQueue.innerHTML = '';
+
+    Array.from(files).forEach((file, index) => {
+        const uploadItem = document.createElement('div');
+        uploadItem.className = 'flex items-center space-x-3 p-3 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg';
+        uploadItem.innerHTML = `
+            <div class="w-8 h-8 bg-base dark:bg-base-tint rounded-lg flex items-center justify-center">
+                ${getMediaIcon(file.type)}
+            </div>
+            <div class="flex-1">
+                <div class="text-sm font-medium text-t-bright font-syne">${file.name}</div>
+                <div class="text-xs text-t-medium font-syne">${formatFileSize(file.size)}</div>
+            </div>
+            <div class="upload-progress-bar">
+                <div class="upload-progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="text-xs text-t-medium font-syne" id="progress-${index}">0%</div>
+        `;
+
+        uploadQueue.appendChild(uploadItem);
+
+        // Simulate upload progress
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    showNotification(`"${file.name}" uploaded successfully`, 'success');
+                    loadMediaData(); // Refresh
+                }, 500);
+            }
+
+            document.querySelector(`#progress-${index}`).textContent = `${Math.round(progress)}%`;
+            uploadItem.querySelector('.upload-progress-fill').style.width = `${progress}%`;
+        }, 200);
+    });
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function formatNumber(num) {
+    return new Intl.NumberFormat().format(num);
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+function showFallbackMediaData() {
+    console.log('🐛 MEDIA JS: showFallbackMediaData() called - using fallback data');
+    console.log('🐛 MEDIA JS: This means the API call failed');
+
+    // Show sample data when API is not available
+    const fallbackStats = {
+        totalFiles: 247,
+        totalFolders: 12,
+        recentFiles: 23
+    };
+    console.log('🐛 MEDIA JS: Fallback stats:', fallbackStats);
+    updateStats(fallbackStats);
+
+    // Sample folders
+    const sampleFolders = [
+        { id: 'images', name: 'Images', count: 89 },
+        { id: 'videos', name: 'Videos', count: 34 },
+        { id: 'documents', name: 'Documents', count: 67 },
+        { id: 'audio', name: 'Audio', count: 23 },
+        { id: 'archives', name: 'Archives', count: 34 }
+    ];
+    console.log('🐛 MEDIA JS: Sample folders:', sampleFolders);
+    renderFolders(sampleFolders);
+
+    // Sample media with working URLs
+    allMedia = [
+        {
+            id: '1',
+            name: 'hero-banner.jpg',
+            url: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop',
+            type: 'image/jpeg',
+            size: 245760,
+            uploadedAt: '2024-01-15T10:30:00Z',
+            folderId: 'images',
+            dimensions: '1920x1080',
+            altText: 'Hero banner image',
+            caption: 'Main hero banner for the website'
+        },
+        {
+            id: '2',
+            name: 'nature-landscape.jpg',
+            url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+            type: 'image/jpeg',
+            size: 187432,
+            uploadedAt: '2024-01-14T09:15:00Z',
+            folderId: 'images',
+            dimensions: '1920x1280',
+            altText: 'Beautiful nature landscape',
+            caption: 'Stunning mountain landscape'
+        },
+        {
+            id: '3',
+            name: 'tech-background.jpg',
+            url: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=300&fit=crop',
+            type: 'image/jpeg',
+            size: 312567,
+            uploadedAt: '2024-01-13T14:20:00Z',
+            folderId: 'images',
+            dimensions: '1920x1080',
+            altText: 'Technology background',
+            caption: 'Digital technology background'
+        },
+        {
+            id: '4',
+            name: 'product-demo.mp4',
+            url: '#',
+            type: 'video/mp4',
+            size: 15728640,
+            uploadedAt: '2024-01-14T15:45:00Z',
+            folderId: 'videos',
+            dimensions: '1920x1080',
+            altText: '',
+            caption: 'Product demonstration video'
+        },
+        {
+            id: '5',
+            name: 'user-manual.pdf',
+            url: '#',
+            type: 'application/pdf',
+            size: 2097152,
+            uploadedAt: '2024-01-13T12:00:00Z',
+            folderId: 'documents',
+            dimensions: 'N/A',
+            altText: '',
+            caption: 'Complete user manual'
+        },
+        {
+            id: '6',
+            name: 'presentation.pptx',
+            url: '#',
+            type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            size: 5242880,
+            uploadedAt: '2024-01-12T11:30:00Z',
+            folderId: 'documents',
+            dimensions: 'N/A',
+            altText: '',
+            caption: 'Company presentation slides'
+        },
+        {
+            id: '7',
+            name: 'background-music.mp3',
+            url: '#',
+            type: 'audio/mpeg',
+            size: 4194304,
+            uploadedAt: '2024-01-11T16:45:00Z',
+            folderId: 'audio',
+            dimensions: 'N/A',
+            altText: '',
+            caption: 'Background music for videos'
+        },
+        {
+            id: '8',
+            name: 'data-backup.zip',
+            url: '#',
+            type: 'application/zip',
+            size: 104857600,
+            uploadedAt: '2024-01-10T08:00:00Z',
+            folderId: 'archives',
+            dimensions: 'N/A',
+            altText: '',
+            caption: 'Monthly data backup'
+        }
+    ];
+
+    console.log('🐛 MEDIA JS: Fallback data loaded, rendering media...');
+    console.log('🐛 MEDIA JS: Media count:', allMedia.length);
+    renderMedia();
+    console.log('🐛 MEDIA JS: showFallbackMediaData() completed');
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMediaLibrary);
+} else {
+    initMediaLibrary();
+}
+</script>

@@ -1,0 +1,959 @@
+<!-- System Status Page -->
+<div class="system-status">
+    <!-- Status Overview Cards -->
+    <div class="status-cards">
+        <div class="status-card">
+            <div class="status-icon server">
+                <i class="ph-bold ph-server"></i>
+            </div>
+            <div class="status-content">
+                <div class="status-title">Server Status</div>
+                <div class="status-value online">Online</div>
+                <div class="status-subtitle">All systems operational</div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <div class="status-icon database">
+                <i class="ph-bold ph-database"></i>
+            </div>
+            <div class="status-content">
+                <div class="status-title">Database</div>
+                <div class="status-value healthy">Healthy</div>
+                <div class="status-subtitle">Response time: 12ms</div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <div class="status-icon uptime">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="status-content">
+                <div class="status-title">Uptime</div>
+                <div class="status-value excellent">99.9%</div>
+                <div class="status-subtitle">Last 30 days</div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <div class="status-icon memory">
+                <i class="ph-bold ph-cpu"></i>
+            </div>
+            <div class="status-content">
+                <div class="status-title">Memory Usage</div>
+                <div class="status-value good">45%</div>
+                <div class="status-subtitle">512MB / 1GB used</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Metrics -->
+    <div class="metrics-section">
+        <div class="metric-card">
+            <div class="metric-header">
+                <h3>System Resources</h3>
+                <div class="metric-controls">
+                    <select id="resourceTimeframe">
+                        <option value="1h">Last Hour</option>
+                        <option value="24h">Last 24 Hours</option>
+                        <option value="7d">Last 7 Days</option>
+                    </select>
+                </div>
+            </div>
+            <div class="metric-content">
+                <div class="resource-metric">
+                    <div class="metric-label">CPU Usage</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill cpu-fill" style="width: 35%"></div>
+                    </div>
+                    <div class="metric-value">35%</div>
+                </div>
+
+                <div class="resource-metric">
+                    <div class="metric-label">Memory Usage</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill memory-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="metric-value">45%</div>
+                </div>
+
+                <div class="resource-metric">
+                    <div class="metric-label">Disk Usage</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill disk-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="metric-value">60%</div>
+                </div>
+
+                <div class="resource-metric">
+                    <div class="metric-label">Network I/O</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill network-fill" style="width: 25%"></div>
+                    </div>
+                    <div class="metric-value">25%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-header">
+                <h3>API Performance</h3>
+            </div>
+            <div class="metric-content">
+                <div class="api-metrics">
+                    <div class="api-metric">
+                        <div class="metric-icon">
+                            <i class="ph-bold ph-gauge"></i>
+                        </div>
+                        <div class="metric-info">
+                            <div class="metric-name">Avg Response Time</div>
+                            <div class="metric-value">127ms</div>
+                        </div>
+                    </div>
+
+                    <div class="api-metric">
+                        <div class="metric-icon">
+                            <i class="ph-bold ph-check-circle"></i>
+                        </div>
+                        <div class="metric-info">
+                            <div class="metric-name">Success Rate</div>
+                            <div class="metric-value">99.8%</div>
+                        </div>
+                    </div>
+
+                    <div class="api-metric">
+                        <div class="metric-icon">
+                            <i class="ph-bold ph-trend-up"></i>
+                        </div>
+                        <div class="metric-info">
+                            <div class="metric-name">Requests/Hour</div>
+                            <div class="metric-value">2,847</div>
+                        </div>
+                    </div>
+
+                    <div class="api-metric">
+                        <div class="metric-icon">
+                            <i class="ph-bold ph-x-circle"></i>
+                        </div>
+                        <div class="metric-info">
+                            <div class="metric-name">Error Rate</div>
+                            <div class="metric-value">0.2%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Status -->
+    <div class="services-section">
+        <div class="section-header">
+            <h3>Service Status</h3>
+            <button class="refresh-btn" id="refreshServices">
+                <i class="ph-bold ph-arrow-clockwise"></i>
+                Refresh
+            </button>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">
+                        <i class="ph-bold ph-article"></i>
+                    </div>
+                    <div class="service-info">
+                        <div class="service-name">Blog Service</div>
+                        <div class="service-status operational">Operational</div>
+                    </div>
+                </div>
+                <div class="service-metrics">
+                    <div class="service-metric">
+                        <span class="metric-label">Posts:</span>
+                        <span class="metric-value">1,247</span>
+                    </div>
+                    <div class="service-metric">
+                        <span class="metric-label">Uptime:</span>
+                        <span class="metric-value">99.9%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">
+                        <i class="ph-bold ph-magnifying-glass"></i>
+                    </div>
+                    <div class="service-info">
+                        <div class="service-name">Search Service</div>
+                        <div class="service-status operational">Operational</div>
+                    </div>
+                </div>
+                <div class="service-metrics">
+                    <div class="service-metric">
+                        <span class="metric-label">Queries:</span>
+                        <span class="metric-value">8,432</span>
+                    </div>
+                    <div class="service-metric">
+                        <span class="metric-label">Avg Time:</span>
+                        <span class="metric-value">45ms</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">
+                        <i class="ph-bold ph-paper-plane-tilt"></i>
+                    </div>
+                    <div class="service-info">
+                        <div class="service-name">Newsletter Service</div>
+                        <div class="service-status operational">Operational</div>
+                    </div>
+                </div>
+                <div class="service-metrics">
+                    <div class="service-metric">
+                        <span class="metric-label">Subscribers:</span>
+                        <span class="metric-value">3,891</span>
+                    </div>
+                    <div class="service-metric">
+                        <span class="metric-label">Sent Today:</span>
+                        <span class="metric-value">127</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">
+                        <i class="ph-bold ph-shopping-bag"></i>
+                    </div>
+                    <div class="service-info">
+                        <div class="service-name">Store Service</div>
+                        <div class="service-status maintenance">Maintenance</div>
+                    </div>
+                </div>
+                <div class="service-metrics">
+                    <div class="service-metric">
+                        <span class="metric-label">Products:</span>
+                        <span class="metric-value">0</span>
+                    </div>
+                    <div class="service-metric">
+                        <span class="metric-label">Status:</span>
+                        <span class="metric-value">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Logs -->
+    <div class="logs-section">
+        <div class="section-header">
+            <h3>Recent System Logs</h3>
+            <div class="log-controls">
+                <select id="logLevel">
+                    <option value="all">All Levels</option>
+                    <option value="error">Errors</option>
+                    <option value="warning">Warnings</option>
+                    <option value="info">Info</option>
+                </select>
+                <button class="clear-logs-btn" id="clearLogs">
+                    <i class="ph-bold ph-trash"></i>
+                    Clear Logs
+                </button>
+            </div>
+        </div>
+
+        <div class="logs-container">
+            <div class="log-entry">
+                <div class="log-time">14:32:15</div>
+                <div class="log-level info">INFO</div>
+                <div class="log-message">User authentication successful: gojominitia</div>
+            </div>
+
+            <div class="log-entry">
+                <div class="log-time">14:31:42</div>
+                <div class="log-level info">INFO</div>
+                <div class="log-message">Blog post created: "The Future of AI"</div>
+            </div>
+
+            <div class="log-entry">
+                <div class="log-time">14:30:18</div>
+                <div class="log-level warning">WARN</div>
+                <div class="log-message">High memory usage detected: 78%</div>
+            </div>
+
+            <div class="log-entry">
+                <div class="log-time">14:28:55</div>
+                <div class="log-level error">ERROR</div>
+                <div class="log-message">Failed to send newsletter: SMTP timeout</div>
+            </div>
+
+            <div class="log-entry">
+                <div class="log-time">14:25:33</div>
+                <div class="log-level info">INFO</div>
+                <div class="log-message">Search index rebuilt successfully</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .system-status {
+        padding: 2rem;
+    }
+
+    /* Status Cards */
+    .status-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .status-card {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .status-card:hover {
+        box-shadow: var(--admin-shadow-md);
+    }
+
+    .status-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: var(--admin-radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .status-icon.server {
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+        color: white;
+    }
+
+    .status-icon.database {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+    }
+
+    .status-icon.uptime {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+    }
+
+    .status-icon.memory {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+    }
+
+    .status-content {
+        flex: 1;
+    }
+
+    .status-title {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .status-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+
+    .status-value.online,
+    .status-value.healthy,
+    .status-value.excellent,
+    .status-value.good {
+        color: var(--admin-success);
+    }
+
+    .status-subtitle {
+        font-size: 0.75rem;
+        color: var(--admin-text-muted);
+    }
+
+    /* Metrics Section */
+    .metrics-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .metric-card {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+    }
+
+    .metric-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .metric-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .metric-controls select {
+        padding: 0.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+    }
+
+    .metric-content {
+        padding: 1.5rem;
+    }
+
+    /* Resource Metrics */
+    .resource-metric {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .resource-metric:last-child {
+        margin-bottom: 0;
+    }
+
+    .metric-label {
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+        font-weight: 600;
+        min-width: 120px;
+    }
+
+    .metric-bar {
+        flex: 1;
+        height: 8px;
+        background: var(--admin-border);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .metric-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+
+    .cpu-fill {
+        background: linear-gradient(90deg, var(--admin-primary), var(--admin-secondary));
+    }
+
+    .memory-fill {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+    }
+
+    .disk-fill {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+    }
+
+    .network-fill {
+        background: linear-gradient(90deg, #10b981, #059669);
+    }
+
+    .metric-value {
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+        font-weight: 600;
+        min-width: 40px;
+        text-align: right;
+    }
+
+    /* API Metrics */
+    .api-metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .api-metric {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--admin-bg);
+        border-radius: var(--admin-radius-md);
+    }
+
+    .metric-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .metric-info {
+        flex: 1;
+    }
+
+    .metric-name {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+        margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--admin-text-primary);
+    }
+
+    /* Services Section */
+    .services-section {
+        margin-bottom: 2rem;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .refresh-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--admin-primary);
+        color: white;
+        border: none;
+        border-radius: var(--admin-radius-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .refresh-btn:hover {
+        background: var(--admin-primary);
+        opacity: 0.9;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+    }
+
+    .service-card {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+        transition: all 0.2s ease;
+    }
+
+    .service-card:hover {
+        box-shadow: var(--admin-shadow-md);
+    }
+
+    .service-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .service-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--admin-radius-lg);
+        background: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .service-info {
+        flex: 1;
+    }
+
+    .service-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .service-status {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--admin-radius-sm);
+        text-transform: uppercase;
+    }
+
+    .service-status.operational {
+        background: var(--admin-success);
+        color: white;
+    }
+
+    .service-status.maintenance {
+        background: var(--admin-warning);
+        color: white;
+    }
+
+    .service-status.down {
+        background: var(--admin-error);
+        color: white;
+    }
+
+    .service-metrics {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .service-metric {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .service-metric .metric-label {
+        color: var(--admin-text-muted);
+    }
+
+    /* Logs Section */
+    .logs-section {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+    }
+
+    .log-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .clear-logs-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--admin-error);
+        color: white;
+        border: none;
+        border-radius: var(--admin-radius-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .clear-logs-btn:hover {
+        background: var(--admin-error);
+        opacity: 0.9;
+    }
+
+    .logs-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .log-entry {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.875rem;
+    }
+
+    .log-entry:last-child {
+        border-bottom: none;
+    }
+
+    .log-time {
+        color: var(--admin-text-muted);
+        min-width: 80px;
+    }
+
+    .log-level {
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--admin-radius-sm);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .log-level.info {
+        background: var(--admin-info);
+        color: white;
+    }
+
+    .log-level.warning {
+        background: var(--admin-warning);
+        color: white;
+    }
+
+    .log-level.error {
+        background: var(--admin-error);
+        color: white;
+    }
+
+    .log-message {
+        color: var(--admin-text-primary);
+        flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .metrics-section {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .status-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .services-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .service-metrics {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .log-entry {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+</style>
+
+<script>
+    // System Status Page Initialization
+    function initOverviewStatus() {
+        loadSystemStatus();
+        setupEventListeners();
+        startStatusUpdates();
+    }
+
+    async function loadSystemStatus() {
+        try {
+            // Load system metrics
+            const metricsResponse = await fetch('/api/admin/system/metrics');
+            if (metricsResponse.ok) {
+                const metrics = await metricsResponse.json();
+                updateSystemMetrics(metrics);
+            }
+
+            // Load service status
+            const servicesResponse = await fetch('/api/admin/system/services');
+            if (servicesResponse.ok) {
+                const services = await servicesResponse.json();
+                updateServiceStatus(services);
+            }
+
+            // Load recent logs
+            const logsResponse = await fetch('/api/admin/system/logs?limit=20');
+            if (logsResponse.ok) {
+                const logs = await logsResponse.json();
+                updateSystemLogs(logs);
+            }
+
+        } catch (error) {
+            console.error('Error loading system status:', error);
+            showNotification('Failed to load system status', 'error');
+        }
+    }
+
+    function updateSystemMetrics(data) {
+        // Update resource metrics
+        updateResourceMetric('cpu-fill', data.cpuUsage || 35);
+        updateResourceMetric('memory-fill', data.memoryUsage || 45);
+        updateResourceMetric('disk-fill', data.diskUsage || 60);
+        updateResourceMetric('network-fill', data.networkUsage || 25);
+
+        // Update API metrics
+        document.querySelector('.api-metric:nth-child(1) .metric-value').textContent =
+            `${data.avgResponseTime || 127}ms`;
+        document.querySelector('.api-metric:nth-child(2) .metric-value').textContent =
+            `${data.successRate || 99.8}%`;
+        document.querySelector('.api-metric:nth-child(3) .metric-value').textContent =
+            formatNumber(data.requestsPerHour || 2847);
+        document.querySelector('.api-metric:nth-child(4) .metric-value').textContent =
+            `${data.errorRate || 0.2}%`;
+    }
+
+    function updateResourceMetric(className, percentage) {
+        const element = document.querySelector(`.${className}`);
+        if (element) {
+            element.style.width = `${percentage}%`;
+            // Update the text value too
+            const valueElement = element.parentElement.nextElementSibling;
+            if (valueElement) {
+                valueElement.textContent = `${percentage}%`;
+            }
+        }
+    }
+
+    function updateServiceStatus(services) {
+        const serviceCards = document.querySelectorAll('.service-card');
+
+        services.forEach((service, index) => {
+            if (index < serviceCards.length) {
+                const card = serviceCards[index];
+                const statusElement = card.querySelector('.service-status');
+                const metrics = card.querySelectorAll('.service-metric .metric-value');
+
+                // Update status
+                statusElement.textContent = service.status;
+                statusElement.className = `service-status ${service.statusClass}`;
+
+                // Update metrics
+                if (metrics.length >= 2) {
+                    metrics[0].textContent = formatNumber(service.metric1);
+                    metrics[1].textContent = service.metric2;
+                }
+            }
+        });
+    }
+
+    function updateSystemLogs(logs) {
+        const container = document.querySelector('.logs-container');
+        container.innerHTML = '';
+
+        logs.forEach(log => {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `
+                <div class="log-time">${log.time}</div>
+                <div class="log-level ${log.level.toLowerCase()}">${log.level}</div>
+                <div class="log-message">${log.message}</div>
+            `;
+            container.appendChild(logEntry);
+        });
+    }
+
+    function setupEventListeners() {
+        // Resource timeframe selector
+        const timeframeSelect = document.getElementById('resourceTimeframe');
+        if (timeframeSelect) {
+            timeframeSelect.addEventListener('change', () => {
+                loadSystemStatus();
+            });
+        }
+
+        // Refresh services button
+        const refreshBtn = document.getElementById('refreshServices');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', async () => {
+                refreshBtn.disabled = true;
+                refreshBtn.innerHTML = '<i class="ph-bold ph-spinner ph-spinner-animate"></i> Refreshing...';
+
+                await loadSystemStatus();
+
+                refreshBtn.disabled = false;
+                refreshBtn.innerHTML = '<i class="ph-bold ph-arrow-clockwise"></i> Refresh';
+            });
+        }
+
+        // Log level filter
+        const logLevelSelect = document.getElementById('logLevel');
+        if (logLevelSelect) {
+            logLevelSelect.addEventListener('change', () => {
+                filterLogs(logLevelSelect.value);
+            });
+        }
+
+        // Clear logs button
+        const clearLogsBtn = document.getElementById('clearLogs');
+        if (clearLogsBtn) {
+            clearLogsBtn.addEventListener('click', async () => {
+                if (confirm('Are you sure you want to clear all system logs?')) {
+                    try {
+                        const response = await fetch('/api/admin/system/logs', {
+                            method: 'DELETE'
+                        });
+
+                        if (response.ok) {
+                            updateSystemLogs([]);
+                            showNotification('System logs cleared successfully', 'success');
+                        } else {
+                            throw new Error('Failed to clear logs');
+                        }
+                    } catch (error) {
+                        console.error('Error clearing logs:', error);
+                        showNotification('Failed to clear system logs', 'error');
+                    }
+                }
+            });
+        }
+    }
+
+    function filterLogs(level) {
+        const logEntries = document.querySelectorAll('.log-entry');
+
+        logEntries.forEach(entry => {
+            if (level === 'all') {
+                entry.style.display = 'flex';
+            } else {
+                const entryLevel = entry.querySelector('.log-level').textContent.toLowerCase();
+                entry.style.display = entryLevel === level ? 'flex' : 'none';
+            }
+        });
+    }
+
+    function startStatusUpdates() {
+        // Update status every 30 seconds
+        setInterval(() => {
+            loadSystemStatus();
+        }, 30000);
+    }
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initOverviewStatus);
+    } else {
+        initOverviewStatus();
+    }
+</script>

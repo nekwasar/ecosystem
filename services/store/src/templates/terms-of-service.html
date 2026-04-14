@@ -1,0 +1,128 @@
+{% extends "base_store.html" %}
+
+{% block title %}Terms of Service | NekwasaR Store{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-base min-h-screen">
+    <div class="max-w-4xl mx-auto px-6">
+        <!-- Header -->
+        <div class="mb-16 border-l-4 border-accent pl-8">
+            <h1 class="font-display font-black text-5xl text-t-bright uppercase tracking-tighter mb-4">Terms of <span
+                    class="text-accent underline decoration-stroke-elements underline-offset-8">Service</span></h1>
+            <p class="text-t-muted font-medium text-lg italic">Last updated: January 2026</p>
+        </div>
+
+        <div class="space-y-12">
+            <!-- Introduction Card -->
+            <div class="bg-base-tint/50 backdrop-blur-md border border-stroke-elements p-8 rounded-2xl shadow-2xl">
+                <p class="text-t-medium leading-relaxed text-lg mb-0 font-inter">
+                    Welcome to the <span class="text-t-bright font-bold">NekwasaR Store</span>. These Terms of Service
+                    constitute a legally binding agreement between you and NekwasaR regarding your use of our digital
+                    marketplace. By accessing our services, purchasing assets, or interacting with our platform, you
+                    acknowledge that you have read, understood, and agreed to these terms in their entirety.
+                </p>
+            </div>
+
+            <!-- Section 1: Licensing -->
+            <div class="group">
+                <h2
+                    class="font-display font-bold text-2xl text-t-bright flex items-center gap-4 mb-6 group-hover:text-accent transition-colors">
+                    <span
+                        class="text-xs bg-accent text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold">01</span>
+                    Digital Licensing & Ownership
+                </h2>
+                <div class="pl-12 space-y-6 text-t-medium leading-relaxed">
+                    <p>Unless explicitly stated otherwise, all digital products are the intellectual property of
+                        NekwasaR.</p>
+
+                    <div class="bg-base-shade border-l-4 border-t-muted p-4 rounded-r-xl">
+                        <h4 class="text-t-bright font-bold mb-2">A. Standard Digital License</h4>
+                        <p>Upon purchase of a standard asset, you are granted a non-exclusive, royalty-free license to
+                            use the product in personal and commercial projects. <strong>You do not acquire
+                                ownership</strong> of the underlying source code or design assets.</p>
+                    </div>
+
+                    <div class="bg-base-shade border-l-4 border-accent p-4 rounded-r-xl">
+                        <h4 class="text-t-bright font-bold mb-2">B. Complete Acquisition (Enterprise/Reserved)</h4>
+                        <p>For products marked as <strong>"Reserved"</strong> or purchased under an <strong>"Enterprise
+                                Acquisition"</strong> agreement: You acquire <strong>full ownership rights</strong>.
+                            This includes the transfer of intellectual property, source code, and resale rights. Once
+                            acquired, the asset is removed from our public marketplace, and you become the sole owner.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Usage Restrictions -->
+            <div class="group">
+                <h2
+                    class="font-display font-bold text-2xl text-t-bright flex items-center gap-4 mb-6 group-hover:text-accent transition-colors">
+                    <span
+                        class="text-xs bg-accent text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold">02</span>
+                    Prohibited Actions
+                </h2>
+                <div class="pl-12 text-t-medium leading-relaxed">
+                    <p class="mb-4 text-sm italic text-t-muted">The following restrictions apply to <strong>Standard
+                            License</strong> holders only. Owners of completely acquired assets are exempt.</p>
+                    <ul class="list-disc space-y-4 marker:text-accent">
+                        <li><span class="text-t-bright font-bold">Sublicensing:</span> Reselling, redistributing, or
+                            sharing the raw source files on any marketplace or public repository is strictly prohibited.
+                        </li>
+                        <li><span class="text-t-bright font-bold">Reverse Engineering:</span> You may not attempt to
+                            decompile or extract proprietary logic for the purpose of creating a competing service.</li>
+                        <li><span class="text-t-bright font-bold">Misrepresentation:</span> You may not claim credit for
+                            the original creation of the assets unless you hold a Complete Acquisition title.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 3: Payments & Refunds -->
+            <div class="group">
+                <h2
+                    class="font-display font-bold text-2xl text-t-bright flex items-center gap-4 mb-6 group-hover:text-accent transition-colors">
+                    <span
+                        class="text-xs bg-accent text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold">03</span>
+                    Payments, Refunds & Taxes
+                </h2>
+                <div class="pl-12 space-y-4 text-t-medium leading-relaxed">
+                    <p>All transactions are handled securely via <span
+                            class="text-t-bright font-bold underline decoration-accent decoration-2 underline-offset-4">Stripe</span>.
+                        NekwasaR does not store your credit card information.</p>
+                    <p class="bg-base-tint border-l-4 border-secondary p-4 rounded-r-lg italic">
+                        <span class="font-bold text-t-bright not-italic">Digital Goods Policy:</span> Due to the
+                        intangible and irrevocable nature of digital downloads, all sales are final. Refunds are only
+                        considered in the event of a verified technical defect that prevents the asset from functioning
+                        as described.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 4: Liability -->
+            <div class="group">
+                <h2
+                    class="font-display font-bold text-2xl text-t-bright flex items-center gap-4 mb-6 group-hover:text-accent transition-colors">
+                    <span
+                        class="text-xs bg-accent text-white w-8 h-8 rounded-lg flex items-center justify-center font-bold">04</span>
+                    Limitation of Liability
+                </h2>
+                <div class="pl-12 space-y-4 text-t-medium leading-relaxed">
+                    <p>NekwasaR shall not be held liable for any direct or indirect damages resulting from the use or
+                        inability to use the purchased assets. Assets are provided "as is" without warranty of any kind
+                        unless exempted in product description.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact CTA -->
+        <div class="mt-20 border-t border-stroke-elements pt-12 text-center">
+            <p class="text-t-muted mb-4 uppercase tracking-widest text-xs font-bold font-display">Have questions
+                regarding these terms?</p>
+            <a href="/support"
+                class="inline-flex items-center gap-3 text-accent hover:text-white font-bold transition-all group">
+                Visit Support Center
+                <i class="ph ph-arrow-right group-hover:translate-x-2 transition-transform"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

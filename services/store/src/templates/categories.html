@@ -1,0 +1,145 @@
+{% extends "base_store.html" %}
+
+{% block title %}Categories | NekwasaR Store{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen flex flex-col md:flex-row bg-base">
+    <!-- Sidebar (Left) -->
+    <aside
+        class="sticky top-[73px] h-[calc(100vh-73px)] w-full md:w-80 bg-base-tint border-r border-stroke-elements overflow-y-auto hidden md:block z-40">
+        <div class="p-6">
+            <h2 class="font-display font-bold text-xl text-t-bright mb-6 tracking-wide uppercase">Categories</h2>
+            <nav class="space-y-2">
+                {% for root in roots %}
+                <a href="/categories?slug={{ root.slug }}"
+                    class="block px-4 py-3 rounded-xl transition-all duration-200 group relative
+                          {{ 'bg-accent/10 border border-accent/20' if active_category and active_category.id == root.id else 'hover:bg-base-shade text-t-medium hover:text-white' }}">
+
+                    <div class="flex items-center justify-between">
+                        <span
+                            class="font-syne font-bold {{ 'text-accent' if active_category and active_category.id == root.id else '' }}">
+                            {{ root.name }}
+                        </span>
+                        {% if active_category and active_category.id == root.id %}
+                        <i class="ph-bold ph-caret-right text-accent"></i>
+                        {% endif %}
+                    </div>
+                </a>
+                {% endfor %}
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Mobile Nav (Top - Horizontal Scroll) -->
+    <div class="md:hidden sticky top-[73px] bg-base-tint border-b border-stroke-elements z-40 overflow-x-auto">
+        <div class="flex gap-4 p-4 min-w-max">
+            {% for root in roots %}
+            <a href="/categories?slug={{ root.slug }}"
+                class="px-4 py-2 rounded-full border text-sm font-bold font-syne whitespace-nowrap
+                      {{ 'bg-accent text-white border-accent' if active_category and active_category.id == root.id else 'bg-base border-stroke-elements text-t-muted' }}">
+                {{ root.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 md:p-12 overflow-y-auto">
+
+        {% if active_category %}
+        <!-- Hero / Header -->
+        <div class="mb-12">
+            <h1 class="font-display font-bold text-4xl md:text-5xl text-t-bright mb-4">{{ active_category.name }}</h1>
+            <p class="text-lg text-t-muted font-syne max-w-3xl">{{ active_category.description or 'Explore premium
+                resources in this category.' }}</p>
+        </div>
+
+        <!-- Subcategories Loop -->
+        {% if active_category.children %}
+        {% for sub in active_category.children %}
+        <div class="mb-16">
+            <!-- Subcategory Header -->
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-stroke-elements">
+                <h2 class="font-display font-bold text-2xl text-t-bright flex items-center gap-3">
+                    {{ sub.name }}
+                </h2>
+                <a href="/store?filter={{ sub.slug }}"
+                    class="group flex items-center gap-2 text-sm font-bold font-syne text-accent hover:text-white transition-colors">
+                    <span>See All</span>
+                    <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Products Grid (3 Columns Fixed) -->
+            <div class="grid grid-cols-3 gap-6">
+                {% for p in sub.products[:6] %}
+                <div class="group relative bg-base-shade rounded-xl overflow-hidden border border-stroke-elements hover:border-accent/50 transition-all hover:shadow-xl cursor-pointer hover:-translate-y-1 block h-full flex flex-col"
+                    onclick="window.location.href='/product/{{ p.slug }}'">
+
+                    <!-- Image -->
+                    <div class="aspect-[4/3] bg-base-tint overflow-hidden relative">
+                        {% set hero = p.images|selectattr("is_hero")|first or p.images|first %}
+                        <img src="{{ hero.file_url if hero else '/store/img/placeholder.jpg' }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
+                            onerror="this.src='https://placehold.co/400x300/1e293b/FFF?text=Asset'">
+
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="p-3 md:p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3
+                                class="font-bold text-sm md:text-lg text-t-bright leading-tight mb-2 group-hover:text-accent transition-colors line-clamp-1">
+                                {{ p.name }}</h3>
+                            <p class="text-[10px] md:text-xs text-t-muted line-clamp-2">{{ p.short_description or
+                                p.description[:60] }}...</p>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="font-mono text-xs md:text-sm font-bold text-t-bright">${{ p.price }}</span>
+                            <div
+                                class="w-6 h-6 md:w-8 md:h-8 rounded-full bg-base-tint flex items-center justify-center text-t-muted group-hover:bg-accent group-hover:text-white transition-colors">
+                                <i class="ph-bold ph-arrow-right text-xs md:text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div
+                    class="col-span-3 py-8 text-center border border-dashed border-stroke-elements rounded-xl bg-base-tint/30">
+                    <p class="text-t-muted font-syne text-sm">No products in {{ sub.name }} yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="py-20 text-center">
+            <div
+                class="w-20 h-20 bg-base-tint rounded-full flex items-center justify-center mx-auto mb-6 text-t-muted border border-stroke-elements">
+                <i class="ph-duotone ph-tree-structure text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-t-bright font-display mb-2">No Subcategories</h3>
+            <p class="text-t-muted">This category matches products directly or has no organization yet.</p>
+            <a href="/store?filter={{ active_category.slug }}"
+                class="inline-block mt-6 px-6 py-3 bg-accent text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
+                Browse All Assets
+            </a>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State / Welcome -->
+        <div class="flex flex-col items-center justify-center h-full min-h-[50vh] text-center">
+            <i class="ph-duotone ph-stack text-6xl text-t-muted mb-6 animate-bounce"></i>
+            <h2 class="font-display font-bold text-3xl text-t-bright mb-4">Select a Category</h2>
+            <p class="text-t-muted max-w-md mx-auto">Choose a collection from the sidebar to explore our premium assets.
+            </p>
+        </div>
+        {% endif %}
+
+    </main>
+</div>
+{% endblock %}

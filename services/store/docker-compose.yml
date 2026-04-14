@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  store:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecosystem_store
+    restart: always
+    ports:
+      - "8004:8004"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://ecosystem:password@postgres:5432/store_db}
+      - PORT=8004
+    networks:
+      - ecosystem_network
+
+networks:
+  ecosystem_network:
+    driver: bridge

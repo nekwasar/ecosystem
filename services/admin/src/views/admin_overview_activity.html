@@ -1,0 +1,900 @@
+<!-- Recent Activity Page -->
+<div class="recent-activity">
+    <!-- Activity Filters -->
+    <div class="activity-filters">
+        <div class="filter-group">
+            <label>Time Range:</label>
+            <select id="timeRange">
+                <option value="1h">Last Hour</option>
+                <option value="24h">Last 24 Hours</option>
+                <option value="7d">Last 7 Days</option>
+                <option value="30d">Last 30 Days</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Activity Type:</label>
+            <select id="activityType">
+                <option value="all">All Activities</option>
+                <option value="content">Content</option>
+                <option value="users">Users</option>
+                <option value="system">System</option>
+                <option value="security">Security</option>
+            </select>
+        </div>
+
+        <div class="filter-actions">
+            <button class="refresh-btn" id="refreshActivity">
+                <i class="ph-bold ph-arrow-clockwise"></i>
+                Refresh
+            </button>
+            <button class="export-btn" id="exportActivity">
+                <i class="ph-bold ph-download"></i>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="activity-timeline">
+        <div class="timeline-header">
+            <h3>Activity Timeline</h3>
+            <div class="timeline-stats">
+                <span id="totalActivities">-- total activities</span>
+            </div>
+        </div>
+
+        <div class="timeline-container" id="activityTimeline">
+            <!-- Activity items will be loaded here -->
+            <div class="text-slate-500 text-center">
+                <i class="ph-bold ph-clock text-2xl mb-4 opacity-50"></i>
+                <div class="text-sm">Recent activity will be displayed here</div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreActivity" style="display: none;">
+                <i class="ph-bold ph-plus"></i>
+                Load More Activities
+            </button>
+        </div>
+    </div>
+
+    <!-- Activity Summary -->
+    <div class="activity-summary">
+        <div class="summary-header">
+            <h3>Activity Summary</h3>
+            <span class="summary-period">Last 24 hours</span>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-icon content">
+                    <i class="ph-bold ph-article"></i>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-value" id="contentActivities">--</div>
+                    <div class="summary-label">Content Activities</div>
+                    <div class="summary-change positive">
+                        <i class="ph-bold ph-trend-up"></i>
+                        <span>+12%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon users">
+                    <i class="ph-bold ph-users"></i>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-value" id="userActivities">--</div>
+                    <div class="summary-label">User Activities</div>
+                    <div class="summary-change positive">
+                        <i class="ph-bold ph-trend-up"></i>
+                        <span>+8%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon system">
+                    <i class="ph-bold ph-gear"></i>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-value" id="systemActivities">--</div>
+                    <div class="summary-label">System Activities</div>
+                    <div class="summary-change neutral">
+                        <i class="ph-bold ph-minus"></i>
+                        <span>0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-icon security">
+                    <i class="ph-bold ph-shield"></i>
+                </div>
+                <div class="summary-content">
+                    <div class="summary-value" id="securityActivities">--</div>
+                    <div class="summary-label">Security Events</div>
+                    <div class="summary-change negative">
+                        <i class="ph-bold ph-trend-down"></i>
+                        <span>-5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Details Modal (Hidden by default) -->
+    <div class="activity-modal" id="activityModal" style="display: none;">
+        <div class="modal-overlay" onclick="closeActivityModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Activity Details</h3>
+                <button class="modal-close" onclick="closeActivityModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Activity details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .recent-activity {
+        padding: 2rem;
+    }
+
+    /* Activity Filters */
+    .activity-filters {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .filter-group label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+    }
+
+    .filter-group select {
+        padding: 0.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        min-width: 140px;
+    }
+
+    .filter-actions {
+        display: flex;
+        gap: 1rem;
+        margin-left: auto;
+    }
+
+    .refresh-btn, .export-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .refresh-btn:hover, .export-btn:hover {
+        background: var(--admin-bg);
+        border-color: var(--admin-primary);
+    }
+
+    /* Activity Timeline */
+    .activity-timeline {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .timeline-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .timeline-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .timeline-stats {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .timeline-container {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--admin-border);
+        border-top: 3px solid var(--admin-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
+
+    .loading-text {
+        font-size: 0.875rem;
+    }
+
+    /* Activity Items */
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .activity-item:hover {
+        background: var(--admin-bg);
+    }
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+    .activity-timeline-line {
+        position: relative;
+        width: 2px;
+        background: var(--admin-border);
+        margin-left: 19px;
+        margin-top: 8px;
+    }
+
+    .activity-timeline-line::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--admin-primary);
+    }
+
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .activity-icon.content {
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+    }
+
+    .activity-icon.user {
+        background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .activity-icon.system {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .activity-icon.security {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .activity-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .activity-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .activity-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .activity-time {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+        white-space: nowrap;
+        margin-left: 1rem;
+    }
+
+    .activity-description {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .activity-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.75rem;
+        color: var(--admin-text-muted);
+    }
+
+    .activity-user {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .activity-ip {
+        font-family: 'Monaco', 'Menlo', monospace;
+    }
+
+    /* Load More */
+    .load-more-container {
+        padding: 1.5rem;
+        text-align: center;
+        border-top: 1px solid var(--admin-border);
+    }
+
+    .load-more-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: var(--admin-primary);
+        color: white;
+        border: none;
+        border-radius: var(--admin-radius-md);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .load-more-btn:hover {
+        background: var(--admin-primary);
+        opacity: 0.9;
+    }
+
+    /* Activity Summary */
+    .activity-summary {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+    }
+
+    .summary-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+
+    .summary-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .summary-period {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .summary-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--admin-bg);
+        border-radius: var(--admin-radius-md);
+        border: 1px solid var(--admin-border);
+    }
+
+    .summary-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--admin-radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .summary-icon.content {
+        background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+    }
+
+    .summary-icon.users {
+        background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .summary-icon.system {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .summary-icon.security {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .summary-content {
+        flex: 1;
+    }
+
+    .summary-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .summary-label {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+        margin-bottom: 0.5rem;
+    }
+
+    .summary-change {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .summary-change.positive {
+        color: var(--admin-success);
+    }
+
+    .summary-change.negative {
+        color: var(--admin-error);
+    }
+
+    .summary-change.neutral {
+        color: var(--admin-text-secondary);
+    }
+
+    /* Activity Modal */
+    .activity-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+    }
+
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--admin-surface);
+        border-radius: var(--admin-radius-lg);
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .modal-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        color: var(--admin-text-secondary);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: var(--admin-radius-md);
+        transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+        background: var(--admin-border);
+        color: var(--admin-text-primary);
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .activity-filters {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .filter-actions {
+            margin-left: 0;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .recent-activity {
+            padding: 1rem;
+        }
+
+        .activity-filters {
+            padding: 1rem;
+        }
+
+        .summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .activity-item {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .activity-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .activity-time {
+            margin-left: 0;
+        }
+    }
+</style>
+
+<script>
+    // Recent Activity Page Initialization
+    let currentPage = 1;
+    let hasMoreActivities = true;
+    let currentFilters = {
+        timeRange: '24h',
+        activityType: 'all'
+    };
+
+    function initOverviewActivity() {
+        setupEventListeners();
+        loadActivityData();
+        startAutoRefresh();
+    }
+
+    async function loadActivityData(loadMore = false) {
+        if (!loadMore) {
+            currentPage = 1;
+            hasMoreActivities = true;
+        }
+
+        try {
+            const params = new URLSearchParams({
+                page: currentPage,
+                limit: 20,
+                timeRange: currentFilters.timeRange,
+                type: currentFilters.activityType
+            });
+
+            const response = await fetch(`/api/admin/activity?${params}`);
+            if (response.ok) {
+                const data = await response.json();
+
+                if (loadMore) {
+                    appendActivities(data.activities);
+                } else {
+                    updateActivities(data.activities);
+                }
+
+                updateActivityStats(data.stats);
+                hasMoreActivities = data.hasMore;
+                updateLoadMoreButton();
+
+                if (!loadMore) {
+                    document.getElementById('totalActivities').textContent =
+                        `${formatNumber(data.total)} total activities`;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading activity data:', error);
+            showNotification('Failed to load activity data', 'error');
+        }
+    }
+
+    function updateActivities(activities) {
+        const container = document.getElementById('activityTimeline');
+        container.innerHTML = '';
+
+        if (!activities || activities.length === 0) {
+            container.innerHTML = `
+                <div class="loading-state">
+                    <i class="ph-bold ph-clock" style="font-size: 2rem; margin-bottom: 1rem; color: var(--admin-text-secondary);"></i>
+                    <div class="loading-text">No activities found</div>
+                </div>
+            `;
+            return;
+        }
+
+        activities.forEach((activity, index) => {
+            const activityElement = createActivityElement(activity, index === 0);
+            container.appendChild(activityElement);
+        });
+    }
+
+    function appendActivities(activities) {
+        const container = document.getElementById('activityTimeline');
+
+        activities.forEach(activity => {
+            const activityElement = createActivityElement(activity, false);
+            container.appendChild(activityElement);
+        });
+    }
+
+    function createActivityElement(activity, isFirst = false) {
+        const item = document.createElement('div');
+        item.className = 'activity-item';
+        item.onclick = () => showActivityDetails(activity);
+
+        item.innerHTML = `
+            ${!isFirst ? '<div class="activity-timeline-line"></div>' : ''}
+            <div class="activity-icon ${activity.category}">
+                <i class="ph-bold ${getActivityIcon(activity.type)}"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-header">
+                    <h4 class="activity-title">${activity.title}</h4>
+                    <span class="activity-time">${formatTimeAgo(activity.timestamp)}</span>
+                </div>
+                <p class="activity-description">${activity.description}</p>
+                <div class="activity-meta">
+                    <span class="activity-user">
+                        <i class="ph-bold ph-user"></i>
+                        ${activity.user}
+                    </span>
+                    ${activity.ip ? `<span class="activity-ip">IP: ${activity.ip}</span>` : ''}
+                    ${activity.userAgent ? `<span>User-Agent: ${activity.userAgent}</span>` : ''}
+                </div>
+            </div>
+        `;
+
+        return item;
+    }
+
+    function getActivityIcon(type) {
+        const icons = {
+            'login': 'ph-sign-in',
+            'logout': 'ph-sign-out',
+            'post_created': 'ph-plus',
+            'post_updated': 'ph-pencil',
+            'post_deleted': 'ph-trash',
+            'comment_added': 'ph-chat-circle',
+            'comment_moderated': 'ph-shield-check',
+            'user_registered': 'ph-user-plus',
+            'newsletter_sent': 'ph-paper-plane-tilt',
+            'search_performed': 'ph-magnifying-glass',
+            'cache_cleared': 'ph-broom',
+            'backup_created': 'ph-database',
+            'settings_changed': 'ph-gear',
+            'error_occurred': 'ph-warning',
+            'security_alert': 'ph-shield-x'
+        };
+        return icons[type] || 'ph-circle';
+    }
+
+    function updateActivityStats(stats) {
+        document.getElementById('contentActivities').textContent = formatNumber(stats.content || 0);
+        document.getElementById('userActivities').textContent = formatNumber(stats.users || 0);
+        document.getElementById('systemActivities').textContent = formatNumber(stats.system || 0);
+        document.getElementById('securityActivities').textContent = formatNumber(stats.security || 0);
+
+        // Update change indicators
+        updateChangeIndicator('contentActivities', stats.contentChange);
+        updateChangeIndicator('userActivities', stats.userChange);
+        updateChangeIndicator('systemActivities', stats.systemChange);
+        updateChangeIndicator('securityActivities', stats.securityChange);
+    }
+
+    function updateChangeIndicator(elementId, change) {
+        if (!change) return;
+
+        const container = document.getElementById(elementId).parentElement;
+        const changeElement = container.querySelector('.summary-change');
+
+        if (changeElement) {
+            changeElement.className = `summary-change ${change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral'}`;
+            changeElement.innerHTML = `
+                <i class="ph-bold ph-trend-${change > 0 ? 'up' : change < 0 ? 'down' : 'right'}"></i>
+                <span>${Math.abs(change)}%</span>
+            `;
+        }
+    }
+
+    function updateLoadMoreButton() {
+        const loadMoreBtn = document.getElementById('loadMoreActivity');
+        loadMoreBtn.style.display = hasMoreActivities ? 'inline-flex' : 'none';
+    }
+
+    function showActivityDetails(activity) {
+        const modal = document.getElementById('activityModal');
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+
+        title.textContent = activity.title;
+
+        body.innerHTML = `
+            <div class="activity-details">
+                <div class="detail-row">
+                    <strong>Type:</strong> ${activity.type.replace('_', ' ').toUpperCase()}
+                </div>
+                <div class="detail-row">
+                    <strong>Timestamp:</strong> ${new Date(activity.timestamp).toLocaleString()}
+                </div>
+                <div class="detail-row">
+                    <strong>User:</strong> ${activity.user}
+                </div>
+                ${activity.ip ? `<div class="detail-row"><strong>IP Address:</strong> ${activity.ip}</div>` : ''}
+                <div class="detail-row">
+                    <strong>Description:</strong> ${activity.description}
+                </div>
+                ${activity.details ? `
+                    <div class="detail-row">
+                        <strong>Additional Details:</strong>
+                        <pre>${JSON.stringify(activity.details, null, 2)}</pre>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+
+        modal.style.display = 'block';
+    }
+
+    function closeActivityModal() {
+        document.getElementById('activityModal').style.display = 'none';
+    }
+
+    function setupEventListeners() {
+        // Filter changes
+        document.getElementById('timeRange').addEventListener('change', (e) => {
+            currentFilters.timeRange = e.target.value;
+            loadActivityData();
+        });
+
+        document.getElementById('activityType').addEventListener('change', (e) => {
+            currentFilters.activityType = e.target.value;
+            loadActivityData();
+        });
+
+        // Refresh button
+        document.getElementById('refreshActivity').addEventListener('click', () => {
+            loadActivityData();
+        });
+
+        // Export button
+        document.getElementById('exportActivity').addEventListener('click', async () => {
+            try {
+                const params = new URLSearchParams(currentFilters);
+                const response = await fetch(`/api/admin/activity/export?${params}`);
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'activity_log.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+
+                    showNotification('Activity log exported successfully', 'success');
+                } else {
+                    throw new Error('Export failed');
+                }
+            } catch (error) {
+                console.error('Error exporting activity:', error);
+                showNotification('Failed to export activity log', 'error');
+            }
+        });
+
+        // Load more button
+        document.getElementById('loadMoreActivity').addEventListener('click', () => {
+            currentPage++;
+            loadActivityData(true);
+        });
+    }
+
+    function startAutoRefresh() {
+        // Refresh every 5 minutes
+        setInterval(() => {
+            loadActivityData();
+        }, 300000);
+    }
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initOverviewActivity);
+    } else {
+        initOverviewActivity();
+    }
+</script>

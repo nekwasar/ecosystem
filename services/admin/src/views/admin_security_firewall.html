@@ -1,0 +1,799 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-6 md:p-8 lg:p-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Firewall</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Network security, intrusion detection, and access control management</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firewall Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Firewall Status Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-shield-check"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="firewallStatus">Active</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Firewall Status</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="statusChange">
+                            <i class="ph-bold ph-check-circle text-base"></i>
+                            <span>Protected</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Blocked Threats Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-red-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-500 via-pink-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-shield-x"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="blockedThreats">1,247</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Blocked Threats</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-red-500 dark:text-red-400" id="threatsChange">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+23 today</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-red-500/10 to-pink-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Active Rules Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-list-checks"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="activeRules">89</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Active Rules</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-blue-500 dark:text-blue-400" id="rulesChange">
+                            <i class="ph-bold ph-circle text-base"></i>
+                            <span>Enforced</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Network Traffic Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-bar-chart"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-2xl font-bold text-t-bright font-syne mb-1" id="networkTraffic">2.4GB</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Traffic Today</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-yellow-500 dark:text-yellow-400" id="trafficChange">
+                            <i class="ph-bold ph-activity text-base"></i>
+                            <span>Monitored</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- Firewall Rules Management -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-list-checks text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Firewall Rules</h3>
+                            <p class="text-t-medium font-syne text-sm">Configure and manage network access rules and policies</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="addRuleBtn">
+                            <i class="ph-bold ph-plus text-lg"></i>
+                            <span>Add Rule</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="importRulesBtn">
+                            <i class="ph-bold ph-upload text-lg"></i>
+                            <span>Import Rules</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rules Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full" id="firewallRulesTable">
+                    <thead class="bg-base-tint/50 dark:bg-base-shade/50">
+                        <tr class="border-b border-stroke-elements">
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Rule Name</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Source</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Destination</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Protocol</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Action</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Status</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="firewallRulesTableBody" class="divide-y divide-stroke-elements">
+                        <!-- Firewall rules will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Intrusion Detection & Prevention -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-12">
+            <!-- IDS/IPS Status -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-shield-warning text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Intrusion Detection</h3>
+                            <p class="text-t-medium font-syne text-sm">Real-time threat detection and prevention systems</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements text-center">
+                                <div class="text-2xl font-bold text-green-500 font-syne mb-1">Active</div>
+                                <div class="text-sm text-t-medium font-syne">IDS Status</div>
+                            </div>
+                            <div class="p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements text-center">
+                                <div class="text-2xl font-bold text-blue-500 font-syne mb-1">Enabled</div>
+                                <div class="text-sm text-t-medium font-syne">IPS Status</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                                <div>
+                                    <h5 class="font-semibold text-t-bright font-syne">Signature-based Detection</h5>
+                                    <p class="text-sm text-t-medium font-syne">Known attack pattern recognition</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                                <div>
+                                    <h5 class="font-semibold text-t-bright font-syne">Anomaly Detection</h5>
+                                    <p class="text-sm text-t-medium font-syne">AI-powered behavioral analysis</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                                <div>
+                                    <h5 class="font-semibold text-t-bright font-syne">Auto Block Threats</h5>
+                                    <p class="text-sm text-t-medium font-syne">Automatically block detected threats</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-base-shade peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-accent/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Security Events -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-warning text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Security Events</h3>
+                            <p class="text-t-medium font-syne text-sm">Recent firewall and intrusion detection alerts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <div class="space-y-4 max-h-96 overflow-y-auto">
+                        <div class="p-4 bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 rounded-xl">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="ph-bold ph-shield-x text-red-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h5 class="font-bold text-t-bright font-syne">Port Scan Detected</h5>
+                                        <span class="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded-full">Critical</span>
+                                    </div>
+                                    <p class="text-t-medium font-syne text-sm mb-3">Port scanning activity detected from IP 192.168.1.100. All ports blocked.</p>
+                                    <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                        <span>5 minutes ago</span>
+                                        <span>•</span>
+                                        <span>Blocked</span>
+                                        <span>•</span>
+                                        <span>192.168.1.100</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-yellow-500/5 dark:bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="ph-bold ph-warning text-yellow-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h5 class="font-bold text-t-bright font-syne">SQL Injection Attempt</h5>
+                                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-bold rounded-full">High</span>
+                                    </div>
+                                    <p class="text-t-medium font-syne text-sm mb-3">Potential SQL injection detected in API request. Request blocked and logged.</p>
+                                    <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                        <span>12 minutes ago</span>
+                                        <span>•</span>
+                                        <span>Blocked</span>
+                                        <span>•</span>
+                                        <span>API Endpoint</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="ph-bold ph-info text-blue-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h5 class="font-bold text-t-bright font-syne">DDoS Protection Activated</h5>
+                                        <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-bold rounded-full">Info</span>
+                                    </div>
+                                    <p class="text-t-medium font-syne text-sm mb-3">Traffic spike detected. DDoS protection measures activated automatically.</p>
+                                    <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                        <span>1 hour ago</span>
+                                        <span>•</span>
+                                        <span>Active</span>
+                                        <span>•</span>
+                                        <span>All Endpoints</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Monitoring & Analytics -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                        <i class="ph-bold ph-activity text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-t-bright font-syne">Network Analytics</h3>
+                        <p class="text-t-medium font-syne text-sm">Traffic analysis, performance metrics, and security insights</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <!-- Traffic Analysis -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg mx-auto">
+                                <i class="ph-bold ph-bar-chart text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Traffic Analysis</h4>
+                                <p class="text-sm text-t-medium font-syne">Real-time network traffic monitoring</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threat Intelligence -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center text-white shadow-lg mx-auto">
+                                <i class="ph-bold ph-brain text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Threat Intelligence</h4>
+                                <p class="text-sm text-t-medium font-syne">AI-powered threat detection</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Metrics -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-lg mx-auto">
+                                <i class="ph-bold ph-gauge text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Performance</h4>
+                                <p class="text-sm text-t-medium font-syne">Network performance metrics</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compliance Reports -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white shadow-lg mx-auto">
+                                <i class="ph-bold ph-file-text text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Compliance</h4>
+                                <p class="text-sm text-t-medium font-syne">Security compliance reporting</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Statistics -->
+                <div class="mt-8 grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                        <h4 class="font-bold text-t-bright font-syne mb-4">Connection Stats</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Active Connections</span>
+                                <span class="font-bold text-accent font-syne">1,247</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Peak Today</span>
+                                <span class="font-bold text-accent font-syne">2,891</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Avg Response Time</span>
+                                <span class="font-bold text-accent font-syne">45ms</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                        <h4 class="font-bold text-t-bright font-syne mb-4">Security Metrics</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Blocked IPs</span>
+                                <span class="font-bold text-red-500 font-syne">89</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">False Positives</span>
+                                <span class="font-bold text-yellow-500 font-syne">3</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Detection Rate</span>
+                                <span class="font-bold text-green-500 font-syne">99.7%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                        <h4 class="font-bold text-t-bright font-syne mb-4">Bandwidth Usage</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Inbound</span>
+                                <span class="font-bold text-blue-500 font-syne">1.2GB</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Outbound</span>
+                                <span class="font-bold text-blue-500 font-syne">890MB</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-t-medium font-syne">Total</span>
+                                <span class="font-bold text-blue-500 font-syne">2.1GB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+</style>
+
+<script>
+// Firewall Page
+function initSecurityFirewall() {
+    loadFirewallData();
+    setupFirewallEventListeners();
+    loadFirewallRules();
+}
+
+async function loadFirewallData() {
+    try {
+        const response = await fetch('/api/admin/security/firewall');
+        if (response.ok) {
+            const data = await response.json();
+            updateFirewallStats(data.stats);
+            updateFirewallRules(data.rules);
+        } else {
+            showFallbackFirewallData();
+        }
+    } catch (error) {
+        console.error('Error loading firewall data:', error);
+        showFallbackFirewallData();
+    }
+}
+
+function updateFirewallStats(stats) {
+    document.getElementById('firewallStatus').textContent = stats.firewallStatus || 'Active';
+    document.getElementById('blockedThreats').textContent = stats.blockedThreats || '1,247';
+    document.getElementById('activeRules').textContent = stats.activeRules || '89';
+    document.getElementById('networkTraffic').textContent = stats.networkTraffic || '2.4GB';
+}
+
+function updateFirewallRules(rules) {
+    const tbody = document.getElementById('firewallRulesTableBody');
+
+    if (!rules || rules.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="px-8 py-16 text-center">
+                    <div class="flex flex-col items-center space-y-6">
+                        <div class="w-20 h-20 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl">
+                            <i class="ph-bold ph-list-checks text-5xl text-t-muted opacity-60"></i>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">No firewall rules found</h3>
+                            <p class="text-base text-t-medium font-syne max-w-md">Firewall rules will appear here once configured.</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = rules.map(rule => `
+        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium group">
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${rule.name}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${rule.description}</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${rule.source}
+                </div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${rule.destination}
+                </div>
+            </td>
+            <td class="px-8 py-6">
+                <span class="inline-flex items-center px-3 py-2 rounded-xl text-sm font-bold uppercase tracking-wide font-syne ${getProtocolClass(rule.protocol)} shadow-lg">
+                    <i class="ph-bold ph-circle mr-2 text-xs"></i>
+                    ${rule.protocol}
+                </span>
+            </td>
+            <td class="px-8 py-6">
+                <span class="inline-flex items-center px-3 py-2 rounded-xl text-sm font-bold uppercase tracking-wide font-syne ${getActionClass(rule.action)} shadow-lg">
+                    <i class="ph-bold ph-circle mr-2 text-xs"></i>
+                    ${rule.action}
+                </span>
+            </td>
+            <td class="px-8 py-6">
+                <span class="inline-flex items-center px-3 py-2 rounded-xl text-sm font-bold uppercase tracking-wide font-syne ${getStatusClass(rule.status)} shadow-lg">
+                    <i class="ph-bold ph-circle mr-2 text-xs"></i>
+                    ${rule.status}
+                </span>
+            </td>
+            <td class="px-8 py-6">
+                <div class="flex items-center space-x-2">
+                    <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Edit Rule" onclick="editFirewallRule('${rule.id}')">
+                        <i class="ph-bold ph-pencil text-sm"></i>
+                    </button>
+                    <button class="w-8 h-8 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-lg flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Duplicate" onclick="duplicateFirewallRule('${rule.id}')">
+                        <i class="ph-bold ph-copy text-sm"></i>
+                    </button>
+                    <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Delete Rule" onclick="deleteFirewallRule('${rule.id}')">
+                        <i class="ph-bold ph-trash text-sm"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getProtocolClass(protocol) {
+    if (protocol === 'TCP') {
+        return 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white border-blue-500/20';
+    } else if (protocol === 'UDP') {
+        return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-green-500/20';
+    } else if (protocol === 'ICMP') {
+        return 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-yellow-500/20';
+    }
+    return 'bg-gradient-to-r from-slate-500 to-gray-500 text-white border-slate-500/20';
+}
+
+function getActionClass(action) {
+    if (action === 'ALLOW') {
+        return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-green-500/20';
+    } else if (action === 'DENY') {
+        return 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-500/20';
+    } else if (action === 'DROP') {
+        return 'bg-gradient-to-r from-orange-500 to-red-500 text-white border-orange-500/20';
+    }
+    return 'bg-gradient-to-r from-slate-500 to-gray-500 text-white border-slate-500/20';
+}
+
+function getStatusClass(status) {
+    if (status === 'active') {
+        return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-green-500/20';
+    } else if (status === 'inactive') {
+        return 'bg-gradient-to-r from-slate-500 to-gray-500 text-white border-slate-500/20';
+    } else if (status === 'pending') {
+        return 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-yellow-500/20';
+    }
+    return 'bg-gradient-to-r from-slate-500 to-gray-500 text-white border-slate-500/20';
+}
+
+function setupFirewallEventListeners() {
+    // Add Rule Button
+    document.getElementById('addRuleBtn').onclick = () => {
+        addFirewallRule();
+    };
+
+    // Import Rules Button
+    document.getElementById('importRulesBtn').onclick = () => {
+        importFirewallRules();
+    };
+}
+
+function loadFirewallRules() {
+    // Load initial firewall rules data
+    const sampleRules = [
+        {
+            id: '1',
+            name: 'SSH Access',
+            description: 'Allow SSH access from admin IPs',
+            source: '192.168.1.0/24',
+            destination: 'Any',
+            protocol: 'TCP',
+            action: 'ALLOW',
+            status: 'active'
+        },
+        {
+            id: '2',
+            name: 'HTTP/HTTPS',
+            description: 'Allow web traffic',
+            source: 'Any',
+            destination: '80,443',
+            protocol: 'TCP',
+            action: 'ALLOW',
+            status: 'active'
+        },
+        {
+            id: '3',
+            name: 'Block Suspicious',
+            description: 'Block known malicious IPs',
+            source: '192.168.1.100',
+            destination: 'Any',
+            protocol: 'Any',
+            action: 'DENY',
+            status: 'active'
+        }
+    ];
+
+    updateFirewallRules(sampleRules);
+}
+
+function showFallbackFirewallData() {
+    // Show sample data when API is not available
+    updateFirewallStats({
+        firewallStatus: 'Active',
+        blockedThreats: '1,247',
+        activeRules: '89',
+        networkTraffic: '2.4GB'
+    });
+
+    loadFirewallRules();
+}
+
+function addFirewallRule() {
+    showNotification('Add firewall rule modal would open here', 'info');
+}
+
+function importFirewallRules() {
+    showNotification('Import firewall rules modal would open here', 'info');
+}
+
+function editFirewallRule(ruleId) {
+    showNotification(`Editing firewall rule ${ruleId}`, 'info');
+}
+
+function duplicateFirewallRule(ruleId) {
+    showNotification(`Duplicating firewall rule ${ruleId}`, 'info');
+}
+
+function deleteFirewallRule(ruleId) {
+    if (confirm('Are you sure you want to delete this firewall rule?')) {
+        showNotification(`Deleting firewall rule ${ruleId}`, 'info');
+    }
+}
+
+function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSecurityFirewall);
+} else {
+    initSecurityFirewall();
+}
+</script>

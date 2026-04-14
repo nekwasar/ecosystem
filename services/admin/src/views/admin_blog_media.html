@@ -1,0 +1,1013 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+        'bounce-in': 'bounceIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium overflow-x-hidden">
+    <div class="p-4 md:p-6 lg:p-8 max-w-full">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Media Library</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Professional media management for your content</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Media Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Total Files Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-images"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalFiles">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Total Files</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-emerald-500 dark:text-emerald-400">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+24</span>
+                            <span class="text-t-muted font-syne">this month</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Storage Used Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-hard-drive"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="storageUsed">2.4 GB</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Storage Used</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-blue-500 dark:text-blue-400">
+                            <i class="ph-bold ph-chart-bar text-base"></i>
+                            <span>12% of limit</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Folders Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-amber-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-amber-500 via-yellow-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-folder"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalFolders">12</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Folders</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-amber-500 dark:text-amber-400">
+                            <i class="ph-bold ph-folder-plus text-base"></i>
+                            <span>+3</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-amber-500/10 to-yellow-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Shared Files Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-rose-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-rose-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-rose-500 via-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-share"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="sharedFiles">8</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Shared Files</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-rose-500 dark:text-rose-400">
+                            <i class="ph-bold ph-users text-base"></i>
+                            <span>3 collaborators</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-rose-500/10 to-pink-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- Media Management -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-images text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Media Library</h3>
+                            <p class="text-t-medium font-syne text-sm">Upload, organize, and manage your media files</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <input type="file" id="fileUpload" multiple accept="image/*,video/*,.pdf,.doc,.docx,.txt,.zip" class="hidden">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="uploadBtn">
+                            <i class="ph-bold ph-cloud-arrow-up text-lg"></i>
+                            <span>Upload Files</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="newFolderBtn">
+                            <i class="ph-bold ph-folder-plus text-lg"></i>
+                            <span>New Folder</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="shareBtn">
+                            <i class="ph-bold ph-share text-lg"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Controls -->
+            <div class="p-4 md:p-6 lg:p-8 border-b border-stroke-elements">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                    <div class="flex items-center space-x-6">
+                        <!-- View Mode Toggle -->
+                        <div class="flex items-center space-x-2">
+                            <button class="w-10 h-10 bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium" id="gridViewBtn">
+                                <i class="ph-bold ph-squares-four"></i>
+                            </button>
+                            <button class="w-10 h-10 hover:bg-base-tint dark:hover:bg-base-shade text-t-muted rounded-lg flex items-center justify-center transition-all duration-medium" id="listViewBtn">
+                                <i class="ph-bold ph-list"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Selected Count -->
+                        <div class="text-sm text-t-medium font-syne" id="selectedCount">
+                            0 files selected
+                        </div>
+                    </div>
+
+                    <!-- Filters and Search -->
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <div class="relative">
+                            <input type="text" class="pl-10 pr-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-muted w-full sm:w-64" id="searchFiles" placeholder="Search files...">
+                            <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-t-muted"></i>
+                        </div>
+                        <select class="pl-10 pr-10 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright appearance-none cursor-pointer w-full sm:w-40" id="fileTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="images">Images</option>
+                            <option value="videos">Videos</option>
+                            <option value="documents">Documents</option>
+                            <option value="archives">Archives</option>
+                        </select>
+                        <select class="pl-10 pr-10 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright appearance-none cursor-pointer w-full sm:w-40" id="sortBy">
+                            <option value="name">Name</option>
+                            <option value="date">Date Modified</option>
+                            <option value="size">Size</option>
+                            <option value="type">Type</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Folder Navigation -->
+            <div class="p-4 md:p-6 lg:p-8 border-b border-stroke-elements">
+                <div class="flex items-center space-x-3" id="folderBreadcrumb">
+                    <button class="text-accent hover:text-secondary transition-colors font-syne" onclick="navigateToFolder('')">
+                        <i class="ph-bold ph-house"></i>
+                        All Files
+                    </button>
+                    <!-- Folder path will be populated here -->
+                </div>
+            </div>
+
+            <!-- Media Grid/List View -->
+            <div class="p-4 md:p-6 lg:p-8">
+                <div id="mediaContainer" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6" id="mediaGrid">
+                    <!-- Media files will be populated here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="text-center py-16 hidden" id="emptyState">
+                    <div class="w-24 h-24 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-6">
+                        <i class="ph-bold ph-images text-6xl text-t-muted opacity-60"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-t-bright font-syne mb-4">No media files found</h3>
+                    <p class="text-base text-t-medium font-syne max-w-md mx-auto mb-8">Upload your first file to get started with your media library.</p>
+                    <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" onclick="document.getElementById('fileUpload').click()">
+                        <i class="ph-bold ph-cloud-arrow-up text-lg"></i>
+                        <span>Upload First File</span>
+                    </button>
+                </div>
+
+                <!-- Load More -->
+                <div class="text-center pt-8" id="loadMoreContainer">
+                    <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne" id="loadMoreBtn">
+                        <i class="ph-bold ph-arrow-down text-lg"></i>
+                        <span>Load More Files</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Progress Modal -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" id="uploadModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-2xl w-full">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <h3 class="text-xl font-bold text-t-bright font-syne">Upload Files</h3>
+                <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closeUploadModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4" id="uploadProgress">
+                    <!-- Upload progress items will be shown here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- File Preview Modal -->
+<div class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden" id="previewModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <div class="flex items-center space-x-4">
+                    <div id="fileIcon" class="w-12 h-12 bg-accent/20 text-accent rounded-xl flex items-center justify-center text-2xl">
+                        <i class="ph-bold ph-file"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-t-bright font-syne" id="fileName">File Name</h3>
+                        <p class="text-sm text-t-medium font-syne" id="fileSize">1.2 MB</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="w-8 h-8 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-lg flex items-center justify-center transition-all duration-medium" title="Download" onclick="downloadFile()">
+                        <i class="ph-bold ph-download"></i>
+                    </button>
+                    <button class="w-8 h-8 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded-lg flex items-center justify-center transition-all duration-medium" title="Share" onclick="shareFile()">
+                        <i class="ph-bold ph-share"></i>
+                    </button>
+                    <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium" title="Delete" onclick="deleteFile()">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                    <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closePreviewModal()">
+                        <i class="ph-bold ph-x"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto flex items-center justify-center" id="filePreview">
+                <!-- File preview will be shown here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Share Modal -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" id="shareModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-2xl w-full">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <h3 class="text-xl font-bold text-t-bright font-syne">Share Files</h3>
+                <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closeShareModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-t-bright font-syne mb-2">Share via Link</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="shareLink" class="flex-1 px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" readonly>
+                        <button class="px-6 py-3 bg-accent hover:bg-accent/90 text-t-opp-bright font-semibold rounded-xl transition-all duration-medium font-syne" onclick="copyShareLink()">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-t-bright font-syne mb-2">Or select files to share</label>
+                    <div class="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto" id="shareFilesList">
+                        <!-- Files list will be populated here -->
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end space-x-3 p-6 border-t border-stroke-elements">
+                <button class="px-6 py-3 bg-base-tint dark:bg-base-shade border border-stroke-elements text-t-bright rounded-lg hover:bg-base-shade dark:hover:bg-base transition-all duration-medium font-syne" onclick="closeShareModal()">Cancel</button>
+                <button class="px-6 py-3 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright rounded-lg transition-all duration-medium font-syne">Generate Link</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.6s ease-out forwards;
+}
+
+/* Media card styles */
+.media-card {
+  @apply bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl overflow-hidden hover:scale-105 hover:-translate-y-1 transition-all duration-medium shadow-lg hover:shadow-xl cursor-pointer group relative;
+}
+
+.media-card.selected {
+  @apply ring-2 ring-accent ring-offset-2 ring-offset-base;
+}
+
+.media-thumbnail {
+  @apply aspect-square bg-base-tint dark:bg-base-shade rounded-t-xl flex items-center justify-center overflow-hidden;
+}
+
+.media-info {
+  @apply p-4;
+}
+
+.media-name {
+  @apply text-sm font-bold text-t-bright font-syne truncate mb-1;
+}
+
+.media-meta {
+  @apply text-xs text-t-medium font-syne flex items-center justify-between;
+}
+
+.media-actions {
+  @apply absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-medium flex space-x-1;
+}
+
+.media-checkbox {
+  @apply absolute top-2 left-2 w-4 h-4 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0 opacity-0 group-hover:opacity-100 transition-all duration-medium;
+}
+
+.media-card.selected .media-checkbox {
+  @apply opacity-100;
+}
+
+/* List view styles */
+.media-card.list-view {
+  @apply flex items-center p-4 space-x-4;
+}
+
+.media-card.list-view .media-thumbnail {
+  @apply w-16 h-16 rounded-lg flex-shrink-0;
+}
+
+.media-card.list-view .media-actions {
+  @apply relative top-0 right-0 opacity-100 flex space-x-2;
+}
+
+/* File type icons */
+.file-icon-image {
+  @apply text-blue-500;
+}
+
+.file-icon-video {
+  @apply text-purple-500;
+}
+
+.file-icon-document {
+  @apply text-emerald-500;
+}
+
+.file-icon-archive {
+  @apply text-orange-500;
+}
+
+/* Upload progress */
+.upload-progress {
+  @apply flex items-center space-x-3 p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-lg;
+}
+
+.upload-progress-bar {
+  @apply flex-1 h-2 bg-base-shade dark:bg-base-tint rounded-full overflow-hidden;
+}
+
+.upload-progress-fill {
+  @apply h-full bg-gradient-to-r from-accent to-secondary rounded-full transition-all duration-medium;
+}
+
+/* Bulk selection */
+.bulk-selected {
+  @apply bg-accent/10 border-accent/50;
+}
+
+/* Folder breadcrumb */
+.breadcrumb-separator {
+  @apply text-t-muted mx-2;
+}
+
+.folder-link {
+  @apply text-accent hover:text-secondary transition-colors font-syne cursor-pointer;
+}
+</style>
+
+<script>
+// Blog Media Management Page
+let allFiles = [];
+let selectedFiles = new Set();
+let currentFolder = '';
+let currentView = 'grid';
+let currentPage = 1;
+let hasMoreFiles = true;
+
+function initBlogMedia() {
+    loadMediaData();
+    setupEventListeners();
+}
+
+async function loadMediaData(page = 1) {
+    try {
+        const response = await fetch(`/api/content/media?folder=${currentFolder}&page=${page}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (page === 1) {
+                allFiles = data.media || [];
+            } else {
+                allFiles = [...allFiles, ...(data.media || [])];
+            }
+
+            updateMediaStats(data.stats);
+            renderMediaFiles(data.media || [], page === 1);
+            hasMoreFiles = data.hasMore || false;
+            currentPage = page;
+
+            if (!hasMoreFiles) {
+                document.getElementById('loadMoreContainer').classList.add('hidden');
+            }
+        } else {
+            showFallbackMediaData();
+        }
+    } catch (error) {
+        console.error('Error loading media data:', error);
+        showFallbackMediaData();
+    }
+}
+
+function updateMediaStats(stats) {
+    document.getElementById('totalFiles').textContent = formatNumber(stats.totalFiles || 0);
+    document.getElementById('storageUsed').textContent = formatStorageSize(stats.storageUsed || 0);
+    document.getElementById('totalFolders').textContent = formatNumber(stats.totalFolders || 0);
+    document.getElementById('sharedFiles').textContent = formatNumber(stats.sharedFiles || 0);
+}
+
+function renderMediaFiles(files, replace = true) {
+    const container = document.getElementById('mediaContainer');
+    const emptyState = document.getElementById('emptyState');
+
+    if (allFiles.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+    }
+
+    emptyState.classList.add('hidden');
+
+    if (replace) {
+        container.innerHTML = '';
+    }
+
+    if (currentView === 'list') {
+        container.className = 'space-y-4';
+        files.forEach(file => {
+            const fileElement = createListFileElement(file);
+            container.appendChild(fileElement);
+        });
+    } else {
+        container.className = 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6';
+        files.forEach(file => {
+            const fileElement = createGridFileElement(file);
+            container.appendChild(fileElement);
+        });
+    }
+}
+
+function createGridFileElement(file) {
+    const fileDiv = document.createElement('div');
+    fileDiv.className = `media-card ${selectedFiles.has(file.id) ? 'selected' : ''}`;
+    fileDiv.dataset.fileId = file.id;
+
+    const fileTypeClass = getFileTypeIcon(file.type).className;
+    const fileIcon = getFileTypeIcon(file.type).icon;
+
+    fileDiv.innerHTML = `
+        <div class="media-thumbnail">
+            <i class="ph-bold ${fileIcon} ${fileTypeClass} text-4xl"></i>
+        </div>
+        <div class="media-info">
+            <div class="media-name" title="${file.name}">${file.name}</div>
+            <div class="media-meta">
+                <span>${formatStorageSize(file.size)}</span>
+                <span>${formatDate(file.modifiedAt)}</span>
+            </div>
+        </div>
+        <div class="media-actions">
+            <button class="w-6 h-6 bg-blue-500/20 hover:bg-blue-500/30 text-blue-500 rounded flex items-center justify-center transition-all duration-medium" onclick="previewFile('${file.id}', event)" title="Preview">
+                <i class="ph-bold ph-eye text-xs"></i>
+            </button>
+            <button class="w-6 h-6 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-500 rounded flex items-center justify-center transition-all duration-medium" onclick="shareFile('${file.id}', event)" title="Share">
+                <i class="ph-bold ph-share text-xs"></i>
+            </button>
+            <button class="w-6 h-6 bg-red-500/20 hover:bg-red-500/30 text-red-500 rounded flex items-center justify-center transition-all duration-medium" onclick="deleteFile('${file.id}', event)" title="Delete">
+                <i class="ph-bold ph-trash text-xs"></i>
+            </button>
+        </div>
+        <input type="checkbox" class="media-checkbox" ${selectedFiles.has(file.id) ? 'checked' : ''} onchange="toggleFileSelection('${file.id}')">
+    `;
+
+    return fileDiv;
+}
+
+function createListFileElement(file) {
+    const fileDiv = document.createElement('div');
+    fileDiv.className = `media-card list-view ${selectedFiles.has(file.id) ? 'selected' : ''}`;
+    fileDiv.dataset.fileId = file.id;
+
+    const fileTypeClass = getFileTypeIcon(file.type).className;
+    const fileIcon = getFileTypeIcon(file.type).icon;
+
+    fileDiv.innerHTML = `
+        <div class="media-thumbnail">
+            <i class="ph-bold ${fileIcon} ${fileTypeClass} text-2xl"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+            <div class="media-name" title="${file.name}">${file.name}</div>
+            <div class="text-xs text-t-medium font-syne">${formatStorageSize(file.size)} • ${formatDate(file.modifiedAt)}</div>
+        </div>
+        <div class="media-actions relative opacity-100 flex space-x-2">
+            <button class="w-6 h-6 bg-blue-500/20 hover:bg-blue-500/30 text-blue-500 rounded flex items-center justify-center transition-all duration-medium" onclick="previewFile('${file.id}', event)" title="Preview">
+                <i class="ph-bold ph-eye text-xs"></i>
+            </button>
+            <button class="w-6 h-6 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-500 rounded flex items-center justify-center transition-all duration-medium" onclick="shareFile('${file.id}', event)" title="Share">
+                <i class="ph-bold ph-share text-xs"></i>
+            </button>
+            <button class="w-6 h-6 bg-red-500/20 hover:bg-red-500/30 text-red-500 rounded flex items-center justify-center transition-all duration-medium" onclick="deleteFile('${file.id}', event)" title="Delete">
+                <i class="ph-bold ph-trash text-xs"></i>
+            </button>
+            <input type="checkbox" class="media-checkbox absolute left-0 top-1/2 transform -translate-y-1/2" ${selectedFiles.has(file.id) ? 'checked' : ''} onchange="toggleFileSelection('${file.id}')">
+        </div>
+    `;
+
+    return fileDiv;
+}
+
+function setupEventListeners() {
+    // Upload
+    document.getElementById('uploadBtn').onclick = () => document.getElementById('fileUpload').click();
+    document.getElementById('fileUpload').onchange = handleFileUpload;
+
+    // View toggles
+    document.getElementById('gridViewBtn').onclick = () => switchView('grid');
+    document.getElementById('listViewBtn').onclick = () => switchView('list');
+
+    // Filters
+    document.getElementById('searchFiles').oninput = debounce(filterFiles, 300);
+    document.getElementById('fileTypeFilter').onchange = filterFiles;
+    document.getElementById('sortBy').onchange = filterFiles;
+
+    // Actions
+    document.getElementById('newFolderBtn').onclick = createNewFolder;
+    document.getElementById('shareBtn').onclick = openShareModal;
+    document.getElementById('loadMoreBtn').onclick = () => loadMediaData(currentPage + 1);
+}
+
+function switchView(view) {
+    currentView = view;
+    
+    // Update button states
+    document.getElementById('gridViewBtn').className = view === 'grid' ? 
+        'w-10 h-10 bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium' :
+        'w-10 h-10 hover:bg-base-tint dark:hover:bg-base-shade text-t-muted rounded-lg flex items-center justify-center transition-all duration-medium';
+    
+    document.getElementById('listViewBtn').onclick = () => switchView('list');
+    document.getElementById('listViewBtn').className = view === 'list' ? 
+        'w-10 h-10 bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium' :
+        'w-10 h-10 hover:bg-base-tint dark:hover:bg-base-shade text-t-muted rounded-lg flex items-center justify-center transition-all duration-medium';
+    
+    renderMediaFiles(allFiles, true);
+}
+
+function filterFiles() {
+    const searchTerm = document.getElementById('searchFiles').value.toLowerCase();
+    const typeFilter = document.getElementById('fileTypeFilter').value;
+    const sortBy = document.getElementById('sortBy').value;
+
+    let filtered = allFiles.filter(file => {
+        const matchesSearch = !searchTerm || file.name.toLowerCase().includes(searchTerm);
+        const matchesType = !typeFilter || getFileCategory(file.type) === typeFilter;
+        return matchesSearch && matchesType;
+    });
+
+    // Sort
+    filtered.sort((a, b) => {
+        switch (sortBy) {
+            case 'date':
+                return new Date(b.modifiedAt) - new Date(a.modifiedAt);
+            case 'size':
+                return b.size - a.size;
+            case 'type':
+                return a.type.localeCompare(b.type);
+            default: // name
+                return a.name.localeCompare(b.name);
+        }
+    });
+
+    renderMediaFiles(filtered, true);
+}
+
+function toggleFileSelection(fileId) {
+    if (selectedFiles.has(fileId)) {
+        selectedFiles.delete(fileId);
+    } else {
+        selectedFiles.add(fileId);
+    }
+    updateSelectionUI();
+}
+
+function updateSelectionUI() {
+    document.querySelectorAll('.media-card').forEach(card => {
+        const fileId = card.dataset.fileId;
+        const checkbox = card.querySelector('.media-checkbox');
+
+        if (selectedFiles.has(fileId)) {
+            card.classList.add('selected');
+            if (checkbox) checkbox.checked = true;
+        } else {
+            card.classList.remove('selected');
+            if (checkbox) checkbox.checked = false;
+        }
+    });
+
+    const count = selectedFiles.size;
+    document.getElementById('selectedCount').textContent = count === 0 ? 'No files selected' : 
+        `${count} file${count > 1 ? 's' : ''} selected`;
+}
+
+function handleFileUpload(event) {
+    const files = Array.from(event.target.files);
+    if (files.length === 0) return;
+
+    showUploadModal(files);
+}
+
+function showUploadModal(files) {
+    const modal = document.getElementById('uploadModal');
+    const progressContainer = document.getElementById('uploadProgress');
+    
+    progressContainer.innerHTML = files.map(file => `
+        <div class="upload-progress">
+            <i class="ph-bold ${getFileTypeIcon(getFileType(file.name)).icon} ${getFileTypeIcon(getFileType(file.name)).className} text-xl"></i>
+            <div class="flex-1">
+                <div class="text-sm font-semibold text-t-bright font-syne">${file.name}</div>
+                <div class="text-xs text-t-medium font-syne">${formatStorageSize(file.size)}</div>
+                <div class="upload-progress-bar mt-2">
+                    <div class="upload-progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="text-xs text-t-medium font-syne" id="progress-${file.name}">0%</div>
+        </div>
+    `).join('');
+
+    modal.classList.remove('hidden');
+
+    // Simulate upload progress
+    files.forEach((file, index) => {
+        simulateUploadProgress(file.name, index * 200);
+    });
+}
+
+function simulateUploadProgress(fileName, delay) {
+    let progress = 0;
+    const progressBar = document.querySelector(`#progress-${fileName}`).parentElement.querySelector('.upload-progress-fill');
+    const progressText = document.getElementById(`progress-${fileName}`);
+
+    const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+        }
+        
+        progressBar.style.width = progress + '%';
+        progressText.textContent = Math.round(progress) + '%';
+    }, 100 + delay);
+}
+
+function closeUploadModal() {
+    document.getElementById('uploadModal').classList.add('hidden');
+}
+
+function previewFile(fileId, event) {
+    event.stopPropagation();
+    const file = allFiles.find(f => f.id === fileId);
+    if (!file) return;
+
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = formatStorageSize(file.size);
+    
+    const fileType = getFileType(file.type);
+    const fileTypeData = getFileTypeIcon(fileType);
+    const fileIcon = document.getElementById('fileIcon');
+    
+    fileIcon.className = `w-12 h-12 ${fileTypeData.className} bg-opacity-20 rounded-xl flex items-center justify-center text-2xl`;
+    fileIcon.innerHTML = `<i class="ph-bold ${fileTypeData.icon}"></i>`;
+
+    const preview = document.getElementById('filePreview');
+    preview.innerHTML = `
+        <div class="text-center">
+            <i class="ph-bold ${fileTypeData.icon} ${fileTypeData.className} text-9xl mb-4"></i>
+            <p class="text-t-medium font-syne">Preview not available for this file type</p>
+            <button class="inline-flex items-center space-x-2 px-6 py-3 bg-accent hover:bg-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-medium font-syne mt-4" onclick="downloadFile('${fileId}')">
+                <i class="ph-bold ph-download"></i>
+                <span>Download File</span>
+            </button>
+        </div>
+    `;
+
+    document.getElementById('previewModal').classList.remove('hidden');
+}
+
+function closePreviewModal() {
+    document.getElementById('previewModal').classList.add('hidden');
+}
+
+function shareFile(fileId, event) {
+    event.stopPropagation();
+    // Implementation for sharing individual file
+    showNotification('Share functionality coming soon', 'info');
+}
+
+function openShareModal() {
+    if (selectedFiles.size === 0) {
+        showNotification('Please select files to share', 'warning');
+        return;
+    }
+    document.getElementById('shareModal').classList.remove('hidden');
+}
+
+function closeShareModal() {
+    document.getElementById('shareModal').classList.add('hidden');
+}
+
+function copyShareLink() {
+    const linkInput = document.getElementById('shareLink');
+    linkInput.select();
+    document.execCommand('copy');
+    showNotification('Share link copied to clipboard', 'success');
+}
+
+function deleteFile(fileId, event) {
+    event.stopPropagation();
+    if (confirm('Are you sure you want to delete this file?')) {
+        showNotification('File deleted successfully', 'success');
+        loadMediaData(1);
+    }
+}
+
+function downloadFile(fileId) {
+    showNotification('Download started', 'success');
+}
+
+function createNewFolder() {
+    const folderName = prompt('Enter folder name:');
+    if (folderName && folderName.trim()) {
+        showNotification(`Folder "${folderName}" created successfully`, 'success');
+        loadMediaData(1);
+    }
+}
+
+function navigateToFolder(folderPath) {
+    currentFolder = folderPath;
+    updateFolderBreadcrumb(folderPath);
+    loadMediaData(1);
+}
+
+function updateFolderBreadcrumb(folderPath) {
+    const breadcrumb = document.getElementById('folderBreadcrumb');
+    // Implementation for breadcrumb navigation
+}
+
+// Utility functions
+function getFileType(fileName) {
+    const ext = fileName.split('.').pop().toLowerCase();
+    const imageTypes = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'];
+    const videoTypes = ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv'];
+    const documentTypes = ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt'];
+    const archiveTypes = ['zip', 'rar', '7z', 'tar', 'gz'];
+
+    if (imageTypes.includes(ext)) return 'image';
+    if (videoTypes.includes(ext)) return 'video';
+    if (documentTypes.includes(ext)) return 'document';
+    if (archiveTypes.includes(ext)) return 'archive';
+    return 'other';
+}
+
+function getFileTypeIcon(type) {
+    const iconMap = {
+        image: { icon: 'ph-image', className: 'file-icon-image' },
+        video: { icon: 'ph-video', className: 'file-icon-video' },
+        document: { icon: 'ph-file-text', className: 'file-icon-document' },
+        archive: { icon: 'ph-file-zip', className: 'file-icon-archive' },
+        other: { icon: 'ph-file', className: 'text-t-muted' }
+    };
+    return iconMap[type] || iconMap.other;
+}
+
+function getFileCategory(type) {
+    return type;
+}
+
+function formatStorageSize(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function formatNumber(num) {
+    return new Intl.NumberFormat().format(num);
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function showNotification(message, type = 'info') {
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+function showFallbackMediaData() {
+    // Show sample data when API is not available
+    updateMediaStats({
+        totalFiles: 142,
+        storageUsed: 2.4 * 1024 * 1024 * 1024, // 2.4 GB in bytes
+        totalFolders: 12,
+        sharedFiles: 8
+    });
+
+    // Sample files
+    allFiles = [
+        {
+            id: '1',
+            name: 'hero-banner.jpg',
+            type: 'image',
+            size: 2457600, // 2.4 MB
+            modifiedAt: '2024-01-15T10:30:00Z',
+            folder: 'images'
+        },
+        {
+            id: '2',
+            name: 'product-demo.mp4',
+            type: 'video',
+            size: 52428800, // 50 MB
+            modifiedAt: '2024-01-14T15:45:00Z',
+            folder: 'videos'
+        },
+        {
+            id: '3',
+            name: 'user-guide.pdf',
+            type: 'document',
+            size: 1048576, // 1 MB
+            modifiedAt: '2024-01-13T12:00:00Z',
+            folder: 'documents'
+        },
+        {
+            id: '4',
+            name: 'assets.zip',
+            type: 'archive',
+            size: 15728640, // 15 MB
+            modifiedAt: '2024-01-12T09:15:00Z',
+            folder: 'resources'
+        }
+    ];
+
+    renderMediaFiles(allFiles, true);
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+    initBlogMedia();
+});
+</script>

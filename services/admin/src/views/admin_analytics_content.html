@@ -1,0 +1,905 @@
+<div class="analytics-content">
+    <div class="analytics-header">
+        <h1 class="page-title">Content Analytics</h1>
+        <p class="page-subtitle">Understand how your content performs and engages your audience</p>
+    </div>
+
+    <!-- Content Performance Overview -->
+    <div class="content-overview">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-file-text"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalPosts">0</div>
+                <div class="card-label">Total Posts</div>
+                <div class="card-trend" id="postsTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-eye"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalViews">0</div>
+                <div class="card-label">Total Views</div>
+                <div class="card-trend" id="viewsTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+12.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-heart"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalEngagement">0</div>
+                <div class="card-label">Total Engagement</div>
+                <div class="card-trend" id="engagementTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+15.3%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgReadTime">0m</div>
+                <div class="card-label">Avg. Read Time</div>
+                <div class="card-trend" id="readTimeTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+5.7%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Performing Content -->
+    <div class="top-content-section">
+        <div class="section-header">
+            <h2>Top Performing Content</h2>
+            <div class="content-filters">
+                <button class="content-filter-btn active" data-metric="views">Views</button>
+                <button class="content-filter-btn" data-metric="engagement">Engagement</button>
+                <button class="content-filter-btn" data-metric="shares">Shares</button>
+                <button class="content-filter-btn" data-metric="comments">Comments</button>
+            </div>
+        </div>
+        <div class="top-content-list" id="topContentList">
+            <!-- Top content items will be populated here -->
+        </div>
+    </div>
+
+    <!-- Content Categories Performance -->
+    <div class="categories-section">
+        <div class="section-header">
+            <h2>Content Categories Performance</h2>
+        </div>
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Category cards will be populated here -->
+        </div>
+    </div>
+
+    <!-- Content Engagement Trends -->
+    <div class="engagement-section">
+        <div class="section-header">
+            <h2>Engagement Trends</h2>
+            <div class="time-filters">
+                <button class="time-filter-btn active" data-period="7d">7 Days</button>
+                <button class="time-filter-btn" data-period="30d">30 Days</button>
+                <button class="time-filter-btn" data-period="90d">90 Days</button>
+            </div>
+        </div>
+        <div class="engagement-chart">
+            <canvas id="engagementChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Content Quality Metrics -->
+    <div class="quality-section">
+        <div class="section-header">
+            <h2>Content Quality Metrics</h2>
+        </div>
+        <div class="quality-metrics">
+            <div class="quality-card">
+                <div class="quality-header">
+                    <h3>Readability Score</h3>
+                    <div class="quality-score" id="readabilityScore">0</div>
+                </div>
+                <div class="quality-bar">
+                    <div class="quality-fill" id="readabilityBar"></div>
+                </div>
+                <div class="quality-label">Average readability across all posts</div>
+            </div>
+
+            <div class="quality-card">
+                <div class="quality-header">
+                    <h3>SEO Score</h3>
+                    <div class="quality-score" id="seoScore">0</div>
+                </div>
+                <div class="quality-bar">
+                    <div class="quality-fill" id="seoBar"></div>
+                </div>
+                <div class="quality-label">Search engine optimization performance</div>
+            </div>
+
+            <div class="quality-card">
+                <div class="quality-header">
+                    <h3>Engagement Rate</h3>
+                    <div class="quality-score" id="engagementRate">0%</div>
+                </div>
+                <div class="quality-bar">
+                    <div class="quality-fill" id="engagementBar"></div>
+                </div>
+                <div class="quality-label">Average engagement per post</div>
+            </div>
+
+            <div class="quality-card">
+                <div class="quality-header">
+                    <h3>Content Freshness</h3>
+                    <div class="quality-score" id="freshnessScore">0</div>
+                </div>
+                <div class="quality-bar">
+                    <div class="quality-fill" id="freshnessBar"></div>
+                </div>
+                <div class="quality-label">How recently content has been updated</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Recommendations -->
+    <div class="recommendations-section">
+        <div class="section-header">
+            <h2>Content Recommendations</h2>
+        </div>
+        <div class="recommendations-grid">
+            <div class="recommendation-card">
+                <div class="rec-icon">
+                    <i class="ph-bold ph-lightbulb"></i>
+                </div>
+                <div class="rec-content">
+                    <h4>Trending Topics</h4>
+                    <p>Consider creating content about these trending topics in your niche</p>
+                    <div class="rec-tags" id="trendingTopics">
+                        <!-- Trending topics will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendation-card">
+                <div class="rec-icon">
+                    <i class="ph-bold ph-clock"></i>
+                </div>
+                <div class="rec-content">
+                    <h4>Optimal Posting Times</h4>
+                    <p>Best times to post based on your audience engagement</p>
+                    <div class="rec-times" id="optimalTimes">
+                        <!-- Optimal times will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendation-card">
+                <div class="rec-icon">
+                    <i class="ph-bold ph-target"></i>
+                </div>
+                <div class="rec-content">
+                    <h4>Content Gaps</h4>
+                    <p>Topics your audience is searching for but you haven't covered</p>
+                    <div class="rec-gaps" id="contentGaps">
+                        <!-- Content gaps will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.analytics-content {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.page-title {
+    font: normal 700 2.38rem/1.2 var(--_font-accent);
+    color: var(--t-accent);
+    background: var(--t-accent);
+    background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font: normal 400 1.26rem/1.4 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Content Overview */
+.content-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.overview-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 2rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-value {
+    font: normal 700 1.96rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.card-label {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin-bottom: 0.5rem;
+}
+
+.card-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 500 0.84rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font: normal 600 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+/* Top Content Section */
+.top-content-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.content-filters, .time-filters {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.content-filter-btn, .time-filter-btn {
+    background: none;
+    border: 1px solid var(--stroke-elements);
+    color: var(--t-medium);
+    padding: 0.5rem 1rem;
+    border-radius: var(--_radius-s);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+}
+
+.content-filter-btn.active, .time-filter-btn.active {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.top-content-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.content-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: var(--_radius-m);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    border: 1px solid var(--stroke-elements);
+}
+
+.content-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.content-rank {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.content-info {
+    flex: 1;
+}
+
+.content-title {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.content-meta {
+    display: flex;
+    gap: 2rem;
+    font: normal 400 0.91rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.content-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.content-stat i {
+    color: var(--accent);
+}
+
+/* Categories Section */
+.categories-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.category-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+    text-align: center;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+}
+
+.category-name {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.category-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.category-stat {
+    text-align: center;
+}
+
+.category-stat-value {
+    font: normal 700 1.26rem/1.2 var(--_font-accent);
+    color: var(--accent);
+    display: block;
+}
+
+.category-stat-label {
+    font: normal 400 0.84rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Engagement Section */
+.engagement-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.engagement-chart {
+    height: 400px;
+    position: relative;
+}
+
+/* Quality Metrics Section */
+.quality-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.quality-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.quality-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+}
+
+.quality-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.quality-header h3 {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.quality-score {
+    font: normal 700 1.68rem/1.2 var(--_font-accent);
+    color: var(--accent);
+}
+
+.quality-bar {
+    height: 8px;
+    background: var(--stroke-elements);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.quality-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width var(--_animspeed-slow) var(--_animbezier);
+}
+
+.quality-fill.readability { background: var(--accent); }
+.quality-fill.seo { background: var(--secondary); }
+.quality-fill.engagement { background: var(--success, #10b981); }
+.quality-fill.freshness { background: var(--warning, #f59e0b); }
+
+.quality-label {
+    font: normal 400 0.91rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Recommendations Section */
+.recommendations-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.recommendation-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.recommendation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.rec-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.rec-content {
+    flex: 1;
+}
+
+.rec-content h4 {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0 0 0.5rem 0;
+}
+
+.rec-content p {
+    font: normal 400 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin: 0 0 1rem 0;
+}
+
+.rec-tags, .rec-times, .rec-gaps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.rec-tag {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--_radius-s);
+    font: normal 500 0.84rem/1.2 var(--_font-default);
+}
+
+.rec-time {
+    background: var(--secondary);
+    color: var(--t-opp-bright);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--_radius-s);
+    font: normal 500 0.84rem/1.2 var(--_font-default);
+}
+
+.rec-gap {
+    background: var(--warning, #f59e0b);
+    color: var(--t-bright);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--_radius-s);
+    font: normal 500 0.84rem/1.2 var(--_font-default);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .content-filters, .time-filters {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .analytics-content {
+        padding: 1rem;
+    }
+
+    .content-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quality-metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .recommendations-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recommendation-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+// Content Analytics JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initContentAnalytics();
+});
+
+function initContentAnalytics() {
+    loadContentData();
+    initContentFilters();
+    initTimeFilters();
+}
+
+function loadContentData() {
+    fetch('/api/analytics/content')
+        .then(response => response.json())
+        .then(data => {
+            updateContentOverview(data.overview);
+            updateTopContent(data.topContent);
+            updateCategories(data.categories);
+            updateEngagementChart(data.engagement);
+            updateQualityMetrics(data.quality);
+            updateRecommendations(data.recommendations);
+        })
+        .catch(error => {
+            console.error('Error loading content data:', error);
+            showFallbackContentData();
+        });
+}
+
+function updateContentOverview(overview) {
+    document.getElementById('totalPosts').textContent = overview.posts.toLocaleString();
+    document.getElementById('totalViews').textContent = overview.views.toLocaleString();
+    document.getElementById('totalEngagement').textContent = overview.engagement.toLocaleString();
+    document.getElementById('avgReadTime').textContent = formatDuration(overview.readTime);
+
+    updateTrend('postsTrend', overview.postsChange);
+    updateTrend('viewsTrend', overview.viewsChange);
+    updateTrend('engagementTrend', overview.engagementChange);
+    updateTrend('readTimeTrend', overview.readTimeChange);
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change).toFixed(1) + '%';
+}
+
+function updateTopContent(contentData) {
+    const container = document.getElementById('topContentList');
+    container.innerHTML = contentData.map((item, index) => `
+        <div class="content-item">
+            <div class="content-rank">${index + 1}</div>
+            <div class="content-info">
+                <div class="content-title">${item.title}</div>
+                <div class="content-meta">
+                    <div class="content-stat">
+                        <i class="ph-bold ph-eye"></i>
+                        ${item.views.toLocaleString()}
+                    </div>
+                    <div class="content-stat">
+                        <i class="ph-bold ph-heart"></i>
+                        ${item.likes.toLocaleString()}
+                    </div>
+                    <div class="content-stat">
+                        <i class="ph-bold ph-chat-circle"></i>
+                        ${item.comments.toLocaleString()}
+                    </div>
+                    <div class="content-stat">
+                        <i class="ph-bold ph-share"></i>
+                        ${item.shares.toLocaleString()}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateCategories(categoriesData) {
+    const container = document.getElementById('categoriesGrid');
+    container.innerHTML = categoriesData.map(category => `
+        <div class="category-card">
+            <div class="category-icon">
+                <i class="ph-bold ${category.icon}"></i>
+            </div>
+            <div class="category-name">${category.name}</div>
+            <div class="category-stats">
+                <div class="category-stat">
+                    <span class="category-stat-value">${category.posts}</span>
+                    <span class="category-stat-label">Posts</span>
+                </div>
+                <div class="category-stat">
+                    <span class="category-stat-value">${category.views.toLocaleString()}</span>
+                    <span class="category-stat-label">Views</span>
+                </div>
+                <div class="category-stat">
+                    <span class="category-stat-value">${category.engagement}%</span>
+                    <span class="category-stat-label">Engagement</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateEngagementChart(engagementData) {
+    const ctx = document.getElementById('engagementChart').getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (window.engagementChart) {
+        window.engagementChart.destroy();
+    }
+
+    window.engagementChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: engagementData.labels,
+            datasets: [{
+                label: 'Likes',
+                data: engagementData.likes,
+                borderColor: 'var(--accent)',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                tension: 0.4
+            }, {
+                label: 'Comments',
+                data: engagementData.comments,
+                borderColor: 'var(--secondary)',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4
+            }, {
+                label: 'Shares',
+                data: engagementData.shares,
+                borderColor: 'var(--success, #10b981)',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updateQualityMetrics(qualityData) {
+    updateQualityMetric('readability', qualityData.readability);
+    updateQualityMetric('seo', qualityData.seo);
+    updateQualityMetric('engagement', qualityData.engagement);
+    updateQualityMetric('freshness', qualityData.freshness);
+}
+
+function updateQualityMetric(type, data) {
+    document.getElementById(`${type}Score`).textContent = data.score;
+    document.getElementById(`${type}Bar`).style.width = data.percentage + '%';
+}
+
+function updateRecommendations(recommendations) {
+    updateTags('trendingTopics', recommendations.trendingTopics, 'rec-tag');
+    updateTags('optimalTimes', recommendations.optimalTimes, 'rec-time');
+    updateTags('contentGaps', recommendations.contentGaps, 'rec-gap');
+}
+
+function updateTags(containerId, tags, className) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = tags.map(tag => `<span class="${className}">${tag}</span>`).join('');
+}
+
+function initContentFilters() {
+    document.querySelectorAll('.content-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.content-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadTopContent(this.dataset.metric);
+        });
+    });
+}
+
+function initTimeFilters() {
+    document.querySelectorAll('.time-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.time-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadEngagementData(this.dataset.period);
+        });
+    });
+}
+
+function loadTopContent(metric) {
+    fetch(`/api/analytics/content/top?metric=${metric}`)
+        .then(response => response.json())
+        .then(data => updateTopContent(data))
+        .catch(error => console.error('Error loading top content:', error));
+}
+
+function loadEngagementData(period) {
+    fetch(`/api/analytics/content/engagement?period=${period}`)
+        .then(response => response.json())
+        .then(data => updateEngagementChart(data))
+        .catch(error => console.error('Error loading engagement data:', error));
+}
+
+function formatDuration(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes}m`;
+}
+
+function showFallbackContentData() {
+    // Show sample data when API is not available
+    updateContentOverview({
+        posts: 127,
+        views: 45231,
+        engagement: 8921,
+        readTime: 184,
+        postsChange: 8.2,
+        viewsChange: 12.5,
+        engagementChange: 15.3,
+        readTimeChange: 5.7
+    });
+}
+</script>

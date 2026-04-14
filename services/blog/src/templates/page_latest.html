@@ -1,0 +1,16 @@
+<![CDATA[{% extends "./base_blog.html" %}
+
+{% block title %}Latest Stories | NekwasaR Blog{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="/blog/css/blog.css">
+{% endblock %}
+
+{% block content %}
+{% include 'routes/latest.html' %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/blog/js/blog.js"></script>
+{% endblock %}
+]]>

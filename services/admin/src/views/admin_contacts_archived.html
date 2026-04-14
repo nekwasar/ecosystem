@@ -1,0 +1,920 @@
+<!-- Contact Archived Messages -->
+<div class="contacts-archived">
+    <!-- Archive Header -->
+    <div class="archive-header">
+        <div class="header-content">
+            <h2>Archived Messages</h2>
+            <p>Manage and restore archived contact messages</p>
+        </div>
+        <div class="header-actions">
+            <button class="action-btn secondary" id="bulkRestoreBtn">
+                <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                Bulk Restore
+            </button>
+            <button class="action-btn danger" id="bulkDeleteBtn">
+                <i class="ph-bold ph-trash"></i>
+                Bulk Delete
+            </button>
+        </div>
+    </div>
+
+    <!-- Archive Stats -->
+    <div class="archive-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="ph-bold ph-archive"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalArchived">0</div>
+                <div class="stat-label">Total Archived</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value" id="oldestMessage">--</div>
+                <div class="stat-label">Oldest Message</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="ph-bold ph-database"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value" id="archiveSize">--</div>
+                <div class="stat-label">Archive Size</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Archive Filters -->
+    <div class="archive-filters">
+        <div class="search-box">
+            <i class="ph-bold ph-magnifying-glass"></i>
+            <input type="text" id="archiveSearch" placeholder="Search archived messages...">
+        </div>
+        <div class="filter-options">
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+            </select>
+            <select id="dateFilter">
+                <option value="">All Dates</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+                <option value="year">This Year</option>
+            </select>
+            <select id="sortFilter">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="sender">By Sender</option>
+                <option value="subject">By Subject</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Archive Folders -->
+    <div class="archive-folders">
+        <div class="folder-tabs">
+            <button class="folder-tab active" data-folder="all">
+                <i class="ph-bold ph-archive"></i>
+                All Archived
+                <span class="folder-count" id="allCount">0</span>
+            </button>
+            <button class="folder-tab" data-folder="auto">
+                <i class="ph-bold ph-robot"></i>
+                Auto-Archived
+                <span class="folder-count" id="autoCount">0</span>
+            </button>
+            <button class="folder-tab" data-folder="manual">
+                <i class="ph-bold ph-hand"></i>
+                Manually Archived
+                <span class="folder-count" id="manualCount">0</span>
+            </button>
+            <button class="folder-tab" data-folder="old">
+                <i class="ph-bold ph-clock"></i>
+                Old Messages
+                <span class="folder-count" id="oldCount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Messages List -->
+    <div class="archived-messages" id="archivedMessages">
+        <!-- Messages will be populated here -->
+    </div>
+
+    <!-- Bulk Actions Bar -->
+    <div class="bulk-actions-bar" id="bulkActionsBar" style="display: none;">
+        <div class="bulk-info">
+            <span id="selectedCount">0</span> messages selected
+        </div>
+        <div class="bulk-buttons">
+            <button class="bulk-btn restore" onclick="bulkRestore()">
+                <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                Restore
+            </button>
+            <button class="bulk-btn delete" onclick="bulkDelete()">
+                <i class="ph-bold ph-trash"></i>
+                Delete Permanently
+            </button>
+            <button class="bulk-btn cancel" onclick="cancelBulk()">
+                <i class="ph-bold ph-x"></i>
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contacts-archived {
+        padding: 2rem;
+    }
+
+    /* Archive Header */
+    .archive-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .header-content h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .header-content p {
+        color: var(--admin-text-secondary);
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .action-btn.secondary {
+        background: var(--admin-secondary);
+        color: white;
+        border-color: var(--admin-secondary);
+    }
+
+    .action-btn.danger {
+        background: var(--admin-error);
+        color: white;
+        border-color: var(--admin-error);
+    }
+
+    .action-btn.danger:hover {
+        background: #dc2626;
+        border-color: #dc2626;
+    }
+
+    /* Archive Stats */
+    .archive-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .stat-content {
+        flex: 1;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    /* Archive Filters */
+    .archive-filters {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+        max-width: 300px;
+        padding: 0.75rem;
+        background: var(--admin-background);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+    }
+
+    .search-box i {
+        color: var(--admin-text-secondary);
+    }
+
+    .search-box input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+    }
+
+    .search-box input:focus {
+        outline: none;
+    }
+
+    .filter-options {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .filter-options select {
+        padding: 0.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        min-width: 120px;
+    }
+
+    /* Archive Folders */
+    .archive-folders {
+        margin-bottom: 1.5rem;
+    }
+
+    .folder-tabs {
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .folder-tab {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 1.5rem;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: var(--admin-text-secondary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .folder-tab:hover {
+        color: var(--admin-text-primary);
+        background: var(--admin-background);
+    }
+
+    .folder-tab.active {
+        color: var(--admin-primary);
+        border-bottom-color: var(--admin-primary);
+    }
+
+    .folder-count {
+        background: var(--admin-border);
+        color: var(--admin-text-secondary);
+        padding: 0.125rem 0.375rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .folder-tab.active .folder-count {
+        background: var(--admin-primary);
+        color: white;
+    }
+
+    /* Messages List */
+    .archived-messages {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+        min-height: 500px;
+    }
+
+    .archived-message-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .archived-message-item:hover {
+        background: var(--admin-background);
+    }
+
+    .archived-message-item.selected {
+        background: rgba(124, 58, 237, 0.05);
+        border-left: 3px solid var(--admin-primary);
+    }
+
+    .message-checkbox {
+        width: 18px;
+        height: 18px;
+        border: 1px solid var(--admin-border);
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .message-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .message-sender {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+    }
+
+    .message-category {
+        padding: 0.125rem 0.5rem;
+        background: var(--admin-secondary);
+        color: white;
+        border-radius: 3px;
+        font-size: 0.625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .message-subject {
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-preview {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .message-date {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .message-actions {
+        display: flex;
+        gap: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .archived-message-item:hover .message-actions {
+        opacity: 1;
+    }
+
+    .message-action-btn {
+        padding: 0.375rem;
+        border: none;
+        background: none;
+        color: var(--admin-text-secondary);
+        cursor: pointer;
+        border-radius: var(--admin-radius-sm);
+        transition: all 0.2s ease;
+    }
+
+    .message-action-btn:hover {
+        background: var(--admin-border);
+        color: var(--admin-text-primary);
+    }
+
+    .message-action-btn.restore:hover {
+        background: var(--admin-success);
+        color: white;
+    }
+
+    .message-action-btn.delete:hover {
+        background: var(--admin-error);
+        color: white;
+    }
+
+    /* Bulk Actions Bar */
+    .bulk-actions-bar {
+        position: fixed;
+        bottom: 0;
+        left: 280px;
+        right: 0;
+        background: var(--admin-primary);
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .bulk-info {
+        font-weight: 600;
+    }
+
+    .bulk-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .bulk-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: var(--admin-radius-md);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .bulk-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .bulk-btn.restore {
+        background: var(--admin-success);
+        border-color: var(--admin-success);
+    }
+
+    .bulk-btn.delete {
+        background: var(--admin-error);
+        border-color: var(--admin-error);
+    }
+
+    .bulk-btn.cancel {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Empty State */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--admin-text-secondary);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--admin-text-primary);
+    }
+
+    .empty-state p {
+        font-size: 0.875rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .archive-filters {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .filter-options {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .filter-options select {
+            flex: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contacts-archived {
+            padding: 1rem;
+        }
+
+        .archive-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .archive-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .folder-tabs {
+            flex-wrap: wrap;
+        }
+
+        .bulk-actions-bar {
+            left: 0;
+            padding: 1rem;
+        }
+
+        .bulk-buttons {
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .bulk-btn {
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    // Contact Archived Messages Management
+    let selectedMessages = new Set();
+
+    function initContactsArchived() {
+        loadArchivedData();
+        setupEventListeners();
+    }
+
+    async function loadArchivedData() {
+        try {
+            const response = await fetch('/api/admin/contacts/archived');
+            if (response.ok) {
+                const data = await response.json();
+                updateArchiveStats(data.stats);
+                updateCategories(data.categories);
+                updateMessages(data.messages);
+                updateFolderCounts(data.folderCounts);
+            }
+        } catch (error) {
+            console.error('Error loading archived data:', error);
+        }
+    }
+
+    function updateArchiveStats(stats) {
+        document.getElementById('totalArchived').textContent = stats.total || 0;
+        document.getElementById('oldestMessage').textContent = stats.oldest ? formatDate(stats.oldest) : '--';
+        document.getElementById('archiveSize').textContent = stats.size ? formatFileSize(stats.size) : '--';
+    }
+
+    function updateCategories(categories) {
+        const select = document.getElementById('categoryFilter');
+        select.innerHTML = '<option value="">All Categories</option>';
+
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            select.appendChild(option);
+        });
+    }
+
+    function updateMessages(messages) {
+        const container = document.getElementById('archivedMessages');
+
+        if (!messages || messages.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="ph-bold ph-archive"></i>
+                    <h3>No archived messages</h3>
+                    <p>Messages you archive will appear here. You can restore them back to your inbox anytime.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = messages.map(message => `
+            <div class="archived-message-item" data-id="${message.id}">
+                <input type="checkbox" class="message-checkbox" onchange="toggleMessageSelection(${message.id})">
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="message-sender">${message.sender}</div>
+                        <span class="message-category">${message.category}</span>
+                    </div>
+                    <div class="message-subject">${message.subject}</div>
+                    <div class="message-preview">${message.preview}</div>
+                    <div class="message-meta">
+                        <span>Archived ${formatTimeAgo(message.archivedAt)}</span>
+                        <span>${formatDate(message.timestamp)}</span>
+                    </div>
+                </div>
+                <div class="message-actions">
+                    <button class="message-action-btn restore" onclick="restoreMessage(${message.id})" title="Restore to inbox">
+                        <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                    </button>
+                    <button class="message-action-btn delete" onclick="deleteMessage(${message.id})" title="Delete permanently">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateFolderCounts(counts) {
+        document.getElementById('allCount').textContent = counts.all || 0;
+        document.getElementById('autoCount').textContent = counts.auto || 0;
+        document.getElementById('manualCount').textContent = counts.manual || 0;
+        document.getElementById('oldCount').textContent = counts.old || 0;
+    }
+
+    function setupEventListeners() {
+        // Search functionality
+        const searchInput = document.getElementById('archiveSearch');
+        searchInput.addEventListener('input', debounce(() => {
+            filterMessages(searchInput.value);
+        }, 300));
+
+        // Filter changes
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateFilter').addEventListener('change', applyFilters);
+        document.getElementById('sortFilter').addEventListener('change', applyFilters);
+
+        // Folder tabs
+        document.querySelectorAll('.folder-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.folder-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                filterByFolder(tab.dataset.folder);
+            });
+        });
+
+        // Bulk actions
+        document.getElementById('bulkRestoreBtn').addEventListener('click', () => {
+            selectAllMessages();
+            showBulkActions();
+        });
+
+        document.getElementById('bulkDeleteBtn').addEventListener('click', () => {
+            selectAllMessages();
+            showBulkActions();
+        });
+    }
+
+    function filterMessages(searchTerm) {
+        const messages = document.querySelectorAll('.archived-message-item');
+        messages.forEach(message => {
+            const text = message.textContent.toLowerCase();
+            const matches = text.includes(searchTerm.toLowerCase());
+            message.style.display = matches ? 'flex' : 'none';
+        });
+    }
+
+    function applyFilters() {
+        // Apply current filters and reload data
+        loadArchivedData();
+    }
+
+    function filterByFolder(folder) {
+        // Filter messages by folder type
+        loadArchivedData();
+    }
+
+    function toggleMessageSelection(messageId) {
+        if (selectedMessages.has(messageId)) {
+            selectedMessages.delete(messageId);
+        } else {
+            selectedMessages.add(messageId);
+        }
+
+        updateBulkActionsVisibility();
+        updateSelectedCount();
+    }
+
+    function selectAllMessages() {
+        const checkboxes = document.querySelectorAll('.message-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = true;
+            const messageId = parseInt(checkbox.closest('.archived-message-item').dataset.id);
+            selectedMessages.add(messageId);
+        });
+
+        updateBulkActionsVisibility();
+        updateSelectedCount();
+    }
+
+    function updateBulkActionsVisibility() {
+        const bulkActionsBar = document.getElementById('bulkActionsBar');
+        bulkActionsBar.style.display = selectedMessages.size > 0 ? 'flex' : 'none';
+    }
+
+    function updateSelectedCount() {
+        document.getElementById('selectedCount').textContent = selectedMessages.size;
+    }
+
+    function restoreMessage(messageId) {
+        fetch(`/api/admin/contacts/restore/${messageId}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    loadArchivedData();
+                    showNotification('Message restored to inbox', 'success');
+                }
+            });
+    }
+
+    function deleteMessage(messageId) {
+        if (confirm('Are you sure you want to permanently delete this message?')) {
+            fetch(`/api/admin/contacts/delete/${messageId}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        loadArchivedData();
+                        showNotification('Message deleted permanently', 'success');
+                    }
+                });
+        }
+    }
+
+    function bulkRestore() {
+        if (selectedMessages.size === 0) return;
+
+        const messageIds = Array.from(selectedMessages);
+        fetch('/api/admin/contacts/bulk-restore', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messageIds })
+        }).then(response => {
+            if (response.ok) {
+                selectedMessages.clear();
+                updateBulkActionsVisibility();
+                loadArchivedData();
+                showNotification(`${messageIds.length} messages restored to inbox`, 'success');
+            }
+        });
+    }
+
+    function bulkDelete() {
+        if (selectedMessages.size === 0) return;
+
+        if (confirm(`Are you sure you want to permanently delete ${selectedMessages.size} messages?`)) {
+            const messageIds = Array.from(selectedMessages);
+            fetch('/api/admin/contacts/bulk-delete', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messageIds })
+            }).then(response => {
+                if (response.ok) {
+                    selectedMessages.clear();
+                    updateBulkActionsVisibility();
+                    loadArchivedData();
+                    showNotification(`${messageIds.length} messages deleted permanently`, 'success');
+                }
+            });
+        }
+    }
+
+    function cancelBulk() {
+        selectedMessages.clear();
+        document.querySelectorAll('.message-checkbox').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        updateBulkActionsVisibility();
+    }
+
+    function formatFileSize(bytes) {
+        if (!bytes) return '--';
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+    }
+
+    function formatTimeAgo(timestamp) {
+        const now = new Date();
+        const time = new Date(timestamp);
+        const diff = now - time;
+
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+
+        if (minutes < 1) return 'now';
+        if (minutes < 60) return `${minutes}m ago`;
+        if (hours < 24) return `${hours}h ago`;
+        return `${days}d ago`;
+    }
+
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString();
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    function showNotification(message, type = 'info') {
+        // Use global notification system
+        console.log(`${type.toUpperCase()}: ${message}`);
+    }
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContactsArchived);
+    } else {
+        initContactsArchived();
+    }
+</script>

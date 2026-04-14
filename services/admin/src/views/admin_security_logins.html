@@ -1,0 +1,727 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-6 md:p-8 lg:p-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Login History</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Monitor authentication activities and security events</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Analytics Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Total Logins Today Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-sign-in"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalLoginsToday">47</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Logins Today</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="loginsChange">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+12%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Failed Attempts Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-red-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-500 via-pink-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-x-circle"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="failedAttempts">3</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Failed Attempts</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-red-500 dark:text-red-400" id="failedChange">
+                            <i class="ph-bold ph-trend-down text-base"></i>
+                            <span>-2 today</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-red-500/10 to-pink-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Active Sessions Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-activity"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="activeSessions">8</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Active Sessions</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="sessionsChange">
+                            <i class="ph-bold ph-circle text-base"></i>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Suspicious Activities Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-warning"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="suspiciousActivities">1</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Suspicious Activities</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-yellow-500 dark:text-yellow-400" id="suspiciousChange">
+                            <i class="ph-bold ph-shield-warning text-base"></i>
+                            <span>Flagged</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- Login History Management -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-clock-counter-clockwise text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Login History</h3>
+                            <p class="text-t-medium font-syne text-sm">Detailed authentication logs and session tracking</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="exportLogsBtn">
+                            <i class="ph-bold ph-download text-lg"></i>
+                            <span>Export Logs</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="filterLogsBtn">
+                            <i class="ph-bold ph-funnel text-lg"></i>
+                            <span>Filter Logs</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="p-8 border-b border-stroke-elements">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <!-- Search Logs -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Search Logs</label>
+                        <div class="relative group">
+                            <input type="text" class="w-full pl-12 pr-4 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne text-base shadow-lg focus:shadow-xl" id="searchLogs" placeholder="Search by user, IP, or status...">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-magnifying-glass"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Date Range</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="dateRange">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-calendar"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Login Status</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="statusFilter">
+                                <option value="all">All Status</option>
+                                <option value="success">Successful</option>
+                                <option value="failed">Failed</option>
+                                <option value="suspicious">Suspicious</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-check-circle"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- User Filter -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Filter by User</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="userFilter">
+                                <option value="all">All Users</option>
+                                <option value="admin">Admins Only</option>
+                                <option value="regular">Regular Users</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-users"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login History Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full" id="loginHistoryTable">
+                    <thead class="bg-base-tint/50 dark:bg-base-shade/50">
+                        <tr class="border-b border-stroke-elements">
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">User</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Login Time</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">IP Address</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Location</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Device</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Status</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="loginHistoryTableBody" class="divide-y divide-stroke-elements">
+                        <!-- Login history data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Security Alerts & Notifications -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                        <i class="ph-bold ph-shield-warning text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-t-bright font-syne">Security Alerts</h3>
+                        <p class="text-t-medium font-syne text-sm">Recent security events and suspicious activities</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8">
+                <div class="space-y-6">
+                    <!-- Alert Item -->
+                    <div class="p-6 bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 rounded-xl">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="ph-bold ph-warning text-red-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-bold text-t-bright font-syne">Multiple Failed Login Attempts</h4>
+                                    <span class="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded-full">Critical</span>
+                                </div>
+                                <p class="text-t-medium font-syne text-sm mb-3">Detected 5 failed login attempts from IP 192.168.1.100 for user admin@nekwasar.com</p>
+                                <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                    <span>2 hours ago</span>
+                                    <span>•</span>
+                                    <span>Chrome on Windows</span>
+                                    <span>•</span>
+                                    <span>New York, US</span>
+                                </div>
+                            </div>
+                            <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                <i class="ph-bold ph-x text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alert Item -->
+                    <div class="p-6 bg-yellow-500/5 dark:bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="ph-bold ph-warning-circle text-yellow-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-bold text-t-bright font-syne">Unusual Login Location</h4>
+                                    <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-bold rounded-full">Warning</span>
+                                </div>
+                                <p class="text-t-medium font-syne text-sm mb-3">Login from unrecognized location: Tokyo, Japan (usually logs in from Nigeria)</p>
+                                <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                    <span>4 hours ago</span>
+                                    <span>•</span>
+                                    <span>Safari on iPhone</span>
+                                    <span>•</span>
+                                    <span>Tokyo, JP</span>
+                                </div>
+                            </div>
+                            <button class="w-8 h-8 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                <i class="ph-bold ph-check text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Alert Item -->
+                    <div class="p-6 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="ph-bold ph-info text-blue-500"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-bold text-t-bright font-syne">New Device Login</h4>
+                                    <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-bold rounded-full">Info</span>
+                                </div>
+                                <p class="text-t-medium font-syne text-sm mb-3">First login from new device: MacBook Pro (M2 Chip) - 2FA verification completed</p>
+                                <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                    <span>6 hours ago</span>
+                                    <span>•</span>
+                                    <span>Chrome on macOS</span>
+                                    <span>•</span>
+                                    <span>Awka, NG</span>
+                                </div>
+                            </div>
+                            <button class="w-8 h-8 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-lg flex items-center justify-center transition-all duration-medium">
+                                <i class="ph-bold ph-check text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+</style>
+
+<script>
+// Login History Page
+function initSecurityLogins() {
+    loadLoginData();
+    setupLoginEventListeners();
+    loadLoginHistory();
+}
+
+async function loadLoginData() {
+    try {
+        const response = await fetch('/api/admin/security/logins');
+        if (response.ok) {
+            const data = await response.json();
+            updateLoginStats(data.stats);
+            updateLoginHistory(data.history);
+        } else {
+            showFallbackLoginData();
+        }
+    } catch (error) {
+        console.error('Error loading login data:', error);
+        showFallbackLoginData();
+    }
+}
+
+function updateLoginStats(stats) {
+    document.getElementById('totalLoginsToday').textContent = stats.totalLoginsToday || 47;
+    document.getElementById('failedAttempts').textContent = stats.failedAttempts || 3;
+    document.getElementById('activeSessions').textContent = stats.activeSessions || 8;
+    document.getElementById('suspiciousActivities').textContent = stats.suspiciousActivities || 1;
+}
+
+function updateLoginHistory(history) {
+    const tbody = document.getElementById('loginHistoryTableBody');
+
+    if (!history || history.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="px-8 py-16 text-center">
+                    <div class="flex flex-col items-center space-y-6">
+                        <div class="w-20 h-20 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl">
+                            <i class="ph-bold ph-clock-counter-clockwise text-5xl text-t-muted opacity-60"></i>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">No login history found</h3>
+                            <p class="text-base text-t-medium font-syne max-w-md">Login history will appear here once users start authenticating.</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = history.map(login => `
+        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium group">
+            <td class="px-8 py-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright font-bold text-sm shadow-lg">
+                        ${getInitials(login.user)}
+                    </div>
+                    <div>
+                        <div class="text-base font-semibold text-t-bright group-hover:text-accent transition-colors duration-medium font-syne">
+                            ${login.user}
+                        </div>
+                        <div class="text-sm text-t-medium font-syne">${login.role}</div>
+                    </div>
+                </div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${formatDateTime(login.timestamp)}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${formatRelativeTime(login.timestamp)}</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne font-mono group-hover:text-t-bright transition-colors duration-medium">
+                    ${login.ipAddress}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${login.ipType || 'IPv4'}</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${login.location || 'Unknown'}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${login.country || ''}</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${login.device || 'Unknown'}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${login.browser || ''}</div>
+            </td>
+            <td class="px-8 py-6">
+                <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wide font-syne ${getLoginStatusClass(login.status)} shadow-lg">
+                    <i class="ph-bold ph-circle mr-2 text-xs"></i>
+                    ${login.status}
+                </span>
+            </td>
+            <td class="px-8 py-6">
+                <div class="flex items-center space-x-2">
+                    <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="View Details" onclick="viewLoginDetails('${login.id}')">
+                        <i class="ph-bold ph-eye text-sm"></i>
+                    </button>
+                    ${login.status === 'failed' ? `
+                        <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Block IP" onclick="blockIP('${login.ipAddress}')">
+                            <i class="ph-bold ph-shield-x text-sm"></i>
+                        </button>
+                    ` : ''}
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getLoginStatusClass(status) {
+    if (status === 'success') {
+        return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-green-500/20';
+    } else if (status === 'failed') {
+        return 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-500/20';
+    } else if (status === 'suspicious') {
+        return 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-yellow-500/20';
+    }
+    return 'bg-gradient-to-r from-slate-500 to-gray-500 text-white border-slate-500/20';
+}
+
+function setupLoginEventListeners() {
+    // Export Logs Button
+    document.getElementById('exportLogsBtn').onclick = () => {
+        exportLoginLogs();
+    };
+
+    // Filter Logs Button
+    document.getElementById('filterLogsBtn').onclick = () => {
+        showFilterModal();
+    };
+
+    // Search functionality
+    document.getElementById('searchLogs').oninput = debounce(filterLoginLogs, 300);
+    document.getElementById('dateRange').onchange = filterLoginLogs;
+    document.getElementById('statusFilter').onchange = filterLoginLogs;
+    document.getElementById('userFilter').onchange = filterLoginLogs;
+}
+
+function loadLoginHistory() {
+    // Load initial login history data
+    const sampleHistory = [
+        {
+            id: '1',
+            user: 'John Doe',
+            role: 'Admin',
+            timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+            ipAddress: '192.168.1.100',
+            location: 'New York',
+            country: 'US',
+            device: 'MacBook Pro',
+            browser: 'Chrome 120',
+            status: 'success'
+        },
+        {
+            id: '2',
+            user: 'Jane Smith',
+            role: 'Editor',
+            timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+            ipAddress: '10.0.0.50',
+            location: 'London',
+            country: 'UK',
+            device: 'iPhone 15',
+            browser: 'Safari',
+            status: 'success'
+        },
+        {
+            id: '3',
+            user: 'Unknown User',
+            role: 'Guest',
+            timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+            ipAddress: '203.0.113.1',
+            location: 'Unknown',
+            country: '',
+            device: 'Unknown',
+            browser: 'Unknown',
+            status: 'failed'
+        }
+    ];
+
+    updateLoginHistory(sampleHistory);
+}
+
+function showFallbackLoginData() {
+    // Show sample data when API is not available
+    updateLoginStats({
+        totalLoginsToday: 47,
+        failedAttempts: 3,
+        activeSessions: 8,
+        suspiciousActivities: 1
+    });
+
+    loadLoginHistory();
+}
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+}
+
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function formatRelativeTime(dateString) {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours === 1) return '1 hour ago';
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays === 1) return '1 day ago';
+    return `${diffInDays} days ago`;
+}
+
+function viewLoginDetails(loginId) {
+    showNotification(`Viewing details for login ${loginId}`, 'info');
+}
+
+function blockIP(ipAddress) {
+    if (confirm(`Are you sure you want to block IP address ${ipAddress}?`)) {
+        showNotification(`IP ${ipAddress} has been blocked`, 'success');
+    }
+}
+
+function exportLoginLogs() {
+    showNotification('Exporting login logs...', 'info');
+}
+
+function showFilterModal() {
+    showNotification('Filter modal would open here', 'info');
+}
+
+function filterLoginLogs() {
+    // Implement filtering logic here
+    console.log('Filtering login logs...');
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSecurityLogins);
+} else {
+    initSecurityLogins();
+}
+</script>

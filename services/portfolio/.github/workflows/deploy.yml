@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/portfolio/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          docker build -t nekwasar-portfolio:${{ github.sha }} services/portfolio
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            docker stop ecosystem_portfolio || true
+            docker rm ecosystem_portfolio || true
+            docker run -d --name ecosystem_portfolio --network ecosystem_network -p 80:80 nekwasar-portfolio:${{ github.sha }}

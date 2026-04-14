@@ -1,0 +1,211 @@
+{% extends "base_blog.html" %}
+
+{% block title %}{{ author.name }} - Author Profile{% endblock %}
+{% block description %}Read articles by {{ author.name }}. {{ author.bio|default('', true)|truncate(100) }}{% endblock
+%}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<style>
+    /* Editorial Layout Utilities */
+    .text-vertical {
+        writing-mode: vertical-lr;
+        transform: rotate(180deg);
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .font-pacifico {
+        font-family: 'Pacifico', cursive;
+    }
+</style>
+
+<div class="author-profile-page w-full min-h-screen bg-[#f8fafc] text-[#0f172a] pb-24 font-outfit">
+
+    <!-- Hero Section: The Identity Block -->
+    <!-- Grid: Left (Name), MIddle (Empty/Line), Right (Avatar) -->
+    <div class="w-full pt-12 lg:pt-32 pb-12 border-b border-gray-200">
+        <div
+            class="container mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-[1.5fr_1px_1fr] gap-8 lg:gap-12 items-end">
+
+            <!-- Left: Typography Core (Order 2 on Mobile) -->
+            <div class="flex flex-col gap-6 lg:gap-8 pb-4 order-2 lg:order-1">
+                <div class="flex items-center gap-4 mb-2">
+                    <div class="h-px bg-black w-12"></div>
+                    <span class="text-sm font-black uppercase tracking-[0.2em] text-gray-400">Contributor Profile</span>
+                </div>
+
+                <h1
+                    class="text-5xl md:text-8xl lg:text-[7rem] font-bold font-syne leading-[0.9] lg:leading-[0.85] tracking-tighter text-black">
+                    {{ author.name }}
+                </h1>
+
+                <div class="flex flex-wrap items-center gap-6 mt-4">
+                    <div class="px-5 py-2 border-2 border-black rounded-full font-mono text-lg font-bold">
+                        @{{ author.username }}
+                    </div>
+                    {% if author.expert_tags %}
+                    <div class="flex flex-wrap gap-2 md:gap-3">
+                        {% for tag in author.expert_tags %}
+                        <span
+                            class="text-sm md:text-lg font-black text-gray-600 uppercase tracking-wide bg-gray-100 rounded px-2 py-1">#{{
+                            tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Middle: Divider (Desktop Only) -->
+            <div class="hidden lg:block h-full bg-gray-200 order-last lg:order-2"></div>
+
+            <!-- Right: The Portait & Socials (Order 1 on Mobile) -->
+            <div class="relative w-full max-w-md mx-auto lg:mr-0 flex flex-col gap-6 order-1 lg:order-3">
+                <div
+                    class="aspect-[3/4] bg-gray-200 overflow-hidden relative grayscale hover:grayscale-0 transition-all duration-700 ease-out shadow-2xl">
+                    <img src="{{ author.avatar_image or 'https://ui-avatars.com/api/?name=' + author.name }}"
+                        alt="{{ author.name }}" class="w-full h-full object-cover">
+                    <!-- Corner accent -->
+                    <div class="absolute bottom-0 left-0 w-12 h-12 bg-white flex items-center justify-center">
+                        <i class="ph-bold ph-arrow-down-right text-2xl"></i>
+                    </div>
+                </div>
+
+                <!-- Socials (Visible & Big) -->
+                {% if author.social_links %}
+                <div class="flex flex-wrap gap-3 justify-end lg:justify-start">
+                    {% for social in author.social_links %}
+                    <a href="{{ social.url }}" target="_blank"
+                        class="w-12 h-12 border-2 border-black rounded-lg flex items-center justify-center text-xl hover:bg-black hover:text-white transition-all shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
+                        title="{{ social.platform }}">
+                        {% if social.platform == 'twitter' or social.platform == 'x' %}<i class="ph-bold ph-x-logo"></i>
+                        {% elif social.platform == 'github' %}<i class="ph-bold ph-github-logo"></i>
+                        {% elif social.platform == 'linkedin' %}<i class="ph-bold ph-linkedin-logo"></i>
+                        {% elif social.platform == 'instagram' %}<i class="ph-bold ph-instagram-logo"></i>
+                        {% elif social.platform == 'facebook' %}<i class="ph-bold ph-facebook-logo"></i>
+                        {% elif social.platform == 'youtube' %}<i class="ph-bold ph-youtube-logo"></i>
+                        {% elif social.platform == 'medium' %}<i class="ph-bold ph-medium-logo"></i>
+                        {% elif social.platform == 'tiktok' %}<i class="ph-bold ph-tiktok-logo"></i>
+                        {% elif social.platform == 'reddit' %}<i class="ph-bold ph-reddit-logo"></i>
+                        {% elif social.platform == 'discord' %}<i class="ph-bold ph-discord-logo"></i>
+                        {% elif social.platform == 'email' %}<i class="ph-bold ph-envelope"></i>
+                        {% else %}<i class="ph-bold ph-link"></i>{% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Floating geometric accent -->
+                <div class="absolute -top-6 -right-6 w-24 h-24 border-2 border-black/10 -z-10 rounded-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="container mx-auto px-6 md:px-12 py-16 grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-16 lg:gap-24">
+
+        <!-- Left Column: Narrative (Bio & Socials) - Order 2 on Mobile -->
+        <div class="sticky top-24 self-start order-2 lg:order-1">
+            <h2 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-8 border-b border-gray-200 pb-4">
+                Biography
+            </h2>
+
+            <div class="prose prose-xl font-pacifico text-gray-800 leading-relaxed mb-12">
+                {{ author.bio or "This author focuses on delivering high-quality content without a detailed biography
+                provided." }}
+            </div>
+
+            <!-- Social Links moved to under Author Avatar -->
+
+            <!-- Published Books (Mini Shelf) -->
+            {% if author.books %}
+            <div class="mt-12">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-6">Publications</span>
+                <div class="grid grid-cols-2 gap-4">
+                    {% for book in author.books %}
+                    <a href="{{ book.link }}" target="_blank" class="group block">
+                        <div
+                            class="aspect-[2/3] bg-white border border-gray-200 p-2 relative shadow transition-all group-hover:-translate-y-1">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center overflow-hidden">
+                                {% if book.cover %}<img src="{{ book.cover }}" class="w-full h-full object-cover">
+                                {% else %}<i class="ph-duotone ph-book text-2xl text-gray-400"></i>{% endif %}
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-gray-900 mt-2 block group-hover:underline">{{ book.title
+                            }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column: The Work (Articles) - Order 1 on Mobile -->
+        <div class="order-1 lg:order-2">
+            <div class="flex items-center justify-between mb-12 border-b border-gray-200 pb-4">
+                <h2 class="text-4xl font-black font-syne uppercase">Selected Work</h2>
+                <span class="font-mono text-sm border border-black px-3 py-1 rounded-full">{{ posts|length }}
+                    Items</span>
+            </div>
+
+            <div class="flex flex-col gap-12">
+                {% for post in posts %}
+                <article
+                    class="group relative grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 items-start hover:bg-white hover:p-6 hover:-mx-6 hover:shadow-xl hover:rounded-2xl transition-all duration-300">
+
+                    <!-- Date/Meta (Desktop Left) -->
+                    <div class="hidden md:flex flex-col gap-2 pt-2">
+                        <span class="font-mono text-sm font-bold text-gray-400">
+                            {{ post.published_at.strftime('%Y') if post.published_at else 'DRAFT' }}
+                        </span>
+                        <span class="text-xs font-black uppercase tracking-widest text-accent">
+                            {{ post.section|replace('_', ' ') }}
+                        </span>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-1">
+                        <!-- Mobile Date -->
+                        <div class="md:hidden flex items-center gap-2 mb-2 text-xs font-bold text-gray-400 uppercase">
+                            <span>{{ post.published_at.strftime('%b %d, %Y') if post.published_at else 'DRAFT' }}</span>
+                            <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span class="text-accent">{{ post.section|replace('_', ' ') }}</span>
+                        </div>
+
+                        <h3
+                            class="text-3xl font-bold font-syne leading-tight mb-4 group-hover:text-accent transition-colors">
+                            <a href="/{{ post.slug }}">
+                                <span class="hover:underline decoration-2 decoration-accent underline-offset-4">{{
+                                    post.title }}</span>
+                            </a>
+                        </h3>
+
+                        <p class="text-lg text-gray-500 leading-relaxed line-clamp-2 md:line-clamp-3 mb-6 font-outfit">
+                            {{ post.excerpt }}
+                        </p>
+
+                        <a href="/{{ post.slug }}"
+                            class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-black group-hover:gap-4 transition-all">
+                            Read Article <i class="ph-bold ph-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+                {% else %}
+                <div class="py-24 text-center border border-dashed border-gray-300 rounded-xl">
+                    <p class="text-xl text-gray-400 font-syne">No articles published yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

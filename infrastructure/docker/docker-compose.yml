@@ -1,0 +1,211 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with 7 databases
+  postgres:
+    image: postgres:15-alpine
+    container_name: ecosystem_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - ecosystem_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: ecosystem_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ecosystem_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: ecosystem_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_cache:/var/cache/nginx
+      - nginx_logs:/var/log/nginx
+    depends_on:
+      - admin
+      - blog
+      - store
+      - portfolio
+      - gigs
+      - mail
+      - agent
+    networks:
+      - ecosystem_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Admin Service
+  admin:
+    build:
+      context: ../../services/admin
+      dockerfile: Dockerfile
+    container_name: ecosystem_admin
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/admin_db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+      - PORT=8001
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecosystem_network
+
+  # Blog Service
+  blog:
+    build:
+      context: ../../services/blog
+      dockerfile: Dockerfile
+    container_name: ecosystem_blog
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/blog_db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+      - PORT=8003
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecosystem_network
+
+  # Store Service
+  store:
+    build:
+      context: ../../services/store
+      dockerfile: Dockerfile
+    container_name: ecosystem_store
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/store_db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+      - PORT=8007
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecosystem_network
+
+  # Portfolio Service (Static)
+  portfolio:
+    build:
+      context: ../../services/portfolio
+      dockerfile: Dockerfile
+    container_name: ecosystem_portfolio
+    restart: always
+    environment:
+      - PORT=8006
+    networks:
+      - ecosystem_network
+
+  # Gigs Service
+  gigs:
+    build:
+      context: ../../services/gigs
+      dockerfile: Dockerfile
+    container_name: ecosystem_gigs
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/gigs_db
+      - REDIS_URL=redis://redis:6379
+      - PORT=8004
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecosystem_network
+
+  # Mail Service
+  mail:
+    build:
+      context: ../../services/mail
+      dockerfile: Dockerfile
+    container_name: ecosystem_mail
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/mail_db
+      - REDIS_URL=redis://redis:6379
+      - BREVO_API_KEY=${BREVO_API_KEY}
+      - SENDER_EMAIL=${SENDER_EMAIL}
+      - PORT=8005
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecosystem_network
+
+  # Agent Service
+  agent:
+    build:
+      context: ../../services/agent
+      dockerfile: Dockerfile
+    container_name: ecosystem_agent
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/agent_db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+      - PORT=8002
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ecosystem_network
+
+networks:
+  ecosystem_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  nginx_cache:
+  nginx_logs:

@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  blog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecosystem_blog
+    restart: always
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://ecosystem:password@postgres:5432/blog_db}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - PORT=8003
+    depends_on:
+      - postgres
+    networks:
+      - ecosystem_network
+
+networks:
+  ecosystem_network:
+    driver: bridge

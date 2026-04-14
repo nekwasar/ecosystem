@@ -1,0 +1,483 @@
+<div id="newsletterTemplatesPage" class="p-6">
+    <style>
+        /* Scoped styles using theme variables */
+        #newsletterTemplatesPage .theme-text-main {
+            color: var(--t-bright);
+        }
+
+        #newsletterTemplatesPage .theme-text-sub {
+            color: var(--t-medium);
+        }
+
+        #newsletterTemplatesPage .theme-card {
+            background: var(--base);
+            border: 1px solid var(--stroke-elements);
+            border-radius: var(--_radius-m);
+        }
+
+        #newsletterTemplatesPage .theme-input {
+            background: var(--base);
+            border: 1px solid var(--stroke-controls);
+            color: var(--t-bright);
+        }
+
+        #newsletterTemplatesPage .theme-input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        #newsletterTemplatesPage .theme-btn-primary {
+            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            color: var(--t-opp-bright);
+            border: none;
+        }
+
+        #newsletterTemplatesPage .theme-btn-secondary {
+            background: var(--base);
+            border: 1px solid var(--stroke-controls);
+            color: var(--t-medium);
+        }
+
+        #newsletterTemplatesPage .theme-btn-secondary:hover {
+            background: var(--base-tint);
+            color: var(--t-bright);
+        }
+
+        #newsletterTemplatesPage .stat-icon-wrapper {
+            background: var(--base-tint);
+            color: var(--accent);
+        }
+
+        .template-grid-item {
+            background: var(--base);
+            border: 1px solid var(--stroke-elements);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .template-grid-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-color: var(--accent);
+        }
+
+        .modal-content {
+            background: var(--base);
+            border: 1px solid var(--stroke-elements);
+            color: var(--t-bright);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--stroke-elements);
+        }
+
+        .modal-sidebar {
+            background: var(--base-tint);
+            border-right: 1px solid var(--stroke-elements);
+        }
+
+        /* Editor dark mode override for contrast */
+        .code-editor {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+        }
+    </style>
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold theme-text-main mb-2" style="font-family: var(--_font-accent);">Newsletter
+            Templates</h1>
+        <p class="theme-text-sub">Manage your email templates</p>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Templates -->
+        <div class="theme-card p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <div class="p-3 rounded-lg stat-icon-wrapper">
+                    <i class="ph-bold ph-files text-2xl"></i>
+                </div>
+            </div>
+            <div class="text-2xl font-bold theme-text-main" id="totalTemplates">0</div>
+            <div class="text-sm theme-text-sub">Total Templates</div>
+        </div>
+
+        <!-- Custom Templates -->
+        <div class="theme-card p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <div class="p-3 rounded-lg stat-icon-wrapper">
+                    <i class="ph-bold ph-pencil-simple text-2xl"></i>
+                </div>
+            </div>
+            <div class="text-2xl font-bold theme-text-main" id="customTemplates">0</div>
+            <div class="text-sm theme-text-sub">Custom Designs</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="theme-card shadow-sm">
+        <!-- Toolbar -->
+        <div class="p-6 border-b" style="border-color: var(--stroke-elements);">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex-1 max-w-md">
+                    <div class="relative">
+                        <input type="text" id="templateSearch" placeholder="Search templates..."
+                            class="w-full pl-10 pr-4 py-2 rounded-lg theme-input">
+                        <i
+                            class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 theme-text-sub"></i>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <select id="categoryFilter" class="px-4 py-2 rounded-lg theme-input">
+                        <option value="">All Categories</option>
+                        <option value="newsletter">Newsletters</option>
+                        <option value="promo">Promotional</option>
+                        <option value="welcome">Welcome</option>
+                        <option value="transactional">Transactional</option>
+                        <option value="imported">Imported</option>
+                    </select>
+
+                    <button id="createTemplateBtn"
+                        class="px-4 py-2 rounded-lg theme-btn-primary flex items-center gap-2 hover:opacity-90">
+                        <i class="ph-bold ph-plus"></i>
+                        Create
+                    </button>
+                    <button id="importTemplateBtn"
+                        class="px-4 py-2 rounded-lg theme-btn-secondary flex items-center gap-2">
+                        <i class="ph-bold ph-upload"></i>
+                        Import
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid Content -->
+        <div id="templatesGrid" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Templates Loaded Here -->
+        </div>
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div id="templateModal" class="fixed inset-0 z-50 hidden"
+    style="background-color: rgba(0,0,0,0.5); backdrop-filter: blur(2px);">
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div id="modalInner"
+            class="modal-content rounded-lg shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="modal-header px-6 py-4 flex justify-between items-center">
+                <h3 class="text-xl font-bold theme-text-main" id="modalTitle" style="font-family: var(--_font-accent);">
+                    Create Template</h3>
+                <div class="flex gap-3">
+                    <button onclick="closeTemplateModal()"
+                        class="px-4 py-2 theme-text-sub hover:text-red-500 transition-colors">Cancel</button>
+                    <button onclick="saveTemplate()"
+                        class="px-6 py-2 theme-btn-primary rounded-lg font-medium shadow-lg hover:shadow-xl transition-all">Save
+                        Template</button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+                <!-- Sidebar -->
+                <div
+                    class="w-full md:w-80 modal-sidebar p-6 overflow-y-auto border-b md:border-b-0 md:border-r border-stroke-elements shrink-0">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium theme-text-sub mb-1">Name</label>
+                            <input type="text" id="tplName"
+                                class="w-full px-3 py-2 rounded-lg theme-input focus:ring-2 focus:ring-opacity-50"
+                                style="--tw-ring-color: var(--accent);">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium theme-text-sub mb-1">Category</label>
+                            <select id="tplCategory"
+                                class="w-full px-3 py-2 rounded-lg theme-input focus:ring-2 focus:ring-opacity-50"
+                                style="--tw-ring-color: var(--accent);">
+                                <option value="newsletter">Newsletter</option>
+                                <option value="promo">Promotional</option>
+                                <option value="welcome">Welcome</option>
+                                <option value="transactional">Transactional</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium theme-text-sub mb-1">Description</label>
+                            <textarea id="tplDesc" rows="3"
+                                class="w-full px-3 py-2 rounded-lg theme-input focus:ring-2 focus:ring-opacity-50"
+                                style="--tw-ring-color: var(--accent);"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editor -->
+                <div class="flex-1 flex flex-col bg-[#1e1e1e] min-h-[300px]">
+                    <div
+                        class="px-4 py-2 text-xs text-gray-400 border-b border-gray-700 flex justify-between bg-[#252526]">
+                        <span>HTML Source Code</span>
+                        <span class="opacity-70">Use {{ content }} for dynamic body injection</span>
+                    </div>
+                    <textarea id="tplContent"
+                        class="code-editor flex-1 w-full h-full font-mono text-sm p-4 outline-none resize-none"
+                        spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // State
+    var allTemplates = [];
+    var currentFilter = '';
+    var currentSearch = '';
+    var isEditingId = null;
+
+    // Initialize function exposed to window for SPA loader
+    function initNewsletterTemplates() {
+        if (!document.getElementById('newsletterTemplatesPage')) return;
+        console.log('📬 Initializing Newsletter Templates page...');
+        loadTemplates(); // Only load when page is actually present
+        setupTemplateEventListeners();
+    }
+    window.initNewsletterTemplates = initNewsletterTemplates;
+
+    // --- Core Logic ---
+
+    function setupTemplateEventListeners() {
+        // Create Button
+        const createBtn = document.getElementById('createTemplateBtn');
+        if (createBtn) createBtn.addEventListener('click', () => openModal());
+
+        // Import Button
+        const importBtn = document.getElementById('importTemplateBtn');
+        if (importBtn) {
+            // Hidden file input
+            let fileInput = document.getElementById('hiddenImportInput');
+            if (!fileInput) {
+                fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.id = 'hiddenImportInput';
+                fileInput.accept = '.html,.htm';
+                fileInput.style.display = 'none';
+                document.body.appendChild(fileInput);
+
+                fileInput.addEventListener('change', handleFileImport);
+            }
+            importBtn.addEventListener('click', () => fileInput.click());
+        }
+
+        // Filters
+        document.getElementById('templateSearch').addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase();
+            renderTemplatesGrid();
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            currentFilter = e.target.value;
+            renderTemplatesGrid();
+        });
+
+        // Click outside modal to close
+        const modal = document.getElementById('templateModal');
+        modal.addEventListener('click', (e) => {
+            // Check if the click target is the modal overlay itself, NOT the inner content
+            if (e.target === modal) {
+                closeTemplateModal();
+            }
+        });
+    }
+
+    async function handleFileImport(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            const text = await file.text();
+            const name = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+
+            // Auto-create via API
+            const res = await fetch('/api/newsletter/admin/templates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` },
+                body: JSON.stringify({
+                    name: name,
+                    category: 'imported',
+                    description: `Imported from ${file.name}`,
+                    content_template: text,
+                    subject_template: 'Imported Template'
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                alert('Template imported successfully!');
+                loadTemplates();
+            } else {
+                alert('Import failed: ' + data.message);
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Import error: ' + err.message);
+        }
+        e.target.value = ''; // Reset
+    }
+
+    async function loadTemplates() {
+        try {
+            const res = await fetch('/api/newsletter/admin/templates', {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            const data = await res.json();
+            if (data.success) {
+                allTemplates = data.templates || [];
+                updateTemplateStats();
+                renderTemplatesGrid();
+            }
+        } catch (e) {
+            console.error(e);
+            document.getElementById('templatesGrid').innerHTML = '<div class="col-span-full text-center text-red-500">Failed to load templates.</div>';
+        }
+    }
+
+    function renderTemplatesGrid() {
+        const grid = document.getElementById('templatesGrid');
+
+        const filtered = allTemplates.filter(t => {
+            const matchesSearch = t.name.toLowerCase().includes(currentSearch);
+            const matchesCat = !currentFilter || t.category === currentFilter;
+            return matchesSearch && matchesCat;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="col-span-full text-center py-12 theme-text-sub">No templates found.</div>';
+            return;
+        }
+
+        grid.innerHTML = filtered.map(t => `
+            <div class="template-grid-item rounded-lg overflow-hidden flex flex-col group relative">
+                <div class="h-40 bg-gray-100 dark:bg-gray-800 flex items-center justify-center relative overlow-hidden" style="background: var(--base-tint);">
+                    <i class="ph-bold ph-envelope-open text-4xl theme-text-sub opacity-50"></i>
+                    
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
+                        <button onclick="editTemplate(${t.id})" class="p-2 bg-white rounded-full text-blue-600 hover:bg-blue-50 transform hover:scale-110 transition-all shadow-lg" title="Edit">
+                            <i class="ph-bold ph-pencil-simple"></i>
+                        </button>
+                         <button onclick="deleteTemplate(${t.id})" class="p-2 bg-white rounded-full text-red-600 hover:bg-red-50 transform hover:scale-110 transition-all shadow-lg" title="Delete">
+                            <i class="ph-bold ph-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold theme-text-main line-clamp-1">${t.name}</h3>
+                    </div>
+                    <div class="mt-auto flex items-center gap-2">
+                        <span class="text-xs px-2 py-1 rounded theme-text-sub border uppercase font-semibold tracking-wide" style="border-color: var(--stroke-elements);">
+                            ${t.category}
+                        </span>
+                        <span class="text-xs theme-text-sub ml-auto">${new Date(t.created_at).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function updateTemplateStats() {
+        document.getElementById('totalTemplates').innerText = allTemplates.length;
+        document.getElementById('customTemplates').innerText = allTemplates.length; // Simplified
+    }
+
+    // Modal Functions
+    function openModal(id = null) {
+        const modal = document.getElementById('templateModal');
+        const title = document.getElementById('modalTitle');
+        isEditingId = id;
+
+        if (id) {
+            title.innerText = "Edit Template";
+            fetch(`/api/newsletter/admin/templates/${id}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            })
+                .then(r => r.json())
+                .then(d => {
+                    const t = d.template;
+                    document.getElementById('tplName').value = t.name;
+                    document.getElementById('tplCategory').value = t.category;
+                    document.getElementById('tplDesc').value = t.description || '';
+                    document.getElementById('tplContent').value = t.content_template;
+                    modal.classList.remove('hidden');
+                });
+        } else {
+            title.innerText = "Create Template";
+            document.getElementById('tplName').value = '';
+            document.getElementById('tplDesc').value = '';
+            document.getElementById('tplContent').value = '<html>\n<body>\n  <h1>Title</h1>\n  <p>{{ content }}</p>\n</body>\n</html>';
+            modal.classList.remove('hidden');
+        }
+    }
+
+    function closeTemplateModal() {
+        document.getElementById('templateModal').classList.add('hidden');
+    }
+
+    async function saveTemplate() {
+        const name = document.getElementById('tplName').value;
+        const category = document.getElementById('tplCategory').value;
+        const description = document.getElementById('tplDesc').value;
+        const content = document.getElementById('tplContent').value;
+
+        if (!name) return alert('Name required');
+
+        const payload = {
+            name, category, description,
+            content_template: content,
+            subject_template: 'Template Subject'
+        };
+
+        const endpoint = isEditingId ? `/api/newsletter/admin/templates/${isEditingId}` : '/api/newsletter/admin/templates';
+        const method = isEditingId ? 'PUT' : 'POST';
+
+        try {
+            const res = await fetch(endpoint, {
+                method,
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                closeTemplateModal();
+                loadTemplates();
+                alert('Saved successfully');
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (e) {
+            alert('Save failed');
+        }
+    }
+
+    window.editTemplate = (id) => openModal(id);
+    window.deleteTemplate = async (id) => {
+        if (!confirm("Delete template?")) return;
+        try {
+            await fetch(`/api/newsletter/admin/templates/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            loadTemplates();
+        } catch (e) { alert('Delete failed'); }
+    };
+
+    window.closeTemplateModal = closeTemplateModal;
+    window.saveTemplate = saveTemplate;
+
+    // Run init if loaded standalone (rare case now, but safe)
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNewsletterTemplates);
+    } else if (!window.adminApp) {
+        initNewsletterTemplates();
+    }
+</script>

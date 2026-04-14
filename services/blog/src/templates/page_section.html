@@ -1,0 +1,9 @@
+{% extends "./base_blog.html" %}
+
+{% block title %}{{ section|capitalize }} | NekwasaR Blog{% endblock %}
+
+{% block content %}
+{# Dynamically include the page partial for this route. These are full pages rendered inside the base layout, not sections. #}
+{% set tpl = 'routes/' ~ section ~ '.html' %}
+{% include tpl %}
+{% endblock %}

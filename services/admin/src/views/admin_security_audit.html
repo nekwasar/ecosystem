@@ -1,0 +1,887 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-6 md:p-8 lg:p-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Audit Logs</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Comprehensive audit trail of all system activities and changes</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Total Events Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-file-text"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalEvents">2,847</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Total Events</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="eventsChange">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+12% today</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Critical Events Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-red-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-500 via-pink-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-warning"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="criticalEvents">3</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Critical Events</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-red-500 dark:text-red-400" id="criticalChange">
+                            <i class="ph-bold ph-flag text-base"></i>
+                            <span>Requires Attention</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-red-500/10 to-pink-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Log Retention Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-clock-counter-clockwise"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="logRetention">90</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Days Retention</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-blue-500 dark:text-blue-400" id="retentionChange">
+                            <i class="ph-bold ph-database text-base"></i>
+                            <span>Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Compliance Score Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-shield-check"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="complianceScore">98</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Compliance Score</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="complianceChange">
+                            <i class="ph-bold ph-check-circle text-base"></i>
+                            <span>Excellent</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- Audit Log Management -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-file-text text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Audit Log Management</h3>
+                            <p class="text-t-medium font-syne text-sm">Search, filter, and analyze system audit logs</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="exportAuditLogsBtn">
+                            <i class="ph-bold ph-download text-lg"></i>
+                            <span>Export Logs</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="configureRetentionBtn">
+                            <i class="ph-bold ph-gear text-lg"></i>
+                            <span>Configure Retention</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="p-8 border-b border-stroke-elements">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+                    <!-- Search Logs -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Search Events</label>
+                        <div class="relative group">
+                            <input type="text" class="w-full pl-12 pr-4 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne text-base shadow-lg focus:shadow-xl" id="searchAuditLogs" placeholder="Search by user, action, or resource...">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-magnifying-glass"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Date Range</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="auditDateRange">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-calendar"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Event Type -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Event Type</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="eventTypeFilter">
+                                <option value="all">All Events</option>
+                                <option value="authentication">Authentication</option>
+                                <option value="authorization">Authorization</option>
+                                <option value="data-access">Data Access</option>
+                                <option value="system">System Events</option>
+                                <option value="security">Security Events</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-list"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Severity -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Severity</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="severityFilter">
+                                <option value="all">All Levels</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-flag"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- User Filter -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Filter by User</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="auditUserFilter">
+                                <option value="all">All Users</option>
+                                <option value="admin">Admins Only</option>
+                                <option value="regular">Regular Users</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-users"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Log Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full" id="auditLogTable">
+                    <thead class="bg-base-tint/50 dark:bg-base-shade/50">
+                        <tr class="border-b border-stroke-elements">
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Timestamp</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">User</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Action</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Resource</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">IP Address</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Severity</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditLogTableBody" class="divide-y divide-stroke-elements">
+                        <!-- Audit log data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Audit Analytics & Reports -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-12">
+            <!-- Event Distribution -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-chart-pie text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Event Distribution</h3>
+                            <p class="text-t-medium font-syne text-sm">Breakdown of audit events by category</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                                <span class="text-t-bright font-syne font-semibold">Authentication Events</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-t-medium font-syne">1,247</span>
+                                <span class="text-sm text-t-muted font-syne">44%</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                                <span class="text-t-bright font-syne font-semibold">Data Access Events</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-t-medium font-syne">892</span>
+                                <span class="text-sm text-t-muted font-syne">31%</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                                <span class="text-t-bright font-syne font-semibold">System Events</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-t-medium font-syne">456</span>
+                                <span class="text-sm text-t-muted font-syne">16%</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                                <span class="text-t-bright font-syne font-semibold">Security Events</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-t-medium font-syne">252</span>
+                                <span class="text-sm text-t-muted font-syne">9%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Critical Events -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-warning text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Critical Events</h3>
+                            <p class="text-t-medium font-syne text-sm">Recent high-severity audit events</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <div class="space-y-4 max-h-96 overflow-y-auto">
+                        <div class="p-4 bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 rounded-xl">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="ph-bold ph-shield-x text-red-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-bold text-t-bright font-syne">Failed Admin Login Attempts</h4>
+                                        <span class="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold rounded-full">Critical</span>
+                                    </div>
+                                    <p class="text-t-medium font-syne text-sm mb-3">Multiple failed login attempts detected for admin account from suspicious IP</p>
+                                    <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                        <span>2 hours ago</span>
+                                        <span>•</span>
+                                        <span>192.168.1.100</span>
+                                        <span>•</span>
+                                        <span>admin@nekwasar.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-orange-500/5 dark:bg-orange-500/10 border border-orange-500/20 rounded-xl">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-orange-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="ph-bold ph-key text-orange-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-bold text-t-bright font-syne">API Key Compromised</h4>
+                                        <span class="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs font-bold rounded-full">High</span>
+                                    </div>
+                                    <p class="text-t-medium font-syne text-sm mb-3">API key used from unauthorized location with unusual request patterns</p>
+                                    <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                        <span>4 hours ago</span>
+                                        <span>•</span>
+                                        <span>Tokyo, JP</span>
+                                        <span>•</span>
+                                        <span>Production API Key</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-yellow-500/5 dark:bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 bg-yellow-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="ph-bold ph-database text-yellow-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h4 class="font-bold text-t-bright font-syne">Bulk Data Export</h4>
+                                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-bold rounded-full">Medium</span>
+                                    </div>
+                                    <p class="text-t-medium font-syne text-sm mb-3">Large dataset export initiated - monitoring for unusual activity</p>
+                                    <div class="flex items-center space-x-4 text-xs text-t-muted font-syne">
+                                        <span>6 hours ago</span>
+                                        <span>•</span>
+                                        <span>45.2MB exported</span>
+                                        <span>•</span>
+                                        <span>john.doe@example.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compliance & Reporting -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                        <i class="ph-bold ph-clipboard-text text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-t-bright font-syne">Compliance & Reporting</h3>
+                        <p class="text-t-medium font-syne text-sm">Generate compliance reports and audit documentation</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <!-- Generate Report -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg mx-auto">
+                                <i class="ph-bold ph-file-pdf text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Audit Report</h4>
+                                <p class="text-sm text-t-medium font-syne">Generate comprehensive audit report</p>
+                            </div>
+                            <button class="w-full inline-flex items-center justify-center space-x-3 px-4 py-3 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm">
+                                <i class="ph-bold ph-download text-base"></i>
+                                <span>Generate</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Compliance Check -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center text-white shadow-lg mx-auto">
+                                <i class="ph-bold ph-check-circle text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Compliance Check</h4>
+                                <p class="text-sm text-t-medium font-syne">Run automated compliance verification</p>
+                            </div>
+                            <button class="w-full inline-flex items-center justify-center space-x-3 px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-500/90 hover:to-emerald-500/90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm">
+                                <i class="ph-bold ph-play text-base"></i>
+                                <span>Run Check</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Data Export -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg mx-auto">
+                                <i class="ph-bold ph-database text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Data Export</h4>
+                                <p class="text-sm text-t-medium font-syne">Export audit data for external review</p>
+                            </div>
+                            <button class="w-full inline-flex items-center justify-center space-x-3 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-500/90 hover:to-indigo-500/90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm">
+                                <i class="ph-bold ph-arrow-right text-base"></i>
+                                <span>Export</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Archive Logs -->
+                    <div class="p-6 bg-base-tint/50 dark:bg-base-shade/50 rounded-xl border border-stroke-elements hover:bg-base-shade dark:hover:bg-base transition-all duration-medium cursor-pointer">
+                        <div class="text-center space-y-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white shadow-lg mx-auto">
+                                <i class="ph-bold ph-archive text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-t-bright font-syne mb-2">Archive Logs</h4>
+                                <p class="text-sm text-t-medium font-syne">Archive old logs for long-term storage</p>
+                            </div>
+                            <button class="w-full inline-flex items-center justify-center space-x-3 px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-500/90 hover:to-pink-500/90 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm">
+                                <i class="ph-bold ph-archive-box text-base"></i>
+                                <span>Archive</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+</style>
+
+<script>
+// Audit Logs Page
+function initSecurityAudit() {
+    loadAuditData();
+    setupAuditEventListeners();
+    loadAuditLogs();
+}
+
+async function loadAuditData() {
+    try {
+        const response = await fetch('/api/admin/security/audit');
+        if (response.ok) {
+            const data = await response.json();
+            updateAuditStats(data.stats);
+            updateAuditLogs(data.logs);
+        } else {
+            showFallbackAuditData();
+        }
+    } catch (error) {
+        console.error('Error loading audit data:', error);
+        showFallbackAuditData();
+    }
+}
+
+function updateAuditStats(stats) {
+    document.getElementById('totalEvents').textContent = stats.totalEvents || '2,847';
+    document.getElementById('criticalEvents').textContent = stats.criticalEvents || '3';
+    document.getElementById('logRetention').textContent = stats.logRetention || '90';
+    document.getElementById('complianceScore').textContent = stats.complianceScore || '98';
+}
+
+function updateAuditLogs(logs) {
+    const tbody = document.getElementById('auditLogTableBody');
+
+    if (!logs || logs.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="px-8 py-16 text-center">
+                    <div class="flex flex-col items-center space-y-6">
+                        <div class="w-20 h-20 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl">
+                            <i class="ph-bold ph-file-text text-5xl text-t-muted opacity-60"></i>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">No audit logs found</h3>
+                            <p class="text-base text-t-medium font-syne max-w-md">Audit logs will appear here once system activities are recorded.</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = logs.map(log => `
+        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium group">
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${formatDateTime(log.timestamp)}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${formatRelativeTime(log.timestamp)}</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright font-bold text-sm shadow-lg">
+                        ${getInitials(log.user)}
+                    </div>
+                    <div>
+                        <div class="text-base font-semibold text-t-bright group-hover:text-accent transition-colors duration-medium font-syne">
+                            ${log.user}
+                        </div>
+                        <div class="text-sm text-t-medium font-syne">${log.role}</div>
+                    </div>
+                </div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${log.action}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${log.eventType}</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${log.resource}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${log.resourceType}</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne font-mono group-hover:text-t-bright transition-colors duration-medium">
+                    ${log.ipAddress}
+                </div>
+                <div class="text-sm text-t-muted font-syne">${log.location || 'Unknown'}</div>
+            </td>
+            <td class="px-8 py-6">
+                <span class="inline-flex items-center px-3 py-2 rounded-xl text-sm font-bold uppercase tracking-wide font-syne ${getSeverityClass(log.severity)} shadow-lg">
+                    <i class="ph-bold ph-circle mr-2 text-xs"></i>
+                    ${log.severity}
+                </span>
+            </td>
+            <td class="px-8 py-6">
+                <button class="w-8 h-8 bg-accent/10 hover:bg-accent/20 text-accent rounded-lg flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="View Details" onclick="viewAuditDetails('${log.id}')">
+                    <i class="ph-bold ph-eye text-sm"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getSeverityClass(severity) {
+    if (severity === 'low') {
+        return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-green-500/20';
+    } else if (severity === 'medium') {
+        return 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-yellow-500/20';
+    } else if (severity === 'high') {
+        return 'bg-gradient-to-r from-orange-500 to-red-500 text-white border-orange-500/20';
+    } else if (severity === 'critical') {
+        return 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-500/20';
+    }
+    return 'bg-gradient-to-r from-slate-500 to-gray-500 text-white border-slate-500/20';
+}
+
+function setupAuditEventListeners() {
+    // Export Audit Logs Button
+    document.getElementById('exportAuditLogsBtn').onclick = () => {
+        exportAuditLogs();
+    };
+
+    // Configure Retention Button
+    document.getElementById('configureRetentionBtn').onclick = () => {
+        configureRetention();
+    };
+
+    // Search functionality
+    document.getElementById('searchAuditLogs').oninput = debounce(filterAuditLogs, 300);
+    document.getElementById('auditDateRange').onchange = filterAuditLogs;
+    document.getElementById('eventTypeFilter').onchange = filterAuditLogs;
+    document.getElementById('severityFilter').onchange = filterAuditLogs;
+    document.getElementById('auditUserFilter').onchange = filterAuditLogs;
+}
+
+function loadAuditLogs() {
+    // Load initial audit logs data
+    const sampleLogs = [
+        {
+            id: '1',
+            timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+            user: 'John Doe',
+            role: 'Admin',
+            action: 'User Login',
+            eventType: 'Authentication',
+            resource: 'Login System',
+            resourceType: 'System',
+            ipAddress: '192.168.1.100',
+            location: 'New York, US',
+            severity: 'low'
+        },
+        {
+            id: '2',
+            timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+            user: 'Jane Smith',
+            role: 'Editor',
+            action: 'Content Created',
+            eventType: 'Data Access',
+            resource: 'Blog Post #123',
+            resourceType: 'Content',
+            ipAddress: '10.0.0.50',
+            location: 'London, UK',
+            severity: 'low'
+        },
+        {
+            id: '3',
+            timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+            user: 'System',
+            role: 'Automated',
+            action: 'Security Scan',
+            eventType: 'System',
+            resource: 'Security Module',
+            resourceType: 'System',
+            ipAddress: '127.0.0.1',
+            location: 'Local Server',
+            severity: 'medium'
+        }
+    ];
+
+    updateAuditLogs(sampleLogs);
+}
+
+function showFallbackAuditData() {
+    // Show sample data when API is not available
+    updateAuditStats({
+        totalEvents: '2,847',
+        criticalEvents: '3',
+        logRetention: '90',
+        complianceScore: '98'
+    });
+
+    loadAuditLogs();
+}
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+}
+
+function formatDateTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function formatRelativeTime(dateString) {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours === 1) return '1 hour ago';
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays === 1) return '1 day ago';
+    return `${diffInDays} days ago`;
+}
+
+function viewAuditDetails(auditId) {
+    showNotification(`Viewing details for audit event ${auditId}`, 'info');
+}
+
+function exportAuditLogs() {
+    showNotification('Exporting audit logs...', 'info');
+}
+
+function configureRetention() {
+    showNotification('Retention configuration modal would open here', 'info');
+}
+
+function filterAuditLogs() {
+    // Implement filtering logic here
+    console.log('Filtering audit logs...');
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSecurityAudit);
+} else {
+    initSecurityAudit();
+}

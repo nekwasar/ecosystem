@@ -1,0 +1,1519 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<!-- Retro Comments Explorer - Windows File Explorer with Retro CRT Style -->
+<div class="retro-comments-container">
+    <!-- Retro CRT Header -->
+    <div class="retro-header">
+        <div class="retro-title-bar">
+            <div class="retro-title-left">
+                <div class="retro-title-icon">💬</div>
+                <h2 class="retro-title">COMMENTS EXPLORER v2.1</h2>
+            </div>
+            <div class="retro-title-right">
+                <button class="retro-window-btn retro-minimize" onclick="minimizeWindow()" title="Minimize">
+                    <span>_</span>
+                </button>
+                <button class="retro-window-btn retro-maximize" onclick="maximizeWindow()" title="Maximize">
+                    <span>□</span>
+                </button>
+                <button class="retro-window-btn retro-close" onclick="closeWindow()" title="Close">
+                    <span>×</span>
+                </button>
+            </div>
+        </div>
+        <div class="retro-menu-bar">
+            <div class="retro-menu-item active">FILE</div>
+            <div class="retro-menu-item">EDIT</div>
+            <div class="retro-menu-item">VIEW</div>
+            <div class="retro-menu-item">TOOLS</div>
+            <div class="retro-menu-item">HELP</div>
+        </div>
+    </div>
+
+    <!-- Retro Toolbar -->
+    <div class="retro-toolbar">
+        <div class="retro-toolbar-section">
+            <button class="retro-toolbar-btn" onclick="newComment()">NEW COMMENT</button>
+            <button class="retro-toolbar-btn" onclick="replyToSelected()">REPLY</button>
+            <button class="retro-toolbar-btn" onclick="deleteSelected()">DELETE</button>
+        </div>
+        <div class="retro-toolbar-separator"></div>
+        <div class="retro-toolbar-section">
+            <button class="retro-toolbar-btn" onclick="approveSelected()">APPROVE</button>
+            <button class="retro-toolbar-btn" onclick="markAsSpam()">MARK SPAM</button>
+            <button class="retro-toolbar-btn" onclick="bulkActions()">BULK</button>
+        </div>
+        <div class="retro-toolbar-separator"></div>
+        <div class="retro-toolbar-section">
+            <button class="retro-toolbar-btn" onclick="refreshView()">REFRESH</button>
+            <button class="retro-toolbar-btn" onclick="showProperties()">PROPERTIES</button>
+        </div>
+    </div>
+
+    <!-- Retro Navigation Bar -->
+    <div class="retro-nav-bar">
+        <div class="retro-nav-controls">
+            <button class="retro-nav-btn" onclick="goBack()" title="Back">◀</button>
+            <button class="retro-nav-btn" onclick="goForward()" title="Forward">▶</button>
+            <button class="retro-nav-btn" onclick="goUp()" title="Up">↑</button>
+            <div class="retro-nav-separator"></div>
+            <div class="retro-path-bar">
+                <span class="retro-path-text">COMMENTS</span>
+                <span class="retro-path-separator">\</span>
+                <span class="retro-path-text">ALL COMMENTS</span>
+            </div>
+        </div>
+        <div class="retro-nav-controls">
+            <input type="text" class="retro-search-input" placeholder="SEARCH COMMENTS..." id="searchInput">
+            <div class="retro-view-controls">
+                <button class="retro-view-btn" onclick="setViewMode('large-icons')" title="Large Icons">L</button>
+                <button class="retro-view-btn" onclick="setViewMode('medium-icons')" title="Medium Icons">M</button>
+                <button class="retro-view-btn active" onclick="setViewMode('list')" title="List">S</button>
+                <button class="retro-view-btn" onclick="setViewMode('details')" title="Details">D</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Retro Interface -->
+    <div class="retro-main-panel">
+        <!-- Left Sidebar - Quick Actions -->
+        <div class="retro-sidebar">
+            <div class="retro-panel-title">FOLDERS</div>
+            <div class="retro-tree-view">
+                <!-- All Comments -->
+                <div class="retro-tree-item active" data-folder="all">
+                    <div class="retro-tree-content">
+                        <i class="retro-tree-icon">💬</i>
+                        <span class="retro-tree-text">ALL COMMENTS</span>
+                        <span class="retro-tree-count" id="allCommentsCount">247</span>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="retro-tree-item" onclick="toggleTreeItem(this)">
+                    <div class="retro-tree-content">
+                        <i class="retro-tree-icon">⚙️</i>
+                        <span class="retro-tree-text">STATUS</span>
+                        <i class="retro-tree-arrow">▶</i>
+                    </div>
+                    <div class="retro-tree-children" id="statusTree">
+                        <div class="retro-tree-item" data-filter="status-pending">
+                            <div class="retro-tree-content">
+                                <i class="retro-tree-icon">⏰</i>
+                                <span class="retro-tree-text">PENDING</span>
+                                <span class="retro-tree-count" id="pendingCount">12</span>
+                            </div>
+                        </div>
+                        <div class="retro-tree-item" data-filter="status-approved">
+                            <div class="retro-tree-content">
+                                <i class="retro-tree-icon">✅</i>
+                                <span class="retro-tree-text">APPROVED</span>
+                                <span class="retro-tree-count" id="approvedCount">218</span>
+                            </div>
+                        </div>
+                        <div class="retro-tree-item" data-filter="status-spam">
+                            <div class="retro-tree-content">
+                                <i class="retro-tree-icon">🚫</i>
+                                <span class="retro-tree-text">SPAM</span>
+                                <span class="retro-tree-count" id="spamCount">17</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Authors -->
+                <div class="retro-tree-item" onclick="toggleTreeItem(this)">
+                    <div class="retro-tree-content">
+                        <i class="retro-tree-icon">👤</i>
+                        <span class="retro-tree-text">AUTHORS</span>
+                        <i class="retro-tree-arrow">▶</i>
+                    </div>
+                    <div class="retro-tree-children hidden" id="authorsTree">
+                        <!-- Authors will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Posts -->
+                <div class="retro-tree-item" onclick="toggleTreeItem(this)">
+                    <div class="retro-tree-content">
+                        <i class="retro-tree-icon">📄</i>
+                        <span class="retro-tree-text">POSTS</span>
+                        <i class="retro-tree-arrow">▶</i>
+                    </div>
+                    <div class="retro-tree-children hidden" id="postsTree">
+                        <!-- Posts will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="retro-sidebar-footer">
+                <div class="retro-stats-item">
+                    <span class="retro-stats-label">TOTAL COMMENTS:</span>
+                    <span class="retro-stats-value" id="totalCommentsCount">247</span>
+                </div>
+                <div class="retro-stats-item">
+                    <span class="retro-stats-label">SELECTED:</span>
+                    <span class="retro-stats-value" id="selectedCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Comments List -->
+        <div class="retro-content-panel">
+            <!-- Status Bar -->
+            <div class="retro-status-bar">
+                <div class="retro-status-left">
+                    <span id="itemsCount">247 comments</span>
+                    <span id="selectedItemsInfo">0 selected</span>
+                </div>
+                <div class="retro-status-right">
+                    <span id="sortInfo">SORTED BY NAME</span>
+                    <span id="viewInfo">LIST VIEW</span>
+                </div>
+            </div>
+
+            <!-- Comments List -->
+            <div class="retro-comments-list">
+                <!-- Header -->
+                <div class="retro-list-header">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox" id="selectAll">
+                        <label for="selectAll" class="retro-checkbox-label"></label>
+                    </div>
+                    <div class="retro-col-author">AUTHOR</div>
+                    <div class="retro-col-content">CONTENT</div>
+                    <div class="retro-col-status">STATUS</div>
+                    <div class="retro-col-post">POST</div>
+                    <div class="retro-col-date">DATE</div>
+                </div>
+
+                <!-- Comments Items -->
+                <div id="commentsList" class="retro-comments-items">
+                    <!-- Comments will be populated here -->
+                </div>
+            </div>
+
+            <!-- Other view modes (hidden by default) -->
+            <div class="retro-comments-grid large-icons-view hidden" id="largeIconsView">
+                <div class="retro-grid-container" id="largeIconsGrid">
+                    <!-- Large icons will be populated here -->
+                </div>
+            </div>
+
+            <div class="retro-comments-grid medium-icons-view hidden" id="mediumIconsView">
+                <div class="retro-grid-container" id="mediumIconsGrid">
+                    <!-- Medium icons will be populated here -->
+                </div>
+            </div>
+
+            <div class="retro-comments-list details-view hidden" id="detailsView">
+                <!-- Details view header -->
+                <div class="retro-list-header">
+                    <div class="retro-col-select">
+                        <input type="checkbox" class="retro-checkbox">
+                        <label class="retro-checkbox-label"></label>
+                    </div>
+                    <div class="retro-col-author">AUTHOR</div>
+                    <div class="retro-col-content">CONTENT</div>
+                    <div class="retro-col-status">STATUS</div>
+                    <div class="retro-col-post">POST</div>
+                    <div class="retro-col-email">EMAIL</div>
+                    <div class="retro-col-date">DATE</div>
+                </div>
+                <div id="commentsDetails" class="retro-comments-items">
+                    <!-- Details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Retro Context Menu -->
+<div class="retro-context-menu hidden" id="contextMenu">
+    <div class="retro-context-header">COMMENT OPTIONS</div>
+    <div class="retro-context-item" onclick="replyToSelected()">
+        <span class="retro-context-icon">💬</span>
+        <span class="retro-context-text">REPLY</span>
+    </div>
+    <div class="retro-context-item" onclick="approveSelected()">
+        <span class="retro-context-icon">✅</span>
+        <span class="retro-context-text">APPROVE</span>
+    </div>
+    <div class="retro-context-item" onclick="markAsSpam()">
+        <span class="retro-context-icon">🚫</span>
+        <span class="retro-context-text">MARK SPAM</span>
+    </div>
+    <div class="retro-context-separator"></div>
+    <div class="retro-context-item" onclick="editComment()">
+        <span class="retro-context-icon">✏️</span>
+        <span class="retro-context-text">EDIT</span>
+    </div>
+    <div class="retro-context-item" onclick="viewCommentDetails()">
+        <span class="retro-context-icon">ℹ️</span>
+        <span class="retro-context-text">DETAILS</span>
+    </div>
+    <div class="retro-context-separator"></div>
+    <div class="retro-context-item retro-context-danger" onclick="deleteSelected()">
+        <span class="retro-context-icon">🗑️</span>
+        <span class="retro-context-text">DELETE</span>
+    </div>
+    <div class="retro-context-item" onclick="showProperties()">
+        <span class="retro-context-icon">⚙️</span>
+        <span class="retro-context-text">PROPERTIES</span>
+    </div>
+</div>
+
+<!-- Comment Reply Modal -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" id="replyModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <h3 class="text-xl font-bold text-t-bright font-syne" id="replyModalTitle">Reply to Comment</h3>
+                <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closeReplyModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto">
+                <!-- Original Comment -->
+                <div class="bg-base-tint/30 dark:bg-base-shade/30 rounded-xl p-6 mb-6" id="originalComment">
+                    <!-- Original comment will be loaded here -->
+                </div>
+
+                <!-- Reply Form -->
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-t-bright font-syne mb-2">Your Reply</label>
+                        <textarea class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright resize-none" id="replyContent" rows="6" placeholder="Write your reply..."></textarea>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="notifyAuthor">
+                            <span class="text-sm text-t-bright font-syne">Notify comment author</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="publishImmediately" checked>
+                            <span class="text-sm text-t-bright font-syne">Publish immediately</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end space-x-3 p-6 border-t border-stroke-elements">
+                <button class="px-6 py-3 bg-base-tint dark:bg-base-shade border border-stroke-elements text-t-bright rounded-lg hover:bg-base-shade dark:hover:bg-base transition-all duration-medium font-syne" onclick="closeReplyModal()">Cancel</button>
+                <button class="px-6 py-3 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright rounded-lg transition-all duration-medium font-syne" id="sendReplyBtn">Send Reply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Comment Details Modal -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden" id="commentModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-base/95 dark:bg-base-tint/95 backdrop-blur-xl border border-stroke-elements rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-stroke-elements">
+                <h3 class="text-xl font-bold text-t-bright font-syne">Comment Details</h3>
+                <button class="w-8 h-8 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright rounded-lg flex items-center justify-center transition-all duration-medium" onclick="closeCommentModal()">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+            <div class="p-6 max-h-[70vh] overflow-y-auto" id="commentDetails">
+                <!-- Comment details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Retro CSS Styles - Scoped to comments page only -->
+<style>
+/* Retro Comments Container */
+.retro-comments-container {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+    color: #00ff00;
+    padding: 0;
+    margin: 0;
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    overflow: hidden;
+    min-height: 600px;
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+}
+
+/* Retro CRT Effects */
+.retro-comments-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.retro-comments-container * {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+}
+
+/* Retro Header */
+.retro-header {
+    background: linear-gradient(90deg, #0f0f0f, #1f1f1f);
+    border-bottom: 1px solid #00ff00;
+    padding: 8px 12px;
+}
+
+.retro-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.retro-title-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.retro-title-icon {
+    font-size: 16px;
+}
+
+.retro-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #00ff00;
+    text-shadow: 0 0 8px #00ff00;
+    margin: 0;
+}
+
+.retro-title-right {
+    display: flex;
+    gap: 4px;
+}
+
+.retro-window-btn {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.retro-window-btn:hover {
+    background: #00ff00;
+    color: #000;
+}
+
+.retro-close:hover {
+    background: #ff0000;
+    color: #fff;
+}
+
+.retro-menu-bar {
+    display: flex;
+    gap: 16px;
+}
+
+.retro-menu-item {
+    font-size: 12px;
+    color: #888;
+    cursor: pointer;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.retro-menu-item:hover,
+.retro-menu-item.active {
+    color: #00ff00;
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+/* Retro Toolbar */
+.retro-toolbar {
+    display: flex;
+    align-items: center;
+    background: #0a0a0a;
+    border-bottom: 1px solid #00ff00;
+    padding: 8px 12px;
+    gap: 12px;
+}
+
+.retro-toolbar-section {
+    display: flex;
+    gap: 4px;
+}
+
+.retro-toolbar-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.retro-toolbar-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.retro-toolbar-separator {
+    width: 1px;
+    height: 20px;
+    background: #333;
+}
+
+/* Retro Navigation Bar */
+.retro-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0f0f0f;
+    border-bottom: 1px solid #333;
+    padding: 8px 12px;
+}
+
+.retro-nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.retro-nav-btn {
+    width: 24px;
+    height: 24px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    color: #00ff00;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.retro-nav-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.retro-nav-separator {
+    width: 1px;
+    height: 20px;
+    background: #333;
+    margin: 0 8px;
+}
+
+.retro-path-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #00ff00;
+}
+
+.retro-path-separator {
+    color: #888;
+}
+
+.retro-search-input {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 11px;
+    width: 200px;
+}
+
+.retro-search-input:focus {
+    border-color: #00ff00;
+    outline: none;
+}
+
+.retro-view-controls {
+    display: flex;
+    border: 1px solid #333;
+}
+
+.retro-view-btn {
+    width: 24px;
+    height: 24px;
+    background: #0a0a0a;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.retro-view-btn:hover,
+.retro-view-btn.active {
+    color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+/* Main Panel */
+.retro-main-panel {
+    display: flex;
+    min-height: 500px;
+}
+
+/* Sidebar */
+.retro-sidebar {
+    width: 220px;
+    background: #0a0a0a;
+    border-right: 1px solid #00ff00;
+    display: flex;
+    flex-direction: column;
+}
+
+.retro-panel-title {
+    font-size: 11px;
+    color: #00ff00;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-bottom: 1px solid #00ff00;
+    text-transform: uppercase;
+}
+
+.retro-tree-view {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+}
+
+.retro-tree-item {
+    cursor: pointer;
+    margin-bottom: 2px;
+}
+
+.retro-tree-item.active {
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.retro-tree-item:hover {
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.retro-tree-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    font-size: 11px;
+}
+
+.retro-tree-icon {
+    font-size: 12px;
+    width: 12px;
+    text-align: center;
+}
+
+.retro-tree-text {
+    color: #00ff00;
+    flex: 1;
+}
+
+.retro-tree-arrow {
+    font-size: 8px;
+    color: #888;
+    transition: transform 0.2s;
+}
+
+.retro-tree-item.expanded .retro-tree-arrow {
+    transform: rotate(90deg);
+}
+
+.retro-tree-count {
+    font-size: 10px;
+    color: #888;
+}
+
+.retro-tree-children {
+    margin-left: 16px;
+    margin-top: 2px;
+}
+
+.retro-tree-children.hidden {
+    display: none;
+}
+
+.retro-tree-children .retro-tree-content {
+    padding: 2px 4px;
+}
+
+.retro-sidebar-footer {
+    padding: 8px 12px;
+    border-top: 1px solid #333;
+    font-size: 10px;
+}
+
+.retro-stats-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.retro-stats-label {
+    color: #888;
+}
+
+.retro-stats-value {
+    color: #00ff00;
+    font-weight: bold;
+}
+
+/* Content Panel */
+.retro-content-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Status Bar */
+.retro-status-bar {
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #888;
+}
+
+.retro-status-left,
+.retro-status-right {
+    display: flex;
+    gap: 16px;
+}
+
+/* Comments List */
+.retro-comments-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.retro-list-header {
+    display: grid;
+    grid-template-columns: 30px 1.5fr 2fr 1fr 1.5fr 1fr;
+    gap: 8px;
+    background: #1a1a1a;
+    padding: 8px;
+    border-bottom: 1px solid #00ff00;
+    font-size: 10px;
+    font-weight: bold;
+    color: #00ff00;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.retro-comments-items {
+    padding: 4px;
+}
+
+.retro-comment-item {
+    display: grid;
+    grid-template-columns: 30px 1.5fr 2fr 1fr 1.5fr 1fr;
+    gap: 8px;
+    padding: 6px 8px;
+    border-bottom: 1px solid #222;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 11px;
+}
+
+.retro-comment-item:hover {
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.retro-comment-item.selected {
+    background: rgba(0, 255, 0, 0.15);
+    border-color: #00ff00;
+}
+
+/* Checkbox */
+.retro-checkbox {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #333;
+    background: #0a0a0a;
+    cursor: pointer;
+}
+
+.retro-checkbox:checked {
+    background: #00ff00;
+    border-color: #00ff00;
+}
+
+/* Comment Item Details */
+.retro-comment-author {
+    color: #00ff00;
+    font-weight: bold;
+}
+
+.retro-comment-email {
+    font-size: 9px;
+    color: #888;
+    margin-top: 1px;
+}
+
+.retro-comment-content {
+    color: #00ff00;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 10px;
+}
+
+.retro-comment-status {
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.retro-status-pending {
+    color: #ffaa00;
+}
+
+.retro-status-approved {
+    color: #00ff00;
+}
+
+.retro-status-spam {
+    color: #ff4444;
+}
+
+.retro-comment-post,
+.retro-comment-date {
+    font-size: 9px;
+    color: #888;
+}
+
+/* Grid Views */
+.retro-comments-grid {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.retro-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.retro-grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #0a0a0a;
+}
+
+.retro-grid-item:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.05);
+}
+
+.retro-grid-item.selected {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.retro-grid-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.retro-grid-name {
+    font-size: 10px;
+    color: #00ff00;
+    text-align: center;
+    word-break: break-all;
+}
+
+.retro-grid-meta {
+    font-size: 8px;
+    color: #888;
+    margin-top: 2px;
+}
+
+/* Large Icons View */
+.large-icons-view .retro-grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+/* Medium Icons View */
+.medium-icons-view .retro-grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+
+.medium-icons-view .retro-grid-icon {
+    font-size: 24px;
+}
+
+/* Details View */
+.details-view .retro-list-header {
+    grid-template-columns: 30px 1.5fr 2fr 1fr 1.5fr 1fr 1fr;
+}
+
+.details-view .retro-comment-item {
+    grid-template-columns: 30px 1.5fr 2fr 1fr 1.5fr 1fr 1fr;
+}
+
+.retro-comment-email-col {
+    font-size: 9px;
+    color: #888;
+}
+
+/* Context Menu */
+.retro-context-menu {
+    position: absolute;
+    background: #0a0a0a;
+    border: 1px solid #00ff00;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    min-width: 150px;
+    z-index: 1000;
+    font-size: 11px;
+}
+
+.retro-context-header {
+    background: #1a1a1a;
+    padding: 4px 8px;
+    color: #00ff00;
+    font-weight: bold;
+    border-bottom: 1px solid #00ff00;
+}
+
+.retro-context-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #00ff00;
+    transition: background 0.2s;
+}
+
+.retro-context-item:hover {
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.retro-context-danger:hover {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff4444;
+}
+
+.retro-context-icon {
+    width: 16px;
+    text-align: center;
+}
+
+.retro-context-text {
+    flex: 1;
+}
+
+.retro-context-separator {
+    height: 1px;
+    background: #333;
+    margin: 2px 0;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+/* Scrollbar Styling */
+.retro-comments-container::-webkit-scrollbar,
+.retro-tree-view::-webkit-scrollbar,
+.retro-comments-list::-webkit-scrollbar,
+.retro-comments-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.retro-comments-container::-webkit-scrollbar-track,
+.retro-tree-view::-webkit-scrollbar-track,
+.retro-comments-list::-webkit-scrollbar-track,
+.retro-comments-grid::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+.retro-comments-container::-webkit-scrollbar-thumb,
+.retro-tree-view::-webkit-scrollbar-thumb,
+.retro-comments-list::-webkit-scrollbar-thumb,
+.retro-comments-grid::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 4px;
+}
+
+.retro-comments-container::-webkit-scrollbar-thumb:hover,
+.retro-tree-view::-webkit-scrollbar-thumb:hover,
+.retro-comments-list::-webkit-scrollbar-thumb:hover,
+.retro-comments-grid::-webkit-scrollbar-thumb:hover {
+    background: #88ff88;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .retro-main-panel {
+        flex-direction: column;
+    }
+    
+    .retro-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #00ff00;
+    }
+    
+    .retro-list-header,
+    .retro-comment-item {
+        grid-template-columns: 25px 1.5fr 2fr 1fr 1.5fr 1fr;
+        font-size: 9px;
+    }
+    
+    .retro-nav-bar {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .retro-search-input {
+        width: 150px;
+    }
+}
+</style>
+
+<script>
+// Blog Comments Management Page
+let allComments = [];
+let selectedComments = new Set();
+let currentPage = 1;
+let hasMoreComments = true;
+
+function initBlogComments() {
+    loadCommentsData();
+    setupEventListeners();
+}
+
+async function loadCommentsData(page = 1) {
+    try {
+        const response = await fetch(`/api/admin/blog/comments?page=${page}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (page === 1) {
+                allComments = data.comments || [];
+            } else {
+                allComments = [...allComments, ...(data.comments || [])];
+            }
+
+            updateCommentStats(data.stats);
+            renderComments(allComments, true);(data.comments || [], page === 1);
+            hasMoreComments = data.hasMore || false;
+            currentPage = page;
+
+            if (!hasMoreComments) {
+                document.getElementById('loadMoreContainer').classList.add('hidden');
+            }
+        } else {
+            showFallbackCommentsData();
+        }
+    } catch (error) {
+        console.error('Error loading comments data:', error);
+        showFallbackCommentsData();
+    }
+}
+
+function updateCommentStats(stats) {
+    document.getElementById('totalComments').textContent = formatNumber(stats.totalComments || 0);
+    document.getElementById('pendingComments').textContent = formatNumber(stats.pendingComments || 0);
+    document.getElementById('approvedComments').textContent = formatNumber(stats.approvedComments || 0);
+    document.getElementById('spamComments').textContent = formatNumber(stats.spamComments || 0);
+}
+
+function renderComments(comments, replace = true) {
+    const container = document.getElementById('commentsList');
+    const emptyState = document.getElementById('emptyState');
+
+    if (allComments.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+    }
+
+    emptyState.classList.add('hidden');
+
+    if (replace) {
+        container.innerHTML = '';
+    }
+
+    comments.forEach(comment => {
+        const commentElement = createCommentElement(comment);
+        container.appendChild(commentElement);
+    });
+}
+
+function createCommentElement(comment) {
+    const commentDiv = document.createElement('div');
+    commentDiv.className = `comment-card ${selectedComments.has(comment.id) ? 'comment-selected' : ''}`;
+    commentDiv.dataset.commentId = comment.id;
+
+    commentDiv.innerHTML = `
+        <div class="comment-header">
+            <div class="comment-author">
+                <div class="comment-avatar">
+                    ${getInitials(comment.author)}
+                </div>
+                <div class="comment-meta">
+                    <div class="comment-name">${comment.author}</div>
+                    <div class="comment-email">${comment.email}</div>
+                    <div class="comment-date">${formatDate(comment.createdAt)}</div>
+                </div>
+            </div>
+            <div class="comment-actions">
+                <input type="checkbox" class="comment-checkbox" ${selectedComments.has(comment.id) ? 'checked' : ''} onchange="toggleCommentSelection('${comment.id}')">
+                <button class="w-8 h-8 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="replyToComment('${comment.id}', event)" title="Reply">
+                    <i class="ph-bold ph-arrow-bend-up-left text-sm"></i>
+                </button>
+                <button class="w-8 h-8 bg-green-500/10 hover:bg-green-500/20 text-green-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="approveComment('${comment.id}', event)" title="Approve">
+                    <i class="ph-bold ph-check text-sm"></i>
+                </button>
+                <button class="w-8 h-8 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="markAsSpam('${comment.id}', event)" title="Mark as Spam">
+                    <i class="ph-bold ph-shield-x text-sm"></i>
+                </button>
+                <button class="w-8 h-8 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="deleteComment('${comment.id}', event)" title="Delete">
+                    <i class="ph-bold ph-trash text-sm"></i>
+                </button>
+                <button class="w-8 h-8 bg-gray-500/10 hover:bg-gray-500/20 text-gray-500 rounded-lg flex items-center justify-center transition-all duration-medium" onclick="viewCommentDetails('${comment.id}', event)" title="Details">
+                    <i class="ph-bold ph-info text-sm"></i>
+                </button>
+            </div>
+        </div>
+        <div class="comment-content">
+            <p class="comment-text">${escapeHtml(comment.content)}</p>
+            ${comment.replies && comment.replies.length > 0 ? `
+                <div class="comment-thread mt-4">
+                    ${comment.replies.map(reply => `
+                        <div class="comment-card">
+                            <div class="comment-header">
+                                <div class="comment-author">
+                                    <div class="comment-avatar bg-secondary">
+                                        A
+                                    </div>
+                                    <div class="comment-meta">
+                                        <div class="comment-name">Admin Reply</div>
+                                        <div class="comment-date">${formatDate(reply.createdAt)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comment-content">
+                                <p class="comment-text">${escapeHtml(reply.content)}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+        </div>
+        <div class="comment-footer">
+            <div class="comment-post-info">
+                On: <a href="#" class="text-accent hover:text-secondary transition-colors font-syne" onclick="viewPost('${comment.postId}', event)">${comment.postTitle}</a>
+            </div>
+            <div class="comment-status status-${comment.status}">
+                ${formatStatus(comment.status)}
+            </div>
+        </div>
+    `;
+
+    return commentDiv;
+}
+
+function setupEventListeners() {
+    // Search
+    document.getElementById('searchComments').oninput = debounce((e) => {
+        filterComments();
+    }, 300);
+
+    // Filters
+    document.getElementById('statusFilter').onchange = filterComments;
+    document.getElementById('postFilter').onchange = filterComments;
+    document.getElementById('sortFilter').onchange = filterComments;
+
+    // Bulk actions
+    document.getElementById('bulkApproveBtn').onclick = () => bulkAction('approve');
+    document.getElementById('bulkSpamBtn').onclick = () => bulkAction('spam');
+    document.getElementById('bulkDeleteBtn').onclick = () => bulkAction('delete');
+
+    // Load more
+    document.getElementById('loadMoreBtn').onclick = () => loadCommentsData(currentPage + 1);
+
+    // Modal actions
+    document.getElementById('sendReplyBtn').onclick = () => sendReply();
+}
+
+function filterComments() {
+    const searchTerm = document.getElementById('searchComments').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const postFilter = document.getElementById('postFilter').value;
+    const sortFilter = document.getElementById('sortFilter').value;
+
+    let filtered = allComments.filter(comment => {
+        const matchesSearch = !searchTerm ||
+            comment.content.toLowerCase().includes(searchTerm) ||
+            comment.author.toLowerCase().includes(searchTerm) ||
+            comment.email.toLowerCase().includes(searchTerm);
+
+        const matchesStatus = !statusFilter || comment.status === statusFilter;
+        const matchesPost = !postFilter || comment.postId === postFilter;
+
+        return matchesSearch && matchesStatus && matchesPost;
+    });
+
+    // Sort
+    filtered.sort((a, b) => {
+        switch (sortFilter) {
+            case 'oldest':
+                return new Date(a.createdAt) - new Date(b.createdAt);
+            case 'post':
+                return a.postTitle.localeCompare(b.postTitle);
+            case 'author':
+                return a.author.localeCompare(b.author);
+            default: // newest
+                return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+    });
+
+    renderComments(allComments, true);(filtered, true);
+}
+
+function toggleCommentSelection(commentId) {
+    if (selectedComments.has(commentId)) {
+        selectedComments.delete(commentId);
+    } else {
+        selectedComments.add(commentId);
+    }
+    updateSelectionUI();
+}
+
+function updateSelectionUI() {
+    document.querySelectorAll('.comment-card').forEach(card => {
+        const commentId = card.dataset.commentId;
+        const checkbox = card.querySelector('.comment-checkbox');
+
+        if (selectedComments.has(commentId)) {
+            card.classList.add('comment-selected');
+            if (checkbox) checkbox.checked = true;
+        } else {
+            card.classList.remove('comment-selected');
+            if (checkbox) checkbox.checked = false;
+        }
+    });
+}
+
+function bulkAction(action) {
+    if (selectedComments.size === 0) {
+        showNotification('Please select comments first', 'warning');
+        return;
+    }
+
+    const actionText = {
+        'approve': 'approve',
+        'spam': 'mark as spam',
+        'delete': 'delete'
+    };
+
+    if (confirm(`Are you sure you want to ${actionText[action]} ${selectedComments.size} comment${selectedComments.size > 1 ? 's' : ''}?`)) {
+        showNotification(`${actionText[action].charAt(0).toUpperCase() + actionText[action].slice(1)} ${selectedComments.size} comment${selectedComments.size > 1 ? 's' : ''}`, 'success');
+        selectedComments.clear();
+        updateSelectionUI();
+        loadCommentsData(1); // Refresh
+    }
+}
+
+function replyToComment(commentId, event) {
+    event.stopPropagation();
+    const comment = allComments.find(c => c.id === commentId);
+    if (comment) {
+        document.getElementById('replyModalTitle').textContent = `Reply to ${comment.author}`;
+        document.getElementById('originalComment').innerHTML = `
+            <div class="flex items-start space-x-3">
+                <div class="comment-avatar">
+                    ${getInitials(comment.author)}
+                </div>
+                <div class="flex-1">
+                    <div class="comment-name">${comment.author}</div>
+                    <div class="comment-date">${formatDate(comment.createdAt)}</div>
+                    <p class="comment-text mt-2">${escapeHtml(comment.content)}</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('replyContent').value = '';
+        document.getElementById('replyModal').dataset.commentId = commentId;
+        document.getElementById('replyModal').classList.remove('hidden');
+    }
+}
+
+function closeReplyModal() {
+    document.getElementById('replyModal').classList.add('hidden');
+}
+
+function sendReply() {
+    const commentId = document.getElementById('replyModal').dataset.commentId;
+    const content = document.getElementById('replyContent').value.trim();
+    const notifyAuthor = document.getElementById('notifyAuthor').checked;
+    const publishImmediately = document.getElementById('publishImmediately').checked;
+
+    if (!content) {
+        showNotification('Please enter a reply', 'error');
+        return;
+    }
+
+    showNotification('Reply sent successfully', 'success');
+    closeReplyModal();
+    loadCommentsData(1); // Refresh
+}
+
+function approveComment(commentId, event) {
+    event.stopPropagation();
+    showNotification(`Comment ${commentId} approved`, 'success');
+    loadCommentsData(1);
+}
+
+function markAsSpam(commentId, event) {
+    event.stopPropagation();
+    showNotification(`Comment ${commentId} marked as spam`, 'warning');
+    loadCommentsData(1);
+}
+
+function deleteComment(commentId, event) {
+    event.stopPropagation();
+    if (confirm('Are you sure you want to delete this comment?')) {
+        showNotification(`Comment ${commentId} deleted`, 'error');
+        loadCommentsData(1);
+    }
+}
+
+function viewCommentDetails(commentId, event) {
+    event.stopPropagation();
+    const comment = allComments.find(c => c.id === commentId);
+    if (comment) {
+        document.getElementById('commentDetails').innerHTML = `
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-lg font-semibold text-t-bright font-syne mb-4">Comment Information</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">Author</label>
+                            <p class="text-t-bright font-syne">${comment.author}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">Email</label>
+                            <p class="text-t-bright font-syne">${comment.email}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">IP Address</label>
+                            <p class="text-t-bright font-syne">${comment.ipAddress || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-t-medium font-syne mb-1">User Agent</label>
+                            <p class="text-t-bright font-syne text-sm">${comment.userAgent || 'N/A'}</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-t-bright font-syne mb-4">Comment Content</h4>
+                    <div class="bg-base-tint/30 dark:bg-base-shade/30 rounded-lg p-4">
+                        <p class="text-t-bright font-syne">${escapeHtml(comment.content)}</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-t-bright font-syne mb-4">Post Information</h4>
+                    <p class="text-t-bright font-syne">Posted on: <a href="#" class="text-accent hover:text-secondary" onclick="viewPost('${comment.postId}')">${comment.postTitle}</a></p>
+                </div>
+            </div>
+        `;
+        document.getElementById('commentModal').classList.remove('hidden');
+    }
+}
+
+function closeCommentModal() {
+    document.getElementById('commentModal').classList.add('hidden');
+}
+
+function viewPost(postId, event) {
+    if (event) event.preventDefault();
+    showNotification(`Viewing post ${postId}`, 'info');
+}
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function formatStatus(status) {
+    return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function formatNumber(num) {
+    return new Intl.NumberFormat().format(num);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function showFallbackCommentsData() {
+    // Show sample data when API is not available
+    updateCommentStats({
+        totalComments: 247,
+        pendingComments: 12,
+        approvedComments: 218,
+        spamComments: 17
+    });
+
+    // Sample comments
+    allComments = [
+        {
+            id: '1',
+            author: 'John Doe',
+            email: 'john@example.com',
+            content: 'Great article! This really helped me understand the topic better. Looking forward to more content like this.',
+            status: 'approved',
+            createdAt: '2024-01-15T10:30:00Z',
+            postId: 'post-1',
+            postTitle: 'Getting Started with React',
+            replies: []
+        },
+        {
+            id: '2',
+            author: 'Jane Smith',
+            email: 'jane@example.com',
+            content: 'I disagree with some points in this article. The approach mentioned might not work for larger scale applications.',
+            status: 'pending',
+            createdAt: '2024-01-14T15:45:00Z',
+            postId: 'post-2',
+            postTitle: 'Advanced CSS Techniques',
+            replies: []
+        },
+        {
+            id: '3',
+            author: 'Spam Bot',
+            email: 'spam@bot.com',
+            content: 'Buy cheap viagra now!!! Special offer only today!!!',
+            status: 'spam',
+            createdAt: '2024-01-14T12:00:00Z',
+            postId: 'post-1',
+            postTitle: 'Getting Started with React',
+            replies: []
+        }
+    ];
+
+    renderComments(allComments, true);

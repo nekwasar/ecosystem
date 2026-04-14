@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecosystem_portfolio
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - ecosystem_network
+
+networks:
+  ecosystem_network:
+    driver: bridge

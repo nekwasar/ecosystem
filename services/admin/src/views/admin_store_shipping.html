@@ -1,0 +1,269 @@
+<!-- Tailwind Configuration Script -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    'syne': ['Syne', 'sans-serif'],
+                },
+                colors: {
+                    'base': 'var(--base)',
+                    'base-tint': 'var(--base-tint)',
+                    'base-shade': 'var(--base-shade)',
+                    'accent': 'var(--accent)',
+                    'secondary': 'var(--secondary)',
+                    't-bright': 'var(--t-bright)',
+                    't-medium': 'var(--t-medium)',
+                    't-muted': 'var(--t-muted)',
+                    't-opp-bright': 'var(--t-opp-bright)',
+                    'stroke-elements': 'var(--stroke-elements)',
+                    'gradient-one': 'var(--gradient-one)',
+                    'gradient-two': 'var(--gradient-two)',
+                }
+            }
+        }
+    }
+</script>
+
+<div
+    class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-4 md:p-6 lg:p-12">
+        <!-- Page Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-bold font-syne text-t-bright">Shipping</h1>
+                <p class="text-t-medium font-syne">Delivery zones and shipping rates</p>
+            </div>
+            <button onclick="document.getElementById('createZoneModal').classList.remove('hidden')"
+                class="px-6 py-3 bg-accent text-white font-bold rounded-xl shadow-lg hover:bg-accent/90 transition-all duration-medium flex items-center gap-2">
+                <i class="ph-bold ph-globe-hemisphere-west"></i>
+                <span>Add Shipping Zone</span>
+            </button>
+        </div>
+
+        <!-- Zones List -->
+        <div id="zonesContainer" class="space-y-6">
+            <!-- Zones will be injected here -->
+            <div class="p-12 text-center text-t-muted">Loading shipping configuration...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Zone Modal -->
+<div id="createZoneModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div
+            class="bg-base dark:bg-base-tint border border-stroke-elements rounded-2xl shadow-2xl w-full max-w-lg transform transition-all scale-100 flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-stroke-elements flex justify-between items-center bg-base-tint/50">
+                <h2 class="text-2xl font-bold font-syne text-t-bright">New Shipping Zone</h2>
+                <button onclick="closeModal()" class="text-t-medium hover:text-accent">
+                    <i class="ph-bold ph-x text-xl"></i>
+                </button>
+            </div>
+            <form onsubmit="handleCreateZone(event)" class="p-6 space-y-6 overflow-y-auto">
+                <div>
+                    <label class="block text-sm font-bold text-t-medium mb-1">Zone Name</label>
+                    <input type="text" name="name" required placeholder="e.g. North America, Global"
+                        class="w-full px-4 py-3 bg-base-tint/50 border border-stroke-elements rounded-xl text-t-bright focus:border-accent outline-none font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-t-medium mb-1">Countries</label>
+                    <p class="text-xs text-t-muted mb-2">Simulated selection for now (saves specific codes)</p>
+                    <div class="flex flex-wrap gap-2">
+                        <label
+                            class="px-3 py-1 bg-base border border-stroke-elements rounded-lg cursor-pointer hover:border-accent has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
+                            <input type="checkbox" name="countries" value="US" class="hidden" checked>
+                            <span class="text-sm font-bold">United States</span>
+                        </label>
+                        <label
+                            class="px-3 py-1 bg-base border border-stroke-elements rounded-lg cursor-pointer hover:border-accent has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
+                            <input type="checkbox" name="countries" value="CA" class="hidden">
+                            <span class="text-sm font-bold">Canada</span>
+                        </label>
+                        <label
+                            class="px-3 py-1 bg-base border border-stroke-elements rounded-lg cursor-pointer hover:border-accent has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
+                            <input type="checkbox" name="countries" value="UK" class="hidden">
+                            <span class="text-sm font-bold">United Kingdom</span>
+                        </label>
+                        <label
+                            class="px-3 py-1 bg-base border border-stroke-elements rounded-lg cursor-pointer hover:border-accent has-[:checked]:bg-accent/20 has-[:checked]:border-accent transition-all">
+                            <input type="checkbox" name="countries" value="WO" class="hidden">
+                            <span class="text-sm font-bold">Rest of World</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-4">
+                    <button type="submit"
+                        class="px-8 py-3 bg-accent text-white font-bold rounded-xl shadow-lg hover:bg-accent/90 transition-all transform hover:scale-105">
+                        Create Zone
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.initStoreShipping = function () {
+        console.log('🚀 Init Store Shipping Triggered');
+        loadZones();
+    }
+
+    function closeModal() {
+        document.getElementById('createZoneModal').classList.add('hidden');
+    }
+
+    async function loadZones() {
+        const container = document.getElementById('zonesContainer');
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/admin/store/shipping/zones', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const zones = await res.json();
+
+            if (!res.ok) throw new Error('Failed to fetch zones');
+
+            if (zones.length === 0) {
+                container.innerHTML = `
+                    <div class="p-12 text-center border-2 border-dashed border-stroke-elements rounded-2xl">
+                        <i class="ph-bold ph-globe-simple text-4xl text-t-muted mb-4"></i>
+                        <p class="text-t-medium font-bold">No shipping zones configured.</p>
+                        <p class="text-t-muted text-sm">Add a zone to start shipping physical goods.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = zones.map(zone => `
+                <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-6 border-b border-stroke-elements bg-base-tint/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <div class="flex items-center gap-3">
+                                <i class="ph-bold ph-map-pin text-accent text-xl"></i>
+                                <h3 class="text-xl font-bold text-t-bright font-syne">${zone.name}</h3>
+                            </div>
+                            <p class="text-sm text-t-muted mt-1 ml-8">
+                                Countries: ${zone.countries ? zone.countries.join(', ') : 'Global'}
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="addRate(${zone.id})" class="px-4 py-2 text-sm bg-base border border-stroke-elements rounded-lg hover:bg-base-shade transition-colors text-t-bright">
+                                + Add Rate
+                            </button>
+                            <button onclick="deleteZone(${zone.id})" class="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors">
+                                <i class="ph-bold ph-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-0">
+                        ${zone.rates.length > 0 ? `
+                        <table class="w-full text-left">
+                            <thead class="text-xs text-t-muted uppercase bg-base-tint/30">
+                                <tr>
+                                    <th class="p-4 pl-8 font-bold">Method Name</th>
+                                    <th class="p-4 font-bold">Cost</th>
+                                    <th class="p-4 font-bold text-right pr-8">Conditions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${zone.rates.map(rate => `
+                                <tr class="border-b border-stroke-elements last:border-0 hover:bg-base-tint/20">
+                                    <td class="p-4 pl-8 font-bold text-t-bright">${rate.name}</td>
+                                    <td class="p-4 text-accent font-bold">$${rate.price}</td>
+                                    <td class="p-4 pr-8 text-right text-sm text-t-muted">
+                                        ${rate.min_order_price ? `Orders over $${rate.min_order_price}` : 'No limits'}
+                                    </td>
+                                </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        ` : `
+                        <div class="p-6 text-center text-sm text-t-muted italic bg-base/50">
+                            No shipping rates defined for this zone yet. Customers in this zone cannot check out defined items.
+                        </div>
+                        `}
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (e) {
+            console.error(e);
+            container.innerHTML = `<div class="text-red-500 text-center">Error: ${e.message}</div>`;
+        }
+    }
+
+    async function handleCreateZone(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        // Handle multi-select manually
+        const countries = [];
+        document.querySelectorAll('input[name="countries"]:checked').forEach(c => countries.push(c.value));
+
+        const payload = {
+            name: formData.get('name'),
+            countries: countries
+        };
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/admin/store/shipping/zones', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error('Failed to create zone');
+
+            closeModal();
+            e.target.reset();
+            loadZones();
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    async function deleteZone(id) {
+        if (!confirm("Delete this shipping zone?")) return;
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`/api/admin/store/shipping/zones/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error("Failed");
+            loadZones();
+        } catch (e) { alert(e.message); }
+    }
+
+    // Placeholder for adding rates (can be expanded to a full modal later)
+    async function addRate(zoneId) {
+        const name = prompt("Method Name (e.g. Express Shipping):");
+        if (!name) return;
+        const price = prompt("Price (e.g. 15.00):");
+        if (!price) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`/api/admin/store/shipping/zones/${zoneId}/rates`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, price: parseFloat(price) })
+            });
+            loadZones();
+        } catch (e) { alert("Failed to add rate"); }
+    }
+</script>

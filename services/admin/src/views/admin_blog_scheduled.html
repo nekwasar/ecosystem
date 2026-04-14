@@ -1,0 +1,1510 @@
+<!-- Futuristic Scheduled Posts Management System -->
+<div class="futuristic-scheduled-container">
+    <!-- Futuristic CRT Header -->
+    <div class="futuristic-header">
+        <div class="futuristic-title-section">
+            <div class="futuristic-title-icon">
+                <span class="holographic-icon">⏰</span>
+            </div>
+            <div class="futuristic-title-content">
+                <h2 class="futuristic-title">NEURAL SCHEDULER</h2>
+                <p class="futuristic-subtitle">Quantum-Powered Post Automation v3.7</p>
+            </div>
+            <div class="futuristic-status-panel">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span class="status-text">SCHEDULER ONLINE</span>
+                </div>
+            </div>
+        </div>
+        <div class="futuristic-nav-bar">
+            <div class="nav-item active">
+                <span class="nav-icon">📋</span>
+                <span class="nav-text">QUEUE</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">⚡</span>
+                <span class="nav-text">TASKS</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🎯</span>
+                <span class="nav-text">TARGETS</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🧠</span>
+                <span class="nav-text">AI CONTROL</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Futuristic Main Panel -->
+    <div class="futuristic-main-panel">
+        <!-- Futuristic Sidebar -->
+        <div class="futuristic-sidebar">
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="section-icon">🚀</span>
+                    <span class="section-title">QUANTUM ACTIONS</span>
+                </div>
+                <div class="action-grid">
+                    <button class="futuristic-btn primary">
+                        <span class="btn-icon">⚡</span>
+                        <span class="btn-text">LAUNCH QUEUE</span>
+                    </button>
+                    <button class="futuristic-btn secondary">
+                        <span class="btn-icon">📅</span>
+                        <span class="btn-text">SCHEDULE</span>
+                    </button>
+                    <button class="futuristic-btn">
+                        <span class="btn-icon">⏸️</span>
+                        <span class="btn-text">PAUSE ALL</span>
+                    </button>
+                    <button class="futuristic-btn danger">
+                        <span class="btn-icon">🗑️</span>
+                        <span class="btn-text">CLEAR QUEUE</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Neural Stats Panel -->
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <span class="section-title">NEURAL FEED</span>
+                </div>
+                <div class="stats-panel">
+                    <div class="stat-item">
+                        <div class="stat-label">Queue Depth</div>
+                        <div class="stat-value" data-count="3">3</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Today's Posts</div>
+                        <div class="stat-value" data-count="1">1</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Next Launch</div>
+                        <div class="stat-value highlight">45m</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantum Health -->
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="section-icon">🧬</span>
+                    <span class="section-title">QUANTUM HEALTH</span>
+                </div>
+                <div class="health-indicators">
+                    <div class="health-item">
+                        <div class="health-label">CPU Core</div>
+                        <div class="health-bar">
+                            <div class="health-fill" style="width: 87%"></div>
+                        </div>
+                        <div class="health-score">87%</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-label">Memory</div>
+                        <div class="health-bar">
+                            <div class="health-fill" style="width: 64%"></div>
+                        </div>
+                        <div class="health-score">64%</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-label">Network</div>
+                        <div class="health-bar">
+                            <div class="health-fill" style="width: 92%"></div>
+                        </div>
+                        <div class="health-score">92%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Futuristic Content Panel -->
+        <div class="futuristic-content">
+            <!-- Content Controls -->
+            <div class="content-controls">
+                <div class="view-switcher">
+                    <button class="view-btn active">
+                        <span class="view-icon">🌐</span>
+                        <span class="view-text">NEURAL GRID</span>
+                    </button>
+                    <button class="view-btn">
+                        <span class="view-icon">📋</span>
+                        <span class="view-text">QUEUE VIEW</span>
+                    </button>
+                    <button class="view-btn">
+                        <span class="view-icon">🧠</span>
+                        <span class="view-text">AI INSIGHTS</span>
+                    </button>
+                </div>
+                <div class="control-panel">
+                    <div class="search-container">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="futuristic-input" placeholder="SEARCH POSTS..." id="searchInput">
+                    </div>
+                    <select class="futuristic-select" id="statusFilter">
+                        <option value="all">ALL STATUS</option>
+                        <option value="scheduled">SCHEDULED</option>
+                        <option value="pending">PENDING</option>
+                        <option value="active">ACTIVE</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Scheduled Posts Grid -->
+            <div class="scheduled-grid-container">
+                <div class="floating-particle particle-1"></div>
+                <div class="floating-particle particle-2"></div>
+                <div class="floating-particle particle-3"></div>
+                <div class="floating-particle particle-4"></div>
+                <div class="floating-particle particle-5"></div>
+                
+                <div class="scheduled-posts-grid">
+                    <!-- Neural Scheduled Post Item -->
+                    <div class="scheduled-post-card featured" data-post-id="1">
+                        <div class="post-header">
+                            <div class="post-status-indicator active"></div>
+                            <div class="post-title">The Future of AI: 2025 Predictions</div>
+                            <div class="post-meta">
+                                <span class="post-category">AI & Technology</span>
+                                <span class="post-words">1,847 words</span>
+                            </div>
+                        </div>
+                        <div class="post-schedule-info">
+                            <div class="schedule-time">
+                                <span class="time-label">LAUNCH TIME</span>
+                                <span class="time-value">Today, 2:00 PM</span>
+                                <span class="time-date">Jan 6, 2025</span>
+                            </div>
+                            <div class="countdown-timer">
+                                <span class="countdown-label">QUANTUM COUNTDOWN</span>
+                                <span class="countdown-value">45m 32s</span>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn edit-btn" title="Edit Post">✏️</button>
+                            <button class="action-btn preview-btn" title="Preview">👁️</button>
+                            <button class="action-btn launch-btn" title="Launch Now">🚀</button>
+                            <button class="action-btn reschedule-btn" title="Reschedule">🔄</button>
+                            <button class="action-btn delete-btn" title="Cancel">❌</button>
+                        </div>
+                    </div>
+
+                    <div class="scheduled-post-card popular" data-post-id="2">
+                        <div class="post-header">
+                            <div class="post-status-indicator pending"></div>
+                            <div class="post-title">Building Scalable React Applications</div>
+                            <div class="post-meta">
+                                <span class="post-category">Web Development</span>
+                                <span class="post-words">2,234 words</span>
+                            </div>
+                        </div>
+                        <div class="post-schedule-info">
+                            <div class="schedule-time">
+                                <span class="time-label">LAUNCH TIME</span>
+                                <span class="time-value">Tomorrow, 9:00 AM</span>
+                                <span class="time-date">Jan 7, 2025</span>
+                            </div>
+                            <div class="countdown-timer">
+                                <span class="countdown-label">QUANTUM COUNTDOWN</span>
+                                <span class="countdown-value">18h 45m</span>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn edit-btn" title="Edit Post">✏️</button>
+                            <button class="action-btn preview-btn" title="Preview">👁️</button>
+                            <button class="action-btn launch-btn" title="Launch Now">🚀</button>
+                            <button class="action-btn reschedule-btn" title="Reschedule">🔄</button>
+                            <button class="action-btn delete-btn" title="Cancel">❌</button>
+                        </div>
+                    </div>
+
+                    <div class="scheduled-post-card trending" data-post-id="3">
+                        <div class="post-header">
+                            <div class="post-status-indicator pending"></div>
+                            <div class="post-title">Cloud Security Best Practices in 2025</div>
+                            <div class="post-meta">
+                                <span class="post-category">Security</span>
+                                <span class="post-words">1,543 words</span>
+                            </div>
+                        </div>
+                        <div class="post-schedule-info">
+                            <div class="schedule-time">
+                                <span class="time-label">LAUNCH TIME</span>
+                                <span class="time-value">Wed, 1:30 PM</span>
+                                <span class="time-date">Jan 8, 2025</span>
+                            </div>
+                            <div class="countdown-timer">
+                                <span class="countdown-label">QUANTUM COUNTDOWN</span>
+                                <span class="countdown-value">3d 2h</span>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn edit-btn" title="Edit Post">✏️</button>
+                            <button class="action-btn preview-btn" title="Preview">👁️</button>
+                            <button class="action-btn launch-btn" title="Launch Now">🚀</button>
+                            <button class="action-btn reschedule-btn" title="Reschedule">🔄</button>
+                            <button class="action-btn delete-btn" title="Cancel">❌</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Panel -->
+            <div class="ai-insights-panel">
+                <div class="insights-header">
+                    <h3 class="insights-title">🧠 NEURAL INSIGHTS</h3>
+                </div>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <span class="insight-icon">⚡</span>
+                        <div class="insight-content">
+                            <div class="insight-title">Optimal Timing Detected</div>
+                            <div class="insight-text">AI analysis suggests posting at 2:00 PM yields 34% higher engagement rates</div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <span class="insight-icon">🎯</span>
+                        <div class="insight-content">
+                            <div class="insight-title">Audience Prediction</div>
+                            <div class="insight-text">Expected reach: 2.4K readers based on historical engagement patterns</div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <span class="insight-icon">📊</span>
+                        <div class="insight-content">
+                            <div class="insight-title">Performance Forecast</div>
+                            <div class="insight-text">AI confidence: 87% - High probability of viral potential detected</div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <span class="insight-icon">🚀</span>
+                        <div class="insight-content">
+                            <div class="insight-title">Auto-Optimization</div>
+                            <div class="insight-text">System adjusted optimal posting time based on real-time analytics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quantum Notification -->
+    <div class="quantum-notification">
+        <div class="notification-content">
+            <span class="notification-icon">⚡</span>
+            <span class="notification-text">Next quantum launch in 45 minutes</span>
+        </div>
+    </div>
+</div>
+
+<!-- Futuristic Scheduled Posts Styles (Reusing Tags Page Styles) -->
+<style>
+/* Futuristic Scheduled Posts Management Styles */
+.futuristic-scheduled-container {
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #2d1b69 100%);
+    color: #ffffff;
+    padding: 0;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 600px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Neon Glow Background Effects */
+.futuristic-scheduled-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.futuristic-scheduled-container * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Futuristic Header */
+.futuristic-header {
+    background: linear-gradient(90deg, rgba(26, 26, 58, 0.9), rgba(45, 27, 105, 0.9));
+    border-bottom: 1px solid rgba(168, 85, 247, 0.4);
+    padding: 16px 20px;
+    backdrop-filter: blur(20px);
+}
+
+.futuristic-title-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.futuristic-title-icon {
+    position: relative;
+}
+
+.holographic-icon {
+    font-size: 28px;
+    animation: glow 2s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8));
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)); }
+    to { filter: drop-shadow(0 0 25px rgba(236, 72, 153, 0.9)); }
+}
+
+.futuristic-title-content {
+    flex: 1;
+}
+
+.futuristic-title {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a855f7, #ec4899, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.02em;
+}
+
+.futuristic-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+}
+
+.futuristic-status-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 16px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: #a855f7;
+    border-radius: 50%;
+    animation: neural-pulse 1.5s infinite;
+}
+
+@keyframes neural-pulse {
+    0% { 
+        box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 0 6px rgba(168, 85, 247, 0);
+        transform: scale(1.1);
+    }
+    100% { 
+        box-shadow: 0 0 0 0 rgba(168, 85, 247, 0);
+        transform: scale(1);
+    }
+}
+
+.status-text {
+    font-size: 10px;
+    font-weight: 600;
+    color: #a855f7;
+}
+
+/* Navigation Bar */
+.futuristic-nav-bar {
+    display: flex;
+    gap: 6px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #a855f7;
+    transform: translateY(-1px);
+}
+
+.nav-icon {
+    font-size: 12px;
+}
+
+.nav-text {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* Main Panel */
+.futuristic-main-panel {
+    display: flex;
+    min-height: 500px;
+}
+
+/* Sidebar */
+.futuristic-sidebar {
+    width: 220px;
+    background: rgba(45, 27, 105, 0.6);
+    border-right: 1px solid rgba(168, 85, 247, 0.3);
+    padding: 16px 12px;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar-section {
+    margin-bottom: 20px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.section-icon {
+    font-size: 14px;
+    color: #a855f7;
+}
+
+.section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.05em;
+}
+
+/* Action Grid */
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.futuristic-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+}
+
+.futuristic-btn:hover {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.5);
+    transform: translateY(-1px);
+}
+
+.futuristic-btn.primary {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(236, 72, 153, 0.25));
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+.futuristic-btn.secondary:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+.futuristic-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.btn-icon {
+    font-size: 14px;
+}
+
+.btn-text {
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Stats Panel */
+.stats-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: #a855f7;
+}
+
+.stat-value.highlight {
+    background: linear-gradient(135deg, #ec4899, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Health Indicators */
+.health-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.health-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.health-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    min-width: 60px;
+}
+
+.health-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.health-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a855f7, #ec4899);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.health-score {
+    font-size: 10px;
+    font-weight: 600;
+    color: #a855f7;
+    min-width: 24px;
+    text-align: right;
+}
+
+/* Content Area */
+.futuristic-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Content Controls */
+.content-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.view-switcher {
+    display: flex;
+    gap: 6px;
+}
+
+.view-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.view-btn:hover,
+.view-btn.active {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #a855f7;
+    transform: translateY(-1px);
+}
+
+.view-icon {
+    font-size: 12px;
+}
+
+.view-text {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.control-panel {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-container {
+    position: relative;
+}
+
+.futuristic-input {
+    width: 200px;
+    padding: 8px 12px 8px 36px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 11px;
+    transition: all 0.3s ease;
+}
+
+.futuristic-input:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.futuristic-select {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.futuristic-select:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+/* Scheduled Posts Grid Container */
+.scheduled-grid-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.floating-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(168, 85, 247, 0.6);
+    border-radius: 50%;
+    animation: float-around 20s infinite linear;
+}
+
+.particle-1 {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 25s;
+}
+
+.particle-2 {
+    top: 60%;
+    left: 80%;
+    animation-delay: 5s;
+    animation-duration: 30s;
+}
+
+.particle-3 {
+    top: 80%;
+    left: 20%;
+    animation-delay: 10s;
+    animation-duration: 22s;
+}
+
+.particle-4 {
+    top: 30%;
+    left: 70%;
+    animation-delay: 15s;
+    animation-duration: 28s;
+}
+
+.particle-5 {
+    top: 70%;
+    left: 90%;
+    animation-delay: 20s;
+    animation-duration: 26s;
+}
+
+@keyframes float-around {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(30px, -30px) rotate(90deg); }
+    50% { transform: translate(-20px, 20px) rotate(180deg); }
+    75% { transform: translate(-30px, -20px) rotate(270deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+/* Scheduled Posts Grid */
+.scheduled-posts-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.scheduled-post-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.scheduled-post-card:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+}
+
+.scheduled-post-card.featured {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
+    border-color: rgba(168, 85, 247, 0.6);
+}
+
+.scheduled-post-card.popular {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+    border-color: rgba(59, 130, 246, 0.6);
+}
+
+.scheduled-post-card.trending {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(249, 115, 22, 0.2));
+    border-color: rgba(236, 72, 153, 0.6);
+}
+
+/* Post Header */
+.post-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.post-status-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+}
+
+.post-status-indicator.active {
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulse 1.5s infinite;
+}
+
+.post-status-indicator.pending {
+    background: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.post-title {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 11px;
+    margin-right: 20px;
+}
+
+.post-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.post-category {
+    font-size: 10px;
+    color: #a855f7;
+    background: rgba(168, 85, 247, 0.2);
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+.post-words {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Schedule Info */
+.post-schedule-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+}
+
+.schedule-time, .countdown-timer {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.time-label, .countdown-label {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.time-value, .countdown-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: #a855f7;
+}
+
+.time-date {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Post Actions */
+.post-actions {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    width: 24px;
+    height: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+}
+
+.action-btn:hover {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #a855f7;
+    transform: translateY(-1px);
+}
+
+.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #ef4444;
+}
+
+/* AI Insights Panel */
+.ai-insights-panel {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: 10px;
+    padding: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.insights-header {
+    margin-bottom: 10px;
+}
+
+.insights-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #a855f7;
+    margin: 0;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+}
+
+.insight-card {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+    transform: translateY(-1px);
+}
+
+.insight-icon {
+    font-size: 12px;
+    color: #a855f7;
+    flex-shrink: 0;
+}
+
+.insight-content {
+    flex: 1;
+}
+
+.insight-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 2px;
+}
+
+.insight-text {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.3;
+}
+
+/* Quantum Notification */
+.quantum-notification {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-radius: 12px;
+    padding: 12px 16px;
+    backdrop-filter: blur(20px);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #a855f7;
+}
+
+.notification-icon {
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .futuristic-main-panel {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    
+    .futuristic-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+        max-width: 100%;
+    }
+    
+    .scheduled-posts-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        padding: 16px;
+        max-width: 100%;
+    }
+    
+    .futuristic-scheduled-container {
+        margin: 0 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .futuristic-scheduled-container {
+        padding: 12px;
+        margin: 0;
+        border-radius: 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .futuristic-header {
+        padding: 16px;
+    }
+    
+    .futuristic-main-panel {
+        flex-direction: column;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .futuristic-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+        padding: 16px 12px;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .scheduled-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 16px 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .scheduled-post-card {
+        padding: 12px;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .content-controls {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .control-panel {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+    
+    .futuristic-input {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .futuristic-select {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .insights-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .action-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+    
+    .futuristic-btn {
+        padding: 8px 6px;
+    }
+    
+    .stats-panel {
+        gap: 6px;
+    }
+    
+    .stat-item {
+        padding: 6px 8px;
+    }
+    
+    .health-indicators {
+        gap: 6px;
+    }
+    
+    .health-item {
+        gap: 6px;
+    }
+    
+    .health-label {
+        min-width: 50px;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .futuristic-scheduled-container {
+        padding: 8px;
+        margin: 0;
+        border-radius: 8px;
+    }
+    
+    .futuristic-header {
+        padding: 12px;
+    }
+    
+    .futuristic-title-section {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .futuristic-nav-bar {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .nav-item {
+        padding: 6px 10px;
+    }
+    
+    .scheduled-posts-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 12px 8px;
+    }
+    
+    .scheduled-post-card {
+        padding: 10px;
+    }
+    
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .content-controls {
+        padding: 8px;
+    }
+    
+    .insights-grid {
+        gap: 8px;
+    }
+    
+    .insight-card {
+        padding: 10px;
+    }
+}
+
+/* Global overflow prevention */
+.futuristic-scheduled-container,
+.futuristic-main-panel,
+.scheduled-posts-grid,
+.ai-insights-panel {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Scrollbar Styling */
+.futuristic-content::-webkit-scrollbar,
+.futuristic-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.futuristic-content::-webkit-scrollbar-track,
+.futuristic-sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.futuristic-content::-webkit-scrollbar-thumb,
+.futuristic-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.5);
+    border-radius: 3px;
+}
+
+.futuristic-content::-webkit-scrollbar-thumb:hover,
+.futuristic-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.7);
+}
+</style>
+
+<!-- Futuristic Scheduled Posts JavaScript -->
+<script>
+function initScheduledPosts() {
+    console.log('Initializing Neural Scheduler...');
+    
+    // Setup search functionality
+    setupSearch();
+    
+    // Setup view switching
+    setupViewSwitching();
+    
+    // Setup scheduled post interactions
+    setupScheduledPostInteractions();
+    
+    // Setup AI features
+    setupAIFeatures();
+    
+    // Animate particles
+    animateParticles();
+    
+    // Animate counters
+    animateCounters();
+    
+    console.log('Neural Scheduler initialized successfully');
+}
+
+function setupSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    
+    searchInput?.addEventListener('input', function() {
+        filterScheduledPosts();
+    });
+    
+    statusFilter?.addEventListener('change', function() {
+        filterScheduledPosts();
+    });
+}
+
+function filterScheduledPosts() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const filter = document.getElementById('statusFilter').value;
+    const cards = document.querySelectorAll('.scheduled-post-card');
+    
+    cards.forEach(card => {
+        const postTitle = card.querySelector('.post-title').textContent.toLowerCase();
+        const matchesSearch = !searchTerm || postTitle.includes(searchTerm);
+        
+        // Apply filter logic
+        const shouldShow = matchesSearch && (filter === 'all' || 
+            (filter === 'scheduled' && card.classList.contains('featured')) ||
+            (filter === 'pending' && card.classList.contains('popular')) ||
+            (filter === 'active' && card.classList.contains('trending'))
+        );
+        
+        card.style.display = shouldShow ? 'flex' : 'none';
+    });
+}
+
+function setupViewSwitching() {
+    const viewBtns = document.querySelectorAll('.view-btn, .nav-item');
+    
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const view = this.dataset.view;
+            switchView(view);
+            
+            // Update active state
+            viewBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+}
+
+function switchView(view) {
+    console.log(`Switching to ${view} view`);
+    
+    // Hide all views first
+    // Implementation for view switching would go here
+    
+    // Show selected view
+    switch(view) {
+        case 'neural-grid':
+            // Show neural grid view
+            break;
+        case 'queue-view':
+            // Show queue view
+            break;
+        case 'ai-insights':
+            // Show AI insights
+            break;
+    }
+}
+
+function setupScheduledPostInteractions() {
+    const cards = document.querySelectorAll('.scheduled-post-card');
+    
+    cards.forEach(card => {
+        const actionBtns = card.querySelectorAll('.action-btn');
+        
+        actionBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const action = this.title;
+                const postId = card.dataset.postId;
+                handleScheduledPostAction(action, postId);
+            });
+        });
+        
+        // Card click for details
+        card.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            showPostDetails(postId);
+        });
+    });
+}
+
+function handleScheduledPostAction(action, postId) {
+    console.log(`Executing ${action} for post ${postId}`);
+    
+    switch(action) {
+        case 'Edit Post':
+            // Navigate to post editor
+            window.location.href = `/admin/blog/posts/edit/${postId}`;
+            break;
+        case 'Preview':
+            // Open preview modal
+            showPostPreview(postId);
+            break;
+        case 'Launch Now':
+            // Show launch confirmation
+            showLaunchDialog(postId);
+            break;
+        case 'Reschedule':
+            // Show reschedule dialog
+            showRescheduleDialog(postId);
+            break;
+        case 'Cancel':
+            // Show cancel confirmation
+            showCancelDialog(postId);
+            break;
+    }
+}
+
+function showPostDetails(postId) {
+    // Implementation for post details modal
+    console.log(`Showing details for post ${postId}`);
+}
+
+function showPostPreview(postId) {
+    // Implementation for post preview modal
+    console.log(`Showing preview for post ${postId}`);
+}
+
+function showLaunchDialog(postId) {
+    // Implementation for launch confirmation dialog
+    console.log(`Showing launch dialog for post ${postId}`);
+}
+
+function showRescheduleDialog(postId) {
+    // Implementation for reschedule dialog
+    console.log(`Showing reschedule dialog for post ${postId}`);
+}
+
+function showCancelDialog(postId) {
+    // Implementation for cancel confirmation dialog
+    console.log(`Showing cancel dialog for post ${postId}`);
+}
+
+function setupAIFeatures() {
+    // Simulate AI insights
+    setTimeout(() => {
+        updateAIInsights();
+    }, 2000);
+}
+
+function updateAIInsights() {
+    console.log('Updating AI insights...');
+}
+
+function animateParticles() {
+    const particles = document.querySelectorAll('.floating-particle');
+    
+    particles.forEach((particle, index) => {
+        // Add random floating animation variations
+        particle.style.animationDelay = `${Math.random() * 20}s`;
+    });
+}
+
+function animateCounters() {
+    const counters = document.querySelectorAll('[data-count]');
+    
+    counters.forEach(counter => {
+        const target = parseFloat(counter.dataset.count);
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+        
+        const updateCounter = () => {
+            current += step;
+            if (current < target) {
+                counter.textContent = Math.floor(current).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.textContent = target.toLocaleString();
+            }
+        };
+        
+        updateCounter();
+    });
+}
+
+// Initialize when page is loaded
+document.addEventListener('DOMContentLoaded', initScheduledPosts);
+</script>

@@ -1,0 +1,101 @@
+<section id="route-topics" class="py-16 bg-base min-h-screen">
+    <div class="section-container space-y-10">
+        <!-- Header Section -->
+        <div id="topics-header" class="rounded-[2.5rem] border border-stroke-elements bg-white p-10 shadow-lg">
+            <div class="flex flex-col gap-2">
+                <p class="text-xs uppercase tracking-[0.5em] text-t-muted">Topics & Tags</p>
+                <h1 id="topics-title" class="text-4xl font-syne font-semibold text-t-bright">Explore Everything</h1>
+                <p id="topics-description" class="text-base text-t-medium max-w-3xl">Dive into curated bundles, expert
+                    lists, and detailed guides across various disciplines.</p>
+
+                <div id="active-tag-indicator" class="hidden mt-4 flex items-center gap-3">
+                    <span class="text-sm font-semibold text-t-muted uppercase tracking-wider">Filtered by:</span>
+                    <div class="flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-1.5 rounded-full">
+                        <i class="ph-bold ph-hash"></i>
+                        <span id="active-tag-name" class="font-bold">Tag Name</span>
+                        <button onclick="clearTagFilter()" class="hover:text-red-500 transition-colors">
+                            <i class="ph-bold ph-x-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag Cloud (Small) -->
+        <div class="rounded-[2rem] bg-base-tint border border-stroke-elements p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-semibold text-t-bright">All Tags</h2>
+            </div>
+            <div id="topics-tag-cloud" class="flex flex-wrap gap-2">
+                <!-- Tags will be loaded here -->
+                <div class="animate-pulse flex gap-2">
+                    <div class="h-8 w-20 bg-gray-200 rounded-full"></div>
+                    <div class="h-8 w-24 bg-gray-200 rounded-full"></div>
+                    <div class="h-8 w-16 bg-gray-200 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Grid -->
+        <div id="topics-results" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dynamic posts will be injected here -->
+            <div class="animate-pulse col-span-full py-20 text-center">
+                <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"></div>
+                <p class="mt-4 text-t-medium">Exploring the archives...</p>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="topics-empty"
+            class="hidden text-center py-20 bg-white rounded-[2rem] border border-dashed border-stroke-elements">
+            <div class="max-w-md mx-auto">
+                <i class="ph-bold ph-magnifying-glass text-6xl text-t-muted mb-4 block"></i>
+                <h3 class="text-2xl font-semibold text-t-bright">No items found</h3>
+                <p class="text-t-medium mt-2">We couldn't find any posts matching this tag. Why not explore our latest
+                    articles instead?</p>
+                <button onclick="clearTagFilter()"
+                    class="mt-6 px-8 py-3 bg-purple-600 text-white rounded-full font-bold hover:bg-purple-700 transition-all shadow-lg shadow-purple-200">
+                    See All Posts
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Force high interactivity for the topics page to prevent overlap issues */
+    #route-topics {
+        position: relative;
+        z-index: 10;
+        pointer-events: auto !important;
+    }
+
+    .topic-card {
+        position: relative;
+        z-index: 11;
+        pointer-events: auto !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .topic-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .tag-pill {
+        transition: all 0.2s ease;
+    }
+
+    .tag-pill:hover {
+        border-color: #6366f1;
+        color: #6366f1;
+        background: #6366f110;
+    }
+
+    .tag-pill.active {
+        background: #6366f1;
+        color: white;
+        border-color: #6366f1;
+    }
+</style>

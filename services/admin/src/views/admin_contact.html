@@ -1,0 +1,516 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-6 md:p-8 lg:p-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Contact Messages</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Manage and respond to contact form submissions</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <!-- Total Messages Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-envelope"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalMessages">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Total Messages</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>All Time</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Unread Messages Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-envelope-open"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="unreadMessages">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Unread Messages</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-yellow-500 dark:text-yellow-400">
+                            <i class="ph-bold ph-circle text-base"></i>
+                            <span>Requires Attention</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Read Messages Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-green-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-check-circle"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="readMessages">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Read Messages</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400">
+                            <i class="ph-bold ph-check text-base"></i>
+                            <span>Processed</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- Messages Management -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-chat-circle text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Message Management</h3>
+                            <p class="text-t-medium font-syne text-sm">View, respond to, and manage contact form submissions</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="refreshMessagesBtn">
+                            <i class="ph-bold ph-refresh text-lg"></i>
+                            <span>Refresh</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="exportMessagesBtn">
+                            <i class="ph-bold ph-download text-lg"></i>
+                            <span>Export</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="p-8">
+                <div id="messagesContainer" class="space-y-6">
+                    <div class="text-center py-12">
+                        <div class="w-20 h-20 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-6">
+                            <i class="ph-bold ph-chat-circle text-5xl text-t-muted opacity-60"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-t-bright font-syne mb-4">Contact Messages</h3>
+                        <p class="text-base text-t-medium font-syne max-w-md mx-auto">Contact messages will be displayed here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+
+/* Message card styles */
+.message-card {
+  @apply bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-6 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl cursor-pointer overflow-hidden;
+}
+
+.message-card.unread {
+  @apply border-l-4 border-l-accent bg-gradient-to-r from-accent/5 via-transparent to-secondary/5;
+}
+
+.message-card.read {
+  @apply opacity-70;
+}
+
+.message-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.message-sender {
+  @apply text-xl font-bold text-t-bright font-syne group-hover:text-accent transition-colors duration-medium;
+}
+
+.message-date {
+  @apply text-sm text-t-muted font-syne;
+}
+
+.message-email {
+  @apply text-base text-t-medium font-syne mb-3 group-hover:text-t-bright transition-colors duration-medium;
+}
+
+.message-content {
+  @apply text-t-medium font-syne leading-relaxed mb-6 line-clamp-3;
+}
+
+.message-actions {
+  @apply flex items-center justify-end space-x-3;
+}
+</style>
+
+<script>
+// Contact Messages Page
+let allMessages = [];
+
+function initContactMessages() {
+    checkAuth();
+    loadMessages();
+    setupEventListeners();
+}
+
+async function checkAuth() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/admin';
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/auth/me', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            localStorage.removeItem('token');
+            window.location.href = '/admin';
+        }
+    } catch (error) {
+        localStorage.removeItem('token');
+        window.location.href = '/admin';
+    }
+}
+
+async function loadMessages() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+        const response = await fetch('/api/contacts/', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            allMessages = await response.json();
+            renderMessages();
+            updateStats();
+        } else if (response.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/admin';
+        }
+    } catch (error) {
+        console.error('Error loading messages:', error);
+        showFallbackMessages();
+    }
+}
+
+function renderMessages() {
+    const container = document.getElementById('messagesContainer');
+
+    if (allMessages.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12">
+                <div class="w-20 h-20 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-6">
+                    <i class="ph-bold ph-chat-circle text-5xl text-t-muted opacity-60"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-t-bright font-syne mb-4">No Messages Yet</h3>
+                <p class="text-base text-t-medium font-syne max-w-md mx-auto">Contact messages will appear here once visitors submit the contact form.</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="grid grid-cols-1 gap-6">
+            ${allMessages.map(msg => `
+                <div class="message-card group ${msg.is_read ? 'read' : 'unread'}" onclick="toggleMessage(this)">
+                    <div class="message-header">
+                        <div class="message-sender">${escapeHtml(msg.name)}</div>
+                        <div class="message-date">${formatDate(msg.created_at)}</div>
+                    </div>
+                    <div class="message-email">${escapeHtml(msg.email)}</div>
+                    <div class="message-content">${escapeHtml(msg.message)}</div>
+                    <div class="message-actions">
+                        <button class="inline-flex items-center justify-center space-x-2 px-4 py-2 ${msg.is_read ? 'bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright' : 'bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright'} font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm" onclick="markAsRead(${msg.id}, event)">
+                            <i class="ph-bold ${msg.is_read ? 'ph-eye-slash' : 'ph-eye'} text-sm"></i>
+                            <span>${msg.is_read ? 'Mark Unread' : 'Mark Read'}</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-medium font-syne text-sm border border-red-500/20" onclick="deleteMessage(${msg.id}, event)">
+                            <i class="ph-bold ph-trash text-sm"></i>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function updateStats() {
+    const total = allMessages.length;
+    const unread = allMessages.filter(msg => !msg.is_read).length;
+    const read = total - unread;
+
+    document.getElementById('totalMessages').textContent = total;
+    document.getElementById('unreadMessages').textContent = unread;
+    document.getElementById('readMessages').textContent = read;
+}
+
+async function markAsRead(messageId, event) {
+    event.stopPropagation();
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`/api/contacts/${messageId}/read`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            // Update local data
+            const message = allMessages.find(msg => msg.id === messageId);
+            if (message) {
+                message.is_read = !message.is_read;
+                renderMessages();
+                updateStats();
+            }
+        }
+    } catch (error) {
+        console.error('Error updating message:', error);
+    }
+}
+
+async function deleteMessage(messageId, event) {
+    event.stopPropagation();
+    if (!confirm('Are you sure you want to delete this message? This action cannot be undone.')) return;
+
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`/api/contacts/${messageId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            // Remove from local data
+            allMessages = allMessages.filter(msg => msg.id !== messageId);
+            renderMessages();
+            updateStats();
+        }
+    } catch (error) {
+        console.error('Error deleting message:', error);
+    }
+}
+
+function toggleMessage(card) {
+    card.classList.toggle('expanded');
+}
+
+function setupEventListeners() {
+    // Refresh Messages Button
+    document.getElementById('refreshMessagesBtn').onclick = () => {
+        loadMessages();
+    };
+
+    // Export Messages Button
+    document.getElementById('exportMessagesBtn').onclick = () => {
+        exportMessages();
+    };
+}
+
+function exportMessages() {
+    showNotification('Exporting messages...', 'info');
+}
+
+function showFallbackMessages() {
+    // Show sample data when API is not available
+    updateStats();
+    renderMessages();
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactMessages);
+} else {
+    initContactMessages();
+}
+
+// Auto refresh every 30 seconds
+setInterval(loadMessages, 30000);
+</script>
+</body>
+</html>

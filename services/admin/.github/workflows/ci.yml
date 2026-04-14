@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/admin/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'services/admin/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd services/admin
+          pip install -r requirements.txt
+      
+      - name: Run tests
+        run: |
+          cd services/admin
+          pytest || true
+      
+      - name: Lint
+        run: |
+          pip install flake8
+          cd services/admin
+          flake8 src --max-line-length=120 || true

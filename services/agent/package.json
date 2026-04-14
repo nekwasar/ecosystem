@@ -1,0 +1,24 @@
+{
+  "name": "@nekwasar/agent",
+  "version": "1.0.0",
+  "description": "Agent Service",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "fastapi dev src/main.py --port 8002",
+    "start": "uvicorn src.main:app --host 0.0.0.0 --port 8002",
+    "test": "pytest"
+  },
+  "dependencies": {
+    "fastapi": "^0.109.0",
+    "uvicorn": "^0.27.0",
+    "sqlalchemy": "^2.0.25",
+    "psycopg2-binary": "^2.9.9",
+    "pydantic": "^2.5.3",
+    "redis": "^5.0.1",
+    "python-dotenv": "^1.0.0",
+    "openai": "^1.8.0"
+  },
+  "devDependencies": {
+    "pytest": "^7.4.4"
+  }
+}

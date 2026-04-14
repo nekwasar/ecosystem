@@ -1,0 +1,44 @@
+name: Deploy Admin Service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'services/admin/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd services/admin
+          pip install -r requirements.txt
+      
+      - name: Build Docker image
+        run: |
+          docker build -t nekwasar-admin:${{ github.sha }} services/admin
+      
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /home/nekwasar/ecosystem
+            docker pull nekwasar-admin:${{ github.sha }} || true
+            docker stop ecosystem_admin || true
+            docker rm ecosystem_admin || true
+            docker run -d --name ecosystem_admin \
+              --network ecosystem_network \
+              -p 8001:8001 \
+              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              nekwasar-admin:${{ github.sha }}

@@ -1,0 +1,4980 @@
+<!-- Tailwind Configuration Script -->
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          'syne': ['Syne', 'sans-serif'],
+        },
+        colors: {
+          'base': 'var(--base)',
+          'base-tint': 'var(--base-tint)',
+          'base-shade': 'var(--base-shade)',
+          'accent': 'var(--accent)',
+          'secondary': 'var(--secondary)',
+          'secondary-rgba': 'var(--secondary-rgba)',
+          'stroke-controls': 'var(--stroke-controls)',
+          'stroke-elements': 'var(--stroke-elements)',
+          't-bright': 'var(--t-bright)',
+          't-medium': 'var(--t-medium)',
+          't-muted': 'var(--t-muted)',
+          't-accent': 'var(--t-accent)',
+          't-secondary': 'var(--t-secondary)',
+          't-disabled': 'var(--t-disabled)',
+          't-placeholder': 'var(--t-placeholder)',
+          'base-opp': 'var(--base-opp)',
+          't-opp-bright': 'var(--t-opp-bright)',
+          't-opp-medium': 'var(--t-opp-medium)',
+          't-opp-muted': 'var(--t-opp-muted)',
+          'gradient-one': 'var(--gradient-one)',
+          'gradient-two': 'var(--gradient-two)',
+          'gradient-three': 'var(--gradient-three)',
+        },
+        borderRadius: {
+          's': 'var(--_radius-s)',
+          'm': 'var(--_radius-m)',
+          'l': 'var(--_radius-l)',
+          'xl': 'var(--_radius-xl)',
+        },
+        animation: {
+          'fade-in': 'fadeIn 0.6s ease-out forwards',
+          'slide-up': 'slideUp 0.6s ease-out forwards',
+          'scale-in': 'scaleIn 0.4s ease-out forwards',
+        },
+        transitionTimingFunction: {
+          'bezier': 'var(--_animbezier)',
+        },
+        transitionDuration: {
+          'fast': 'var(--_animspeed-fast)',
+          'medium': 'var(--_animspeed-medium)',
+          'slow': 'var(--_animspeed-slow)',
+        },
+      },
+    },
+  }
+</script>
+
+<!-- Retro Blog Posts Explorer - Windows File Explorer with Retro CRT Style -->
+<div class="retro-posts-container" id="postsExplorer">
+  <!-- Retro CRT Header -->
+  <div class="retro-header">
+    <div class="retro-title-bar">
+      <div class="retro-title-left">
+        <div class="retro-title-icon">📁</div>
+        <div class="retro-sidebar-toggle-wrapper">
+          <button class="retro-sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">«</button>
+        </div>
+        <h2 class="retro-title">BLOG POSTS EXPLORER <span class="retro-version">v2.1</span></h2>
+      </div>
+      <div class="retro-title-right">
+        <button class="retro-window-btn retro-minimize" title="Minimize"
+          onclick="(function(){if(typeof minimizeWindow==='function'){minimizeWindow();}else{console.warn('minimizeWindow function not available');}})();">
+          <span>_</span>
+        </button>
+        <button class="retro-window-btn retro-maximize" title="Maximize"
+          onclick="(function(){var c=document.querySelector('.retro-posts-container');if(!c)return;c.classList.add('explorer-maximized');if(!document.getElementById('explorerBackdrop')){var b=document.createElement('div');b.id='explorerBackdrop';b.className='explorer-backdrop';document.body.appendChild(b);}document.body.style.overflow='hidden';})();">
+          <span>□</span>
+        </button>
+        <button class="retro-window-btn retro-close" title="Close"
+          onclick="(function(){var b=document.getElementById('explorerBackdrop');if(b)b.remove();document.body.style.overflow='';window.location.href='/admin/dashboard';})();">
+          <span>×</span>
+        </button>
+      </div>
+    </div>
+    <div class="retro-menu-bar">
+      <div class="retro-menu-item active">FILE</div>
+      <div class="retro-menu-item">EDIT</div>
+      <div class="retro-menu-item">VIEW</div>
+      <div class="retro-menu-item">TOOLS</div>
+      <div class="retro-menu-item">HELP</div>
+    </div>
+  </div>
+
+  <!-- Retro Toolbar -->
+  <div class="retro-toolbar">
+    <div class="retro-toolbar-section">
+      <button class="retro-toolbar-btn" onclick="newPost()">NEW POST</button>
+      <button class="retro-toolbar-btn" onclick="openPost()">OPEN</button>
+      <button class="retro-toolbar-btn" onclick="deleteSelected()">DELETE</button>
+    </div>
+    <div class="retro-toolbar-separator"></div>
+    <div class="retro-toolbar-section">
+      <button class="retro-toolbar-btn" onclick="cutItems()">CUT</button>
+      <button class="retro-toolbar-btn" onclick="copyItems()">COPY</button>
+      <button class="retro-toolbar-btn" onclick="pasteItems()">PASTE</button>
+    </div>
+    <div class="retro-toolbar-separator"></div>
+    <div class="retro-toolbar-section">
+      <button class="retro-toolbar-btn" onclick="refreshView()">REFRESH</button>
+      <button class="retro-toolbar-btn" onclick="showProperties()">PROPERTIES</button>
+    </div>
+  </div>
+
+  <style>
+    /* Collapsed Sidebar Styles */
+    .retro-posts-container.sidebar-collapsed .retro-sidebar {
+      width: 50px !important;
+      min-width: 50px !important;
+      overflow: hidden;
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-tree-text,
+    .retro-posts-container.sidebar-collapsed .retro-tree-count,
+    .retro-posts-container.sidebar-collapsed .retro-tree-arrow,
+    .retro-posts-container.sidebar-collapsed .retro-panel-title,
+    .retro-posts-container.sidebar-collapsed .retro-sidebar-footer {
+      display: none !important;
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-tree-content {
+      justify-content: center;
+      padding: 8px 0;
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-tree-icon {
+      margin-right: 0;
+      font-size: 20px;
+    }
+
+    .retro-sidebar-toggle-wrapper {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .retro-sidebar-toggle {
+      background: transparent;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      cursor: pointer;
+      font-family: inherit;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .retro-sidebar-toggle:hover {
+      background: rgba(0, 255, 0, 0.2);
+    }
+
+    .retro-posts-container.sidebar-collapsed .retro-sidebar-toggle {
+      transform: rotate(180deg);
+    }
+
+    /* Adjust version display */
+    .retro-version {
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+  </style>
+
+  <!-- Retro Navigation Bar -->
+  <div class="retro-nav-bar">
+    <div class="retro-nav-controls">
+      <button class="retro-nav-btn" onclick="goBack()" title="Back">◀</button>
+      <button class="retro-nav-btn" onclick="goForward()" title="Forward">▶</button>
+      <button class="retro-nav-btn" onclick="goUp()" title="Up">↑</button>
+      <div class="retro-nav-separator"></div>
+      <div class="retro-path-bar">
+        <span class="retro-path-text">BLOG POSTS</span>
+        <span class="retro-path-separator">\\</span>
+        <span class="retro-path-text">ALL POSTS</span>
+      </div>
+    </div>
+    <div class="retro-nav-controls">
+      <input type="text" class="retro-search-input" placeholder="SEARCH POSTS..." id="searchInput">
+      <div class="retro-view-controls">
+        <button class="retro-view-btn" onclick="setViewMode('medium-icons')" title="Medium Icons">M</button>
+        <button class="retro-view-btn active" onclick="setViewMode('list')" title="List">S</button>
+        <button class="retro-view-btn" onclick="setViewMode('details')" title="Details">D</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Retro Interface -->
+  <div class="retro-main-panel">
+    <!-- Left Sidebar - Quick Actions -->
+    <div class="retro-sidebar">
+      <div class="retro-panel-title">FOLDERS</div>
+      <div class="retro-tree-view">
+        <!-- All Posts -->
+        <div class="retro-tree-item active" data-filter="all" onclick="navigateToFolder('all')">
+          <div class="retro-tree-content">
+            <i class="retro-tree-icon">📄</i>
+            <span class="retro-tree-text">ALL POSTS</span>
+            <span class="retro-tree-count" id="allPostsCount">0</span>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="retro-tree-item" onclick="toggleTreeItem(this)">
+          <div class="retro-tree-content">
+            <i class="retro-tree-icon">📂</i>
+            <span class="retro-tree-text">CATEGORIES</span>
+            <i class="retro-tree-arrow">▶</i>
+          </div>
+          <div class="retro-tree-children hidden" id="categoriesTree">
+            <!-- Categories will be populated here -->
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="retro-tree-item" onclick="toggleTreeItem(this)">
+          <div class="retro-tree-content">
+            <i class="retro-tree-icon">🏷️</i>
+            <span class="retro-tree-text">TAGS</span>
+            <i class="retro-tree-arrow">▶</i>
+            <button class="add-tag-btn"
+              onclick="event.stopPropagation(); console.log('➕ ADD TAG BUTTON CLICKED'); showAddTagModal();"
+              title="Add New Tag">+</button>
+          </div>
+          <div class="retro-tree-children hidden" id="tagsTree">
+            <!-- Tags will be populated here -->
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="retro-tree-item" onclick="toggleTreeItem(this)">
+          <div class="retro-tree-content">
+            <i class="retro-tree-icon">⚙️</i>
+            <span class="retro-tree-text">STATUS</span>
+            <i class="retro-tree-arrow">▶</i>
+          </div>
+          <div class="retro-tree-children" id="statusTree">
+            <div class="retro-tree-item" data-filter="status-published" onclick="navigateToFolder('status-published')">
+              <div class="retro-tree-content">
+                <i class="retro-tree-icon">✅</i>
+                <span class="retro-tree-text">PUBLISHED</span>
+                <span class="retro-tree-count" id="publishedCount">0</span>
+              </div>
+            </div>
+            <div class="retro-tree-item" data-filter="status-draft" onclick="navigateToFolder('status-draft')">
+              <div class="retro-tree-content">
+                <i class="retro-tree-icon">📝</i>
+                <span class="retro-tree-text">DRAFT</span>
+                <span class="retro-tree-count" id="draftCount">0</span>
+              </div>
+            </div>
+            <!-- Scheduled removed -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="retro-sidebar-footer">
+        <div class="retro-stats-item">
+          <span class="retro-stats-label">TOTAL POSTS:</span>
+          <span class="retro-stats-value" id="totalPostsCount">0</span>
+        </div>
+        <div class="retro-stats-item">
+          <span class="retro-stats-label">SELECTED:</span>
+          <span class="retro-stats-value" id="selectedCount">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel - Posts List -->
+    <div class="retro-content-panel">
+      <!-- Status Bar -->
+      <div class="retro-status-bar">
+        <div class="retro-status-left">
+          <span id="itemsCount">0 items</span>
+          <span id="selectedItemsInfo">0 selected</span>
+        </div>
+        <div class="retro-status-right">
+          <span id="sortInfo">SORTED BY NAME</span>
+          <span id="viewInfo">LIST VIEW</span>
+        </div>
+      </div>
+
+      <!-- Posts List -->
+      <div class="retro-posts-list">
+        <!-- Header -->
+        <div class="retro-list-header">
+          <div class="retro-col-select">
+            <input type="checkbox" class="retro-checkbox" id="selectAll">
+            <label for="selectAll" class="retro-checkbox-label"></label>
+          </div>
+          <div class="retro-col-title">NAME</div>
+          <div class="retro-col-status">STATUS</div>
+          <div class="retro-col-modified">MODIFIED</div>
+          <div class="retro-col-size">SIZE</div>
+        </div>
+
+        <!-- Posts Items -->
+        <div id="postsList" class="retro-posts-items">
+          <!-- Posts will be populated here -->
+        </div>
+      </div>
+
+      <!-- Other view modes (hidden by default) -->
+
+      <div class="retro-posts-grid medium-icons-view hidden" id="medium-iconsView">
+        <div class="retro-grid-container" id="mediumIconsGrid">
+          <!-- Medium icons will be populated here -->
+        </div>
+      </div>
+
+      <div class="retro-posts-list details-view hidden" id="detailsView">
+        <!-- Details view header -->
+        <div class="retro-list-header">
+          <div class="retro-col-select">
+            <input type="checkbox" class="retro-checkbox" id="selectAllDetails">
+            <label for="selectAllDetails" class="retro-checkbox-label"></label>
+          </div>
+          <div class="retro-col-name">NAME</div>
+          <div class="retro-col-status">STATUS</div>
+          <div class="retro-col-category">CATEGORY</div>
+          <div class="retro-col-author">AUTHOR</div>
+          <div class="retro-col-views">VIEWS</div>
+          <div class="retro-col-modified">MODIFIED</div>
+        </div>
+        <div id="postsDetails" class="retro-posts-items">
+          <!-- Details will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Retro Context Menu -->
+<div class="retro-context-menu hidden" id="contextMenu">
+  <div class="retro-context-header">POST OPTIONS</div>
+  <div class="retro-context-item" onclick="openPost()">
+    <span class="retro-context-icon">📂</span>
+    <span class="retro-context-text">OPEN</span>
+  </div>
+  <div class="retro-context-item" onclick="editPost()">
+    <span class="retro-context-icon">✏️</span>
+    <span class="retro-context-text">EDIT</span>
+  </div>
+  <div class="retro-context-item" onclick="duplicatePost()">
+    <span class="retro-context-icon">📋</span>
+    <span class="retro-context-text">DUPLICATE</span>
+  </div>
+  <div class="retro-context-separator"></div>
+  <div class="retro-context-item" onclick="cutItems()">
+    <span class="retro-context-icon">✂️</span>
+    <span class="retro-context-text">CUT</span>
+  </div>
+  <div class="retro-context-item" onclick="copyItems()">
+    <span class="retro-context-icon">📋</span>
+    <span class="retro-context-text">COPY</span>
+  </div>
+  <div class="retro-context-separator"></div>
+  <div class="retro-context-item retro-context-danger" onclick="deleteSelected()">
+    <span class="retro-context-icon">🗑️</span>
+    <span class="retro-context-text">DELETE</span>
+  </div>
+  <div class="retro-context-item" onclick="showProperties()">
+    <span class="retro-context-icon">ℹ️</span>
+    <span class="retro-context-text">PROPERTIES</span>
+  </div>
+</div>
+
+<!-- Retro CSS Styles - Scoped to posts page only -->
+<style>
+  /* Retro Posts Container */
+  .retro-posts-container {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
+    color: #00ff00;
+    padding: 0;
+    margin: 0 auto;
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    overflow: hidden;
+    min-height: 600px;
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Retro CRT Effects */
+  .retro-posts-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .retro-posts-container * {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Retro Header */
+  .retro-header {
+    background: linear-gradient(90deg, #0f0f0f, #1f1f1f);
+    border-bottom: 1px solid #00ff00;
+    padding: 8px 12px;
+  }
+
+  .retro-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .retro-title-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .retro-title-icon {
+    font-size: 16px;
+  }
+
+  .retro-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #00ff00;
+    text-shadow: 0 0 8px #00ff00;
+    margin: 0;
+  }
+
+  .retro-title-right {
+    display: flex;
+    gap: 4px;
+  }
+
+  .retro-window-btn {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+
+  .retro-window-btn:hover {
+    background: #00ff00;
+    color: #000;
+  }
+
+  .retro-close:hover {
+    background: #ff0000;
+    color: #fff;
+  }
+
+  .retro-menu-bar {
+    display: flex;
+    gap: 16px;
+  }
+
+  .retro-menu-item {
+    font-size: 12px;
+    color: #888;
+    cursor: pointer;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .retro-menu-item:hover,
+  .retro-menu-item.active {
+    color: #00ff00;
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  /* Retro Toolbar */
+  .retro-toolbar {
+    display: flex;
+    align-items: center;
+    background: #0a0a0a;
+    border-bottom: 1px solid #00ff00;
+    padding: 8px 12px;
+    gap: 12px;
+  }
+
+  .retro-toolbar-section {
+    display: flex;
+    gap: 4px;
+  }
+
+  .retro-toolbar-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    transition: all 0.2s;
+  }
+
+  .retro-toolbar-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .retro-toolbar-separator {
+    width: 1px;
+    height: 20px;
+    background: #333;
+  }
+
+  /* Retro Navigation Bar */
+  .retro-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0f0f0f;
+    border-bottom: 1px solid #333;
+    padding: 8px 12px;
+  }
+
+  .retro-nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .retro-nav-btn {
+    width: 24px;
+    height: 24px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    color: #00ff00;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+
+  .retro-nav-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .retro-nav-separator {
+    width: 1px;
+    height: 20px;
+    background: #333;
+    margin: 0 8px;
+  }
+
+  .retro-path-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #00ff00;
+  }
+
+  .retro-path-separator {
+    color: #888;
+  }
+
+  .retro-search-input {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 11px;
+    width: 200px;
+  }
+
+  .retro-search-input:focus {
+    border-color: #00ff00;
+    outline: none;
+  }
+
+  .retro-view-controls {
+    display: flex;
+    border: 1px solid #333;
+  }
+
+  .retro-view-btn {
+    width: 24px;
+    height: 24px;
+    background: #0a0a0a;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+
+  .retro-view-btn:hover,
+  .retro-view-btn.active {
+    color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  /* Main Panel */
+  .retro-main-panel {
+    display: flex;
+    min-height: 500px;
+  }
+
+  /* Sidebar */
+  .retro-sidebar {
+    width: 220px;
+    background: #0a0a0a;
+    border-right: 1px solid #00ff00;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .retro-panel-title {
+    font-size: 11px;
+    color: #00ff00;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-bottom: 1px solid #00ff00;
+    text-transform: uppercase;
+  }
+
+  .retro-tree-view {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+  }
+
+  .retro-tree-item {
+    cursor: pointer;
+    margin-bottom: 2px;
+  }
+
+  .retro-tree-item.active {
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .retro-tree-item:hover {
+    background: rgba(0, 255, 0, 0.05);
+  }
+
+  .retro-tree-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    font-size: 11px;
+  }
+
+  .retro-tree-icon {
+    font-size: 12px;
+    width: 12px;
+    text-align: center;
+  }
+
+  .retro-tree-text {
+    color: #00ff00;
+    flex: 1;
+  }
+
+  .retro-tree-arrow {
+    font-size: 8px;
+    color: #888;
+    transition: transform 0.2s;
+  }
+
+  .retro-tree-item.expanded .retro-tree-arrow {
+    transform: rotate(90deg);
+  }
+
+  .retro-tree-count {
+    font-size: 10px;
+    color: #888;
+  }
+
+  .add-tag-btn {
+    background: #00ff00;
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.2s;
+  }
+
+  .add-tag-btn:hover {
+    background: #88ff88;
+    transform: scale(1.1);
+  }
+
+  .retro-tree-children {
+    margin-left: 16px;
+    margin-top: 2px;
+  }
+
+  .retro-tree-children.hidden {
+    display: none;
+  }
+
+  .retro-tree-children .retro-tree-content {
+    padding: 2px 4px;
+  }
+
+  .retro-sidebar-footer {
+    padding: 8px 12px;
+    border-top: 1px solid #333;
+    font-size: 10px;
+  }
+
+  .retro-stats-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+  }
+
+  .retro-stats-label {
+    color: #888;
+  }
+
+  .retro-stats-value {
+    color: #00ff00;
+    font-weight: bold;
+  }
+
+  /* Content Panel */
+  .retro-content-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Status Bar */
+  .retro-status-bar {
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    padding: 4px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #888;
+  }
+
+  .retro-status-left,
+  .retro-status-right {
+    display: flex;
+    gap: 16px;
+  }
+
+  /* Posts List */
+  .retro-posts-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .retro-list-header {
+    display: grid;
+    grid-template-columns: 30px minmax(300px, 1fr) 120px 140px 80px;
+    gap: 8px;
+    background: #1a1a1a;
+    padding: 8px;
+    border-bottom: 1px solid #00ff00;
+    font-size: 10px;
+    font-weight: bold;
+    color: #00ff00;
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .retro-posts-items {
+    padding: 4px;
+  }
+
+  .retro-post-item {
+    display: grid;
+    grid-template-columns: 30px minmax(300px, 1fr) 120px 140px 80px;
+    gap: 8px;
+    padding: 6px 8px;
+    border-bottom: 1px solid #222;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 11px;
+  }
+
+  .retro-post-item:hover {
+    background: rgba(0, 255, 0, 0.05);
+  }
+
+  .retro-post-item.selected {
+    background: rgba(0, 255, 0, 0.15);
+    border-color: #00ff00;
+  }
+
+  /* Checkbox */
+  .retro-checkbox {
+    width: 14px;
+    height: 14px;
+    border: 1px solid #333;
+    background: #0a0a0a;
+    cursor: pointer;
+  }
+
+  .retro-checkbox:checked {
+    background: #00ff00;
+    border-color: #00ff00;
+  }
+
+  /* Post Item Details */
+  .retro-post-title {
+    color: #00ff00;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .retro-post-meta {
+    font-size: 9px;
+    color: #888;
+    margin-top: 1px;
+  }
+
+  .retro-post-status {
+    font-size: 9px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .retro-status-published {
+    color: #00ff00;
+  }
+
+  .retro-status-draft {
+    color: #ffaa00;
+  }
+
+  .retro-status-scheduled {
+    color: #00aaff;
+  }
+
+  .retro-post-modified,
+  .retro-post-size {
+    font-size: 9px;
+    color: #888;
+  }
+
+  /* Grid Views */
+  .retro-posts-grid {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  .retro-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .retro-grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #0a0a0a;
+  }
+
+  .retro-grid-item:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.05);
+  }
+
+  .retro-grid-item.selected {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .retro-grid-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .retro-grid-name {
+    font-size: 10px;
+    color: #00ff00;
+    text-align: center;
+    word-break: break-all;
+  }
+
+  .retro-grid-meta {
+    font-size: 8px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+
+  /* Medium Icons View */
+  .medium-icons-view .retro-grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .medium-icons-view .retro-grid-icon {
+    font-size: 24px;
+  }
+
+  /* Details View */
+  .details-view .retro-list-header {
+    grid-template-columns: 30px minmax(300px, 1fr) 120px 120px 120px 60px 140px;
+  }
+
+  .details-view .retro-post-item {
+    grid-template-columns: 30px minmax(300px, 1fr) 120px 120px 120px 60px 140px;
+  }
+
+  .retro-post-category,
+  .retro-post-author,
+  .retro-post-views {
+    font-size: 9px;
+    color: #888;
+  }
+
+  /* Context Menu */
+  .retro-context-menu {
+    position: absolute;
+    background: #0a0a0a;
+    border: 1px solid #00ff00;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    min-width: 150px;
+    z-index: 1000;
+    font-size: 11px;
+  }
+
+  .retro-context-header {
+    background: #1a1a1a;
+    padding: 4px 8px;
+    color: #00ff00;
+    font-weight: bold;
+    border-bottom: 1px solid #00ff00;
+  }
+
+  .retro-context-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #00ff00;
+    transition: background 0.2s;
+  }
+
+  .retro-context-item:hover {
+    background: rgba(0, 255, 0, 0.1);
+  }
+
+  .retro-context-danger:hover {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff4444;
+  }
+
+  .retro-context-icon {
+    width: 16px;
+    text-align: center;
+  }
+
+  .retro-context-text {
+    flex: 1;
+  }
+
+  .retro-context-separator {
+    height: 1px;
+    background: #333;
+    margin: 2px 0;
+  }
+
+  /* Utility Classes */
+  .hidden {
+    display: none !important;
+  }
+
+  /* Scrollbar Styling */
+  .retro-posts-container::-webkit-scrollbar,
+  .retro-tree-view::-webkit-scrollbar,
+  .retro-posts-list::-webkit-scrollbar,
+  .retro-posts-grid::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .retro-posts-container::-webkit-scrollbar-track,
+  .retro-tree-view::-webkit-scrollbar-track,
+  .retro-posts-list::-webkit-scrollbar-track,
+  .retro-posts-grid::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  .retro-posts-container::-webkit-scrollbar-thumb,
+  .retro-tree-view::-webkit-scrollbar-thumb,
+  .retro-posts-list::-webkit-scrollbar-thumb,
+  .retro-posts-grid::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 4px;
+  }
+
+  .retro-posts-container::-webkit-scrollbar-thumb:hover,
+  .retro-tree-view::-webkit-scrollbar-thumb:hover,
+  .retro-posts-list::-webkit-scrollbar-thumb:hover,
+  .retro-posts-grid::-webkit-scrollbar-thumb:hover {
+    background: #88ff88;
+  }
+
+  /* Explorer Window Controls Styles */
+  .retro-posts-container.explorer-maximized {
+    position: fixed;
+    inset: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    z-index: 10001;
+  }
+
+  /* Keep internal scrolling functional */
+  .retro-posts-container.explorer-maximized .retro-posts-list,
+  .retro-posts-container.explorer-maximized .retro-posts-grid,
+  .retro-posts-container.explorer-maximized .retro-tree-view {
+    max-height: calc(100vh - 160px);
+  }
+
+  /* Minimized: visually tuck away the container (keep in DOM for quick restore) */
+  .retro-posts-container.explorer-minimized {
+    position: fixed;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    padding: 0 !important;
+    opacity: 0;
+  }
+
+  /* Backdrop to mask admin chrome when maximized/minimized */
+  .explorer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    /* hard black for CRT theme */
+    opacity: 0.85;
+    z-index: 10000;
+  }
+
+  .explorer-backdrop.explorer-backdrop-dim {
+    opacity: 0.6;
+  }
+
+  /* Minimized stub (like a taskbar tile) */
+  .explorer-minimized-stub {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #0a0a0a;
+    border: 1px solid #00ff00;
+    box-shadow: 0 0 12px rgba(0, 255, 0, 0.2);
+    border-radius: 6px;
+    padding: 8px 10px;
+    z-index: 10002;
+    color: #00ff00;
+    min-width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .explorer-minimized-stub .stub-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .explorer-minimized-stub .stub-icon {
+    font-size: 14px;
+  }
+
+  .explorer-minimized-stub .stub-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .explorer-minimized-stub .stub-btn {
+    background: transparent;
+    color: #00ff00;
+    border: 1px solid #333;
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .explorer-minimized-stub .stub-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.08);
+  }
+
+  .explorer-minimized-stub .stub-btn.stub-close:hover {
+    border-color: #ff0000;
+    color: #ff6666;
+  }
+
+  /* Properties Modal Styles */
+  .properties-grid {
+    display: grid;
+    gap: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+
+  .properties-grid::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .properties-grid::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  .properties-grid::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 3px;
+  }
+
+  .property-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #333;
+  }
+
+  .property-row:last-child {
+    border-bottom: none;
+  }
+
+  .property-label {
+    color: #88ff88;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .property-value {
+    color: #00ff00;
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  /* Responsive Design */
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .retro-main-panel {
+      flex-direction: column;
+    }
+
+    .retro-sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #00ff00;
+      max-height: 200px;
+      /* Limit height when expanded on mobile */
+      overflow-y: auto;
+    }
+
+    /* Mobile sidebar behavior */
+    .retro-sidebar.collapsed {
+      display: none;
+    }
+
+    .retro-sidebar-toggle {
+      display: block;
+    }
+
+    /* Compact list for tablet/mobile */
+    .retro-list-header,
+    .retro-post-item {
+      /* Checkbox | Title | Status | Date | Actions (Size hidden) */
+      grid-template-columns: 30px minmax(150px, 1fr) 80px 80px 50px;
+      font-size: 10px;
+      gap: 4px;
+      padding: 6px;
+    }
+
+    /* Hide Size on tablet/mobile */
+    .retro-col-size,
+    .retro-post-size {
+      display: none !important;
+    }
+
+    .retro-nav-bar {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .retro-search-input {
+      width: 100%;
+      /* Full width search */
+    }
+
+    .retro-nav-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    #propertiesShell {
+      width: 95vw !important;
+      max-height: 90vh !important;
+    }
+
+    .property-row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+
+
+  /* Very small screens (Mobile Portrait) */
+  @media (max-width: 480px) {
+
+    .retro-list-header,
+    .retro-post-item {
+      /* Checkbox | Title | Actions */
+      /* Status and Date hidden to save space */
+      grid-template-columns: 30px 1fr 40px;
+      font-size: 10px;
+    }
+
+    /* Hide Status and Date on small mobile */
+    .retro-col-status,
+    .retro-post-status,
+    .retro-col-modified,
+    .retro-post-modified {
+      display: none !important;
+    }
+
+    .retro-post-title {
+      font-size: 11px;
+    }
+
+    /* Make actions easier to tap */
+    .retro-post-actions {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Blog Posts Explorer - Windows File Explorer Style
+  let currentViewMode = 'list';
+  let selectedItems = new Set();
+  let allPosts = [];
+  let currentFolder = 'all';
+  let searchTerm = '';
+  let availablePublishTags = [];
+
+  window.initBlogPosts = function () {
+    console.log("🚀 initBlogPosts CALLED");
+    // Only initialize if we're on the posts page (check for posts container)
+    if (!document.getElementById('postsExplorer')) {
+      console.warn("❌ postsExplorer not found, skipping init");
+      return;
+    }
+
+    loadPostsData();
+    setupEventListeners();
+    setupContextMenu();
+    setupKeyboardShortcuts();
+    setupWindowState();
+    setupKeyboardShortcuts();
+    setupWindowState();
+    updateWindowButtons();
+    loadSidebarState(); // Load saved sidebar preference
+  }
+
+  function loadSidebarState() {
+    const isCollapsed = localStorage.getItem('blogSidebarCollapsed') === 'true';
+    if (isCollapsed) {
+      document.getElementById('postsExplorer').classList.add('sidebar-collapsed');
+      const toggleBtn = document.querySelector('.retro-sidebar-toggle');
+      if (toggleBtn) toggleBtn.innerHTML = '»';
+    }
+  }
+
+  function toggleSidebar() {
+    const container = document.getElementById('postsExplorer');
+    container.classList.toggle('sidebar-collapsed');
+    const isCollapsed = container.classList.contains('sidebar-collapsed');
+    localStorage.setItem('blogSidebarCollapsed', isCollapsed);
+
+    const toggleBtn = document.querySelector('.retro-sidebar-toggle');
+    if (toggleBtn) toggleBtn.innerHTML = isCollapsed ? '»' : '«';
+  }
+
+  async function loadPostsData() {
+    const LOG = '[PostsData]';
+    try {
+      const token = localStorage.getItem('token');
+      console.log(LOG, 'Fetching posts...', { hasToken: !!token });
+
+      const tryFetch = async (url) => {
+        try {
+          const res = await fetch(url, {
+            method: 'GET',
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+          });
+          return res;
+        } catch (e) {
+          console.warn(LOG, 'Network error for', url, e);
+          throw e;
+        }
+      };
+
+      // Try canonical path first, then fallback alias
+      let response = await tryFetch('/admin/api/blog/posts');
+      if (response.status === 404) {
+        console.warn(LOG, '/admin/api/blog/posts returned 404, trying /api/admin/blog/posts');
+        response = await tryFetch('/api/admin/blog/posts');
+      }
+
+      const contentType = response.headers.get('content-type') || '';
+      console.log(LOG, 'Response meta', { status: response.status, ok: response.ok, contentType });
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => '');
+        console.warn(LOG, 'Non-OK response. Body preview:', errorText.slice(0, 400));
+        showFallbackPostsData();
+        return;
+      }
+
+      if (!contentType.includes('application/json')) {
+        const bodyText = await response.text().catch(() => '');
+        console.warn(LOG, 'Expected JSON but received:', contentType, 'Body preview:', bodyText.slice(0, 400));
+        showFallbackPostsData();
+        return;
+      }
+
+      const data = await response.json();
+      console.log(LOG, 'Parsed JSON', {
+        postsCount: (data.posts || []).length,
+        hasStats: !!data.stats,
+        statsData: data.stats,
+        tagsCount: (data.tags || []).length,
+        categoriesCount: (data.categories || []).length
+      });
+
+      allPosts = data.posts || [];
+
+      // Debug: Log sample post with tags
+      if (allPosts.length > 0) {
+        console.log(LOG, 'SAMPLE POST DATA:', {
+          id: allPosts[0].id,
+          title: allPosts[0].title,
+          tags: allPosts[0].tags,
+          category: allPosts[0].category,
+          status: allPosts[0].status
+        });
+      }
+
+      // Log post statuses for debugging
+      const draftCount = allPosts.filter(post => post.status === 'draft' || post.isDraft).length;
+      const publishedCount = allPosts.filter(post => post.status === 'published' || !post.isDraft).length;
+      console.log(LOG, '📊 POST STATUS ANALYSIS:', {
+        totalPosts: allPosts.length,
+        draftPosts: draftCount,
+        publishedPosts: publishedCount,
+        draftPostsList: allPosts.filter(post => post.status === 'draft' || post.isDraft).map(p => ({ id: p.id, title: p.title, status: p.status }))
+      });
+
+      updateSidebarCounts(data);
+      renderCurrentView();
+
+      // Apply saved view mode after posts are loaded
+      loadSavedViewMode();
+    } catch (error) {
+      console.error(LOG, 'Fetch error:', error);
+      showFallbackPostsData();
+    }
+  }
+
+  function updateSidebarCounts(data) {
+    // Only update sidebar counts if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    const stats = data.stats || {
+      totalPosts: 0,
+      publishedCount: 0,
+      draftCount: 0,
+      scheduledCount: 0
+    };
+
+    const setTextContentSafe = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = value;
+      } else {
+        console.warn(`[Sidebar] Element not found: #${id}`);
+      }
+    };
+
+    setTextContentSafe('allPostsCount', stats.totalPosts || 0);
+    setTextContentSafe('publishedCount', stats.publishedCount || 0);
+    setTextContentSafe('draftCount', stats.draftCount || 0);
+    setTextContentSafe('totalPostsCount', stats.totalPosts || 0);
+
+    // Scheduled count is completely removed from UI, so we ignore it here.
+
+    // Update categories and tags trees
+    renderCategoriesTree(data.categories || []);
+    renderTagsTree(data.tags || []);
+
+    // Ensure tags tree is expanded and loaded
+    const tagsTreeItem = document.querySelector('.retro-tree-item [onclick*="showAddTagModal"]')?.closest('.retro-tree-item');
+    if (tagsTreeItem && data.tags && data.tags.length > 0) {
+      // Auto-expand tags if we have tags to show
+      const tagsChildren = tagsTreeItem.querySelector('.retro-tree-children');
+      const tagsArrow = tagsTreeItem.querySelector('.retro-tree-arrow');
+      if (tagsChildren && tagsChildren.classList.contains('hidden')) {
+        tagsChildren.classList.remove('hidden');
+        tagsTreeItem.classList.add('expanded');
+        if (tagsArrow) tagsArrow.classList.add('rotate-90');
+      }
+    }
+  }
+
+  function renderCategoriesTree(categories) {
+    console.log(`📂 RENDERING CATEGORIES TREE: ${categories.length} categories`);
+    categories.forEach(cat => {
+      console.log(`  - Category: ${cat.name} (id: ${cat.id}, count: ${cat.count})`);
+    });
+
+    const container = document.getElementById('categoriesTree');
+    container.innerHTML = categories.map(category => `
+        <div class="retro-tree-item" data-filter="category-${category.id}" onclick="navigateToFolder('category-${category.id}')">
+            <div class="retro-tree-content">
+                <i class="retro-tree-icon">📂</i>
+                <span class="retro-tree-text">${category.name}</span>
+                <span class="retro-tree-count">${category.count}</span>
+            </div>
+        </div>
+    `).join('');
+
+    console.log('✅ CATEGORIES TREE RENDERED');
+  }
+
+  function renderTagsTree(tags) {
+    console.log(`🏷️ RENDERING TAGS TREE: ${tags.length} tags`);
+    tags.forEach(tag => {
+      console.log(`  - Tag: ${tag.name} (slug: ${tag.slug}, count: ${tag.count})`);
+    });
+
+    const container = document.getElementById('tagsTree');
+    container.innerHTML = tags.map(tag => `
+        <div class="retro-tree-item" data-filter="tag-${tag.slug}" onclick="navigateToFolder('tag-${tag.slug}')">
+            <div class="retro-tree-content">
+                <i class="retro-tree-icon">🏷️</i>
+                <span class="retro-tree-text">${tag.name}</span>
+                <span class="retro-tree-count">${tag.count}</span>
+            </div>
+        </div>
+    `).join('');
+
+    console.log('✅ TAGS TREE RENDERED');
+  }
+
+  function renderCurrentView() {
+    // Only render current view if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    const filteredPosts = filterPosts();
+    updateStatusBar(filteredPosts.length);
+
+    switch (currentViewMode) {
+      case 'list':
+        renderListView(filteredPosts);
+        break;
+      case 'medium-icons':
+        renderMediumIconsView(filteredPosts);
+        break;
+      case 'details':
+        renderDetailsView(filteredPosts);
+        break;
+    }
+  }
+
+  function filterPosts() {
+    let filtered = allPosts;
+
+    // Apply folder filter
+    if (currentFolder !== 'all') {
+      if (currentFolder.startsWith('category-')) {
+        const categoryId = currentFolder.replace('category-', '');
+        filtered = filtered.filter(post => post.categoryId === categoryId);
+        console.log(`📂 CATEGORY FILTER: Looking for category "${categoryId}", found ${filtered.length} posts`);
+      } else if (currentFolder.startsWith('tag-')) {
+        const tagSlug = currentFolder.replace('tag-', '');
+        filtered = filtered.filter(post => {
+          const hasTag = post.tags && post.tags.includes(tagSlug);
+          if (hasTag) {
+            console.log(`🏷️ TAG FILTER: Post "${post.title}" has tag "${tagSlug}"`);
+          }
+          return hasTag;
+        });
+        console.log(`🏷️ TAG FILTER: Looking for tag "${tagSlug}", found ${filtered.length} posts`);
+      } else if (currentFolder.startsWith('status-')) {
+        const status = currentFolder.replace('status-', '');
+
+        // Clean filtering based on status field (no redundant slug checking needed)
+        filtered = filtered.filter(post => {
+          // Ensure we have a valid status
+          const postStatus = post.status || 'draft';
+
+          if (status === 'draft') {
+            // Match posts that are explicitly drafts
+            return postStatus === 'draft' || post.isDraft === true;
+          } else if (status === 'published') {
+            // Match posts that are explicitly published
+            return postStatus === 'published' || post.isDraft === false;
+          } else {
+            // For other statuses, match exactly
+            return postStatus === status;
+          }
+        });
+        console.log(`📊 STATUS FILTER: Looking for status "${status}", found ${filtered.length} posts`);
+      }
+    }
+
+    // Apply search filter
+    if (searchTerm) {
+      filtered = filtered.filter(post =>
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.author.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      console.log(`🔍 SEARCH FILTER: "${searchTerm}" found ${filtered.length} posts`);
+    }
+
+    console.log(`🔍 FILTER RESULTS: ${filtered.length} posts after filtering (folder: ${currentFolder})`);
+    return filtered;
+  }
+
+  function renderListView(posts) {
+    const container = document.getElementById('postsList');
+    container.innerHTML = posts.map(post => {
+      const isDraft = post.status === 'draft';
+
+      // Default to Published
+      let statusIcon = '✅';
+      let statusText = 'PUBLISHED';
+      let statusClass = 'status-published';
+
+      if (isDraft) {
+        statusIcon = '📝';
+        statusText = 'DRAFT';
+        statusClass = 'status-draft';
+      }
+      // Scheduled check removed - treated as published
+
+      // Format dates
+      const modifiedDate = post.updatedAt ? new Date(post.updatedAt).toLocaleDateString() : '-';
+
+      return `
+        <div class="retro-post-item ${selectedItems.has(post.id) ? 'selected' : ''}" 
+             onclick="toggleSelection('${post.id}', event)"
+             ondblclick="openPost('${post.id}')"
+             data-id="${post.id}">
+          <div class="retro-col-select">
+            <input type="checkbox" class="retro-checkbox" 
+                   ${selectedItems.has(post.id) ? 'checked' : ''}
+                   onclick="event.stopPropagation(); toggleSelection('${post.id}', event)">
+            <label class="retro-checkbox-label"></label>
+          </div>
+          <div class="retro-col-title">
+            <div class="retro-post-icon">${isDraft ? '📄' : '📰'}</div>
+            <div class="retro-post-info">
+              <span class="retro-post-title">${escapeHtml(post.title)}</span>
+              <div class="retro-post-meta">
+                <span class="retro-post-author">${escapeHtml(post.author || 'Unknown')}</span>
+                <span class="retro-post-category">${escapeHtml(post.category || 'General')}</span>
+              </div>
+            </div>
+          </div>
+          <div class="retro-col-status">
+            <span class="retro-post-status ${statusClass}">
+              ${statusIcon} ${statusText}
+            </span>
+          </div>
+            <div class="retro-post-modified">
+                ${formatDate(post.updatedAt)}
+            </div>
+            <div class="retro-post-size">
+                ${formatFileSize(post.contentLength || 0)}
+            </div>
+        </div>
+    `;
+    }).join('');
+  }
+
+
+  function renderMediumIconsView(posts) {
+    const container = document.getElementById('mediumIconsGrid');
+    container.innerHTML = posts.map(post => `
+        <div class="retro-grid-item ${selectedItems.has(post.id) ? 'selected' : ''}" data-post-id="${post.id}" onclick="selectItem('${post.id}', event)" ondblclick="openPost('${post.id}')" oncontextmenu="showContextMenu(event, '${post.id}')">
+            <div class="retro-grid-icon">📄</div>
+            <div class="retro-grid-name">${post.slug || 'No URL'}</div>
+            <div class="retro-grid-meta">${post.template_type || 'No template'}</div>
+        </div>
+    `).join('');
+  }
+
+  function renderDetailsView(posts) {
+    const container = document.getElementById('postsDetails');
+    container.innerHTML = posts.map(post => `
+        <div class="retro-post-item ${selectedItems.has(post.id) ? 'selected' : ''}" data-post-id="${post.id}" onclick="selectItem('${post.id}', event)" ondblclick="openPost('${post.id}')" oncontextmenu="showContextMenu(event, '${post.id}')">
+            <div>
+                <input type="checkbox" class="retro-checkbox" ${selectedItems.has(post.id) ? 'checked' : ''} onchange="toggleSelection('${post.id}', event); event.stopPropagation();" onclick="event.stopPropagation()">
+            </div>
+            <div>
+                <i class="retro-tree-icon">📄</i>
+                <div style="display: inline-block; margin-left: 6px; vertical-align: top;">
+                    <div class="retro-post-title">${post.title}</div>
+                </div>
+            </div>
+            <div>
+                <span class="retro-post-status status-${post.status}">${formatStatus(post.status)}</span>
+            </div>
+            <div class="retro-post-category">
+                ${post.category || 'Uncategorized'}
+            </div>
+            <div class="retro-post-author">
+                ${post.author || 'Unknown'}
+            </div>
+            <div class="retro-post-views">
+                ${post.views || 0}
+            </div>
+            <div class="retro-post-modified">
+                ${formatDate(post.updatedAt)}
+            </div>
+        </div>
+    `).join('');
+  }
+
+  function setViewMode(mode) {
+    // Update view mode buttons
+    document.querySelectorAll('.retro-view-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+    const activeBtn = document.querySelector(`.retro-view-btn[onclick="setViewMode('${mode}')"]`);
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+    }
+
+    // Hide all views
+    document.querySelectorAll('.medium-icons-view, .details-view').forEach(view => {
+      view.classList.add('hidden');
+    });
+
+    // Show selected view
+    if (mode === 'list') {
+      document.querySelector('.retro-posts-list').classList.remove('hidden');
+    } else {
+      document.querySelector('.retro-posts-list').classList.add('hidden');
+      document.getElementById(`${mode}View`).classList.remove('hidden');
+    }
+
+    currentViewMode = mode;
+
+    // Save view mode to localStorage for persistence
+    try {
+      localStorage.setItem('blogPostsViewMode', mode);
+    } catch (e) {
+      console.warn('Failed to save view mode to localStorage:', e);
+    }
+
+    updateStatusBarText();
+    renderCurrentView();
+  }
+
+  function loadSavedViewMode() {
+    try {
+      const savedMode = localStorage.getItem('blogPostsViewMode');
+      if (savedMode && ['list', 'medium-icons', 'details'].includes(savedMode)) {
+        // Apply the saved view mode
+        setViewMode(savedMode);
+      }
+    } catch (e) {
+      console.warn('Failed to load saved view mode from localStorage:', e);
+    }
+  }
+
+  function selectItem(postId, event) {
+    if (event.ctrlKey || event.metaKey) {
+      // Multi-select
+      if (selectedItems.has(postId)) {
+        selectedItems.delete(postId);
+      } else {
+        selectedItems.add(postId);
+      }
+    } else if (event.shiftKey) {
+      // Range select (simplified)
+      selectedItems.clear();
+      selectedItems.add(postId);
+    } else {
+      // Single select
+      selectedItems.clear();
+      selectedItems.add(postId);
+    }
+
+    updateSelectionUI();
+  }
+
+  function toggleSelection(postId, event) {
+    if (event && (event.ctrlKey || event.metaKey)) {
+      // Multi-select with Ctrl+click
+      if (selectedItems.has(postId)) {
+        selectedItems.delete(postId);
+      } else {
+        selectedItems.add(postId);
+      }
+    } else {
+      // Regular toggle - add if not selected, remove if selected
+      if (selectedItems.has(postId)) {
+        selectedItems.delete(postId);
+      } else {
+        selectedItems.add(postId);
+      }
+    }
+    updateSelectionUI();
+  }
+
+  function updateSelectionUI() {
+    // Update checkboxes (only post checkboxes, not selectAll)
+    document.querySelectorAll('[data-post-id] input[type="checkbox"]').forEach(checkbox => {
+      const postItem = checkbox.closest('[data-post-id]');
+      const postId = postItem.dataset.postId;
+      checkbox.checked = selectedItems.has(postId);
+    });
+
+    // Update selectAll checkbox state (main list view)
+    const selectAllCheckbox = document.getElementById('selectAll');
+    if (selectAllCheckbox) {
+      const totalPosts = document.querySelectorAll('[data-post-id]').length;
+      const selectedPosts = selectedItems.size;
+      selectAllCheckbox.checked = totalPosts > 0 && selectedPosts === totalPosts;
+      selectAllCheckbox.indeterminate = selectedPosts > 0 && selectedPosts < totalPosts;
+    }
+
+    // Update selectAll checkbox state (details view)
+    const selectAllDetailsCheckbox = document.getElementById('selectAllDetails');
+    if (selectAllDetailsCheckbox) {
+      const totalPosts = document.querySelectorAll('[data-post-id]').length;
+      const selectedPosts = selectedItems.size;
+      selectAllDetailsCheckbox.checked = totalPosts > 0 && selectedPosts === totalPosts;
+      selectAllDetailsCheckbox.indeterminate = selectedPosts > 0 && selectedPosts < totalPosts;
+    }
+
+    // Update visual selection
+    document.querySelectorAll('[data-post-id]').forEach(item => {
+      const postId = item.dataset.postId;
+      if (selectedItems.has(postId)) {
+        item.classList.add('selected');
+      } else {
+        item.classList.remove('selected');
+      }
+    });
+
+    updateStatusBar(selectedItems.size);
+  }
+
+  function updateStatusBar(itemCount) {
+    // Only update status bar if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    document.getElementById('itemsCount').textContent = `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
+    document.getElementById('selectedCount').textContent = selectedItems.size;
+    document.getElementById('selectedItemsInfo').textContent = `${selectedItems.size} selected`;
+  }
+
+  function updateStatusBarText() {
+    // Only update status bar text if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    const viewNames = {
+      'list': 'List view',
+      'medium-icons': 'Medium icons view',
+      'details': 'Details view'
+    };
+    document.getElementById('viewInfo').textContent = viewNames[currentViewMode] || 'List view';
+  }
+
+  function toggleTreeItem(element) {
+    console.log('🔽 TOGGLE TREE ITEM:', element.querySelector('.retro-tree-text')?.textContent);
+
+    // Fix: Use correct class names from the HTML
+    const children = element.querySelector('.retro-tree-children');
+    const arrow = element.querySelector('.retro-tree-arrow');
+
+    if (!children || !arrow) {
+      console.warn('toggleTreeItem: Could not find children or arrow elements');
+      return;
+    }
+
+    if (children.classList.contains('hidden')) {
+      children.classList.remove('hidden');
+      element.classList.add('expanded');
+      arrow.style.transform = 'rotate(90deg)';
+      console.log('📂 TREE ITEM EXPANDED');
+    } else {
+      children.classList.add('hidden');
+      element.classList.remove('expanded');
+      arrow.style.transform = 'rotate(0deg)';
+      console.log('📂 TREE ITEM COLLAPSED');
+    }
+  }
+
+  function setupEventListeners() {
+    console.log('🎧 SETTING UP EVENT LISTENERS');
+
+    // Search - only if search input exists
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.oninput = debounce((e) => {
+        searchTerm = e.target.value;
+        renderCurrentView();
+      }, 300);
+    }
+
+    // Tree navigation - Add specific click handlers for tree items
+    document.addEventListener('click', (e) => {
+      const treeItem = e.target.closest('.retro-tree-item[data-filter]');
+      if (treeItem) {
+        e.preventDefault();
+        e.stopPropagation();
+        const filter = treeItem.dataset.filter;
+        console.log(`🖱️ TREE ITEM CLICKED: ${filter}`);
+        navigateToFolder(filter);
+      }
+    });
+
+    // Also add direct click handlers to tree items for redundancy
+    document.querySelectorAll('.retro-tree-item[data-filter]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const filter = item.dataset.filter;
+        console.log(`🖱️ DIRECT TREE ITEM CLICK: ${filter}`);
+        navigateToFolder(filter);
+      });
+    });
+
+    // Select All checkbox (main list view)
+    const selectAllCheckbox = document.getElementById('selectAll');
+    if (selectAllCheckbox) {
+      selectAllCheckbox.onchange = (e) => {
+        if (e.target.checked) {
+          selectAll();
+        } else {
+          // Clear all selections
+          selectedItems.clear();
+          updateSelectionUI();
+        }
+      };
+    }
+
+    // Select All checkbox (details view)
+    const selectAllDetailsCheckbox = document.getElementById('selectAllDetails');
+    if (selectAllDetailsCheckbox) {
+      selectAllDetailsCheckbox.onchange = (e) => {
+        if (e.target.checked) {
+          selectAll();
+        } else {
+          // Clear all selections
+          selectedItems.clear();
+          updateSelectionUI();
+        }
+      };
+    }
+
+    console.log('✅ EVENT LISTENERS SETUP COMPLETE');
+  }
+
+  function navigateToFolder(folder) {
+    // Only navigate to folder if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    console.log(`🗂️ NAVIGATE TO FOLDER: ${folder}`);
+    currentFolder = folder;
+
+    // Update active tree item
+    document.querySelectorAll('.retro-tree-item').forEach(item => item.classList.remove('active'));
+    const activeItem = document.querySelector(`[data-filter="${folder}"]`);
+    if (activeItem) {
+      activeItem.classList.add('active');
+      console.log(`✅ ACTIVE ITEM SET: ${folder}`);
+    } else {
+      console.log(`❌ ACTIVE ITEM NOT FOUND: ${folder}`);
+    }
+
+    // Update path display
+    updatePathDisplay(folder);
+
+    renderCurrentView();
+  }
+
+  function updatePathDisplay(folder) {
+    // Only update path display if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    const pathBar = document.querySelector('.retro-path-bar');
+    let pathText = 'BLOG POSTS\\ALL POSTS';
+
+    if (folder.startsWith('category-')) {
+      const categoryName = folder.replace('category-', '');
+      pathText = `BLOG POSTS\\CATEGORIES\\${categoryName}`;
+    } else if (folder.startsWith('tag-')) {
+      const tagName = folder.replace('tag-', '');
+      pathText = `BLOG POSTS\\TAGS\\${tagName}`;
+    } else if (folder.startsWith('status-')) {
+      const statusName = folder.replace('status-', '').charAt(0).toUpperCase() + folder.replace('status-', '').slice(1);
+      pathText = `BLOG POSTS\\STATUS\\${statusName}`;
+    }
+
+    pathBar.innerHTML = pathText.split('\\\\').map((part, index) => {
+      if (index === pathText.split('\\\\').length - 1) {
+        return `<span class="retro-path-text" style="color: #00ff00; font-weight: bold;">${part}</span>`;
+      }
+      return `<span class="retro-path-text">${part}</span><span class="retro-path-separator">\\\\</span>`;
+    }).join('');
+  }
+
+  function setupContextMenu() {
+    // Only setup context menu if the context menu element exists (posts page)
+    const contextMenu = document.getElementById('contextMenu');
+    if (!contextMenu) {
+      return; // Skip setup if not on posts page
+    }
+
+    document.addEventListener('contextmenu', (e) => {
+      const item = e.target.closest('[data-post-id]');
+      if (item) {
+        e.preventDefault();
+        const postId = item.dataset.postId;
+        showContextMenu(e, postId);
+      }
+    });
+
+    // Hide context menu on click outside
+    document.addEventListener('click', () => {
+      contextMenu.classList.add('hidden');
+    });
+  }
+
+  function showContextMenu(event, postId) {
+    event.preventDefault();
+    const menu = document.getElementById('contextMenu');
+
+    // Check if context menu exists (only on posts page)
+    if (!menu) {
+      return;
+    }
+
+    // Select the item if not already selected
+    if (!selectedItems.has(postId)) {
+      selectedItems.clear();
+      selectedItems.add(postId);
+      updateSelectionUI();
+    }
+
+    menu.style.left = `${event.pageX}px`;
+    menu.style.top = `${event.pageY}px`;
+    menu.classList.remove('hidden');
+  }
+
+  function setupKeyboardShortcuts() {
+    // Only setup keyboard shortcuts if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      // Ctrl+A to select all
+      if (e.ctrlKey && e.key === 'a') {
+        e.preventDefault();
+        selectAll();
+      }
+
+      // Delete key to delete selected
+      if (e.key === 'Delete') {
+        deleteSelected();
+      }
+
+      // F2 to rename/edit
+      if (e.key === 'F2') {
+        e.preventDefault();
+        if (selectedItems.size === 1) {
+          editPost();
+        }
+      }
+
+      // Ctrl+C to copy
+      if (e.ctrlKey && e.key === 'c') {
+        copyItems();
+      }
+
+      // Ctrl+X to cut
+      if (e.ctrlKey && e.key === 'x') {
+        cutItems();
+      }
+
+      // Ctrl+V to paste
+      if (e.ctrlKey && e.key === 'v') {
+        pasteItems();
+      }
+    });
+  }
+
+  function selectAll() {
+    const visibleItems = document.querySelectorAll('[data-post-id]');
+    selectedItems.clear();
+    visibleItems.forEach(item => {
+      selectedItems.add(item.dataset.postId);
+    });
+    updateSelectionUI();
+  }
+
+  function formatStatus(status) {
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (days === 0) return 'Today';
+    if (days === 1) return 'Yesterday';
+    if (days < 7) return `${days} days ago`;
+    if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
+
+    return date.toLocaleDateString();
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+
+
+  function formatFileSize(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  }
+
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  function showFallbackPostsData() {
+    // Show error notification instead of sample data
+    showNotification('Failed to load blog posts. Please check API connection.', 'error');
+
+    // Set empty state
+    updateSidebarCounts({
+      stats: {
+        totalPosts: 0,
+        publishedCount: 0,
+        draftCount: 0,
+        scheduledCount: 0
+      },
+      categories: [],
+      tags: []
+    });
+
+    allPosts = [];
+    renderCurrentView();
+  }
+
+  // Action functions
+  function newPost() {
+    // Redirect to standalone editor page
+    window.location.href = '/admin/blog/editor';
+  }
+
+  async function openPost(postId) {
+    if (!postId) {
+      if (selectedItems.size === 1) {
+        postId = Array.from(selectedItems)[0];
+      } else {
+        showNotification('Please select a single post to open', 'warning');
+        return;
+      }
+    }
+
+    try {
+      // Get post details to find the slug
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/admin/api/blog/posts/${postId}`, {
+        method: 'GET',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch post: ${response.status}`);
+      }
+
+      const post = await response.json();
+
+      // Open post in new tab on the blog subdomain
+      const postUrl = `https://blog.nekwasar.com/${post.slug}`;
+      window.open(postUrl, '_blank');
+      showNotification(`Opened post: ${post.title}`, 'success');
+    } catch (error) {
+      console.error('Error opening post:', error);
+      showNotification('Failed to open post', 'error');
+    }
+  }
+
+  async function editPost(postId) {
+    if (!postId) {
+      if (selectedItems.size === 1) {
+        postId = Array.from(selectedItems)[0];
+      } else {
+        showNotification('Please select a single post to edit', 'warning');
+        return;
+      }
+    }
+
+    // Redirect to standalone editor page with edit mode
+    window.location.href = `/admin/blog/editor?edit=${postId}`;
+  }
+
+  async function duplicatePost(postId) {
+    if (!postId) {
+      if (selectedItems.size === 1) {
+        postId = Array.from(selectedItems)[0];
+      } else {
+        showNotification('Please select a single post to duplicate', 'warning');
+        return;
+      }
+    }
+
+    // Redirect to standalone editor page with duplicate mode
+    window.location.href = `/admin/blog/editor?duplicate=${postId}`;
+  }
+
+  async function deleteSelected() {
+    if (selectedItems.size === 0) {
+      showNotification('No posts selected', 'warning');
+      return;
+    }
+
+    const confirmMessage = selectedItems.size === 1
+      ? 'Are you sure you want to delete this post? This action cannot be undone.'
+      : `Are you sure you want to delete ${selectedItems.size} posts? This action cannot be undone.`;
+
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const deletePromises = Array.from(selectedItems).map(postId =>
+        fetch(`/admin/api/blog/posts/${postId}`, {
+          method: 'DELETE',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        })
+      );
+
+      const results = await Promise.allSettled(deletePromises);
+      const successful = results.filter(r => r.status === 'fulfilled' && r.value.ok).length;
+      const failed = results.length - successful;
+
+      if (successful > 0) {
+        showNotification(`Successfully deleted ${successful} post${successful !== 1 ? 's' : ''}`, 'success');
+        selectedItems.clear();
+        updateSelectionUI();
+        loadPostsData(); // Refresh the list
+      }
+
+      if (failed > 0) {
+        showNotification(`Failed to delete ${failed} post${failed !== 1 ? 's' : ''}`, 'error');
+      }
+    } catch (error) {
+      console.error('Error deleting posts:', error);
+      showNotification('Failed to delete posts', 'error');
+    }
+  }
+
+  // Clipboard functionality
+  let clipboardItems = [];
+
+  function cutItems() {
+    if (selectedItems.size === 0) {
+      showNotification('No posts selected', 'warning');
+      return;
+    }
+
+    clipboardItems = Array.from(selectedItems);
+    showNotification(`Cut ${selectedItems.size} post${selectedItems.size !== 1 ? 's' : ''} to clipboard`, 'info');
+  }
+
+  function copyItems() {
+    if (selectedItems.size === 0) {
+      showNotification('No posts selected', 'warning');
+      return;
+    }
+
+    clipboardItems = Array.from(selectedItems);
+    showNotification(`Copied ${selectedItems.size} post${selectedItems.size !== 1 ? 's' : ''} to clipboard`, 'info');
+  }
+
+  async function pasteItems() {
+    if (clipboardItems.length === 0) {
+      showNotification('Clipboard is empty', 'warning');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      let successful = 0;
+
+      for (const postId of clipboardItems) {
+        // Get original post
+        const getResponse = await fetch(`/admin/api/blog/posts/${postId}`, {
+          method: 'GET',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+
+        if (!getResponse.ok) continue;
+
+        const post = await getResponse.json();
+
+        // Create duplicate
+        const duplicateData = {
+          ...post,
+          title: `${post.title} (Copy)`,
+          slug: `${post.slug}-copy-${Date.now()}`,
+          id: undefined,
+          published_at: undefined
+        };
+
+        const postResponse = await fetch('/admin/api/blog/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` || ''
+          },
+          body: JSON.stringify(duplicateData)
+        });
+
+        if (postResponse.ok) {
+          successful++;
+        }
+      }
+
+      if (successful > 0) {
+        showNotification(`Pasted ${successful} post${successful !== 1 ? 's' : ''}`, 'success');
+        loadPostsData(); // Refresh the list
+      } else {
+        showNotification('Failed to paste posts', 'error');
+      }
+    } catch (error) {
+      console.error('Error pasting posts:', error);
+      showNotification('Failed to paste posts', 'error');
+    }
+  }
+
+  function refreshView() {
+    console.log('[PostsExplorer] Manual refresh triggered');
+    loadPostsData();
+    showNotification('View refreshed', 'success');
+  }
+
+  // Helper function to refresh data after draft operations
+  function refreshPostsData() {
+    console.log('[PostsExplorer] Refreshing posts data after draft operation...');
+    loadPostsData();
+  }
+
+  async function showProperties(postId) {
+    if (!postId) {
+      if (selectedItems.size === 1) {
+        postId = Array.from(selectedItems)[0];
+      } else {
+        showNotification('Please select a single post to view properties', 'warning');
+        return;
+      }
+    }
+
+    try {
+      // Get post details
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/admin/api/blog/posts/${postId}`, {
+        method: 'GET',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch post: ${response.status}`);
+      }
+
+      const post = await response.json();
+
+      // Create properties modal
+      const modal = document.createElement('div');
+      modal.id = 'propertiesModal';
+      modal.innerHTML = `
+            <div id="propertiesBackdrop" class="explorer-backdrop"></div>
+            <div id="propertiesShell" class="editor-shell" style="width: 600px; height: auto; max-height: 80vh;">
+                <div class="editor-header">
+                    <div class="editor-title">
+                        <span class="editor-icon">ℹ️</span>
+                        <h2>POST PROPERTIES</h2>
+                    </div>
+                    <div class="editor-actions">
+                        <button class="ed-btn danger" id="propertiesClose">Close</button>
+                    </div>
+                </div>
+                <div class="editor-content" style="padding: 24px;">
+                    <div class="properties-grid">
+                        <div class="property-row">
+                            <div class="property-label">Title</div>
+                            <div class="property-value">${post.title || 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Slug</div>
+                            <div class="property-value">${post.slug || 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Status</div>
+                            <div class="property-value">${formatStatus(post.status || 'draft')}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Author</div>
+                            <div class="property-value">${post.author || 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Template</div>
+                            <div class="property-value">${post.template_type || 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Section</div>
+                            <div class="property-value">${post.section || 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Created</div>
+                            <div class="property-value">${post.created_at ? new Date(post.created_at).toLocaleString() : 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Modified</div>
+                            <div class="property-value">${post.updated_at ? new Date(post.updated_at).toLocaleString() : 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Views</div>
+                            <div class="property-value">${post.view_count || 0}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Likes</div>
+                            <div class="property-value">${post.like_count || 0}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Comments</div>
+                            <div class="property-value">${post.comment_count || 0}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Tags</div>
+                            <div class="property-value">${post.tags ? post.tags.join(', ') : 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Featured Image</div>
+                            <div class="property-value">${post.featured_image || 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Excerpt</div>
+                            <div class="property-value">${post.excerpt || 'N/A'}</div>
+                        </div>
+                        <div class="property-row">
+                            <div class="property-label">Content Length</div>
+                            <div class="property-value">${post.content ? post.content.length : 0} characters</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+      document.body.appendChild(modal);
+
+      // Wire close button
+      document.getElementById('propertiesClose').onclick = () => {
+        modal.remove();
+      };
+
+      // Close on backdrop click
+      document.getElementById('propertiesBackdrop').onclick = () => {
+        modal.remove();
+      };
+
+    } catch (error) {
+      console.error('Error showing properties:', error);
+      showNotification('Failed to load post properties', 'error');
+    }
+  }
+  function goBack() { showNotification('Go back functionality', 'info'); }
+  function goForward() { showNotification('Go forward functionality', 'info'); }
+  function goUp() { navigateToFolder('all'); }
+
+  /* =========================
+     Window controls behavior
+     States: normal | maximized | minimized
+     ========================= */
+  let explorerState = sessionStorage.getItem('blogExplorerState') || 'normal';
+
+  function setupWindowState() {
+    // Only setup window state if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    // Ensure valid state
+    if (!['normal', 'maximized', 'minimized'].includes(explorerState)) {
+      explorerState = 'normal';
+    }
+    applyExplorerState();
+  }
+
+  function updateWindowButtons() {
+    // Only update window buttons if we're on the posts page
+    if (!document.getElementById('postsExplorer')) {
+      return;
+    }
+
+    const minBtn = document.querySelector('.retro-window-btn.retro-minimize');
+    const maxBtn = document.querySelector('.retro-window-btn.retro-maximize');
+
+    // Minimize always enabled (can minimize from any state)
+    if (minBtn) {
+      minBtn.removeAttribute('disabled');
+      minBtn.style.opacity = '1';
+      minBtn.style.cursor = 'pointer';
+    }
+
+    // Maximize/Restore button: enabled in normal/minimized, disabled when already maximized
+    if (maxBtn) {
+      if (explorerState === 'maximized') {
+        maxBtn.setAttribute('disabled', 'true');
+        maxBtn.style.opacity = '0.5';
+        maxBtn.style.cursor = 'not-allowed';
+        maxBtn.title = 'Already maximized';
+      } else {
+        maxBtn.removeAttribute('disabled');
+        maxBtn.style.opacity = '1';
+        maxBtn.style.cursor = 'pointer';
+        maxBtn.title = 'Maximize';
+      }
+    }
+  }
+
+  function setExplorerState(state) {
+    explorerState = state;
+    sessionStorage.setItem('blogExplorerState', state);
+    applyExplorerState();
+    updateWindowButtons();
+  }
+
+  function applyExplorerState() {
+    const container = document.querySelector('.retro-posts-container');
+    if (!container) return;
+
+    container.classList.remove('explorer-maximized', 'explorer-minimized');
+
+    removeBackdrop();
+    removeMinimizedStub();
+
+    if (explorerState === 'maximized') {
+      container.classList.add('explorer-maximized');
+      createBackdrop();
+      // bring container to top
+      container.style.zIndex = 10001;
+    } else if (explorerState === 'minimized') {
+      // minimized shown as small floating stub, container hidden but kept in DOM for quick restore
+      container.classList.add('explorer-minimized');
+      createBackdrop(true); // keep backdrop but dimmed behind stub
+      createMinimizedStub();
+      container.style.zIndex = 10001; // ensure above admin shell when restored
+    } else {
+      // normal
+      container.style.zIndex = '';
+    }
+  }
+
+  function createBackdrop(isForMinimized = false) {
+    if (document.getElementById('explorerBackdrop')) return;
+    const backdrop = document.createElement('div');
+    backdrop.id = 'explorerBackdrop';
+    backdrop.className = 'explorer-backdrop';
+    if (isForMinimized) backdrop.classList.add('explorer-backdrop-dim');
+    document.body.appendChild(backdrop);
+
+    // Hide admin chrome visually by overlaying
+    // Also try to prevent page scroll while maximized
+    document.body.style.overflow = 'hidden';
+  }
+
+  function removeBackdrop() {
+    const el = document.getElementById('explorerBackdrop');
+    if (el) el.remove();
+    document.body.style.overflow = '';
+  }
+
+  function createMinimizedStub() {
+    if (document.getElementById('explorerMinimizedStub')) return;
+
+    const stub = document.createElement('div');
+    stub.id = 'explorerMinimizedStub';
+    stub.className = 'explorer-minimized-stub';
+    stub.innerHTML = `
+        <div class="stub-title">
+            <span class="stub-icon">📁</span>
+            <span class="stub-text">BLOG POSTS EXPLORER</span>
+        </div>
+        <div class="stub-actions">
+            <button class="stub-btn" title="Restore" onclick="restoreFromMinimize()">Restore</button>
+            <button class="stub-btn stub-close" title="Close" onclick="closeWindow()">Close</button>
+        </div>
+    `;
+    document.body.appendChild(stub);
+  }
+
+  function removeMinimizedStub() {
+    const stub = document.getElementById('explorerMinimizedStub');
+    if (stub) stub.remove();
+  }
+
+  function restoreFromMinimize() {
+    // restore to maximized state
+    setExplorerState('maximized');
+  }
+
+  function minimizeWindow() {
+    // Restore from maximized to normal size (like Windows minimize when maximized)
+    const container = document.querySelector('.retro-posts-container');
+    if (container && container.classList.contains('explorer-maximized')) {
+      container.classList.remove('explorer-maximized');
+      removeBackdrop();
+      document.body.style.overflow = '';
+    }
+  }
+
+  function maximizeWindow() {
+    if (explorerState === 'maximized') {
+      showNotification('Already maximized', 'info');
+      return;
+    }
+    setExplorerState('maximized');
+  }
+
+  function closeWindow() {
+    // Always close to default admin page
+    // Clear any state and overlays
+    sessionStorage.removeItem('blogExplorerState');
+    removeBackdrop();
+    removeMinimizedStub();
+
+    // Navigate to the default admin landing
+    // Prefer dashboard which renders the default home content
+    window.location.href = '/admin/dashboard';
+  }
+
+  function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+  }
+
+  function showAddTagModal() {
+    console.log('[Tags] Opening Add Tag Modal...');
+
+    // Create modal HTML
+    const modalHTML = `
+        <div id="addTagModalBackdrop" class="explorer-backdrop"></div>
+        <div id="addTagModal" class="editor-shell" style="width: 500px; height: auto; max-height: 80vh;">
+            <div class="editor-header">
+                <div class="editor-title">
+                    <span class="editor-icon">🏷️</span>
+                    <h2>ADD NEW TAG</h2>
+                </div>
+                <div class="editor-actions">
+                    <button class="ed-btn danger" id="addTagClose">Close</button>
+                </div>
+            </div>
+            <div class="editor-content" style="padding: 24px;">
+                <div class="form-group">
+                    <label class="form-label">Tag Name *</label>
+                    <input type="text" id="tagNameInput" class="futuristic-input" placeholder="Enter tag name..." required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="tagDescriptionInput" class="futuristic-textarea" rows="3" placeholder="Tag description (optional)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tag Type</label>
+                    <select id="tagTypeSelect" class="futuristic-select">
+                        <option value="manual">Manual</option>
+                        <option value="ai-generated">AI Generated</option>
+                        <option value="suggested">Suggested</option>
+                        <option value="auto">Auto-created</option>
+                    </select>
+                </div>
+                <div class="form-actions" style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="ed-btn secondary" id="addTagCancel">Cancel</button>
+                    <button class="ed-btn primary" id="addTagSubmit">Add Tag</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add to document
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Wire events
+    document.getElementById('addTagClose').onclick = closeAddTagModal;
+    document.getElementById('addTagCancel').onclick = closeAddTagModal;
+    document.getElementById('addTagSubmit').onclick = addNewTag;
+
+    // Close on backdrop click
+    document.getElementById('addTagModalBackdrop').onclick = closeAddTagModal;
+
+    // Focus on input
+    setTimeout(() => {
+      document.getElementById('tagNameInput').focus();
+    }, 100);
+  }
+
+  function closeAddTagModal() {
+    console.log('[Tags] Closing Add Tag Modal...');
+    const modal = document.getElementById('addTagModal');
+    const backdrop = document.getElementById('addTagModalBackdrop');
+
+    if (modal) modal.remove();
+    if (backdrop) backdrop.remove();
+  }
+
+  async function addNewTag() {
+    console.log('[Tags] ===== STARTING TAG CREATION =====');
+    console.log('[Tags] Adding new tag...');
+
+    const tagName = document.getElementById('tagNameInput').value.trim();
+    const tagDescription = document.getElementById('tagDescriptionInput').value.trim();
+    const tagType = document.getElementById('tagTypeSelect').value;
+
+    console.log('[Tags] Form data:', {
+      name: tagName,
+      description: tagDescription,
+      type: tagType
+    });
+
+    if (!tagName) {
+      console.log('[Tags] ❌ VALIDATION FAILED: No tag name provided');
+      alert('Please enter a tag name');
+      document.getElementById('tagNameInput').focus();
+      return;
+    }
+
+    console.log('[Tags] ✅ VALIDATION PASSED: Tag name provided');
+
+    try {
+      console.log('[Tags] 🔄 MAKING API REQUEST to /admin/api/blog/tags');
+      console.log('[Tags] Request method: POST');
+      console.log('[Tags] Request headers:', {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token') ? '[TOKEN PRESENT]' : '[NO TOKEN]'}`
+      });
+
+      const requestBody = {
+        name: tagName,
+        description: tagDescription,
+        type: tagType
+      };
+      console.log('[Tags] Request body:', requestBody);
+
+      const response = await fetch('/admin/api/blog/tags', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      console.log('[Tags] 📡 API RESPONSE RECEIVED');
+      console.log('[Tags] Response status:', response.status);
+      console.log('[Tags] Response ok:', response.ok);
+      console.log('[Tags] Response headers:', Object.fromEntries(response.headers.entries()));
+
+      if (!response.ok) {
+        console.log('[Tags] ❌ API RESPONSE NOT OK');
+        const errorText = await response.text();
+        console.log('[Tags] Error response body:', errorText);
+        throw new Error(`Failed to create tag: ${response.status} - ${errorText}`);
+      }
+
+      console.log('[Tags] ✅ API RESPONSE OK');
+      const result = await response.json();
+      console.log('[Tags] Response JSON:', result);
+
+      console.log('[Tags] 🎉 TAG CREATED SUCCESSFULLY!');
+      console.log('[Tags] Created tag details:', result);
+
+      showNotification(`Tag "${tagName}" created successfully!`, 'success');
+      closeAddTagModal();
+
+      // Refresh the sidebar to show new tag
+      console.log('[Tags] 🔄 REFRESHING POSTS DATA TO SHOW NEW TAG');
+      loadPostsData();
+
+      console.log('[Tags] ===== TAG CREATION COMPLETED SUCCESSFULLY =====');
+
+    } catch (error) {
+      console.error('[Tags] 💥 ERROR DURING TAG CREATION:', error);
+      console.error('[Tags] Error name:', error.name);
+      console.error('[Tags] Error message:', error.message);
+      console.error('[Tags] Error stack:', error.stack);
+
+      showNotification('Failed to create tag: ' + error.message, 'error');
+
+      console.log('[Tags] ===== TAG CREATION FAILED =====');
+    }
+  }
+
+  // Initialize when page loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBlogPosts);
+  } else {
+    initBlogPosts();
+  }
+</script>
+<!-- ===== New Post Wizard: Fullscreen CRT Modal (Appended) ===== -->
+<div id="newPostWizardBackdrop" class="wizard-backdrop hidden"></div>
+<div id="newPostWizard" class="wizard-modal hidden" role="dialog" aria-modal="true" aria-labelledby="wizardTitle">
+  <div class="wizard-shell">
+    <div class="wizard-header">
+      <div class="wizard-title">
+        <span class="wizard-icon">📝</span>
+        <h2 id="wizardTitle">NEW POST WIZARD</h2>
+      </div>
+      <div class="wizard-step-indicator">
+        <span id="wizardStepText">Step 1 of 4</span>
+      </div>
+      <button class="wizard-close-btn" title="Close (Esc)" id="wizardCloseBtn">×</button>
+    </div>
+
+    <div class="wizard-content">
+      <!-- Step 1: Choose Template -->
+      <section class="wizard-step" data-step="1" id="wizardStep1">
+        <h3 class="wizard-section-title">Choose a template</h3>
+        <div class="wizard-grid">
+          <button class="tmpl-card" data-template="template1" id="tmplCard1" title="Template 1 - Banner Image">
+            <div class="tmpl-emoji">🖼️</div>
+            <div class="tmpl-title">Template 1</div>
+            <div class="tmpl-sub">Banner Image</div>
+          </button>
+          <button class="tmpl-card" data-template="template2" id="tmplCard2" title="Template 2 - Banner Video">
+            <div class="tmpl-emoji">🎞️</div>
+            <div class="tmpl-title">Template 2</div>
+            <div class="tmpl-sub">Banner Video</div>
+          </button>
+          <button class="tmpl-card" data-template="template3" id="tmplCard3" title="Template 3 - Listing">
+            <div class="tmpl-emoji">📃</div>
+            <div class="tmpl-title">Template 3</div>
+            <div class="tmpl-sub">Listing</div>
+          </button>
+        </div>
+        <p class="wizard-hint">You can change the template later before publishing.</p>
+      </section>
+
+      <!-- Step 2: Include on Homepage -->
+      <section class="wizard-step hidden" data-step="2" id="wizardStep2">
+        <h3 class="wizard-section-title">Should this post appear on the blog homepage?</h3>
+        <div class="wizard-choices">
+          <button class="choice-btn" data-choice="homepage-yes" id="homepageYes">YES</button>
+          <button class="choice-btn" data-choice="homepage-no" id="homepageNo">NO</button>
+        </div>
+        <p class="wizard-note">If Yes, we will remember this. The exact homepage section will be chosen later during the
+          publish step.</p>
+      </section>
+
+      <!-- Step 3: Include on Route Pages -->
+      <section class="wizard-step hidden" data-step="3" id="wizardStep3">
+        <h3 class="wizard-section-title">Include in route pages?</h3>
+        <div class="wizard-choices">
+          <button class="choice-btn" data-choice="routes-yes" id="routesYes">YES</button>
+          <button class="choice-btn" data-choice="routes-no" id="routesNo">NO</button>
+        </div>
+
+        <div id="routesSelector" class="routes-selector hidden" aria-hidden="true">
+          <p class="wizard-subtitle">Select the route pages where this post should appear:</p>
+          <div class="routes-grid" id="routesGrid">
+            <!-- checkboxes populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 4: Summary -->
+      <section class="wizard-step hidden" data-step="4" id="wizardStep4">
+        <h3 class="wizard-section-title">Summary</h3>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">Template</div>
+            <div class="summary-value" id="summaryTemplate">-</div>
+            <button class="summary-edit" data-edit-step="1" title="Edit">Edit</button>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Homepage</div>
+            <div class="summary-value" id="summaryHomepage">-</div>
+            <button class="summary-edit" data-edit-step="2" title="Edit">Edit</button>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">Route Pages</div>
+            <div class="summary-value" id="summaryRoutes">-</div>
+            <button class="summary-edit" data-edit-step="3" title="Edit">Edit</button>
+          </div>
+        </div>
+        <p class="wizard-note">You can go back to adjust any selection before continuing to the editor.</p>
+      </section>
+    </div>
+
+    <div class="wizard-footer">
+      <div class="wizard-footer-left">
+        <button class="wizard-btn ghost" id="wizardBackBtn" title="Back (Alt+Left)">◀ Back</button>
+      </div>
+      <div class="wizard-footer-right">
+        <button class="wizard-btn ghost" id="wizardCancelBtn">Cancel</button>
+        <button class="wizard-btn primary" id="wizardNextBtn" title="Next (Enter / Alt+Right)">Next ▶</button>
+        <button class="wizard-btn success hidden" id="wizardContinueBtn"
+          title="Continue to editor (Enter)">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== New Post Wizard Styles ===== -->
+<style>
+  /* Backdrop above any explorer overlay */
+  .wizard-backdrop {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    opacity: 0.9;
+    z-index: 10020;
+  }
+
+  /* Fullscreen modal shell */
+  .wizard-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10021;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    color: #00ff00;
+  }
+
+  .wizard-shell {
+    width: min(1100px, 96vw);
+    height: min(680px, 92vh);
+    background: #0a0a0a;
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(0, 255, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .wizard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #0f0f0f, #1f1f1f);
+    border-bottom: 1px solid #00ff00;
+    padding: 8px 12px;
+  }
+
+  .wizard-title {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .wizard-icon {
+    font-size: 16px;
+  }
+
+  .wizard-title h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 0 8px #00ff00;
+  }
+
+  .wizard-step-indicator {
+    font-size: 12px;
+    color: #88ff88;
+  }
+
+  .wizard-close-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wizard-close-btn:hover {
+    background: #ff0000;
+    color: #fff;
+  }
+
+  .wizard-content {
+    flex: 1;
+    padding: 16px;
+    overflow: auto;
+    background:
+      linear-gradient(transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+    background-size: 100% 4px;
+    /* CRT scanlines */
+  }
+
+  .wizard-section-title {
+    font-size: 14px;
+    margin: 0 0 12px 0;
+    color: #00ff00;
+    text-transform: uppercase;
+  }
+
+  .wizard-hint,
+  .wizard-note,
+  .wizard-subtitle {
+    color: #88ff88;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
+  .wizard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .tmpl-card {
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    cursor: pointer;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+  }
+
+  .tmpl-card:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.08);
+  }
+
+  .tmpl-card.active {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.12);
+    box-shadow: 0 0 12px rgba(0, 255, 0, 0.15) inset;
+  }
+
+  .tmpl-emoji {
+    font-size: 28px;
+  }
+
+  .tmpl-title {
+    font-weight: 700;
+  }
+
+  .tmpl-sub {
+    color: #88ff88;
+    font-size: 12px;
+  }
+
+  .wizard-choices {
+    display: flex;
+    gap: 10px;
+  }
+
+  .choice-btn {
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .choice-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.08);
+  }
+
+  .choice-btn.active {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.12);
+  }
+
+  .routes-selector {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #233;
+  }
+
+  .routes-grid {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+    margin-top: 8px;
+  }
+
+  .route-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #333;
+    padding: 8px 10px;
+    cursor: pointer;
+    background: #0a0a0a;
+    color: #00ff00;
+  }
+
+  .route-pill input {
+    accent-color: #00ff00;
+    width: 14px;
+    height: 14px;
+  }
+
+  .route-pill:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.08);
+  }
+
+  .summary-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr;
+  }
+
+  .summary-item {
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .summary-label {
+    color: #88ff88;
+    font-size: 12px;
+  }
+
+  .summary-value {
+    color: #00ff00;
+    font-weight: 700;
+  }
+
+  .summary-edit {
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+
+  .summary-edit:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.08);
+  }
+
+  .wizard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-top: 1px solid #00ff00;
+    background: #111;
+  }
+
+  .wizard-btn {
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    cursor: pointer;
+    padding: 8px 14px;
+  }
+
+  .wizard-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.08);
+  }
+
+  .wizard-btn.primary {
+    font-weight: 700;
+  }
+
+  .wizard-btn.success {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.15);
+  }
+
+  .wizard-btn.ghost {
+    color: #88ff88;
+  }
+
+  /* Wizard Form Inputs */
+  .wizard-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .publish-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .publish-field label {
+    color: #88ff88;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .publish-input,
+  .publish-select,
+  .publish-textarea,
+  .futuristic-input,
+  .futuristic-textarea {
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    padding: 10px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .publish-input:focus,
+  .publish-select:focus,
+  .publish-textarea:focus,
+  .futuristic-input:focus,
+  .futuristic-textarea:focus {
+    outline: none;
+    border-color: #00ff00;
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
+    background: rgba(0, 255, 0, 0.05);
+  }
+
+  .publish-input::placeholder,
+  .publish-textarea::placeholder,
+  .futuristic-input::placeholder,
+  .futuristic-textarea::placeholder {
+    color: #557755;
+  }
+
+  .publish-textarea,
+  .futuristic-textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .publish-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 36px;
+  }
+
+  .futuristic-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 36px;
+  }
+
+  .publish-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #88ff88;
+    font-size: 12px;
+  }
+
+  .publish-checkbox {
+    accent-color: #00ff00;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  .image-preview {
+    margin-top: 8px;
+    border: 1px solid #333;
+    padding: 8px;
+    background: #0a0a0a;
+    border-radius: 4px;
+  }
+
+  .image-preview img {
+    max-width: 200px;
+    max-height: 150px;
+    border: 1px solid #333;
+    display: block;
+  }
+
+  .section-selector {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed #233;
+  }
+
+  .publish-summary {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #00ff00;
+  }
+
+  .publish-confirmation {
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .confirmation-message {
+    margin-bottom: 24px;
+  }
+
+  .confirmation-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .confirmation-message h4 {
+    color: #00ff00;
+    margin: 16px 0 8px 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .confirmation-message p {
+    color: #88ff88;
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .confirmation-details {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #222;
+  }
+
+  .detail-item:last-child {
+    border-bottom: none;
+  }
+
+  .detail-label {
+    color: #88ff88;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .detail-value {
+    color: #00ff00;
+    text-align: right;
+    font-size: 12px;
+  }
+
+  /* Add Tag Modal Styles */
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: #88ff88;
+    margin-bottom: 6px;
+  }
+
+  .form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .ed-btn {
+    border: 1px solid #333;
+    background: #0a0a0a;
+    color: #00ff00;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .ed-btn:hover {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.08);
+  }
+
+  .ed-btn.primary {
+    border-color: #00ff00;
+    background: rgba(0, 255, 0, 0.15);
+    font-weight: bold;
+  }
+
+  .ed-btn.secondary {
+    color: #88ff88;
+    border-color: #333;
+  }
+
+  .ed-btn.secondary:hover {
+    border-color: #88ff88;
+    background: rgba(136, 255, 136, 0.08);
+  }
+
+  .ed-btn.danger {
+    color: #ff6666;
+    border-color: #333;
+  }
+
+  .ed-btn.danger:hover {
+    border-color: #ff6666;
+    background: rgba(255, 102, 102, 0.08);
+  }
+
+  @media (max-width: 768px) {
+    .wizard-shell {
+      height: 96vh;
+      width: 98vw;
+    }
+
+    .wizard-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .routes-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ===== Editor Modal Styles ===== */
+  .editor-backdrop {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    opacity: 0.9;
+    z-index: 10020;
+  }
+
+  .editor-shell {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10021;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', monospace;
+    color: #00ff00;
+    background: linear-gradient(145deg, #0a0a0a, #111);
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    box-shadow: 0 0 24px rgba(0, 255, 0, 0.25);
+  }
+
+  .editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #0f0f0f, #1f1f1f);
+    border-bottom: 1px solid #00ff00;
+    padding: 8px 12px;
+  }
+
+  .editor-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .editor-icon {
+    font-size: 16px;
+  }
+
+  .editor-title h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 0 8px #00ff00;
+  }
+
+  .editor-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .editor-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .editor-canvas {
+    flex: 1;
+    overflow: auto;
+    padding: 12px;
+    background: #0d0d0d;
+  }
+
+  /* Loading/Error states */
+  .loading-template,
+  .error-template {
+    padding: 40px;
+    text-align: center;
+    color: #88ff88;
+  }
+
+  .loading-emoji,
+  .error-emoji {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .loading-text,
+  .error-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .error-text {
+    color: #ff8888;
+    margin-bottom: 16px;
+  }
+
+  /* CRT scanlines for editor */
+  .editor-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 50%, rgba(0, 255, 0, 0.03) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .editor-shell {
+      margin: 8px;
+    }
+  }
+</style>
+
+<!-- Publish Wizard Modal - Exact replica of New Post Wizard -->
+<div id="publishWizardBackdrop" class="wizard-backdrop hidden"></div>
+<div id="publishWizard" class="wizard-modal hidden" role="dialog" aria-modal="true" aria-labelledby="publishTitle">
+  <div class="wizard-shell">
+    <div class="wizard-header">
+      <div class="wizard-title">
+        <span class="wizard-icon">🚀</span>
+        <h2 id="publishTitle">PUBLISH POST WIZARD</h2>
+      </div>
+      <div class="wizard-step-indicator">
+        <span id="publishStepText">Step 1 of 1</span>
+      </div>
+      <button class="wizard-close-btn" title="Close (Esc)" id="publishCloseBtn">×</button>
+    </div>
+
+    <div class="wizard-content">
+      <!-- Step 1: Post Details -->
+      <section class="wizard-step" data-step="1" id="publishStep1">
+        <h3 class="wizard-section-title">Post Details</h3>
+        <div class="wizard-form">
+          <div class="publish-field">
+            <label for="publishTitle">Title *</label>
+            <input type="text" id="publishTitle" class="publish-input" placeholder="Enter post title" required>
+          </div>
+          <div class="publish-field">
+            <label for="publishSlug">URL Slug *</label>
+            <input type="text" id="publishSlug" class="publish-input" placeholder="top-10-best-footballers" required>
+            <small class="wizard-hint">This will be the URL: /your-slug-here</small>
+          </div>
+          <div class="publish-field">
+            <label for="publishExcerpt">Excerpt</label>
+            <textarea id="publishExcerpt" class="publish-textarea" rows="3"
+              placeholder="Brief description (optional)"></textarea>
+          </div>
+          <div class="publish-field">
+            <label for="publishTags">Tags</label>
+            <select id="publishTags" class="publish-select">
+              <option value="">Select a tag...</option>
+            </select>
+          </div>
+          <div class="publish-field">
+            <label for="publishAuthor">Author</label>
+            <input type="text" id="publishAuthor" class="publish-input" placeholder="NekwasaR" value="NekwasaR">
+          </div>
+          <div class="publish-field">
+            <label for="publishDate">Publish Date</label>
+            <input type="datetime-local" id="publishDate" class="publish-input" required>
+          </div>
+          <div class="publish-field">
+            <label for="publishImage">Featured Image URL</label>
+            <input type="url" id="publishImage" class="publish-input" placeholder="https://example.com/image.jpg">
+            <div id="imagePreview" class="image-preview hidden">
+              <img id="previewImg" src="" alt="Image preview"
+                style="max-width: 200px; max-height: 150px; border: 1px solid #333; margin-top: 8px;">
+            </div>
+          </div>
+          <div class="publish-field hidden" id="publishSectionField">
+            <label for="publishSection">Section *</label>
+            <select id="publishSection" class="publish-select" required>
+              <option value="">Select section</option>
+              <option value="latest">Latest</option>
+              <option value="popular">Popular</option>
+              <option value="featured">Featured</option>
+              <option value="others">Others</option>
+            </select>
+          </div>
+        </div>
+        <p class="wizard-hint">Fill in the details for your post before publishing.</p>
+      </section>
+
+    </div>
+
+    <div class="wizard-footer">
+      <div class="wizard-footer-left">
+        <!-- No back button for single step -->
+      </div>
+      <div class="wizard-footer-right">
+        <button class="wizard-btn ghost" id="publishCancelBtn">Cancel</button>
+        <button class="wizard-btn success" id="publishConfirmBtn" title="Confirm and Publish">Confirm & Publish</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== New Post Wizard Script ===== -->
+<script>
+  (function () {
+    const LOG_PREFIX = '[Wizard]';
+    const WIZARD_KEY = 'blogNewPostWizardState';
+    const ROUTE_PAGES = ['featured', 'latest', 'others', 'popular', 'topics'];
+
+    // Helper to pretty print template name in titles
+    function fmtTemplate(t) {
+      try {
+        if (!t) return '-';
+        return String(t).replace('template', 'Template ');
+      } catch (e) {
+        console.warn(LOG_PREFIX, '[fmtTemplate] failed for:', t, e);
+        return '-';
+      }
+    }
+
+    const el = (id) => document.getElementById(id);
+    const wizard = el('newPostWizard');
+    const backdrop = el('newPostWizardBackdrop');
+    const stepText = el('wizardStepText');
+    const backBtn = el('wizardBackBtn');
+    const nextBtn = el('wizardNextBtn');
+    const continueBtn = el('wizardContinueBtn');
+    const cancelBtn = el('wizardCancelBtn');
+    const closeBtn = el('wizardCloseBtn');
+
+    let open = false;
+    let state = {
+      selectedTemplate: null,
+      includeOnHomepage: null,
+      includeOnRoutePages: null,
+      selectedRoutes: [],
+      deferredHomeSection: null,
+      currentStep: 1
+    };
+
+    function saveState() {
+      try {
+        localStorage.setItem(WIZARD_KEY, JSON.stringify(state));
+        console.log(LOG_PREFIX, 'State saved to localStorage', state);
+      } catch (err) {
+        console.warn(LOG_PREFIX, 'Unable to persist state', err);
+      }
+    }
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(WIZARD_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        state = Object.assign(state, parsed);
+        console.log(LOG_PREFIX, 'State restored from localStorage', state);
+      } catch (err) {
+        console.warn(LOG_PREFIX, 'Unable to restore state', err);
+      }
+    }
+
+    function showWizard() {
+      loadState();
+      open = true;
+      wizard.classList.remove('hidden');
+      backdrop.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      buildRoutesGrid();
+      hydrateSelections();
+      gotoStep(state.currentStep || 1, true);
+
+      // attach handlers (idempotent attach via {once:false})
+      backBtn.onclick = onBack;
+      nextBtn.onclick = onNext;
+      continueBtn.onclick = onContinue;
+      cancelBtn.onclick = onCancel;
+      closeBtn.onclick = onCancel;
+
+      // step 1 templates
+      ['tmplCard1', 'tmplCard2', 'tmplCard3'].forEach((id, idx) => {
+        const t = ['template1', 'template2', 'template3'][idx];
+        el(id).onclick = () => selectTemplate(t);
+      });
+
+      // step 2 yes/no
+      el('homepageYes').onclick = () => selectHomepage(true);
+      el('homepageNo').onclick = () => selectHomepage(false);
+
+      // step 3 yes/no + checkboxes populated in buildRoutesGrid()
+      el('routesYes').onclick = () => toggleRoutesInclude(true);
+      el('routesNo').onclick = () => toggleRoutesInclude(false);
+
+      // summary edit
+      document.querySelectorAll('.summary-edit').forEach(btn => {
+        btn.onclick = () => gotoStep(parseInt(btn.dataset.editStep, 10));
+      });
+
+      // keyboard
+      document.addEventListener('keydown', keyHandler);
+    }
+
+    function hideWizard() {
+      open = false;
+      wizard.classList.add('hidden');
+      backdrop.classList.add('hidden');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', keyHandler);
+    }
+
+    function keyHandler(e) {
+      if (!open) return;
+      if (e.key === 'Escape') { e.preventDefault(); onCancel(); return; }
+      if (e.altKey && e.key === 'ArrowLeft') { e.preventDefault(); onBack(); return; }
+      if (e.altKey && e.key === 'ArrowRight') { e.preventDefault(); onNext(); return; }
+      if (e.key === 'Enter') {
+        // enter = next or continue based on step
+        if (state.currentStep === 4) onContinue();
+        else onNext();
+      }
+    }
+
+    function gotoStep(step, initial = false) {
+      const s = Math.min(4, Math.max(1, step));
+      state.currentStep = s;
+      !initial && saveState();
+
+      document.querySelectorAll('.wizard-step').forEach(sec => {
+        const isTarget = parseInt(sec.dataset.step, 10) === s;
+        sec.classList.toggle('hidden', !isTarget);
+      });
+
+      stepText.textContent = `Step ${s} of 4`;
+      backBtn.classList.toggle('hidden', s === 1);
+      nextBtn.classList.toggle('hidden', s === 4);
+      continueBtn.classList.toggle('hidden', s !== 4);
+
+      // validate to enable/disable next
+      nextBtn.disabled = !canProceed();
+      continueBtn.disabled = !canProceed();
+
+      // update dynamic parts
+      if (s === 4) renderSummary();
+    }
+
+    function canProceed() {
+      switch (state.currentStep) {
+        case 1: return !!state.selectedTemplate;
+        case 2: return typeof state.includeOnHomepage === 'boolean';
+        case 3: return typeof state.includeOnRoutePages === 'boolean';
+        case 4: return !!state.selectedTemplate;
+        default: return true;
+      }
+    }
+
+    function onBack() {
+      gotoStep(state.currentStep - 1);
+    }
+    function onNext() {
+      if (!canProceed()) return;
+      gotoStep(state.currentStep + 1);
+    }
+    function onCancel() {
+      hideWizard();
+    }
+
+    function selectTemplate(templateId) {
+      console.log(LOG_PREFIX, '[SELECT TEMPLATE] Template selected:', templateId);
+      state.selectedTemplate = templateId;
+      console.log(LOG_PREFIX, '[SELECT TEMPLATE] State updated:', state);
+      saveState();
+      console.log(LOG_PREFIX, '[SELECT TEMPLATE] State saved');
+      // toggle active
+      document.querySelectorAll('.tmpl-card').forEach(b => b.classList.remove('active'));
+      const activeId = templateId === 'template1' ? 'tmplCard1' : templateId === 'template2' ? 'tmplCard2' : 'tmplCard3';
+      el(activeId).classList.add('active');
+      console.log(LOG_PREFIX, '[SELECT TEMPLATE] UI updated for:', activeId);
+      nextBtn.disabled = !canProceed();
+      console.log(LOG_PREFIX, '[SELECT TEMPLATE] Next button state:', !canProceed());
+    }
+
+    function selectHomepage(include) {
+      console.log(LOG_PREFIX, '[SELECT HOMEPAGE] Homepage selection:', include);
+      state.includeOnHomepage = !!include;
+      // deferred selection stays null until publish
+      console.log(LOG_PREFIX, '[SELECT HOMEPAGE] State updated:', state);
+      saveState();
+      console.log(LOG_PREFIX, '[SELECT HOMEPAGE] State saved');
+      // toggle active styles
+      el('homepageYes').classList.toggle('active', include === true);
+      el('homepageNo').classList.toggle('active', include === false);
+      console.log(LOG_PREFIX, '[SELECT HOMEPAGE] UI updated');
+      nextBtn.disabled = !canProceed();
+      console.log(LOG_PREFIX, '[SELECT HOMEPAGE] Next button state:', !canProceed());
+    }
+
+    function toggleRoutesInclude(include) {
+      console.log(LOG_PREFIX, '[TOGGLE ROUTES] Routes include selection:', include);
+      state.includeOnRoutePages = !!include;
+      console.log(LOG_PREFIX, '[TOGGLE ROUTES] State updated:', state);
+      saveState();
+      console.log(LOG_PREFIX, '[TOGGLE ROUTES] State saved');
+      el('routesYes').classList.toggle('active', include === true);
+      el('routesNo').classList.toggle('active', include === false);
+      console.log(LOG_PREFIX, '[TOGGLE ROUTES] UI updated');
+
+      const rs = el('routesSelector');
+      if (include) {
+        rs.classList.remove('hidden');
+        rs.setAttribute('aria-hidden', 'false');
+        console.log(LOG_PREFIX, '[TOGGLE ROUTES] Routes selector shown');
+      } else {
+        rs.classList.add('hidden');
+        rs.setAttribute('aria-hidden', 'true');
+        state.selectedRoutes = [];
+        document.querySelectorAll('.route-checkbox').forEach(cb => cb.checked = false);
+        saveState();
+        console.log(LOG_PREFIX, '[TOGGLE ROUTES] Routes selector hidden, routes cleared');
+      }
+      nextBtn.disabled = !canProceed();
+      console.log(LOG_PREFIX, '[TOGGLE ROUTES] Next button state:', !canProceed());
+    }
+
+    function buildRoutesGrid() {
+      const container = el('routesGrid');
+      if (!container) return;
+      if (container.dataset.built === '1') {
+        // hydrate checked states if any
+        document.querySelectorAll('.route-checkbox').forEach(cb => {
+          cb.checked = state.selectedRoutes.includes(cb.value);
+        });
+        return;
+      }
+      container.innerHTML = ROUTE_PAGES.map(r => {
+        const label = r.toUpperCase();
+        const checked = state.selectedRoutes.includes(r) ? 'checked' : '';
+        return `
+        <label class="route-pill">
+          <input type="checkbox" class="route-checkbox" value="${r}" ${checked}>
+          <span>${label}</span>
+        </label>
+      `;
+      }).join('');
+
+      container.addEventListener('change', (e) => {
+        const cb = e.target.closest('.route-checkbox');
+        if (!cb) return;
+        const val = cb.value;
+        if (cb.checked && !state.selectedRoutes.includes(val)) state.selectedRoutes.push(val);
+        if (!cb.checked) state.selectedRoutes = state.selectedRoutes.filter(x => x !== val);
+        saveState();
+      });
+
+      container.dataset.built = '1';
+    }
+
+    function hydrateSelections() {
+      // step 1 template
+      if (state.selectedTemplate) {
+        selectTemplate(state.selectedTemplate);
+      }
+      // step 2 homepage
+      if (typeof state.includeOnHomepage === 'boolean') {
+        selectHomepage(state.includeOnHomepage);
+      }
+      // step 3 routes include
+      if (typeof state.includeOnRoutePages === 'boolean') {
+        toggleRoutesInclude(state.includeOnRoutePages);
+      }
+      // ensure checkboxes reflect
+      document.querySelectorAll('.route-checkbox').forEach(cb => {
+        cb.checked = state.selectedRoutes.includes(cb.value);
+      });
+    }
+
+    function renderSummary() {
+      const tpl = state.selectedTemplate ? state.selectedTemplate.replace('template', 'Template ') : '-';
+      const home = typeof state.includeOnHomepage === 'boolean' ? (state.includeOnHomepage ? 'Yes' : 'No') : '-';
+      const routes = state.includeOnRoutePages
+        ? (state.selectedRoutes.length ? state.selectedRoutes.map(r => r.toUpperCase()).join(', ') : 'Yes (no specific routes selected)')
+        : (typeof state.includeOnRoutePages === 'boolean' ? 'No' : '-');
+
+      el('summaryTemplate').textContent = tpl;
+      el('summaryHomepage').textContent = home;
+      el('summaryRoutes').textContent = routes;
+    }
+
+    function onContinue() {
+      console.log(LOG_PREFIX, '[CONTINUE] Starting continue process');
+      console.log(LOG_PREFIX, '[CONTINUE] Current state:', JSON.stringify(state, null, 2));
+
+      if (!canProceed()) {
+        console.log(LOG_PREFIX, '[CONTINUE] ❌ Cannot proceed, state incomplete:', state);
+        alert('Please complete all selections before continuing.');
+        return;
+      }
+
+      console.log(LOG_PREFIX, '[CONTINUE] ✅ Can proceed, saving state');
+      saveState();
+      console.log(LOG_PREFIX, '[CONTINUE] State saved successfully');
+
+      console.log(LOG_PREFIX, '[CONTINUE] Hiding wizard modal');
+      hideWizard();
+      console.log(LOG_PREFIX, '[CONTINUE] Wizard hidden');
+
+      console.log(LOG_PREFIX, '[CONTINUE] Redirecting to editor page');
+      // Redirect to the standalone editor page with the selected template
+      const templateParam = state.selectedTemplate ? `?template=${state.selectedTemplate}` : '';
+      window.location.href = `/admin/blog/editor${templateParam}`;
+    }
+
+    function openEditorModal() {
+      console.log(LOG_PREFIX, '[EDITOR MODAL] Opening editor modal');
+
+      // Create editor modal HTML
+      const editorModal = document.createElement('div');
+      editorModal.id = 'editorModal';
+      editorModal.innerHTML = `
+      <div id="editorBackdrop" class="editor-backdrop"></div>
+      <div id="editorShell" class="editor-shell">
+        <div class="editor-header">
+          <div class="editor-title">
+            <span class="editor-icon">📝</span>
+            <h2>POST EDITOR — ${fmtTemplate(state.selectedTemplate)}</h2>
+          </div>
+          <div class="editor-actions">
+            <button class="ed-btn" id="editorSaveDraft">Save Draft</button>
+            <button class="ed-btn success" id="editorPublish">Publish</button>
+            <button class="ed-btn danger" id="editorClose">Close</button>
+          </div>
+        </div>
+        <div class="editor-content">
+          <div id="editorCanvas" class="editor-canvas">
+            <div class="loading-template">
+              <div class="loading-emoji">⏳</div>
+              <div class="loading-text">Loading template...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+      console.log(LOG_PREFIX, '[EDITOR MODAL] Created modal HTML');
+
+      // Add to page
+      document.body.appendChild(editorModal);
+      console.log(LOG_PREFIX, '[EDITOR MODAL] Added modal to DOM');
+
+      // Wire events
+      document.getElementById('editorClose').onclick = () => closeEditorModal();
+      document.getElementById('editorSaveDraft').onclick = () => saveDraft();
+      document.getElementById('editorPublish').onclick = () => publishPost();
+
+      console.log(LOG_PREFIX, '[EDITOR MODAL] Wired event handlers');
+
+      // Load template
+      console.log(LOG_PREFIX, '[EDITOR MODAL] Starting template load for:', state.selectedTemplate);
+      loadTemplateInEditor(state.selectedTemplate);
+
+      // Initialize publish wizard
+      initPublishWizard();
+    }
+
+    function closeEditorModal() {
+      console.log(LOG_PREFIX, '[EDITOR MODAL] Closing editor modal');
+      const modal = document.getElementById('editorModal');
+      if (modal) {
+        modal.remove();
+        console.log(LOG_PREFIX, '[EDITOR MODAL] Modal removed from DOM');
+      }
+    }
+
+    async function loadTemplateInEditor(templateId) {
+      console.log(LOG_PREFIX, '[TEMPLATE LOAD] Starting template load for:', templateId);
+
+      const canvas = document.getElementById('editorCanvas');
+      if (!canvas) {
+        console.error(LOG_PREFIX, '[TEMPLATE LOAD] ❌ Canvas element not found');
+        return;
+      }
+
+      canvas.innerHTML = '<div class="loading-template"><div class="loading-emoji">⏳</div><div class="loading-text">Loading template...</div></div>';
+      console.log(LOG_PREFIX, '[TEMPLATE LOAD] Set loading state');
+
+      try {
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Making API request to /admin/api/blog/render-template/' + templateId);
+
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/admin/api/blog/render-template/${templateId}`, {
+          method: 'GET',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] API response status:', response.status, 'HasToken:', !!token);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(LOG_PREFIX, '[TEMPLATE LOAD] ❌ API error:', response.status, errorText);
+          throw new Error(`Failed to load template: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] ✅ API response data:', data);
+
+        const html = data.html;
+        const styles = data.styles || '';
+        const globalStyles = data.globalStyles || '';
+        const globalScripts = data.globalScripts || '';
+
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Extracted HTML length:', html ? html.length : 0);
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Extracted styles length:', styles ? styles.length : 0);
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Extracted globalStyles length:', globalStyles ? globalStyles.length : 0);
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Extracted globalScripts length:', globalScripts ? globalScripts.length : 0);
+
+        // Create container
+        const container = document.createElement('div');
+        container.innerHTML = html || '';
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Created container with HTML');
+
+        // Apply template-specific styles
+        try {
+          if (styles) {
+            const existing = document.querySelector(`style[data-template-styles="${templateId}"]`);
+            if (existing) {
+              existing.remove();
+              console.log(LOG_PREFIX, '[TEMPLATE LOAD] Removed existing template style tag to avoid duplicates');
+            }
+            const styleEl = document.createElement('style');
+            styleEl.textContent = styles;
+            styleEl.setAttribute('data-template-styles', templateId);
+            document.head.appendChild(styleEl);
+            console.log(LOG_PREFIX, '[TEMPLATE LOAD] Applied template styles to document head');
+          } else {
+            console.log(LOG_PREFIX, '[TEMPLATE LOAD] No template-scoped styles returned');
+          }
+        } catch (e) {
+          console.error(LOG_PREFIX, '[TEMPLATE LOAD] ❌ Error applying template styles:', e);
+        }
+
+        // Apply global blog styles (for components shared across templates)
+        try {
+          if (globalStyles) {
+            const existingGlobal = document.querySelector('style[data-template-global-styles="blog"]');
+            if (existingGlobal) {
+              existingGlobal.remove();
+              console.log(LOG_PREFIX, '[TEMPLATE LOAD] Removed existing global styles tag to avoid duplicates');
+            }
+            const globalStyleEl = document.createElement('style');
+            globalStyleEl.textContent = globalStyles;
+            globalStyleEl.setAttribute('data-template-global-styles', 'blog');
+            document.head.appendChild(globalStyleEl);
+            console.log(LOG_PREFIX, '[TEMPLATE LOAD] Applied global blog styles to document head');
+          } else {
+            console.log(LOG_PREFIX, '[TEMPLATE LOAD] No globalStyles returned');
+          }
+        } catch (e) {
+          console.error(LOG_PREFIX, '[TEMPLATE LOAD] ❌ Error applying global styles:', e);
+        }
+
+        // Inject global blog scripts (execute once per load)
+        try {
+          if (globalScripts) {
+            const existingScript = document.querySelector('script[data-template-global-scripts="blog"]');
+            if (existingScript) {
+              existingScript.remove();
+              console.log(LOG_PREFIX, '[TEMPLATE LOAD] Removed existing global scripts tag to avoid duplicates');
+            }
+            const scriptEl = document.createElement('script');
+            scriptEl.type = 'text/javascript';
+            scriptEl.setAttribute('data-template-global-scripts', 'blog');
+            scriptEl.textContent = globalScripts;
+            document.body.appendChild(scriptEl);
+            console.log(LOG_PREFIX, '[TEMPLATE LOAD] Executed global blog scripts');
+          } else {
+            console.log(LOG_PREFIX, '[TEMPLATE LOAD] No globalScripts returned');
+          }
+        } catch (e) {
+          console.error(LOG_PREFIX, '[TEMPLATE LOAD] ❌ Error executing global scripts:', e);
+        }
+
+        canvas.innerHTML = '';
+        canvas.appendChild(container);
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Rendered template in canvas');
+
+        // Make all text content editable
+        makeEditable(container);
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] Made content editable');
+
+        console.log(LOG_PREFIX, '[TEMPLATE LOAD] ✅ Template load completed successfully');
+
+      } catch (error) {
+        console.error(LOG_PREFIX, '[TEMPLATE LOAD] 💥 Error loading template:', error);
+        canvas.innerHTML = `
+        <div class="error-template">
+          <div class="error-emoji">❌</div>
+          <div class="error-title">Failed to load template</div>
+          <div class="error-text">${error.message}</div>
+          <button class="ed-btn" onclick="closeEditorModal()">Close</button>
+        </div>
+      `;
+      }
+    }
+
+    function makeEditable(container) {
+      console.log(LOG_PREFIX, '[EDITABLE] Making content editable');
+
+      // Make text elements contenteditable
+      const textElements = container.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, div:not(.no-edit)');
+      console.log(LOG_PREFIX, '[EDITABLE] Found', textElements.length, 'text elements');
+
+      textElements.forEach((el, index) => {
+        if (el.textContent && el.textContent.trim() && !el.querySelector('input, textarea, select')) {
+          el.contentEditable = 'true';
+          el.style.outline = '1px dashed #00ff00';
+          el.style.padding = '2px';
+          el.addEventListener('focus', () => el.style.outline = '1px solid #00ff00');
+          el.addEventListener('blur', () => el.style.outline = '1px dashed #00ff00');
+        }
+        if (index < 5) console.log(LOG_PREFIX, '[EDITABLE] Made editable:', el.tagName, el.textContent.substring(0, 50));
+      });
+
+      // Make images editable
+      const images = container.querySelectorAll('img');
+      console.log(LOG_PREFIX, '[EDITABLE] Found', images.length, 'images');
+
+      images.forEach((img, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'image-edit-overlay';
+        wrapper.style.position = 'relative';
+        wrapper.style.display = 'inline-block';
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+
+        const input = document.createElement('input');
+        input.className = 'image-edit-input';
+        input.type = 'text';
+        input.value = img.src;
+        input.style.position = 'absolute';
+        input.style.top = '0';
+        input.style.left = '0';
+        input.style.width = '100%';
+        input.style.background = 'rgba(0,0,0,0.8)';
+        input.style.color = '#00ff00';
+        input.style.border = '1px solid #00ff00';
+        input.style.fontSize = '10px';
+        input.style.zIndex = '10';
+        input.placeholder = 'Image URL';
+
+        input.addEventListener('input', () => {
+          img.src = input.value;
+        });
+
+        wrapper.appendChild(input);
+        if (index < 3) console.log(LOG_PREFIX, '[EDITABLE] Made image editable:', img.src);
+      });
+
+      // Make videos editable
+      const videos = container.querySelectorAll('video, iframe');
+      console.log(LOG_PREFIX, '[EDITABLE] Found', videos.length, 'videos');
+
+      videos.forEach((video, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'video-edit-overlay';
+        wrapper.style.position = 'relative';
+        wrapper.style.display = 'inline-block';
+        video.parentNode.insertBefore(wrapper, video);
+        wrapper.appendChild(video);
+
+        const input = document.createElement('input');
+        input.className = 'image-edit-input';
+        input.type = 'text';
+        input.value = video.src || video.getAttribute('src') || '';
+        input.style.position = 'absolute';
+        input.style.top = '0';
+        input.style.left = '0';
+        input.style.width = '100%';
+        input.style.background = 'rgba(0,0,0,0.8)';
+        input.style.color = '#00ff00';
+        input.style.border = '1px solid #00ff00';
+        input.style.fontSize = '10px';
+        input.style.zIndex = '10';
+        input.placeholder = 'Video URL';
+
+        input.addEventListener('input', () => {
+          if (video.tagName === 'VIDEO') {
+            video.src = input.value;
+          } else if (video.tagName === 'IFRAME') {
+            video.src = input.value;
+          }
+        });
+
+        wrapper.appendChild(input);
+        if (index < 3) console.log(LOG_PREFIX, '[EDITABLE] Made video editable:', video.src);
+      });
+
+      console.log(LOG_PREFIX, '[EDITABLE] ✅ Content made editable');
+    }
+
+    /**
+     * Sanitizes the content of a container for saving/publishing.
+     * Removes editor artifacts, contenteditable attributes, and template sections.
+     */
+    function sanitizeContent(container) {
+      if (!container) return '';
+
+      // Create a clean clone to sanitize
+      const cleanContainer = container.cloneNode(true);
+
+      // 1. Remove all editor overlays but keep the images/videos they contain
+      const overlays = cleanContainer.querySelectorAll('.image-edit-overlay, .video-edit-overlay');
+      overlays.forEach(overlay => {
+        const media = overlay.querySelector('img, video, iframe');
+        if (media) {
+          overlay.parentNode.insertBefore(media, overlay);
+        }
+        overlay.remove();
+      });
+
+      // 2. Remove all editor-specific artifacts
+      const artifacts = cleanContainer.querySelectorAll('.image-edit-input, .char-counter, .post-context-menu, .editor-controls, .context-menu');
+      artifacts.forEach(el => el.remove());
+
+      // 3. Strip all contenteditable and data-edited/data-attached attributes
+      const allElements = cleanContainer.querySelectorAll('*');
+      allElements.forEach(el => {
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('data-edited');
+        el.removeAttribute('data-attached');
+
+        // Clean up styles added by editor
+        if (el.style.outline && el.style.outline.includes('00ff00')) el.style.outline = '';
+        if (el.style.padding === '2px') el.style.padding = '';
+        if (el.style.borderColor === 'red') el.style.borderColor = '';
+      });
+
+      // 4. PREVENT DUPLICATION: Remove permanent template sections
+      const heroSection = cleanContainer.querySelector('#blog-hero-section');
+      if (heroSection) heroSection.remove();
+      const engagementBar = cleanContainer.querySelector('#blog-engagement-bar');
+      if (engagementBar) engagementBar.remove();
+
+      return cleanContainer.innerHTML;
+    }
+
+    async function saveDraft() {
+      console.log(LOG_PREFIX, '[SAVE DRAFT] Save draft clicked');
+
+      try {
+        // Get HTML content from editor
+        const container = document.querySelector('#editorCanvas > div');
+        if (!container) {
+          alert('No content to save');
+          return;
+        }
+
+        // Extract title from the content (first heading)
+        const titleEl = container.querySelector('h1, h2, h3');
+        const title = titleEl ? titleEl.textContent.trim() : 'Untitled Draft';
+
+        // Create draft data
+        const draftData = {
+          title: title,
+          content: sanitizeContent(container),
+          excerpt: container.querySelector('p') ? container.querySelector('p').textContent.trim().substring(0, 200) : '',
+          template_type: state.selectedTemplate || 'template1',
+          tags: [],
+          section: 'others',
+          author: 'NekwasaR'
+        };
+
+        console.log(LOG_PREFIX, '[SAVE DRAFT] Saving draft data:', draftData);
+
+        // Send to API
+        const response = await fetch('/admin/api/blog/drafts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+          },
+          body: JSON.stringify(draftData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to save draft: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log(LOG_PREFIX, '[SAVE DRAFT] Draft saved successfully:', result);
+
+        // Show success message
+        alert('Draft saved successfully!');
+
+        // Refresh the posts data to show the new draft
+        refreshPostsData();
+
+        // Close the editor modal
+        closeEditorModal();
+
+      } catch (error) {
+        console.error(LOG_PREFIX, '[SAVE DRAFT] Error saving draft:', error);
+        alert('Failed to save draft: ' + error.message);
+      }
+    }
+
+    function publishPost() {
+      console.log('🚀 [PUBLISH DEBUG] onPublish() function called');
+      console.log('📊 [PUBLISH DEBUG] Current timestamp -', new Date().toISOString());
+
+      console.log('🔍 [PUBLISH DEBUG] Element exist check - Editor modal:', !!document.getElementById('editorModal'));
+      console.log('🔍 [PUBLISH DEBUG] Element exist check - Publish wizard:', !!document.getElementById('publishWizard'));
+      console.log('🔍 [PUBLISH DEBUG] Element exist check - Publish backdrop:', !!document.getElementById('publishWizardBackdrop'));
+
+      console.log('🔍 [PUBLISH DEBUG] Editor container found -', !!document.getElementById('editorModal'));
+
+      console.log('🔄 [PUBLISH DEBUG] Hiding editor modal...');
+
+      // Hide the editor modal
+      const editorModal = document.getElementById('editorModal');
+      if (editorModal) {
+        editorModal.style.display = 'none';
+        console.log('✅ [PUBLISH DEBUG] Editor modal hidden');
+      } else {
+        console.log('❌ [PUBLISH DEBUG] Editor modal not found, cannot hide');
+      }
+
+      console.log('📚 [PUBLISH DEBUG] Calling openPublishWizard()...');
+
+      try {
+        // Open the publish wizard as full-screen replacement
+        openPublishWizard();
+        console.log('✅ [PUBLISH DEBUG] openPublishWizard() completed');
+      } catch (error) {
+        console.log('❌ [PUBLISH DEBUG] openPublishWizard() failed:', error.message);
+      }
+    }
+
+    // Publish Wizard State
+    let publishState = {
+      includeOnHomepage: null,
+      includeOnRoutePages: null,
+      selectedRoutes: [],
+      section: null
+    };
+
+    // Publish Wizard Functions
+    function openPublishWizard() {
+      console.log('[Publish Wizard] openPublishWizard called');
+
+      const wizard = document.getElementById('publishWizard');
+      const backdrop = document.getElementById('publishWizardBackdrop');
+
+      console.log('[Publish Wizard] wizard element:', wizard);
+
+      if (!wizard) {
+        console.error('[Publish Wizard] Wizard element not found');
+        alert('Publish wizard not found. Please refresh the page.');
+        return;
+      }
+
+      // Load state from new post wizard
+      loadPublishStateFromNewPostWizard();
+
+      // Load current content from editor
+      loadPostMetaFromEditor();
+
+      // Build routes grid
+      buildPublishRoutesGrid();
+
+      // Show wizard
+      wizard.classList.remove('hidden');
+      backdrop.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      // Reset to first step
+      showPublishStep(1);
+
+      // Wire events
+      wirePublishWizardEvents();
+
+      console.log('[Publish Wizard] Wizard should now be visible');
+      console.log('[Publish Wizard] Wizard classes:', wizard.className);
+
+      // Focus first input
+      setTimeout(() => {
+        const firstInput = wizard.querySelector('input');
+        if (firstInput) firstInput.focus();
+      }, 100);
+
+      console.log('✅ [PUBLISH DEBUG] openPublishWizard() completed');
+    }
+
+    function loadPublishStateFromNewPostWizard() {
+      try {
+        const newPostStateRaw = localStorage.getItem(WIZARD_KEY);
+        if (newPostStateRaw) {
+          const newPostState = JSON.parse(newPostStateRaw);
+          console.log('[Publish Wizard] Loaded state from new post wizard:', newPostState);
+
+          // Copy the homepage and route selections from new post wizard
+          publishState.includeOnHomepage = newPostState.includeOnHomepage;
+          publishState.includeOnRoutePages = newPostState.includeOnRoutePages;
+          publishState.selectedRoutes = newPostState.selectedRoutes || [];
+
+          // Set default section if homepage is enabled but no section was saved
+          if (publishState.includeOnHomepage && newPostState.deferredHomeSection) {
+            publishState.section = newPostState.deferredHomeSection;
+          } else if (publishState.includeOnHomepage && !publishState.section) {
+            publishState.section = 'latest'; // Default section
+          }
+
+          // Show/hide section field based on homepage choice
+          const sectionField = document.getElementById('publishSectionField');
+          const sectionSelect = document.getElementById('publishSection');
+          if (publishState.includeOnHomepage) {
+            sectionField.classList.remove('hidden');
+            if (publishState.section) {
+              sectionSelect.value = publishState.section;
+            }
+            console.log('[Publish Wizard] Homepage enabled, showing section field');
+          } else {
+            sectionField.classList.add('hidden');
+            console.log('[Publish Wizard] Homepage disabled, hiding section field');
+          }
+
+          console.log('[Publish Wizard] Pre-populated publish state:', publishState);
+        } else {
+          console.log('[Publish Wizard] No new post wizard state found, using defaults');
+          // Hide section field by default
+          const sectionField = document.getElementById('publishSectionField');
+          if (sectionField) {
+            sectionField.classList.add('hidden');
+          }
+        }
+      } catch (e) {
+        console.warn('[Publish Wizard] Error loading state from new post wizard:', e);
+        // Hide section field on error
+        const sectionField = document.getElementById('publishSectionField');
+        if (sectionField) {
+          sectionField.classList.add('hidden');
+        }
+      }
+    }
+
+    function buildPublishRoutesGrid() {
+      const ROUTE_PAGES = ['featured', 'latest', 'others', 'popular', 'topics'];
+      const container = document.getElementById('publishRoutesGrid');
+      if (!container) return;
+      if (container.dataset.built === '1') {
+        // hydrate checked states if any
+        document.querySelectorAll('.publish-route-checkbox').forEach(cb => {
+          cb.checked = publishState.selectedRoutes.includes(cb.value);
+        });
+        return;
+      }
+      container.innerHTML = ROUTE_PAGES.map(r => {
+        const label = r.toUpperCase();
+        const checked = publishState.selectedRoutes.includes(r) ? 'checked' : '';
+        return `
+        <label class="route-pill">
+          <input type="checkbox" class="publish-route-checkbox" value="${r}" ${checked}>
+          <span>${label}</span>
+        </label>
+      `;
+      }).join('');
+
+      container.addEventListener('change', (e) => {
+        const cb = e.target.closest('.publish-route-checkbox');
+        if (!cb) return;
+        const val = cb.value;
+        if (cb.checked && !publishState.selectedRoutes.includes(val)) publishState.selectedRoutes.push(val);
+        if (!cb.checked) publishState.selectedRoutes = publishState.selectedRoutes.filter(x => x !== val);
+      });
+
+      container.dataset.built = '1';
+    }
+
+    function selectPublishHomepage(include) {
+      publishState.includeOnHomepage = !!include;
+      document.getElementById('publishHomepageYes').classList.toggle('active', include === true);
+      document.getElementById('publishHomepageNo').classList.toggle('active', include === false);
+
+      const sectionSelector = document.getElementById('publishSectionSelector');
+      const sectionSelect = document.getElementById('publishSection');
+
+      if (include) {
+        sectionSelector.classList.remove('hidden');
+        sectionSelector.setAttribute('aria-hidden', 'false');
+        // Set default section if none selected
+        if (!sectionSelect.value) {
+          sectionSelect.value = 'latest';
+        }
+      } else {
+        sectionSelector.classList.add('hidden');
+        sectionSelector.setAttribute('aria-hidden', 'true');
+        // Clear section selection when homepage is disabled
+        sectionSelect.value = '';
+      }
+    }
+
+    function togglePublishRoutesInclude(include) {
+      publishState.includeOnRoutePages = !!include;
+      document.getElementById('publishRoutesYes').classList.toggle('active', include === true);
+      document.getElementById('publishRoutesNo').classList.toggle('active', include === false);
+
+      const rs = document.getElementById('publishRoutesSelector');
+      if (include) {
+        rs.classList.remove('hidden');
+        rs.setAttribute('aria-hidden', 'false');
+      } else {
+        rs.classList.add('hidden');
+        rs.setAttribute('aria-hidden', 'true');
+        publishState.selectedRoutes = [];
+        document.querySelectorAll('.publish-route-checkbox').forEach(cb => cb.checked = false);
+      }
+    }
+
+    function hydratePublishStep2() {
+      // Set homepage choice
+      if (typeof publishState.includeOnHomepage === 'boolean') {
+        selectPublishHomepage(publishState.includeOnHomepage);
+      }
+
+      // Set route pages choice
+      if (typeof publishState.includeOnRoutePages === 'boolean') {
+        togglePublishRoutesInclude(publishState.includeOnRoutePages);
+      }
+
+      // Set section value if available
+      if (publishState.section) {
+        document.getElementById('publishSection').value = publishState.section;
+      }
+    }
+
+    function hydratePublishStep3() {
+      // Set route pages choice for step 3
+      if (typeof publishState.includeOnRoutePages === 'boolean') {
+        document.getElementById('publishRoutesYes').classList.toggle('active', publishState.includeOnRoutePages === true);
+        document.getElementById('publishRoutesNo').classList.toggle('active', publishState.includeOnRoutePages === false);
+
+        const rs = document.getElementById('publishRoutesSelector');
+        if (publishState.includeOnRoutePages) {
+          rs.classList.remove('hidden');
+          rs.setAttribute('aria-hidden', 'false');
+        } else {
+          rs.classList.add('hidden');
+          rs.setAttribute('aria-hidden', 'true');
+        }
+      }
+    }
+
+    function closePublishWizard() {
+      const wizard = document.getElementById('publishWizard');
+      const backdrop = document.getElementById('publishWizardBackdrop');
+
+      if (wizard) wizard.classList.add('hidden');
+      if (backdrop) backdrop.classList.add('hidden');
+      document.body.style.overflow = '';
+
+      // Show the editor again
+      const editorModal = document.getElementById('editorModal');
+      if (editorModal) {
+        editorModal.style.display = '';
+      }
+
+      resetPublishWizard();
+    }
+
+    function resetPublishWizard() {
+      // Reset form fields
+      const inputs = document.querySelectorAll('#publishWizard input, #publishWizard textarea, #publishWizard select');
+      inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+          input.checked = false;
+        } else {
+          input.value = '';
+        }
+      });
+
+      // Reset publish state
+      publishState = {
+        includeOnHomepage: null,
+        includeOnRoutePages: null,
+        selectedRoutes: []
+      };
+
+      // Reset selected tag in the select element
+      const tagsSelect = document.getElementById('publishTags');
+      if (tagsSelect) {
+        tagsSelect.value = '';
+      }
+
+      // Reset UI states
+      document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('publishRoutesSelector').classList.add('hidden');
+
+      // Reset step to first
+      showPublishStep(1);
+    }
+
+    function loadPostMetaFromEditor() {
+      // Extract metadata from the current template content
+      const container = document.querySelector('#editorCanvas > div');
+      if (!container) return;
+
+      // Try to extract title from h1, h2, etc.
+      const titleEl = container.querySelector('h1, h2, h3');
+      if (titleEl && titleEl.textContent) {
+        document.getElementById('publishTitle').value = titleEl.textContent.trim();
+      }
+
+      // Try to extract excerpt from first paragraph
+      const excerptEl = container.querySelector('p');
+      if (excerptEl && excerptEl.textContent) {
+        document.getElementById('publishExcerpt').value = excerptEl.textContent.trim().substring(0, 200);
+      }
+
+      // Generate slug from title
+      const title = document.getElementById('publishTitle').value;
+      if (title) {
+        const slug = title.toLowerCase()
+          .replace(/[^\w\s-]/g, '') // Remove special chars
+          .replace(/\s+/g, '-') // Replace spaces with hyphens
+          .replace(/-+/g, '-') // Replace multiple hyphens with single
+          .trim();
+        document.getElementById('publishSlug').value = slug;
+      }
+    }
+
+    function showPublishStep(step) {
+      // Only step 1 exists now
+      const targetStep = document.getElementById('publishStep1');
+      if (targetStep) {
+        targetStep.classList.remove('hidden');
+      }
+
+      // Update step indicator
+      const indicator = document.getElementById('publishStepText');
+      if (indicator) {
+        indicator.textContent = `Step 1 of 1`;
+      }
+
+      // Confirm button is always visible for single step
+    }
+
+    function validatePublishStep(step) {
+      console.log('[Publish Wizard] Validating step:', step);
+
+      // Only step 1 exists now
+      const title = document.getElementById('publishTitle').value.trim();
+      const slug = document.getElementById('publishSlug').value.trim();
+      console.log('[Publish Wizard] Step 1 - Title:', title, 'Slug:', slug);
+
+      if (!title) {
+        console.log('[Publish Wizard] Step 1 validation failed: No title');
+        alert('Please enter a title');
+        document.getElementById('publishTitle').focus();
+        return false;
+      }
+      if (!slug) {
+        console.log('[Publish Wizard] Step 1 validation failed: No slug');
+        alert('Please enter a URL slug');
+        document.getElementById('publishSlug').focus();
+        return false;
+      }
+
+      // If homepage was enabled in new post wizard, validate section
+      const sectionField = document.getElementById('publishSectionField');
+      if (sectionField && !sectionField.classList.contains('hidden')) {
+        const section = document.getElementById('publishSection').value;
+        console.log('[Publish Wizard] Step 1 - Section:', section);
+
+        if (!section) {
+          console.log('[Publish Wizard] Step 1 validation failed: Homepage enabled but no section selected');
+          alert('Please select a homepage section');
+          document.getElementById('publishSection').focus();
+          return false;
+        }
+      }
+
+      console.log('[Publish Wizard] Step 1 validation passed');
+      return true;
+    }
+
+    function onPublishNext() {
+      // Single step wizard - this function is no longer needed
+      console.log('[Publish Wizard] Next button clicked - single step wizard');
+    }
+
+    function onPublishBack() {
+      // Single step wizard - no back button
+      console.log('[Publish Wizard] Back button clicked - single step wizard');
+    }
+
+    function getCurrentPublishStep() {
+      // Single step wizard - always step 1
+      return 1;
+    }
+
+    function updatePublishSummary() {
+      const title = document.getElementById('publishTitle').value.trim();
+      const slug = document.getElementById('publishSlug').value.trim();
+      const section = document.getElementById('publishSection').value;
+
+      const homepage = typeof publishState.includeOnHomepage === 'boolean' ? (publishState.includeOnHomepage ? 'Yes' : 'No') : '-';
+      const routes = publishState.includeOnRoutePages
+        ? (publishState.selectedRoutes.length ? publishState.selectedRoutes.map(r => r.toUpperCase()).join(', ') : 'Yes (no specific routes selected)')
+        : (typeof publishState.includeOnRoutePages === 'boolean' ? 'No' : '-');
+
+      document.getElementById('summaryTitle').textContent = title || '-';
+      document.getElementById('summarySlug').textContent = slug ? `blog.nekwasar.com/${slug}` : 'blog.nekwasar.com/-';
+      document.getElementById('summaryHomepage').textContent = homepage;
+      document.getElementById('summaryRoutes').textContent = routes;
+    }
+
+    function updatePublishConfirmation() {
+      const title = document.getElementById('publishTitle').value.trim();
+      const slug = document.getElementById('publishSlug').value.trim();
+
+      const homepage = typeof publishState.includeOnHomepage === 'boolean' ? (publishState.includeOnHomepage ? 'Yes' : 'No') : '-';
+      const routes = publishState.includeOnRoutePages
+        ? (publishState.selectedRoutes.length ? publishState.selectedRoutes.map(r => r.toUpperCase()).join(', ') : 'Yes (no specific routes selected)')
+        : (typeof publishState.includeOnRoutePages === 'boolean' ? 'No' : '-');
+
+      document.getElementById('confirmTitle').textContent = title || '-';
+      document.getElementById('confirmSlug').textContent = slug ? `blog.nekwasar.com/${slug}` : 'blog.nekwasar.com/-';
+      document.getElementById('confirmHomepage').textContent = homepage;
+      document.getElementById('confirmRoutes').textContent = routes;
+    }
+
+    async function onPublishPost() {
+      console.log('🚀 [PUBLISH DEBUG] onPublish() function called');
+      console.log('📊 [PUBLISH DEBUG] Current timestamp -', new Date().toISOString());
+
+      console.log('🔍 [PUBLISH DEBUG] Element exist check - Editor modal:', !!document.getElementById('editorModal'));
+      console.log('🔍 [PUBLISH DEBUG] Element exist check - Publish wizard:', !!document.getElementById('publishWizard'));
+      console.log('🔍 [PUBLISH DEBUG] Element exist check - Publish backdrop:', !!document.getElementById('publishWizardBackdrop'));
+
+      console.log('🔍 [PUBLISH DEBUG] Editor container found -', !!document.getElementById('editorModal'));
+
+      console.log('🔄 [PUBLISH DEBUG] Hiding editor modal...');
+
+      // Validate the single step
+      if (!validatePublishStep(1)) {
+        return;
+      }
+
+      try {
+        // Collect post data
+        const postData = {
+          title: document.getElementById('publishTitle').value.trim(),
+          slug: document.getElementById('publishSlug').value.trim(),
+          excerpt: document.getElementById('publishExcerpt').value.trim(),
+          tags: [document.getElementById('publishTags').value].filter(tag => tag), // Get single selected tag as array
+          author: document.getElementById('publishAuthor').value.trim(),
+          published_at: document.getElementById('publishDate').value || new Date().toISOString(),
+          featured_image: document.getElementById('publishImage').value.trim(),
+          template_type: state.selectedTemplate || 'template1',
+          is_featured: publishState.includeOnHomepage || false
+        };
+
+        // Only include section if homepage was enabled
+        const sectionField = document.getElementById('publishSectionField');
+        if (sectionField && !sectionField.classList.contains('hidden')) {
+          postData.section = document.getElementById('publishSection').value;
+        }
+
+        // Get HTML content from editor and sanitize it
+        const container = document.querySelector('#editorCanvas > div');
+        if (container) {
+          postData.content = sanitizeContent(container);
+        }
+
+        console.log('[Publish] Publishing post:', postData);
+
+        // Send to API
+        const response = await fetch('/admin/api/blog/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+          },
+          body: JSON.stringify(postData)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to publish: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('[Publish] Post published successfully:', result);
+
+        // Success - navigate back to posts page
+        alert('Post published successfully!');
+        closeEditorModal();
+        // Refresh the posts list
+        if (typeof loadPostsData === 'function') {
+          loadPostsData();
+        }
+
+        console.log('✅ [PUBLISH DEBUG] openPublishWizard() completed');
+
+      } catch (error) {
+        console.error('[Publish] Error publishing post:', error);
+        alert('Failed to publish post: ' + error.message);
+      }
+    }
+
+    // Wire publish wizard events
+    function wirePublishWizardEvents() {
+      const closeBtn = document.getElementById('publishCloseBtn');
+      const cancelBtn = document.getElementById('publishCancelBtn');
+      const confirmBtn = document.getElementById('publishConfirmBtn');
+      const imageInput = document.getElementById('publishImage');
+
+      if (closeBtn) closeBtn.onclick = () => closePublishWizard();
+      if (cancelBtn) cancelBtn.onclick = () => closePublishWizard();
+      if (confirmBtn) confirmBtn.onclick = () => onPublishPost();
+
+      // Image preview functionality
+      if (imageInput) {
+        imageInput.addEventListener('input', updateImagePreview);
+        imageInput.addEventListener('blur', updateImagePreview);
+      }
+    }
+
+    function updateImagePreview() {
+      const imageInput = document.getElementById('publishImage');
+      const previewDiv = document.getElementById('imagePreview');
+      const previewImg = document.getElementById('previewImg');
+
+      if (!imageInput || !previewDiv || !previewImg) return;
+
+      const url = imageInput.value.trim();
+
+      if (url) {
+        previewImg.src = url;
+        previewImg.onerror = () => {
+          previewDiv.classList.add('hidden');
+          console.warn('[Image Preview] Failed to load image:', url);
+        };
+        previewImg.onload = () => {
+          previewDiv.classList.remove('hidden');
+          console.log('[Image Preview] Image loaded successfully:', url);
+        };
+      } else {
+        previewDiv.classList.add('hidden');
+        previewImg.src = '';
+      }
+    }
+
+    // Tag Selector Functions for Publish Wizard
+    async function loadPublishTags() {
+      console.log('🏷️ Loading tags for publish wizard...');
+
+      const selectElement = document.getElementById('publishTags');
+      if (!selectElement) return;
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/admin/api/blog/tags', {
+          method: 'GET',
+          headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        availablePublishTags = data.tags || [];
+
+        console.log(`✅ Loaded ${availablePublishTags.length} tags for publish wizard`);
+
+        // Clear existing options except the first one
+        selectElement.innerHTML = '<option value="">Select a tag...</option>';
+
+        if (availablePublishTags.length === 0) {
+          const option = document.createElement('option');
+          option.value = '';
+          option.textContent = 'No tags available';
+          option.disabled = true;
+          selectElement.appendChild(option);
+          return;
+        }
+
+        // Add all tags as options
+        availablePublishTags.forEach(tag => {
+          const option = document.createElement('option');
+          option.value = tag.slug;
+          option.textContent = `${tag.name} (${tag.count} posts)`;
+          selectElement.appendChild(option);
+        });
+
+      } catch (error) {
+        console.error('❌ Error loading publish tags:', error);
+        selectElement.innerHTML = '<option value="">Select a tag...</option><option value="" disabled>Failed to load tags</option>';
+      }
+    }
+
+    // Call this when the editor modal is opened
+    function initPublishWizard() {
+      wirePublishWizardEvents();
+      showPublishStep(1);
+      loadPublishTags(); // Load tags for the tag selector
+    }
+
+    // Public hook: override existing newPost() to open wizard
+    window.newPost = function () {
+      showWizard();
+    };
+
+    // Expose for debug (optional)
+    window.__BlogNewPostWizard = {
+      open: showWizard,
+      close: hideWizard,
+      getState: () => ({ ...state }),
+      clearState: () => {
+        try {
+          localStorage.removeItem(WIZARD_KEY);
+          console.log(LOG_PREFIX, '[DEBUG] Wizard state cleared from localStorage');
+        } catch (e) {
+          console.warn(LOG_PREFIX, '[DEBUG] Failed to clear wizard state', e);
+        }
+      }
+    };
+  })();
+</script>

@@ -1,0 +1,800 @@
+<!-- Search Analytics Overview -->
+<div class="search-overview">
+    <div class="analytics-header">
+        <h1 class="page-title">Search Analytics Overview</h1>
+        <p class="page-subtitle">Monitor search performance and user behavior</p>
+    </div>
+
+    <!-- Search Overview Cards -->
+    <div class="search-overview-cards">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-magnifying-glass"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalSearches">0</div>
+                <div class="card-label">Total Searches</div>
+                <div class="card-trend" id="searchesTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+12.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-users"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="uniqueUsers">0</div>
+                <div class="card-label">Unique Searchers</div>
+                <div class="card-trend" id="usersTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-target"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgResults">0</div>
+                <div class="card-label">Avg. Results per Search</div>
+                <div class="card-trend" id="resultsTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+5.7%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgSearchTime">0ms</div>
+                <div class="card-label">Avg. Search Time</div>
+                <div class="card-trend" id="timeTrend">
+                    <i class="ph-bold ph-trend-down"></i>
+                    <span>-3.2%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Trends Chart -->
+    <div class="search-trends-section">
+        <div class="section-header">
+            <h2>Search Trends</h2>
+            <div class="trend-filters">
+                <button class="trend-filter-btn active" data-period="7d">7 Days</button>
+                <button class="trend-filter-btn" data-period="30d">30 Days</button>
+                <button class="trend-filter-btn" data-period="90d">90 Days</button>
+                <button class="trend-filter-btn" data-period="1y">1 Year</button>
+            </div>
+        </div>
+        <div class="search-chart">
+            <canvas id="searchTrendsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Search Insights Grid -->
+    <div class="search-insights">
+        <div class="insight-card">
+            <div class="insight-header">
+                <h3>Popular Search Terms</h3>
+            </div>
+            <div class="popular-terms" id="popularTerms">
+                <!-- Popular terms will be populated here -->
+            </div>
+        </div>
+
+        <div class="insight-card">
+            <div class="insight-header">
+                <h3>Search Success Rate</h3>
+            </div>
+            <div class="success-rate">
+                <div class="rate-chart">
+                    <canvas id="successRateChart"></canvas>
+                </div>
+                <div class="rate-stats">
+                    <div class="rate-stat">
+                        <div class="stat-value" id="successRate">0%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                    <div class="rate-stat">
+                        <div class="stat-value" id="noResults">0</div>
+                        <div class="stat-label">No Results</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insight-card">
+            <div class="insight-header">
+                <h3>Search Behavior</h3>
+            </div>
+            <div class="behavior-metrics">
+                <div class="behavior-item">
+                    <div class="behavior-label">Avg. Query Length</div>
+                    <div class="behavior-value" id="avgQueryLength">0 words</div>
+                </div>
+                <div class="behavior-item">
+                    <div class="behavior-label">Most Active Hour</div>
+                    <div class="behavior-value" id="peakHour">0:00</div>
+                </div>
+                <div class="behavior-item">
+                    <div class="behavior-label">Mobile Searches</div>
+                    <div class="behavior-value" id="mobileSearches">0%</div>
+                </div>
+                <div class="behavior-item">
+                    <div class="behavior-label">Filter Usage</div>
+                    <div class="behavior-value" id="filterUsage">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insight-card">
+            <div class="insight-header">
+                <h3>Trending Topics</h3>
+            </div>
+            <div class="trending-topics" id="trendingTopics">
+                <!-- Trending topics will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Search Activity -->
+    <div class="recent-activity">
+        <div class="section-header">
+            <h2>Recent Search Activity</h2>
+            <button class="view-all-btn" id="viewAllSearches">View All</button>
+        </div>
+        <div class="activity-list" id="recentActivity">
+            <!-- Recent searches will be populated here -->
+        </div>
+    </div>
+</div>
+
+<style>
+.search-overview {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Search Overview Cards */
+.search-overview-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.overview-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--admin-radius-md);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.overview-card:hover {
+    box-shadow: var(--admin-shadow-lg);
+    transform: translateY(-1px);
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--admin-radius-md);
+    background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.card-label {
+    font-size: 0.75rem;
+    color: var(--admin-text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.card-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+}
+
+.card-trend.positive {
+    color: var(--admin-success);
+}
+
+.card-trend.negative {
+    color: var(--admin-error);
+}
+
+/* Search Trends Section */
+.search-trends-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+    font: normal 600 1.5rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.trend-filters {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.trend-filter-btn {
+    background: none;
+    border: 1px solid var(--stroke-elements);
+    color: var(--t-medium);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--_radius-s);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+}
+
+.trend-filter-btn.active {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.search-chart {
+    height: 250px;
+    position: relative;
+}
+
+/* Search Insights */
+.search-insights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.insight-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.25rem;
+}
+
+.insight-header h3 {
+    font: normal 600 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0 0 1rem 0;
+}
+
+/* Popular Terms */
+.popular-terms {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.term-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border-radius: var(--_radius-m);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    border: 1px solid var(--stroke-elements);
+}
+
+.term-item:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.term-text {
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.term-count {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Success Rate */
+.success-rate {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.rate-chart {
+    flex: 1;
+    height: 100px;
+    position: relative;
+}
+
+.rate-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.rate-stat {
+    text-align: center;
+}
+
+.rate-stat .stat-value {
+    font: normal 700 1.25rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.rate-stat .stat-label {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Behavior Metrics */
+.behavior-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.behavior-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+}
+
+.behavior-label {
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.behavior-value {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Trending Topics */
+.trending-topics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.topic-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--_radius-m);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    border: 1px solid var(--stroke-elements);
+}
+
+.topic-item:hover {
+    background: var(--stroke-elements);
+}
+
+.topic-rank {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.topic-text {
+    flex: 1;
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.topic-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font: normal 500 0.875rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+.topic-trend.negative {
+    color: var(--error, #ef4444);
+}
+
+/* Recent Activity */
+.recent-activity {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 1.5rem;
+}
+
+.view-all-btn {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--_radius-md);
+    font: normal 600 0.875rem/1.2 var(--_font-default);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.view-all-btn:hover {
+    background: var(--secondary);
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--_radius-m);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    border: 1px solid var(--stroke-elements);
+}
+
+.activity-item:hover {
+    background: var(--stroke-elements);
+}
+
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-query {
+    font: normal 500 1rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.activity-meta {
+    font: normal 400 0.875rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.activity-results {
+    font: normal 600 1rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .search-insights {
+        grid-template-columns: 1fr;
+    }
+
+    .success-rate {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-overview {
+        padding: 0.75rem;
+    }
+
+    .search-overview-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .trend-filters {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .behavior-item {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .activity-item {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+// Search Analytics Overview
+document.addEventListener('DOMContentLoaded', function() {
+    initSearchOverview();
+});
+
+function initSearchOverview() {
+    loadSearchOverviewData();
+    initTrendFilters();
+}
+
+async function loadSearchOverviewData() {
+    try {
+        const response = await fetch('/api/admin/search/overview');
+        if (response.ok) {
+            const data = await response.json();
+            updateSearchOverview(data);
+            updateSearchTrends(data.trends);
+            updatePopularTerms(data.popularTerms);
+            updateSuccessRate(data.successRate);
+            updateBehaviorMetrics(data.behavior);
+            updateTrendingTopics(data.trending);
+            updateRecentActivity(data.recent);
+        }
+    } catch (error) {
+        console.error('Error loading search overview data:', error);
+        showFallbackSearchData();
+    }
+}
+
+function updateSearchOverview(data) {
+    document.getElementById('totalSearches').textContent = data.totalSearches.toLocaleString();
+    document.getElementById('uniqueUsers').textContent = data.uniqueUsers.toLocaleString();
+    document.getElementById('avgResults').textContent = data.avgResults.toFixed(1);
+    document.getElementById('avgSearchTime').textContent = Math.round(data.avgSearchTime * 1000) + 'ms';
+
+    updateTrend('searchesTrend', data.searchesChange);
+    updateTrend('usersTrend', data.usersChange);
+    updateTrend('resultsTrend', data.resultsChange);
+    updateTrend('timeTrend', data.timeChange);
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    const icon = element.querySelector('i');
+
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change).toFixed(1) + '%';
+
+    if (change < 0) {
+        element.classList.add('negative');
+        icon.className = 'ph-bold ph-trend-down';
+    } else {
+        element.classList.remove('negative');
+        icon.className = 'ph-bold ph-trend-up';
+    }
+}
+
+function updateSearchTrends(trendsData) {
+    const ctx = document.getElementById('searchTrendsChart').getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (window.searchTrendsChart) {
+        window.searchTrendsChart.destroy();
+    }
+
+    window.searchTrendsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: trendsData.labels,
+            datasets: [{
+                label: 'Total Searches',
+                data: trendsData.searches,
+                borderColor: 'var(--accent)',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Unique Users',
+                data: trendsData.users,
+                borderColor: 'var(--secondary)',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updatePopularTerms(terms) {
+    const container = document.getElementById('popularTerms');
+    container.innerHTML = terms.map(term => `
+        <div class="term-item">
+            <div class="term-text">${term.query}</div>
+            <div class="term-count">${term.count.toLocaleString()}</div>
+        </div>
+    `).join('');
+}
+
+function updateSuccessRate(successData) {
+    document.getElementById('successRate').textContent = successData.rate + '%';
+    document.getElementById('noResults').textContent = successData.noResults.toLocaleString();
+
+    const ctx = document.getElementById('successRateChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Successful', 'No Results'],
+            datasets: [{
+                data: [successData.successful, successData.noResults],
+                backgroundColor: [
+                    'var(--success, #10b981)',
+                    'var(--error, #ef4444)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+}
+
+function updateBehaviorMetrics(behavior) {
+    document.getElementById('avgQueryLength').textContent = behavior.avgQueryLength + ' words';
+    document.getElementById('peakHour').textContent = behavior.peakHour;
+    document.getElementById('mobileSearches').textContent = behavior.mobileSearches + '%';
+    document.getElementById('filterUsage').textContent = behavior.filterUsage + '%';
+}
+
+function updateTrendingTopics(topics) {
+    const container = document.getElementById('trendingTopics');
+    container.innerHTML = topics.map((topic, index) => `
+        <div class="topic-item">
+            <div class="topic-rank">${index + 1}</div>
+            <div class="topic-text">${topic.term}</div>
+            <div class="topic-trend ${topic.change < 0 ? 'negative' : ''}">
+                <i class="ph-bold ${topic.change >= 0 ? 'ph-trend-up' : 'ph-trend-down'}"></i>
+                ${Math.abs(topic.change)}%
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateRecentActivity(activity) {
+    const container = document.getElementById('recentActivity');
+    container.innerHTML = activity.map(item => `
+        <div class="activity-item">
+            <div class="activity-icon">
+                <i class="ph-bold ph-magnifying-glass"></i>
+            </div>
+            <div class="activity-content">
+                <div class="activity-query">"${item.query}"</div>
+                <div class="activity-meta">${formatTimeAgo(item.timestamp)} • ${item.userAgent}</div>
+            </div>
+            <div class="activity-results">${item.resultsCount} results</div>
+        </div>
+    `).join('');
+}
+
+function initTrendFilters() {
+    document.querySelectorAll('.trend-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.trend-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadSearchTrends(this.dataset.period);
+        });
+    });
+}
+
+async function loadSearchTrends(period) {
+    try {
+        const response = await fetch(`/api/admin/search/trends?period=${period}`);
+        if (response.ok) {
+            const data = await response.json();
+            updateSearchTrends(data);
+        }
+    } catch (error) {
+        console.error('Error loading search trends:', error);
+    }
+}
+
+function formatTimeAgo(timestamp) {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diff = now - time;
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return 'now';
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
+}
+
+function showFallbackSearchData() {
+    // Show sample data when API is not available
+    updateSearchOverview({
+        totalSearches: 15432,
+        uniqueUsers: 8921,
+        avgResults: 8.7,
+        avgSearchTime: 0.234,
+        searchesChange: 12.5,
+        usersChange: 8.2,
+        resultsChange: 5.7,
+        timeChange: -3.2
+    });
+}
+</script>

@@ -1,0 +1,1966 @@
+<!-- Futuristic Tags Management System -->
+<div class="futuristic-tags-container">
+    <!-- Futuristic Header -->
+    <div class="futuristic-header">
+        <div class="futuristic-title-section">
+            <div class="futuristic-title-icon">
+                <div class="holographic-icon">🏷️</div>
+            </div>
+            <div class="futuristic-title-content">
+                <h2 class="futuristic-title">TAGS NEURAL NETWORK</h2>
+                <div class="futuristic-subtitle">Advanced Tag Intelligence System v3.0</div>
+            </div>
+            <div class="futuristic-status-panel">
+                <div class="status-indicator active">
+                    <div class="status-dot"></div>
+                    <span class="status-text">NEURAL NET ACTIVE</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="futuristic-nav-bar">
+            <div class="nav-item active" data-view="cloud">
+                <span class="nav-icon">🌌</span>
+                <span class="nav-text">TAG CLOUD</span>
+            </div>
+            <div class="nav-item" data-view="matrix">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">MATRIX VIEW</span>
+            </div>
+            <div class="nav-item" data-view="relationships">
+                <span class="nav-icon">🕸️</span>
+                <span class="nav-text">RELATIONSHIPS</span>
+            </div>
+            <div class="nav-item" data-view="ai">
+                <span class="nav-icon">🤖</span>
+                <span class="nav-text">AI INSIGHTS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Futuristic Interface -->
+    <div class="futuristic-main-panel">
+        <!-- Control Panel Sidebar -->
+        <div class="futuristic-sidebar">
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="section-icon">🚀</span>
+                    <span class="section-title">QUICK ACTIONS</span>
+                </div>
+                <div class="action-grid">
+                    <button class="futuristic-btn primary" onclick="createTag()">
+                        <div class="btn-icon">➕</div>
+                        <div class="btn-text">ADD TAG</div>
+                    </button>
+                    <button class="futuristic-btn danger" onclick="deleteSelectedTags()">
+                        <div class="btn-icon">🗑️</div>
+                        <div class="btn-text">DELETE TAG</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="section-icon">🎯</span>
+                    <span class="section-title">TAG ANALYTICS</span>
+                </div>
+                <div class="stats-panel">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Tags</div>
+                        <div class="stat-value" data-count="0">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Most Used</div>
+                        <div class="stat-value highlight">None</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Tag Accuracy</div>
+                        <div class="stat-value" data-count="0">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span class="section-icon">🧠</span>
+                    <span class="section-title">AI PERFORMANCE</span>
+                </div>
+                <div class="health-indicators">
+                    <div class="health-item">
+                        <span class="health-label">Auto-Tagging</span>
+                        <div class="health-bar">
+                            <div class="health-fill" style="width: 92%"></div>
+                        </div>
+                        <span class="health-score">92%</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">Relevance</span>
+                        <div class="health-bar">
+                            <div class="health-fill" style="width: 88%"></div>
+                        </div>
+                        <span class="health-score">88%</span>
+                    </div>
+                    <div class="health-item">
+                        <span class="health-label">Suggestions</span>
+                        <div class="health-bar">
+                            <div class="health-fill" style="width: 85%"></div>
+                        </div>
+                        <span class="health-score">85%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="futuristic-content">
+            <!-- View Controls -->
+            <div class="content-controls">
+                <div class="view-switcher">
+                    <button class="view-btn active" data-view="cloud">
+                        <span class="view-icon">🌌</span>
+                        <span class="view-text">TAG CLOUD</span>
+                    </button>
+                    <button class="view-btn" data-view="matrix">
+                        <span class="view-icon">📊</span>
+                        <span class="view-text">MATRIX</span>
+                    </button>
+                    <button class="view-btn" data-view="relationships">
+                        <span class="view-icon">🕸️</span>
+                        <span class="view-text">RELATIONS</span>
+                    </button>
+                    <button class="view-btn" data-view="ai">
+                        <span class="view-icon">🤖</span>
+                        <span class="view-text">AI MODE</span>
+                    </button>
+                </div>
+                
+                <div class="control-panel">
+                    <div class="search-container">
+                        <input type="text" class="futuristic-input" placeholder="SEARCH TAGS..." id="tagSearch">
+                        <div class="search-icon">🔍</div>
+                    </div>
+                    <div class="filter-dropdown">
+                        <select class="futuristic-select" id="tagFilter">
+                            <option value="all">ALL TAGS</option>
+                            <option value="popular">POPULAR</option>
+                            <option value="trending">TRENDING</option>
+                            <option value="unused">UNUSED</option>
+                            <option value="ai-generated">AI GENERATED</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tag Cloud View -->
+            <div class="tag-cloud-container" id="tagCloud">
+                <div class="cloud-background">
+                    <div class="floating-particle particle-1"></div>
+                    <div class="floating-particle particle-2"></div>
+                    <div class="floating-particle particle-3"></div>
+                    <div class="floating-particle particle-4"></div>
+                    <div class="floating-particle particle-5"></div>
+                </div>
+                
+                <div class="tag-cloud-grid" id="tagCloudGrid">
+                    <!-- Tags will be loaded dynamically -->
+                    <div class="loading-tags">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Loading Neural Network...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights Panel -->
+            <div class="ai-insights-panel">
+                <div class="insights-header">
+                    <h3 class="insights-title">🤖 AI TAG INSIGHTS</h3>
+                </div>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <div class="insight-icon">🔮</div>
+                        <div class="insight-content">
+                            <div class="insight-title">Tag Trends</div>
+                            <div class="insight-text">AI detected rising interest in quantum computing tags</div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon">🎯</div>
+                        <div class="insight-content">
+                            <div class="insight-title">Optimization</div>
+                            <div class="insight-text">Consider merging similar tags: "JS" and "JavaScript"</div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon">⚡</div>
+                        <div class="insight-content">
+                            <div class="insight-title">Suggestions</div>
+                            <div class="insight-text">12 new tags recommended based on content analysis</div>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon">📈</div>
+                        <div class="insight-content">
+                            <div class="insight-title">Performance</div>
+                            <div class="insight-text">Tag search accuracy improved by 12% this week</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Tag Modal -->
+<div class="modal-overlay" id="createTagModal">
+    <div class="futuristic-modal">
+        <div class="modal-header">
+            <h3 class="modal-title">GENERATE NEW TAG</h3>
+            <button class="modal-close" onclick="closeCreateModal()">✕</button>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label">Tag Name</label>
+                <input type="text" class="futuristic-input" placeholder="Enter tag name...">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="futuristic-textarea" placeholder="Tag description for AI training..." rows="3"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Tag Type</label>
+                    <select class="futuristic-select">
+                        <option value="manual">MANUAL</option>
+                        <option value="ai-generated">AI GENERATED</option>
+                        <option value="suggested">SUGGESTED</option>
+                        <option value="auto">AUTO-CREATED</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select class="futuristic-select">
+                        <option value="low">LOW</option>
+                        <option value="medium">MEDIUM</option>
+                        <option value="high">HIGH</option>
+                        <option value="critical">CRITICAL</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="futuristic-btn secondary" onclick="closeCreateModal()">CANCEL</button>
+            <button class="futuristic-btn primary" onclick="generateTag()">GENERATE TAG</button>
+        </div>
+    </div>
+</div>
+
+<!-- Futuristic Tags Styles -->
+<style>
+/* Futuristic Tags Management Styles */
+.futuristic-tags-container {
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #2d1b69 100%);
+    color: #ffffff;
+    padding: 0;
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    min-height: 600px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Neon Glow Background Effects */
+.futuristic-tags-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 25% 25%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.futuristic-tags-container * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Futuristic Header */
+.futuristic-header {
+    background: linear-gradient(90deg, rgba(26, 26, 58, 0.9), rgba(45, 27, 105, 0.9));
+    border-bottom: 1px solid rgba(168, 85, 247, 0.4);
+    padding: 20px 28px;
+    backdrop-filter: blur(20px);
+}
+
+.futuristic-title-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.futuristic-title-icon {
+    position: relative;
+}
+
+.holographic-icon {
+    font-size: 28px;
+    animation: glow 2s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8));
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.8)); }
+    to { filter: drop-shadow(0 0 25px rgba(236, 72, 153, 0.9)); }
+}
+
+.futuristic-title-content {
+    flex: 1;
+}
+
+.futuristic-title {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a855f7, #ec4899, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.02em;
+}
+
+.futuristic-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+}
+
+.futuristic-status-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 16px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: #a855f7;
+    border-radius: 50%;
+    animation: neural-pulse 1.5s infinite;
+}
+
+@keyframes neural-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(168, 85, 247, 0);
+        transform: scale(1.1);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(168, 85, 247, 0);
+        transform: scale(1);
+    }
+}
+
+.status-text {
+    font-size: 10px;
+    font-weight: 600;
+    color: #a855f7;
+}
+
+/* Navigation Bar */
+.futuristic-nav-bar {
+    display: flex;
+    gap: 6px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #a855f7;
+    transform: translateY(-1px);
+}
+
+.nav-icon {
+    font-size: 12px;
+}
+
+.nav-text {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* Main Panel */
+.futuristic-main-panel {
+    display: flex;
+    min-height: 500px;
+}
+
+/* Sidebar */
+.futuristic-sidebar {
+    width: 220px;
+    background: rgba(45, 27, 105, 0.6);
+    border-right: 1px solid rgba(168, 85, 247, 0.3);
+    padding: 20px 16px;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar-section {
+    margin-bottom: 24px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.section-icon {
+    font-size: 14px;
+    color: #a855f7;
+}
+
+.section-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.05em;
+}
+
+/* Action Grid */
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.futuristic-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+}
+
+.futuristic-btn:hover {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.5);
+    transform: translateY(-1px);
+}
+
+.futuristic-btn.primary {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(236, 72, 153, 0.25));
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+.futuristic-btn.secondary:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+.futuristic-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.btn-icon {
+    font-size: 14px;
+}
+
+.btn-text {
+    font-size: 9px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Stats Panel */
+.stats-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: #a855f7;
+}
+
+.stat-value.highlight {
+    background: linear-gradient(135deg, #ec4899, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Health Indicators */
+.health-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.health-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.health-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    min-width: 60px;
+}
+
+.health-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.health-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a855f7, #ec4899);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.health-score {
+    font-size: 10px;
+    font-weight: 600;
+    color: #a855f7;
+    min-width: 24px;
+    text-align: right;
+}
+
+/* Content Area */
+.futuristic-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Content Controls */
+.content-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.view-switcher {
+    display: flex;
+    gap: 6px;
+}
+
+.view-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.view-btn:hover,
+.view-btn.active {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: rgba(168, 85, 247, 0.5);
+    color: #a855f7;
+    transform: translateY(-1px);
+}
+
+.view-icon {
+    font-size: 12px;
+}
+
+.view-text {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.control-panel {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-container {
+    position: relative;
+}
+
+.futuristic-input {
+    width: 200px;
+    padding: 8px 12px 8px 36px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 11px;
+    transition: all 0.3s ease;
+}
+
+.futuristic-input:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.futuristic-select {
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.futuristic-select:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+/* Tag Cloud Container */
+.tag-cloud-container {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.cloud-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.floating-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(168, 85, 247, 0.6);
+    border-radius: 50%;
+    animation: float-around 20s infinite linear;
+}
+
+.particle-1 {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 25s;
+}
+
+.particle-2 {
+    top: 60%;
+    left: 80%;
+    animation-delay: 5s;
+    animation-duration: 30s;
+}
+
+.particle-3 {
+    top: 80%;
+    left: 20%;
+    animation-delay: 10s;
+    animation-duration: 22s;
+}
+
+.particle-4 {
+    top: 30%;
+    left: 70%;
+    animation-delay: 15s;
+    animation-duration: 28s;
+}
+
+.particle-5 {
+    top: 70%;
+    left: 90%;
+    animation-delay: 20s;
+    animation-duration: 26s;
+}
+
+@keyframes float-around {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(30px, -30px) rotate(90deg); }
+    50% { transform: translate(-20px, 20px) rotate(180deg); }
+    75% { transform: translate(-30px, -20px) rotate(270deg); }
+    100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+/* Tag Cloud Grid */
+.tag-cloud-grid {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    backdrop-filter: blur(5px);
+}
+
+.tag-chip {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 10px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    min-width: 100px;
+    flex: 0 0 auto;
+}
+
+.tag-chip:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.3);
+}
+
+.tag-chip.featured {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
+    border-color: rgba(168, 85, 247, 0.6);
+    font-size: 14px;
+}
+
+.tag-chip.popular {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
+    border-color: rgba(59, 130, 246, 0.6);
+    font-size: 12px;
+}
+
+.tag-chip.trending {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(249, 115, 22, 0.2));
+    border-color: rgba(236, 72, 153, 0.6);
+    font-size: 11px;
+}
+
+.tag-chip.ai-generated {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+    border-color: rgba(16, 185, 129, 0.6);
+    font-size: 10px;
+}
+
+.tag-chip.selected {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(236, 72, 153, 0.3));
+    border-color: rgba(168, 85, 247, 0.8);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+.tag-text {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: 11px;
+}
+
+.tag-count {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+/* AI Insights Panel */
+.ai-insights-panel {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.insights-header {
+    margin-bottom: 12px;
+}
+
+.insights-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #a855f7;
+    margin: 0;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.insight-card {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.insight-card:hover {
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+    transform: translateY(-1px);
+}
+
+.insight-icon {
+    font-size: 16px;
+    color: #a855f7;
+    flex-shrink: 0;
+}
+
+.insight-content {
+    flex: 1;
+}
+
+.insight-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 3px;
+}
+
+.insight-text {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.3;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.futuristic-modal {
+    background: linear-gradient(135deg, rgba(26, 26, 58, 0.95), rgba(45, 27, 105, 0.95));
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 16px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    transform: scale(0.9);
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.show .futuristic-modal {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.modal-close {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #ef4444;
+}
+
+.modal-content {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 6px;
+}
+
+.futuristic-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 11px;
+    resize: vertical;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.futuristic-textarea:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .futuristic-main-panel {
+        flex-direction: column;
+        max-width: 100%;
+    }
+    
+    .futuristic-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+        max-width: 100%;
+    }
+    
+    .tag-cloud-grid {
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 12px;
+        padding: 16px;
+        max-width: 100%;
+    }
+    
+    .futuristic-tags-container {
+        margin: 0 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .futuristic-tags-container {
+        padding: 12px;
+        margin: 0;
+        border-radius: 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .futuristic-header {
+        padding: 16px;
+    }
+    
+    .futuristic-main-panel {
+        flex-direction: column;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .futuristic-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+        padding: 16px 12px;
+        max-width: 100%;
+        overflow: hidden;
+    }
+    
+    .tag-cloud-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+        padding: 16px 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .tag-chip {
+        padding: 8px 6px;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .content-controls {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .control-panel {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+    
+    .futuristic-input {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .futuristic-select {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .insights-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .action-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+    
+    .futuristic-btn {
+        padding: 8px 6px;
+    }
+    
+    .stats-panel {
+        gap: 6px;
+    }
+    
+    .stat-item {
+        padding: 6px 8px;
+    }
+    
+    .health-indicators {
+        gap: 6px;
+    }
+    
+    .health-item {
+        gap: 6px;
+    }
+    
+    .health-label {
+        min-width: 50px;
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .futuristic-tags-container {
+        padding: 8px;
+        margin: 0;
+        border-radius: 8px;
+    }
+    
+    .futuristic-header {
+        padding: 12px;
+    }
+    
+    .futuristic-title-section {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .futuristic-nav-bar {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .nav-item {
+        padding: 6px 10px;
+    }
+    
+    .tag-cloud-grid {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 8px;
+        padding: 12px 8px;
+    }
+    
+    .tag-chip {
+        padding: 6px 4px;
+    }
+    
+    .action-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .content-controls {
+        padding: 8px;
+    }
+    
+    .insights-grid {
+        gap: 8px;
+    }
+    
+    .insight-card {
+        padding: 10px;
+    }
+}
+
+/* Global overflow prevention */
+.futuristic-tags-container,
+.futuristic-main-panel,
+.tag-cloud-grid,
+.ai-insights-panel {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Loading States */
+.loading-tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(168, 85, 247, 0.3);
+    border-top: 3px solid #a855f7;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #a855f7;
+}
+
+/* Error States */
+.error-tags {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.error-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #ef4444;
+}
+
+.error-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ef4444;
+    margin-bottom: 8px;
+}
+
+.error-text {
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.retry-btn {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #ef4444;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: #ef4444;
+}
+
+/* Multi-Select Indicator */
+.multi-select-indicator {
+    position: relative;
+    margin: 16px 20px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2));
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.indicator-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #a855f7;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.indicator-icon {
+    font-size: 14px;
+}
+
+.indicator-text {
+    flex: 1;
+}
+
+.indicator-close {
+    background: rgba(168, 85, 247, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    color: #a855f7;
+    border-radius: 6px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: all 0.3s ease;
+}
+
+.indicator-close:hover {
+    background: rgba(168, 85, 247, 0.4);
+}
+
+/* Scrollbar Styling */
+.futuristic-content::-webkit-scrollbar,
+.futuristic-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.futuristic-content::-webkit-scrollbar-track,
+.futuristic-sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.futuristic-content::-webkit-scrollbar-thumb,
+.futuristic-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.5);
+    border-radius: 3px;
+}
+
+.futuristic-content::-webkit-scrollbar-thumb:hover,
+.futuristic-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.7);
+}
+</style>
+
+<!-- Futuristic Tags JavaScript -->
+<script>
+let selectedTags = new Set();
+let multiSelectMode = false;
+
+function initTags() {
+    console.log('Initializing Futuristic Tags Neural Network...');
+
+    // Check if we're on the tags page
+    if (!document.querySelector('.futuristic-tags-container')) {
+        console.log('Tags page not detected, skipping initialization');
+        return;
+    }
+
+    // Load tags from API
+    loadTags();
+
+    // Setup search functionality
+    setupSearch();
+
+    // Setup view switching
+    setupViewSwitching();
+
+    // Setup tag interactions
+    setupTagInteractions();
+
+    // Setup modal functionality
+    setupModal();
+
+    // Setup AI features
+    setupAIFeatures();
+
+    // Animate particles
+    animateParticles();
+
+    // Animate counters
+    animateCounters();
+
+    console.log('Futuristic Tags Neural Network initialized successfully');
+}
+
+async function loadTags() {
+    console.log('🏷️ Loading tags from neural network...');
+
+    const container = document.getElementById('tagCloudGrid');
+    if (!container) {
+        console.error('❌ Tag cloud container not found');
+        return;
+    }
+
+    // Check if we have authentication token
+    const token = localStorage.getItem('token');
+    if (!token) {
+        console.warn('⚠️ No authentication token found, waiting...');
+        // Wait a bit for authentication to be established
+        setTimeout(() => loadTags(), 1000);
+        return;
+    }
+
+    // Show loading state
+    container.innerHTML = `
+        <div class="loading-tags">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Neural Network...</div>
+        </div>
+    `;
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/admin/api/blog/tags', {
+            method: 'GET',
+            headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const tags = data.tags || [];
+
+        console.log(`✅ Loaded ${tags.length} tags from neural network`);
+
+        // Update stats
+        updateTagStats(tags);
+
+        // Render tags
+        renderTags(tags);
+
+    } catch (error) {
+        console.error('❌ Error loading tags:', error);
+        container.innerHTML = `
+            <div class="error-tags">
+                <div class="error-icon">❌</div>
+                <div class="error-title">Neural Network Error</div>
+                <div class="error-text">Failed to load tags from the system. Please check if you're logged in and try again.</div>
+                <button class="retry-btn" onclick="loadTags()">Retry Connection</button>
+                <div class="error-hint" style="margin-top: 12px; font-size: 11px; color: #557755;">
+                    Hint: Create tags using the + button in the blog posts page sidebar
+                </div>
+            </div>
+        `;
+    }
+}
+
+function updateTagStats(tags) {
+    const totalCount = tags.length;
+    const mostUsed = tags.reduce((max, tag) => tag.count > max.count ? tag : max, { count: 0 });
+
+    // Update total count
+    const totalElement = document.querySelector('[data-count]');
+    if (totalElement) {
+        totalElement.dataset.count = totalCount;
+        totalElement.textContent = totalCount;
+    }
+
+    // Update most used
+    const mostUsedElement = document.querySelector('.stat-value.highlight');
+    if (mostUsedElement && mostUsed.name) {
+        mostUsedElement.textContent = mostUsed.name;
+    }
+
+    // Update accuracy (simulate based on tag count)
+    const accuracyElement = document.querySelector('.stat-value[data-count="94.2"]');
+    if (accuracyElement) {
+        const accuracy = totalCount > 0 ? Math.min(95, 85 + (totalCount * 2)) : 85;
+        accuracyElement.dataset.count = accuracy.toFixed(1);
+        accuracyElement.textContent = accuracy.toFixed(1) + '%';
+    }
+
+    console.log(`📊 Updated stats: ${totalCount} tags, most used: ${mostUsed.name || 'None'}`);
+}
+
+function renderTags(tags) {
+    const container = document.getElementById('tagCloudGrid');
+    if (!container) return;
+
+    if (tags.length === 0) {
+        container.innerHTML = `
+            <div class="error-tags">
+                <div class="error-icon">📭</div>
+                <div class="error-title">No Tags Found</div>
+                <div class="error-text">The neural network has no tags to display</div>
+                <button class="futuristic-btn primary" onclick="createTag()">Create First Tag</button>
+            </div>
+        `;
+        return;
+    }
+
+    // Sort tags by count (most used first)
+    const sortedTags = tags.sort((a, b) => b.count - a.count);
+
+    const tagHTML = sortedTags.map(tag => {
+        const classes = getTagClasses(tag.count, sortedTags);
+        return `
+            <div class="tag-chip ${classes}" data-tag="${tag.slug}" data-count="${tag.count}" data-id="${tag.id}">
+                <span class="tag-text">${tag.name}</span>
+                <span class="tag-count">${tag.count}</span>
+            </div>
+        `;
+    }).join('');
+
+    container.innerHTML = tagHTML;
+
+    // Re-setup tag interactions for dynamically loaded tags
+    setupTagInteractions();
+
+    console.log(`🎨 Rendered ${tags.length} tags in neural network`);
+}
+
+function getTagClasses(count, allTags) {
+    const maxCount = Math.max(...allTags.map(t => t.count));
+    const classes = [];
+
+    if (count === maxCount && count > 0) {
+        classes.push('featured');
+    } else if (count >= maxCount * 0.7) {
+        classes.push('popular');
+    } else if (count >= maxCount * 0.4) {
+        classes.push('trending');
+    }
+
+    return classes.join(' ');
+}
+
+function setupSearch() {
+    const searchInput = document.getElementById('tagSearch');
+    const filterSelect = document.getElementById('tagFilter');
+    
+    searchInput?.addEventListener('input', function() {
+        filterTags();
+    });
+    
+    filterSelect?.addEventListener('change', function() {
+        filterTags();
+    });
+}
+
+function filterTags() {
+    const searchTerm = document.getElementById('tagSearch').value.toLowerCase();
+    const filter = document.getElementById('tagFilter').value;
+    const chips = document.querySelectorAll('.tag-chip');
+
+    chips.forEach(chip => {
+        const tagText = chip.querySelector('.tag-text').textContent.toLowerCase();
+        const tagCount = parseInt(chip.dataset.count) || 0;
+        const matchesSearch = !searchTerm || tagText.includes(searchTerm);
+
+        // Apply filter logic
+        let shouldShow = matchesSearch;
+
+        if (filter !== 'all') {
+            switch (filter) {
+                case 'popular':
+                    shouldShow = shouldShow && tagCount >= 50;
+                    break;
+                case 'trending':
+                    shouldShow = shouldShow && tagCount >= 20 && tagCount < 50;
+                    break;
+                case 'unused':
+                    shouldShow = shouldShow && tagCount === 0;
+                    break;
+                case 'ai-generated':
+                    // For now, assume all tags are manually created
+                    // This can be extended when AI-generated tags are implemented
+                    shouldShow = shouldShow && false;
+                    break;
+            }
+        }
+
+        chip.style.display = shouldShow ? 'flex' : 'none';
+    });
+
+    console.log(`🔍 Filtered tags: search="${searchTerm}", filter="${filter}"`);
+}
+
+function setupViewSwitching() {
+    const viewBtns = document.querySelectorAll('.view-btn, .nav-item');
+    
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const view = this.dataset.view;
+            switchView(view);
+            
+            // Update active state
+            viewBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+}
+
+function switchView(view) {
+    console.log(`Switching to ${view} view`);
+    const container = document.getElementById('tagCloud');
+    
+    // Hide all views first
+    container.querySelectorAll('.view-content').forEach(content => {
+        content.style.display = 'none';
+    });
+    
+    // Show selected view
+    switch(view) {
+        case 'cloud':
+            container.style.display = 'block';
+            break;
+        case 'matrix':
+            // Implement matrix view
+            break;
+        case 'relationships':
+            // Implement relationships view
+            break;
+        case 'ai':
+            // Implement AI mode
+            break;
+    }
+}
+
+function setupTagInteractions() {
+    const chips = document.querySelectorAll('.tag-chip');
+
+    chips.forEach(chip => {
+        // Double-click to start multi-selection
+        chip.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            const tagId = this.dataset.id;
+            startMultiSelect(tagId);
+        });
+
+        // Single-click for selection (only in multi-select mode)
+        chip.addEventListener('click', function(e) {
+            if (multiSelectMode) {
+                e.preventDefault();
+                const tagId = this.dataset.id;
+                toggleTagSelection(tagId);
+            } else {
+                // Normal single-click behavior (could show details)
+                const tag = this.dataset.tag;
+                const count = this.dataset.count;
+                handleTagClick(tag, count);
+            }
+        });
+
+        chip.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-4px) scale(1.05)';
+        });
+
+        chip.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+}
+
+function startMultiSelect(tagId) {
+    console.log(`Starting multi-select with tag: ${tagId}`);
+    multiSelectMode = true;
+    selectedTags.clear();
+    selectedTags.add(tagId);
+    updateTagSelectionUI();
+
+    // Show visual feedback that multi-select is active
+    showMultiSelectIndicator();
+}
+
+function toggleTagSelection(tagId) {
+    if (selectedTags.has(tagId)) {
+        selectedTags.delete(tagId);
+    } else {
+        selectedTags.add(tagId);
+    }
+    updateTagSelectionUI();
+
+    // Exit multi-select if no tags selected
+    if (selectedTags.size === 0) {
+        exitMultiSelect();
+    }
+}
+
+function updateTagSelectionUI() {
+    // Update visual selection state for all tags
+    document.querySelectorAll('.tag-chip').forEach(chip => {
+        const tagId = chip.dataset.id;
+        if (selectedTags.has(tagId)) {
+            chip.classList.add('selected');
+        } else {
+            chip.classList.remove('selected');
+        }
+    });
+
+    // Update delete button state
+    const deleteBtn = document.querySelector('.futuristic-btn.danger');
+    if (deleteBtn) {
+        deleteBtn.disabled = selectedTags.size === 0;
+        deleteBtn.style.opacity = selectedTags.size === 0 ? '0.5' : '1';
+    }
+}
+
+function exitMultiSelect() {
+    multiSelectMode = false;
+    selectedTags.clear();
+    updateTagSelectionUI();
+    hideMultiSelectIndicator();
+}
+
+function showMultiSelectIndicator() {
+    // Add visual indicator that multi-select is active
+    const container = document.querySelector('.futuristic-tags-container');
+    if (container && !container.querySelector('.multi-select-indicator')) {
+        const indicator = document.createElement('div');
+        indicator.className = 'multi-select-indicator';
+        indicator.innerHTML = `
+            <div class="indicator-content">
+                <span class="indicator-icon">🎯</span>
+                <span class="indicator-text">Multi-select active - Click tags to select/deselect</span>
+                <button class="indicator-close" onclick="exitMultiSelect()">✕</button>
+            </div>
+        `;
+        container.insertBefore(indicator, container.firstChild.nextSibling);
+    }
+}
+
+function hideMultiSelectIndicator() {
+    const indicator = document.querySelector('.multi-select-indicator');
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
+function handleTagClick(tag, count) {
+    console.log(`Tag clicked: ${tag} (${count} posts)`);
+
+    // Show tag details modal (only in normal mode)
+    if (!multiSelectMode) {
+        showTagDetails(tag, count);
+    }
+}
+
+function showTagDetails(tag, count) {
+    // Implementation for tag details modal
+    console.log(`Showing details for tag: ${tag}`);
+}
+
+function setupModal() {
+    const modal = document.getElementById('createTagModal');
+    
+    // Close modal when clicking outside
+    modal?.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeCreateModal();
+        }
+    });
+}
+
+function createTag() {
+    const modal = document.getElementById('createTagModal');
+    modal?.classList.add('show');
+}
+
+function closeCreateModal() {
+    const modal = document.getElementById('createTagModal');
+    modal?.classList.remove('show');
+}
+
+async function generateTag() {
+    console.log('🚀 Generating new tag...');
+
+    const nameInput = document.querySelector('#createTagModal input[type="text"]');
+    const descriptionInput = document.querySelector('#createTagModal textarea');
+    const typeSelect = document.querySelector('#createTagModal select');
+
+    const tagName = nameInput?.value.trim();
+    const tagDescription = descriptionInput?.value.trim();
+    const tagType = typeSelect?.value || 'manual';
+
+    if (!tagName) {
+        alert('Please enter a tag name');
+        nameInput?.focus();
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/admin/api/blog/tags', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                name: tagName,
+                description: tagDescription,
+                type: tagType
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Failed to create tag: ${error}`);
+        }
+
+        const result = await response.json();
+        console.log('✅ Tag created successfully:', result);
+
+        // Close modal and refresh tags
+        closeCreateModal();
+        loadTags();
+
+        // Clear form
+        if (nameInput) nameInput.value = '';
+        if (descriptionInput) descriptionInput.value = '';
+        if (typeSelect) typeSelect.value = 'manual';
+
+    } catch (error) {
+        console.error('❌ Error creating tag:', error);
+        alert('Failed to create tag: ' + error.message);
+    }
+}
+
+async function deleteSelectedTags() {
+    if (selectedTags.size === 0) {
+        alert('Please select tags to delete first');
+        return;
+    }
+
+    const confirmMessage = `Are you sure you want to delete ${selectedTags.size} tag${selectedTags.size > 1 ? 's' : ''}? This action cannot be undone.`;
+    if (!confirm(confirmMessage)) {
+        return;
+    }
+
+    console.log(`🗑️ Deleting ${selectedTags.size} tags:`, Array.from(selectedTags));
+
+    try {
+        const token = localStorage.getItem('token');
+        let successCount = 0;
+        let errorCount = 0;
+
+        // Delete each selected tag
+        for (const tagId of selectedTags) {
+            try {
+                const response = await fetch(`/admin/api/blog/tags/${tagId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    successCount++;
+                    console.log(`✅ Deleted tag ID: ${tagId}`);
+                } else {
+                    errorCount++;
+                    console.error(`❌ Failed to delete tag ID: ${tagId}`);
+                }
+            } catch (error) {
+                errorCount++;
+                console.error(`❌ Error deleting tag ID: ${tagId}:`, error);
+            }
+        }
+
+        // Show results
+        if (successCount > 0) {
+            alert(`Successfully deleted ${successCount} tag${successCount > 1 ? 's' : ''}${errorCount > 0 ? ` (${errorCount} failed)` : ''}`);
+        } else {
+            alert('Failed to delete any tags');
+        }
+
+        // Exit multi-select mode and refresh tags
+        exitMultiSelect();
+        loadTags();
+
+    } catch (error) {
+        console.error('❌ Error in delete operation:', error);
+        alert('An error occurred while deleting tags');
+    }
+}
+
+function setupAIFeatures() {
+    // Simulate AI insights
+    setTimeout(() => {
+        updateAIInsights();
+    }, 2000);
+}
+
+function updateAIInsights() {
+    console.log('Updating AI insights...');
+}
+
+function animateParticles() {
+    const particles = document.querySelectorAll('.floating-particle');
+    
+    particles.forEach((particle, index) => {
+        // Add random floating animation variations
+        particle.style.animationDelay = `${Math.random() * 20}s`;
+    });
+}
+
+function animateCounters() {
+    const counters = document.querySelectorAll('[data-count]');
+    
+    counters.forEach(counter => {
+        const target = parseFloat(counter.dataset.count);
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+        
+        const updateCounter = () => {
+            current += step;
+            if (current < target) {
+                counter.textContent = Math.floor(current).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.textContent = target.toLocaleString();
+            }
+        };
+        
+        updateCounter();
+    });
+}
+
+// Initialize when page is loaded
+document.addEventListener('DOMContentLoaded', initTags);
+</script>

@@ -1,0 +1,994 @@
+<!-- Contact Spam Management -->
+<div class="contacts-spam">
+    <!-- Spam Header -->
+    <div class="spam-header">
+        <div class="header-content">
+            <h2>Spam Management</h2>
+            <p>Review and manage potentially unwanted messages</p>
+        </div>
+        <div class="header-actions">
+            <button class="action-btn secondary" id="trainFiltersBtn">
+                <i class="ph-bold ph-brain"></i>
+                Train Filters
+            </button>
+            <button class="action-btn danger" id="emptySpamBtn">
+                <i class="ph-bold ph-trash"></i>
+                Empty Spam
+            </button>
+        </div>
+    </div>
+
+    <!-- Spam Stats -->
+    <div class="spam-stats">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="ph-bold ph-shield-x"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value" id="spamCount">0</div>
+                <div class="stat-label">Messages in Spam</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="ph-bold ph-target"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value" id="accuracyRate">0%</div>
+                <div class="stat-label">Filter Accuracy</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value" id="falsePositives">0</div>
+                <div class="stat-label">False Positives (Last 30 days)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spam Filters -->
+    <div class="spam-filters">
+        <div class="search-box">
+            <i class="ph-bold ph-magnifying-glass"></i>
+            <input type="text" id="spamSearch" placeholder="Search spam messages...">
+        </div>
+        <div class="filter-options">
+            <select id="spamLevelFilter">
+                <option value="">All Spam Levels</option>
+                <option value="high">High Confidence</option>
+                <option value="medium">Medium Confidence</option>
+                <option value="low">Low Confidence</option>
+            </select>
+            <select id="dateFilter">
+                <option value="">All Dates</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Spam Analysis -->
+    <div class="spam-analysis">
+        <div class="analysis-card">
+            <div class="card-header">
+                <h3>Spam Detection Analysis</h3>
+            </div>
+            <div class="analysis-content">
+                <div class="spam-chart" id="spamChart">
+                    <!-- Spam analysis chart will be rendered here -->
+                </div>
+                <div class="spam-insights">
+                    <div class="insight-item">
+                        <div class="insight-label">Most Common Spam Words:</div>
+                        <div class="insight-value" id="commonWords">Loading...</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-label">Top Spam Domains:</div>
+                        <div class="insight-value" id="spamDomains">Loading...</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-label">Peak Spam Hours:</div>
+                        <div class="insight-value" id="peakHours">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spam Messages -->
+    <div class="spam-messages" id="spamMessages">
+        <!-- Spam messages will be populated here -->
+    </div>
+
+    <!-- Bulk Actions Bar -->
+    <div class="bulk-actions-bar" id="bulkActionsBar" style="display: none;">
+        <div class="bulk-info">
+            <span id="selectedCount">0</span> messages selected
+        </div>
+        <div class="bulk-buttons">
+            <button class="bulk-btn not-spam" onclick="markAsNotSpam()">
+                <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                Not Spam
+            </button>
+            <button class="bulk-btn delete" onclick="deleteSpam()">
+                <i class="ph-bold ph-trash"></i>
+                Delete
+            </button>
+            <button class="bulk-btn block" onclick="blockSender()">
+                <i class="ph-bold ph-prohibit"></i>
+                Block Sender
+            </button>
+            <button class="bulk-btn cancel" onclick="cancelBulk()">
+                <i class="ph-bold ph-x"></i>
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contacts-spam {
+        padding: 2rem;
+    }
+
+    /* Spam Header */
+    .spam-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .header-content h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0 0 0.5rem 0;
+    }
+
+    .header-content p {
+        color: var(--admin-text-secondary);
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .action-btn.secondary {
+        background: var(--admin-secondary);
+        color: white;
+        border-color: var(--admin-secondary);
+    }
+
+    .action-btn.danger {
+        background: var(--admin-error);
+        color: white;
+        border-color: var(--admin-error);
+    }
+
+    .action-btn.danger:hover {
+        background: #dc2626;
+        border-color: #dc2626;
+    }
+
+    /* Spam Stats */
+    .spam-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-error);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .stat-content {
+        flex: 1;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    /* Spam Filters */
+    .spam-filters {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+        max-width: 300px;
+        padding: 0.75rem;
+        background: var(--admin-background);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+    }
+
+    .search-box i {
+        color: var(--admin-text-secondary);
+    }
+
+    .search-box input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+    }
+
+    .search-box input:focus {
+        outline: none;
+    }
+
+    .filter-options {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .filter-options select {
+        padding: 0.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        min-width: 140px;
+    }
+
+    /* Spam Analysis */
+    .spam-analysis {
+        margin-bottom: 2rem;
+    }
+
+    .analysis-card {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        padding: 2rem;
+    }
+
+    .card-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin: 0 0 1.5rem 0;
+    }
+
+    .analysis-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+
+    .spam-chart {
+        height: 250px;
+        background: var(--admin-background);
+        border-radius: var(--admin-radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--admin-text-secondary);
+    }
+
+    .spam-insights {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .insight-item {
+        padding: 1rem;
+        background: var(--admin-background);
+        border-radius: var(--admin-radius-md);
+    }
+
+    .insight-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .insight-value {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+        line-height: 1.4;
+    }
+
+    /* Spam Messages */
+    .spam-messages {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+        min-height: 500px;
+    }
+
+    .spam-message-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .spam-message-item:hover {
+        background: var(--admin-background);
+    }
+
+    .spam-message-item.selected {
+        background: rgba(239, 68, 68, 0.05);
+        border-left: 3px solid var(--admin-error);
+    }
+
+    .message-checkbox {
+        width: 18px;
+        height: 18px;
+        border: 1px solid var(--admin-border);
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .spam-confidence {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        min-width: 60px;
+    }
+
+    .confidence-bar {
+        width: 40px;
+        height: 6px;
+        background: var(--admin-border);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .confidence-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.3s ease;
+    }
+
+    .confidence-fill.high {
+        background: var(--admin-error);
+    }
+
+    .confidence-fill.medium {
+        background: var(--admin-warning);
+    }
+
+    .confidence-fill.low {
+        background: var(--admin-secondary);
+    }
+
+    .confidence-label {
+        font-size: 0.625rem;
+        font-weight: 600;
+        color: var(--admin-text-secondary);
+        text-transform: uppercase;
+    }
+
+    .message-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .message-sender {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+    }
+
+    .spam-indicator {
+        padding: 0.125rem 0.5rem;
+        background: var(--admin-error);
+        color: white;
+        border-radius: 3px;
+        font-size: 0.625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .message-subject {
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-preview {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+        margin-top: 0.5rem;
+    }
+
+    .message-actions {
+        display: flex;
+        gap: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .spam-message-item:hover .message-actions {
+        opacity: 1;
+    }
+
+    .message-action-btn {
+        padding: 0.375rem;
+        border: none;
+        background: none;
+        color: var(--admin-text-secondary);
+        cursor: pointer;
+        border-radius: var(--admin-radius-sm);
+        transition: all 0.2s ease;
+    }
+
+    .message-action-btn:hover {
+        background: var(--admin-border);
+        color: var(--admin-text-primary);
+    }
+
+    .message-action-btn.not-spam:hover {
+        background: var(--admin-success);
+        color: white;
+    }
+
+    .message-action-btn.delete:hover {
+        background: var(--admin-error);
+        color: white;
+    }
+
+    .message-action-btn.block:hover {
+        background: var(--admin-warning);
+        color: white;
+    }
+
+    /* Bulk Actions Bar */
+    .bulk-actions-bar {
+        position: fixed;
+        bottom: 0;
+        left: 280px;
+        right: 0;
+        background: var(--admin-error);
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .bulk-info {
+        font-weight: 600;
+    }
+
+    .bulk-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .bulk-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: var(--admin-radius-md);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .bulk-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .bulk-btn.not-spam {
+        background: var(--admin-success);
+        border-color: var(--admin-success);
+    }
+
+    .bulk-btn.delete {
+        background: var(--admin-error);
+        border-color: var(--admin-error);
+    }
+
+    .bulk-btn.block {
+        background: var(--admin-warning);
+        border-color: var(--admin-warning);
+    }
+
+    .bulk-btn.cancel {
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Empty State */
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--admin-text-secondary);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .empty-state h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--admin-text-primary);
+    }
+
+    .empty-state p {
+        font-size: 0.875rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .spam-filters {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .filter-options {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .filter-options select {
+            flex: 1;
+        }
+
+        .analysis-content {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contacts-spam {
+            padding: 1rem;
+        }
+
+        .spam-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .header-actions {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .spam-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .bulk-actions-bar {
+            left: 0;
+            padding: 1rem;
+        }
+
+        .bulk-buttons {
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .bulk-btn {
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    // Contact Spam Management
+    let selectedMessages = new Set();
+
+    function initContactsSpam() {
+        loadSpamData();
+        setupEventListeners();
+    }
+
+    async function loadSpamData() {
+        try {
+            const response = await fetch('/api/admin/contacts/spam');
+            if (response.ok) {
+                const data = await response.json();
+                updateSpamStats(data.stats);
+                updateSpamAnalysis(data.analysis);
+                updateSpamMessages(data.messages);
+            }
+        } catch (error) {
+            console.error('Error loading spam data:', error);
+        }
+    }
+
+    function updateSpamStats(stats) {
+        document.getElementById('spamCount').textContent = stats.total || 0;
+        document.getElementById('accuracyRate').textContent = stats.accuracy ? stats.accuracy + '%' : '0%';
+        document.getElementById('falsePositives').textContent = stats.falsePositives || 0;
+    }
+
+    function updateSpamAnalysis(analysis) {
+        // Update insights
+        document.getElementById('commonWords').textContent = analysis.commonWords ?
+            analysis.commonWords.join(', ') : 'No data available';
+        document.getElementById('spamDomains').textContent = analysis.spamDomains ?
+            analysis.spamDomains.join(', ') : 'No data available';
+        document.getElementById('peakHours').textContent = analysis.peakHours ?
+            analysis.peakHours.join(', ') : 'No data available';
+
+        // Render spam chart
+        renderSpamChart(analysis.chartData);
+    }
+
+    function renderSpamChart(data) {
+        const chartContainer = document.getElementById('spamChart');
+        if (!data || !data.labels) {
+            chartContainer.innerHTML = '<div style="text-align: center; padding: 2rem;">No spam data available</div>';
+            return;
+        }
+
+        // Simple chart implementation
+        chartContainer.innerHTML = `
+            <div style="display: flex; align-items: end; justify-content: space-around; height: 100%; padding: 1rem;">
+                ${data.labels.map((label, index) => `
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <div style="width: 30px; height: ${Math.max(data.values[index] * 2, 20)}px; background: var(--admin-error); border-radius: 3px 3px 0 0;"></div>
+                        <span style="font-size: 0.75rem; color: var(--admin-text-secondary); writing-mode: vertical-rl; text-orientation: mixed;">${label}</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    function updateSpamMessages(messages) {
+        const container = document.getElementById('spamMessages');
+
+        if (!messages || messages.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="ph-bold ph-shield-check"></i>
+                    <h3>No spam messages</h3>
+                    <p>All caught messages are being filtered properly. Great job!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = messages.map(message => `
+            <div class="spam-message-item" data-id="${message.id}">
+                <input type="checkbox" class="message-checkbox" onchange="toggleMessageSelection(${message.id})">
+                <div class="spam-confidence">
+                    <div class="confidence-bar">
+                        <div class="confidence-fill ${message.confidence}" style="width: ${message.confidenceScore}%"></div>
+                    </div>
+                    <span class="confidence-label">${message.confidence}</span>
+                </div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="message-sender">${message.sender}</div>
+                        <span class="spam-indicator">SPAM</span>
+                    </div>
+                    <div class="message-subject">${message.subject}</div>
+                    <div class="message-preview">${message.preview}</div>
+                    <div class="message-meta">
+                        <span>Confidence: ${message.confidenceScore}%</span>
+                        <span>${formatDate(message.timestamp)}</span>
+                    </div>
+                </div>
+                <div class="message-actions">
+                    <button class="message-action-btn not-spam" onclick="markAsNotSpam(${message.id})" title="Mark as not spam">
+                        <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                    </button>
+                    <button class="message-action-btn delete" onclick="deleteSpamMessage(${message.id})" title="Delete permanently">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                    <button class="message-action-btn block" onclick="blockSender(${message.id})" title="Block sender">
+                        <i class="ph-bold ph-prohibit"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function setupEventListeners() {
+        // Search functionality
+        const searchInput = document.getElementById('spamSearch');
+        searchInput.addEventListener('input', debounce(() => {
+            filterMessages(searchInput.value);
+        }, 300));
+
+        // Filter changes
+        document.getElementById('spamLevelFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateFilter').addEventListener('change', applyFilters);
+
+        // Action buttons
+        document.getElementById('trainFiltersBtn').addEventListener('click', trainFilters);
+        document.getElementById('emptySpamBtn').addEventListener('click', emptySpam);
+    }
+
+    function filterMessages(searchTerm) {
+        const messages = document.querySelectorAll('.spam-message-item');
+        messages.forEach(message => {
+            const text = message.textContent.toLowerCase();
+            const matches = text.includes(searchTerm.toLowerCase());
+            message.style.display = matches ? 'flex' : 'none';
+        });
+    }
+
+    function applyFilters() {
+        // Apply current filters and reload data
+        loadSpamData();
+    }
+
+    function toggleMessageSelection(messageId) {
+        if (selectedMessages.has(messageId)) {
+            selectedMessages.delete(messageId);
+        } else {
+            selectedMessages.add(messageId);
+        }
+
+        updateBulkActionsVisibility();
+        updateSelectedCount();
+    }
+
+    function updateBulkActionsVisibility() {
+        const bulkActionsBar = document.getElementById('bulkActionsBar');
+        bulkActionsBar.style.display = selectedMessages.size > 0 ? 'flex' : 'none';
+    }
+
+    function updateSelectedCount() {
+        document.getElementById('selectedCount').textContent = selectedMessages.size;
+    }
+
+    function markAsNotSpam(messageId) {
+        fetch(`/api/admin/contacts/not-spam/${messageId}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    loadSpamData();
+                    showNotification('Message moved to inbox', 'success');
+                }
+            });
+    }
+
+    function deleteSpamMessage(messageId) {
+        if (confirm('Are you sure you want to permanently delete this spam message?')) {
+            fetch(`/api/admin/contacts/delete-spam/${messageId}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        loadSpamData();
+                        showNotification('Spam message deleted', 'success');
+                    }
+                });
+        }
+    }
+
+    function blockSender(messageId) {
+        fetch(`/api/admin/contacts/block-sender/${messageId}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    loadSpamData();
+                    showNotification('Sender blocked successfully', 'success');
+                }
+            });
+    }
+
+    function markAsNotSpam() {
+        if (selectedMessages.size === 0) return;
+
+        const messageIds = Array.from(selectedMessages);
+        fetch('/api/admin/contacts/bulk-not-spam', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messageIds })
+        }).then(response => {
+            if (response.ok) {
+                selectedMessages.clear();
+                updateBulkActionsVisibility();
+                loadSpamData();
+                showNotification(`${messageIds.length} messages moved to inbox`, 'success');
+            }
+        });
+    }
+
+    function deleteSpam() {
+        if (selectedMessages.size === 0) return;
+
+        if (confirm(`Are you sure you want to permanently delete ${selectedMessages.size} spam messages?`)) {
+            const messageIds = Array.from(selectedMessages);
+            fetch('/api/admin/contacts/bulk-delete-spam', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messageIds })
+            }).then(response => {
+                if (response.ok) {
+                    selectedMessages.clear();
+                    updateBulkActionsVisibility();
+                    loadSpamData();
+                    showNotification(`${messageIds.length} spam messages deleted`, 'success');
+                }
+            });
+        }
+    }
+
+    function blockSender() {
+        if (selectedMessages.size === 0) return;
+
+        const messageIds = Array.from(selectedMessages);
+        fetch('/api/admin/contacts/bulk-block-senders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messageIds })
+        }).then(response => {
+            if (response.ok) {
+                selectedMessages.clear();
+                updateBulkActionsVisibility();
+                loadSpamData();
+                showNotification(`${messageIds.length} senders blocked`, 'success');
+            }
+        });
+    }
+
+    function cancelBulk() {
+        selectedMessages.clear();
+        document.querySelectorAll('.message-checkbox').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        updateBulkActionsVisibility();
+    }
+
+    function trainFilters() {
+        fetch('/api/admin/contacts/train-spam-filters', { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    showNotification('Spam filters trained successfully', 'success');
+                    loadSpamData();
+                }
+            });
+    }
+
+    function emptySpam() {
+        if (confirm('Are you sure you want to permanently delete all spam messages? This action cannot be undone.')) {
+            fetch('/api/admin/contacts/empty-spam', { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        loadSpamData();
+                        showNotification('All spam messages deleted', 'success');
+                    }
+                });
+        }
+    }
+
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString();
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    function showNotification(message, type = 'info') {
+        // Use global notification system
+        console.log(`${type.toUpperCase()}: ${message}`);
+    }
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContactsSpam);
+    } else {
+        initContactsSpam();
+    }
+</script>

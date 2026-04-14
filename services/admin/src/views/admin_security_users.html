@@ -1,0 +1,718 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium">
+    <div class="p-6 md:p-8 lg:p-12">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">User Management</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Manage system users, roles, and permissions with precision</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Total Users Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-users"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalUsers">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Total Users</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="usersChange">
+                            <i class="ph-bold ph-trend-up"></i>
+                            <span>+5.2%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Active Users Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-user-plus"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="activeUsers">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Active Users</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400" id="activeChange">
+                            <i class="ph-bold ph-trend-up"></i>
+                            <span>+3.1%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Super Admins Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-orange-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-shield-check"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="superAdmins">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Super Admins</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-t-muted" id="superAdminChange">
+                            <i class="ph-bold ph-minus"></i>
+                            <span>0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Pending Users Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-clock"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="pendingUsers">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Pending Approvals</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-red-500 dark:text-red-400" id="pendingChange">
+                            <i class="ph-bold ph-trend-down"></i>
+                            <span>-2.4%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- User Management Actions -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-users text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">User Management</h3>
+                            <p class="text-t-medium font-syne text-sm">Advanced user control and administration</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="addUserBtn">
+                            <i class="ph-bold ph-plus text-lg"></i>
+                            <span>Add User</span>
+                        </button>
+                        <button class="inline-flex items-center justify-center space-x-3 px-8 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="bulkActionsBtn">
+                            <i class="ph-bold ph-stack text-lg"></i>
+                            <span>Bulk Actions</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+                    <!-- Search Input -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Search Users</label>
+                        <div class="relative group">
+                            <input type="text" class="w-full pl-12 pr-4 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-placeholder font-syne text-base shadow-lg focus:shadow-xl" id="searchUsers" placeholder="Search by name, email, or role...">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-magnifying-glass"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Role Filter -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Filter by Role</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="roleFilter">
+                                <option value="">All Roles</option>
+                                <option value="super_admin">Super Admin</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-funnel"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Status Filter -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Filter by Status</label>
+                        <div class="relative group">
+                            <select class="w-full pl-12 pr-12 py-4 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright font-syne text-base shadow-lg focus:shadow-xl appearance-none cursor-pointer" id="statusFilter">
+                                <option value="">All Statuses</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-t-muted group-focus-within:text-accent transition-colors duration-medium">
+                                <i class="ph-bold ph-check-circle"></i>
+                            </div>
+                            <div class="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-t-muted pointer-events-none">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                            <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/5 to-secondary/5 opacity-0 group-focus-within:opacity-100 transition-opacity duration-medium pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="space-y-3">
+                        <label class="block text-sm font-semibold text-t-bright font-syne">Quick Actions</label>
+                        <div class="flex space-x-3">
+                            <button class="flex-1 inline-flex items-center justify-center space-x-2 px-6 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="exportUsersBtn">
+                                <i class="ph-bold ph-download text-lg"></i>
+                                <span>Export</span>
+                            </button>
+                            <button class="flex-1 inline-flex items-center justify-center space-x-2 px-6 py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="refreshUsersBtn">
+                                <i class="ph-bold ph-refresh text-lg"></i>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-table text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Users List</h3>
+                            <p class="text-t-medium font-syne text-sm">Comprehensive user management interface</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-t-medium font-syne">
+                            Total Users: <span class="font-bold text-t-bright text-lg" id="tableUserCount">0</span>
+                        </div>
+                        <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center">
+                            <i class="ph-bold ph-users text-accent text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full" id="usersTable">
+                    <thead class="bg-base-tint/50 dark:bg-base-shade/50">
+                        <tr class="border-b border-stroke-elements">
+                            <th class="px-8 py-6 text-left">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="selectAllUsers" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0 cursor-pointer transition-all duration-medium">
+                                </div>
+                            </th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">User</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Email</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Role</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Status</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Last Login</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Created</th>
+                            <th class="px-8 py-6 text-left text-sm font-bold text-t-bright uppercase tracking-wider font-syne">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody" class="divide-y divide-stroke-elements">
+                        <!-- User data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+</style>
+
+<script>
+// User Management Page
+function initSecurityUsers() {
+    loadUserData();
+    setupEventListeners();
+    setupBulkActions();
+}
+
+async function loadUserData() {
+    try {
+        const response = await fetch('/api/admin/security/users');
+        if (response.ok) {
+            const data = await response.json();
+            updateUserStats(data.stats);
+            updateUserTable(data.users);
+        } else {
+            showFallbackUserData();
+        }
+    } catch (error) {
+        console.error('Error loading user data:', error);
+        showFallbackUserData();
+    }
+}
+
+function updateUserStats(stats) {
+    document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+    document.getElementById('activeUsers').textContent = stats.activeUsers || 0;
+    document.getElementById('superAdmins').textContent = stats.superAdmins || 0;
+    document.getElementById('pendingUsers').textContent = stats.pendingUsers || 0;
+
+    updateChangeIndicator('usersChange', stats.usersChange);
+    updateChangeIndicator('activeChange', stats.activeChange);
+    updateChangeIndicator('superAdminChange', stats.superAdminChange);
+    updateChangeIndicator('pendingChange', stats.pendingChange);
+}
+
+function updateUserTable(users) {
+    const tbody = document.getElementById('usersTableBody');
+    const tableUserCount = document.getElementById('tableUserCount');
+    
+    tableUserCount.textContent = users ? users.length : 0;
+    
+    if (!users || users.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="px-8 py-16 text-center">
+                    <div class="flex flex-col items-center space-y-6">
+                        <div class="w-20 h-20 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl">
+                            <i class="ph-bold ph-users text-5xl text-t-muted opacity-60"></i>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">No users found</h3>
+                            <p class="text-base text-t-medium font-syne max-w-md">Try adjusting your search filters or add new users to get started with user management.</p>
+                        </div>
+                        <button class="inline-flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" onclick="showAddUserModal()">
+                            <i class="ph-bold ph-plus text-lg"></i>
+                            <span>Add First User</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = users.map(user => `
+        <tr class="hover:bg-base-tint/30 dark:hover:bg-base-shade/30 transition-all duration-medium group cursor-pointer">
+            <td class="px-8 py-6">
+                <div class="flex items-center">
+                    <input type="checkbox" class="user-checkbox w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0 cursor-pointer transition-all duration-medium" value="${user.id}">
+                </div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright font-bold text-base shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                            ${getInitials(user.name)}
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-base dark:border-base-tint"></div>
+                    </div>
+                    <div>
+                        <div class="text-base font-bold text-t-bright group-hover:text-accent transition-colors duration-medium font-syne">
+                            ${user.name}
+                        </div>
+                        <div class="text-sm text-t-medium font-syne">ID: ${user.id}</div>
+                    </div>
+                </div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${user.email}
+                </div>
+                <div class="text-sm text-t-muted font-syne">Verified</div>
+            </td>
+            <td class="px-8 py-6">
+                <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wide font-syne ${getRoleBadgeClass(user.role)} shadow-lg">
+                    <i class="ph-bold ph-shield-check mr-2"></i>
+                    ${formatRole(user.role)}
+                </span>
+            </td>
+            <td class="px-8 py-6">
+                <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold uppercase tracking-wide font-syne ${getStatusBadgeClass(user.status)} shadow-lg">
+                    <i class="ph-bold ph-circle mr-2 text-xs"></i>
+                    ${formatStatus(user.status)}
+                </span>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${user.lastLogin ? formatDate(user.lastLogin) : '<span class="italic text-t-muted font-syne">Never logged in</span>'}
+                </div>
+                <div class="text-sm text-t-muted font-syne">Last activity</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="text-base text-t-medium font-syne group-hover:text-t-bright transition-colors duration-medium">
+                    ${formatDate(user.createdAt)}
+                </div>
+                <div class="text-sm text-t-muted font-syne">Member since</div>
+            </td>
+            <td class="px-8 py-6">
+                <div class="flex items-center space-x-2">
+                    <button class="w-10 h-10 bg-accent/10 hover:bg-accent/20 text-accent rounded-xl flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg group/btn" title="Edit User" onclick="editUser('${user.id}')">
+                        <i class="ph-bold ph-pencil text-base"></i>
+                    </button>
+                    <button class="w-10 h-10 ${user.status === 'active' ? 'bg-orange-500/10 hover:bg-orange-500/20 text-orange-500' : 'bg-green-500/10 hover:bg-green-500/20 text-green-500'} rounded-xl flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg group/btn" title="${user.status === 'active' ? 'Deactivate' : 'Activate'}" onclick="toggleUserStatus('${user.id}')">
+                        <i class="ph-bold ${user.status === 'active' ? 'ph-pause' : 'ph-play'} text-base"></i>
+                    </button>
+                    <button class="w-10 h-10 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg group/btn" title="Delete User" onclick="deleteUser('${user.id}')">
+                        <i class="ph-bold ph-trash text-base"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function getRoleBadgeClass(role) {
+    if (role === 'super_admin') {
+        return 'bg-gradient-to-r from-red-500 to-pink-500 text-white border-red-500/20';
+    }
+    return 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white border-orange-500/20';
+}
+
+function getStatusBadgeClass(status) {
+    if (status === 'active') {
+        return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-green-500/20';
+    } else if (status === 'pending') {
+        return 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-yellow-500/20';
+    }
+    return 'bg-gradient-to-r from-slate-500 to-gray-500 text-white border-slate-500/20';
+}
+
+function updateChangeIndicator(elementId, change) {
+    const element = document.getElementById(elementId);
+    if (!change) return;
+
+    const isPositive = change > 0;
+    if (isPositive) {
+        element.className = 'flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400 font-syne';
+        element.innerHTML = `
+            <i class="ph-bold ph-trend-up text-base"></i>
+            <span>+${Math.abs(change)}%</span>
+        `;
+    } else {
+        element.className = 'flex items-center space-x-2 text-sm font-semibold text-red-500 dark:text-red-400 font-syne';
+        element.innerHTML = `
+            <i class="ph-bold ph-trend-down text-base"></i>
+            <span>-${Math.abs(change)}%</span>
+        `;
+    }
+}
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+}
+
+function formatRole(role) {
+    return role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function formatStatus(status) {
+    return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
+function formatDate(date) {
+    return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+function setupEventListeners() {
+    // Add User Button
+    document.getElementById('addUserBtn').onclick = () => {
+        showAddUserModal();
+    };
+
+    // Search and Filter
+    document.getElementById('searchUsers').oninput = debounce(filterUsers, 300);
+    document.getElementById('roleFilter').onchange = filterUsers;
+    document.getElementById('statusFilter').onchange = filterUsers;
+
+    // Export Users
+    document.getElementById('exportUsersBtn').onclick = exportUsers;
+
+    // Refresh Users
+    document.getElementById('refreshUsersBtn').onclick = () => {
+        loadUserData();
+    };
+
+    // Select All Checkbox
+    document.getElementById('selectAllUsers').onchange = toggleSelectAll;
+}
+
+function setupBulkActions() {
+    // Individual checkboxes
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('user-checkbox')) {
+            updateBulkActionsState();
+        }
+    });
+}
+
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAllUsers');
+    const checkboxes = document.querySelectorAll('.user-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+    });
+    
+    updateBulkActionsState();
+}
+
+function updateBulkActionsState() {
+    const selectedCheckboxes = document.querySelectorAll('.user-checkbox:checked');
+    // Bulk actions panel would be shown here if needed
+    console.log(`${selectedCheckboxes.length} users selected`);
+}
+
+function filterUsers() {
+    const searchTerm = document.getElementById('searchUsers').value;
+    const roleFilter = document.getElementById('roleFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
+    
+    // In a real implementation, this would filter on the server
+    console.log('Filtering users:', { searchTerm, roleFilter, statusFilter });
+    
+    // For now, just reload all data
+    loadUserData();
+}
+
+function showAddUserModal() {
+    // Modal implementation would go here
+    showNotification('Add user modal would open here', 'info');
+}
+
+function editUser(userId) {
+    showNotification(`Edit user ${userId} modal would open here`, 'info');
+}
+
+function toggleUserStatus(userId) {
+    showNotification(`Toggle status for user ${userId}`, 'info');
+}
+
+function deleteUser(userId) {
+    if (confirm('Are you sure you want to delete this user?')) {
+        showNotification(`Delete user ${userId}`, 'info');
+    }
+}
+
+function exportUsers() {
+    showNotification('Exporting users...', 'info');
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function showFallbackUserData() {
+    // Show sample data when API is not available
+    updateUserStats({
+        totalUsers: 15,
+        activeUsers: 12,
+        superAdmins: 2,
+        pendingUsers: 1,
+        usersChange: 5.2,
+        activeChange: 3.1,
+        superAdminChange: 0,
+        pendingChange: -2.4
+    });
+
+    const sampleUsers = [
+        {
+            id: '1',
+            name: 'John Doe',
+            email: 'john@example.com',
+            role: 'super_admin',
+            status: 'active',
+            lastLogin: '2024-01-15T10:30:00Z',
+            createdAt: '2024-01-01T00:00:00Z'
+        },
+        {
+            id: '2',
+            name: 'Jane Smith',
+            email: 'jane@example.com',
+            role: 'admin',
+            status: 'active',
+            lastLogin: '2024-01-14T15:45:00Z',
+            createdAt: '2024-01-02T00:00:00Z'
+        },
+        {
+            id: '3',
+            name: 'Bob Johnson',
+            email: 'bob@example.com',
+            role: 'admin',
+            status: 'pending',
+            lastLogin: null,
+            createdAt: '2024-01-10T00:00:00Z'
+        }
+    ];
+
+    updateUserTable(sampleUsers);
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSecurityUsers);
+} else {
+    initSecurityUsers();
+}
+</script>

@@ -1,0 +1,64 @@
+<section id="route-others" class="py-16 bg-base">
+<div class="section-container space-y-10">
+    <div class="rounded-[2.5rem] border border-stroke-elements bg-base-tint p-10 shadow-lg">
+        <div class="flex flex-col gap-2">
+            <p class="text-xs uppercase tracking-[0.5em] text-t-muted">Others</p>
+            <h1 class="text-4xl font-syne font-semibold text-t-bright">Resource hub & community perspectives</h1>
+            <p class="text-base text-t-medium max-w-3xl">A balanced blend of quick-reference resources, interviews, and perspectives you can bookmark and share with your team.</p>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for card in ['Playbooks','Voices','Toolkit'] %}
+            <article class="bg-white rounded-[1.5rem] border border-stroke-elements shadow-sm p-6 space-y-3 hover:shadow-xl transition-shadow">
+                <div class="text-xs uppercase tracking-[0.5em] text-t-accent">Resource</div>
+                <h3 class="text-2xl font-semibold text-t-bright">{{ card }}</h3>
+                <p class="text-sm text-t-medium">Curated insights that align with NekwasaR’s editorial standards — quick citations, data points, and frameworks.</p>
+                <div class="flex items-center justify-between text-xs text-t-muted">
+                    <span>Updated weekly</span>
+                    <span>12 downloads</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-6 rounded-[2rem] border border-stroke-elements bg-white p-8 md:p-10">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-[0.5em] text-t-muted">Episode Library</p>
+                <h2 class="text-3xl font-semibold text-t-bright">Conversations that broaden context</h2>
+            </div>
+            <button class="px-5 py-2 border border-stroke-elements rounded-full text-xs font-semibold uppercase tracking-[0.3em] text-t-muted hover:border-t-accent hover:text-t-bright transition-colors">View full archive</button>
+        </div>
+        <div class="space-y-6">
+            {% for episode in range(3) %}
+            <div class="border border-stroke-elements rounded-[1.5rem] p-6 flex flex-col md:flex-row justify-between gap-4">
+                <div>
+                    <h3 class="text-2xl font-semibold text-t-bright">Conversation {{ episode + 1 }}</h3>
+                    <p class="text-sm text-t-medium mt-2">Leaders dissect a single trend with actionable takeaways for operators.</p>
+                </div>
+                <div class="flex flex-col gap-2 text-xs text-t-muted">
+                    <span>{{ 30 + episode }} min listen</span>
+                    <span>Published Nov {{ 1 + episode }}</span>
+                    <button class="text-t-accent font-semibold">Listen now →</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="rounded-[2rem] bg-gradient-to-r from-gradient-three to-gradient-two text-white p-10">
+        <div class="grid md:grid-cols-[2fr,1fr] gap-6">
+            <div class="space-y-4">
+                <p class="text-xs uppercase tracking-[0.5em]">Quick references</p>
+                <h2 class="text-3xl font-semibold font-syne">Bookmarkable charts & citation-ready write-ups</h2>
+                <p class="text-sm text-white/90">Download short white papers and citations crafted for executive summaries.</p>
+            </div>
+            <div class="grid gap-3">
+                <button class="w-full bg-black/60 border border-white/30 rounded-full py-3 text-sm font-semibold uppercase tracking-[0.4em]">Download data brief</button>
+                <button class="w-full bg-white/10 border border-white/30 rounded-full py-3 text-sm font-semibold uppercase tracking-[0.4em]">Open toolkit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</section>

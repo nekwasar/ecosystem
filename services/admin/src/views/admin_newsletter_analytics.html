@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Analytics Dashboard - Admin</title>
+    <script>
+        // Synchronous theme detection to prevent flickering
+        (function () {
+            const theme = localStorage.getItem('admin.theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+        })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f5f7ff',
+                            100: '#ebf0fe',
+                            200: '#dae3fd',
+                            300: '#bccafb',
+                            400: '#95a8f8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .premium-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-[#f8fafc] dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+            <div>
+                <h1 class="text-4xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+                    Campaign <span class="text-brand-600">Analytics</span>
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-lg">Real-time performance metrics and subscriber
+                    engagement.</p>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <div
+                    class="flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-full">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[10px] font-black uppercase tracking-widest">Live Sync Alpha</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-end">
+                        <select id="timeRange" onchange="loadAnalytics()"
+                            class="px-5 py-3 rounded-xl border-2 border-slate-200/50 dark:border-slate-700/50 bg-white dark:bg-slate-800 text-sm font-bold focus:border-brand-500 outline-none transition-all">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30" selected>Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                        <span id="lastUpdated"
+                            class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">Updating...</span>
+                    </div>
+                    <button onclick="loadAnalytics()" id="refreshBtn"
+                        class="p-3 bg-white dark:bg-slate-800 border-2 border-slate-200/50 dark:border-slate-700/50 rounded-xl hover:text-brand-500 transition-colors">
+                        <i class="ph-bold ph-arrow-clockwise text-xl" id="refreshIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <!-- Total Sent -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center justify-between mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                        <i class="ph-bold ph-paper-plane-tilt text-2xl"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-black uppercase tracking-widest text-blue-500 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded">Delivered</span>
+                </div>
+                <h3 class="text-3xl font-black mb-1 text-slate-900 dark:text-white" id="statDelivered">0</h3>
+                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total emails processed</p>
+            </div>
+
+            <!-- Open Rate -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center justify-between mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                        <i class="ph-bold ph-envelope-open text-2xl"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded">Open
+                        Rate</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <h3 class="text-3xl font-black mb-1 text-slate-900 dark:text-white" id="statOpenRate">0%</h3>
+                    <span class="text-xs font-bold text-slate-400" id="statOpensCount">(0 opens)</span>
+                </div>
+                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Unique subscriber views</p>
+            </div>
+
+            <!-- Click Rate -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center justify-between mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                        <i class="ph-bold ph-cursor-click text-2xl"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-black uppercase tracking-widest text-purple-500 bg-purple-50 dark:bg-purple-500/10 px-2 py-1 rounded">Click
+                        Rate</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <h3 class="text-3xl font-black mb-1 text-slate-900 dark:text-white" id="statClickRate">0%</h3>
+                    <span class="text-xs font-bold text-slate-400" id="statClicksCount">(0 clicks)</span>
+                </div>
+                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Total link engagement</p>
+            </div>
+
+            <!-- Bounce Rate -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-2xl p-6 transition-all hover:scale-[1.02]">
+                <div class="flex items-center justify-between mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                        <i class="ph-bold ph-warning-circle text-2xl"></i>
+                    </div>
+                    <span
+                        class="text-[10px] font-black uppercase tracking-widest text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-2 py-1 rounded">Bounces</span>
+                </div>
+                <h3 class="text-3xl font-black mb-1 text-slate-900 dark:text-white" id="statBounces">0</h3>
+                <p class="text-sm font-medium text-slate-600 dark:text-slate-400">Failed deliveries & issues</p>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            <!-- Engagement Trend -->
+            <div
+                class="glass lg:col-span-2 premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-3xl p-8">
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Engagement Trend</h3>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-brand-500"></span>
+                            <span class="text-xs font-bold text-slate-500">Opens</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs font-bold text-slate-500">Clicks</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="engagementChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Device Breakdown -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-3xl p-8 flex flex-col">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-8">Device Distribution</h3>
+                <div class="flex-1 flex flex-col items-center justify-center">
+                    <div class="relative w-full aspect-square max-w-[200px]">
+                        <canvas id="deviceChart"></canvas>
+                    </div>
+                    <div class="mt-8 space-y-3 w-full">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-bold ph-desktop text-blue-500"></i>
+                                <span class="text-sm font-medium">Desktop</span>
+                            </div>
+                            <span class="font-bold" id="deviceDesktopPct">0%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-bold ph-device-mobile text-emerald-500"></i>
+                                <span class="text-sm font-medium">Mobile</span>
+                            </div>
+                            <span class="font-bold" id="deviceMobilePct">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Top Links -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-3xl overflow-hidden">
+                <div class="p-8 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white">Top Clicked Links</h3>
+                    <i class="ph-bold ph-link text-slate-400"></i>
+                </div>
+                <div class="p-0">
+                    <table class="w-full">
+                        <tbody id="topLinksTable" class="divide-y divide-slate-50 dark:divide-slate-800">
+                            <!-- Links injected here -->
+                            <tr>
+                                <td class="p-8 text-center text-slate-400 italic">No click data found for this period.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Live Event Feed -->
+            <div
+                class="glass premium-shadow border border-slate-200/50 dark:border-slate-700/50 rounded-3xl flex flex-col h-[500px]">
+                <div
+                    class="p-8 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between shrink-0">
+                    <div class="flex items-center gap-3">
+                        <span class="live-dot"></span>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Live Activity Feed</h3>
+                    </div>
+                    <span
+                        class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500">Brevo
+                        Realtime</span>
+                </div>
+                <div class="flex-1 overflow-y-auto p-2" id="liveFeed">
+                    <!-- Events injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var engagementChart = engagementChart || null;
+        var deviceChart = deviceChart || null;
+        var analyticsRefreshInterval = analyticsRefreshInterval || null;
+
+        async function init() {
+            // Check for dark mode (Robustness)
+            if (localStorage.getItem('admin.theme') === 'dark' || (!localStorage.getItem('admin.theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            await loadAnalytics();
+
+            // Auto refresh every 15 seconds for a dynamic feel
+            if (analyticsRefreshInterval) clearInterval(analyticsRefreshInterval);
+            analyticsRefreshInterval = setInterval(loadAnalytics, 15000);
+        }
+
+        async function loadAnalytics() {
+            const timeRangeEl = document.getElementById('timeRange');
+            const refreshIcon = document.getElementById('refreshIcon');
+
+            if (!timeRangeEl) {
+                if (analyticsRefreshInterval) clearInterval(analyticsRefreshInterval);
+                return;
+            }
+
+            if (refreshIcon) refreshIcon.classList.add('ph-spin');
+
+            const days = timeRangeEl.value;
+            try {
+                const res = await fetch(`/api/newsletter/admin/analytics?days=${days}`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                const response = await res.json();
+
+                if (response.success) {
+                    updateDashboard(response.data, response.realtime);
+                    const lu = document.getElementById('lastUpdated');
+                    if (lu) lu.innerText = 'Last updated: ' + new Date().toLocaleTimeString();
+                }
+            } catch (e) {
+                console.error('Failed to load analytics:', e);
+            } finally {
+                if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('ph-spin'), 500);
+            }
+        }
+
+
+
+        function updateDashboard(data, realtime) {
+            // 1. Summary Stats
+            document.getElementById('statDelivered').innerText = data.summary.delivered.toLocaleString();
+            document.getElementById('statOpenRate').innerText = data.summary.open_rate + '%';
+            document.getElementById('statOpensCount').innerText = `(${data.summary.opens.toLocaleString()} opens)`;
+            document.getElementById('statClickRate').innerText = data.summary.click_rate + '%';
+            document.getElementById('statClicksCount').innerText = `(${data.summary.clicks.toLocaleString()} clicks)`;
+            document.getElementById('statBounces').innerText = data.summary.bounces.toLocaleString();
+
+            // 2. Trend Chart
+            renderTrendChart(data.trends);
+
+            // 3. Device Chart
+            renderDeviceChart(data.devices);
+
+            // 4. Top Links
+            renderTopLinks(data.top_links);
+
+            // 5. Live Feed
+            renderLiveFeed(realtime);
+        }
+
+        function renderTrendChart(trends) {
+            const ctx = document.getElementById('engagementChart').getContext('2d');
+            const labels = trends.map(t => t.date);
+            const opens = trends.map(t => t.opens);
+            const clicks = trends.map(t => t.clicks);
+
+            if (engagementChart) engagementChart.destroy();
+
+            engagementChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Opens',
+                            data: opens,
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#6366f1'
+                        },
+                        {
+                            label: 'Clicks',
+                            data: clicks,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#10b981'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        function renderDeviceChart(devices) {
+            const ctx = document.getElementById('deviceChart').getContext('2d');
+            const total = devices.mobile + devices.desktop;
+            const mobilePct = total > 0 ? Math.round((devices.mobile / total) * 100) : 0;
+            const desktopPct = total > 0 ? Math.round((devices.desktop / total) * 100) : 0;
+
+            document.getElementById('deviceMobilePct').innerText = mobilePct + '%';
+            document.getElementById('deviceDesktopPct').innerText = desktopPct + '%';
+
+            if (deviceChart) deviceChart.destroy();
+
+            deviceChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Desktop', 'Mobile'],
+                    datasets: [{
+                        data: [devices.desktop, devices.mobile],
+                        backgroundColor: ['#6366f1', '#10b981'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    cutout: '75%',
+                    plugins: { legend: { display: false } },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        function renderTopLinks(links) {
+            const container = document.getElementById('topLinksTable');
+            if (links.length === 0) {
+                container.innerHTML = '<tr><td class="p-8 text-center text-slate-400 italic">No click data found for this period.</td></tr>';
+                return;
+            }
+
+            container.innerHTML = links.map(l => `
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td class="p-5">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                                <i class="ph ph-link text-slate-400"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold truncate text-slate-900 dark:text-white">${l.url || 'Unknown URL'}</p>
+                                <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Newsletter Target</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-5 text-right whitespace-nowrap">
+                        <div class="flex flex-col items-end">
+                            <span class="text-lg font-black text-brand-500">${l.count.toLocaleString()}</span>
+                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-tighter">Total Clicks</span>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderLiveFeed(events) {
+            const container = document.getElementById('liveFeed');
+
+            if (events.length === 0) {
+                container.innerHTML = '<div class="h-full flex flex-col items-center justify-center opacity-40"><i class="ph ph-mask-happy text-5xl mb-4"></i><p class="font-bold">No recent events tracked</p></div>';
+                return;
+            }
+
+            container.innerHTML = events.map(e => {
+                let icon = 'ph-bold ph-paper-plane-tilt text-blue-500';
+                let typeColor = 'text-blue-500 bg-blue-50 dark:bg-blue-900/40';
+                let label = e.type.toUpperCase();
+
+                if (e.type.includes('open')) {
+                    icon = 'ph-bold ph-envelope-open text-emerald-500';
+                    typeColor = 'text-emerald-500 bg-emerald-50 dark:bg-emerald-900/40';
+                } else if (e.type.includes('click')) {
+                    icon = 'ph-bold ph-cursor-click text-purple-500';
+                    typeColor = 'text-purple-500 bg-purple-50 dark:bg-purple-900/40';
+                } else if (e.type.includes('bounce') || e.type.includes('failed')) {
+                    icon = 'ph-bold ph-warning-circle text-rose-500';
+                    typeColor = 'text-rose-500 bg-rose-50 dark:bg-rose-900/40';
+                } else if (e.type.includes('unsub')) {
+                    icon = 'ph-bold ph-user-minus text-slate-500';
+                    typeColor = 'text-slate-500 bg-slate-50 dark:bg-slate-900/40';
+                }
+
+                const timeStr = new Date(e.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return `
+                    <div class="flex items-start gap-4 p-4 rounded-2xl hover:bg-white dark:hover:bg-slate-800/50 transition-all border border-transparent hover:border-slate-100 dark:hover:border-slate-700/50 mb-1">
+                        <div class="w-10 h-10 rounded-xl ${typeColor} flex items-center justify-center shrink-0">
+                            <i class="${icon} text-lg"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center justify-between mb-0.5">
+                                <p class="text-sm font-bold truncate text-slate-900 dark:text-white">${e.email}</p>
+                                <span class="text-[10px] font-bold text-slate-400">${timeStr}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-black uppercase tracking-widest ${typeColor.split(' ')[0]}">${label}</span>
+                                <span class="text-[10px] text-slate-400">• ${e.ip || 'Unknown IP'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize - Support both full load and SPA injection
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+
+</html>

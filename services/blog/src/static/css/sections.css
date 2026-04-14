@@ -1,0 +1,277 @@
+/*
+  Sections.css
+  Scoped styling for routed pages (latest, popular, others, featured, topics)
+  This complements blog.css and only enhances within .route-shell to avoid collisions.
+*/
+
+/* Accent mapping per route */
+.route-shell {
+  --route-accent: var(--accent);
+  --route-accent-contrast: var(--t-opp-bright);
+  --route-surface: var(--base);
+  --route-surface-tint: var(--base-tint);
+  --route-stroke: var(--stroke-elements);
+}
+
+.route-shell[data-section="popular"] {
+  --route-accent: var(--secondary);
+}
+
+.route-shell[data-section="featured"] {
+  --route-accent: var(--secondary);
+}
+
+.route-shell[data-section="topics"] {
+  --route-accent: var(--accent);
+}
+
+.route-shell[data-section="others"] {
+  --route-accent: var(--accent);
+}
+
+/* Container rhythm */
+.route-shell {
+  display: block;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+/* Optional header blocks (use if a page provides .route-hero) */
+.route-shell .route-hero {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.route-shell .route-title {
+  font-family: var(--_font-alt, var(--_font-default));
+  font-weight: 700;
+  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.5rem);
+  color: var(--t-bright);
+  line-height: 1.2;
+  position: relative;
+}
+
+.route-shell .route-title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 4px;
+  margin-top: 0.8rem;
+  border-radius: 999px;
+  background: var(--route-accent);
+}
+
+.route-shell .route-subtitle {
+  color: var(--t-medium);
+  font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.1rem);
+  max-width: 62ch;
+}
+
+/* Grid helpers (opt-in for future layouts) */
+.route-shell .route-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 900px) {
+  .route-shell .route-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  }
+  .route-shell .route-aside {
+    position: sticky;
+    top: 88px; /* below sticky header */
+    align-self: start;
+    height: fit-content;
+  }
+}
+
+/* Cards + articles hover affordance */
+.route-shell article,
+.route-shell .route-card,
+.route-shell .card,
+.route-shell .blog-card {
+  transition: transform 220ms var(--_animbezier, ease), box-shadow 220ms var(--_animbezier, ease), border-color 220ms var(--_animbezier, ease);
+  will-change: transform, box-shadow, border-color;
+}
+
+.route-shell article:hover,
+.route-shell .route-card:hover,
+.route-shell .card:hover,
+.route-shell .blog-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+  border-color: var(--route-accent);
+}
+
+/* Accent chips and small labels */
+.route-shell .chip,
+.route-shell .tag-chip,
+.route-shell .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--route-accent);
+  color: var(--t-bright);
+  background: color-mix(in oklab, var(--route-accent) 10%, transparent);
+}
+
+@supports not (color-mix: in oklab, black, white) {
+  .route-shell .chip,
+  .route-shell .tag-chip,
+  .route-shell .badge {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* Buttons */
+.route-shell .btn,
+.route-shell .btn-accent,
+.route-shell .btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background-color 180ms var(--_animbezier, ease), color 180ms var(--_animbezier, ease), border-color 180ms var(--_animbezier, ease), transform 120ms ease;
+  user-select: none;
+}
+
+.route-shell .btn:active,
+.route-shell .btn-accent:active,
+.route-shell .btn-outline:active {
+  transform: translateY(1px);
+}
+
+.route-shell .btn-accent {
+  background: var(--route-accent);
+  color: var(--route-accent-contrast);
+  border: 1px solid var(--route-accent);
+}
+.route-shell .btn-accent:hover {
+  filter: brightness(1.05);
+}
+
+.route-shell .btn-outline {
+  background: transparent;
+  border: 1px solid var(--route-accent);
+  color: var(--t-bright);
+}
+.route-shell .btn-outline:hover {
+  background: color-mix(in oklab, var(--route-accent) 12%, transparent);
+}
+@supports not (color-mix: in oklab, black, white) {
+  .route-shell .btn-outline:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* Links inside route sections */
+.route-shell a {
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.route-shell a:hover {
+  color: var(--t-bright);
+  text-decoration-color: var(--route-accent);
+}
+
+/* Blockquotes and notes */
+.route-shell blockquote {
+  background: var(--route-surface);
+  border: 1px solid var(--route-stroke);
+  border-left: 4px solid var(--route-accent);
+  border-radius: var(--_radius-l, 1rem);
+  padding: 1rem 1.25rem;
+  color: var(--t-medium);
+}
+
+/* Icon alignment */
+.route-shell i[class^="ph"],
+.route-shell i[class*=" ph"] {
+  vertical-align: -2px;
+}
+
+/* Section headers within cards/blocks */
+.route-shell .section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: var(--t-muted);
+}
+
+/* Dots / sliders common */
+.route-shell .slider-dots,
+.route-shell .dots {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+.route-shell .slider-dots .dot,
+.route-shell .dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--route-stroke);
+}
+.route-shell .slider-dots .dot.active,
+.route-shell .dots .dot.active {
+  background: var(--route-accent);
+}
+
+/* Tables (if any in topics/others) */
+.route-shell table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--route-surface);
+  border: 1px solid var(--route-stroke);
+  border-radius: var(--_radius-l, 1rem);
+  overflow: hidden;
+}
+.route-shell thead th {
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--t-muted);
+  background: var(--route-surface-tint);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--route-stroke);
+}
+.route-shell tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--route-stroke);
+}
+.route-shell tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .route-shell {
+    padding-top: 1rem;
+    padding-bottom: 1.25rem;
+  }
+  .route-shell .route-title::after {
+    width: 48px;
+  }
+  .route-shell article,
+  .route-shell .route-card,
+  .route-shell .card,
+  .route-shell .blog-card {
+    transform: none;
+  }
+}
+
+/* Utilities: subtle border focus within route sections */
+.route-shell .focus-accent:focus-visible {
+  outline: 2px solid var(--route-accent);
+  outline-offset: 2px;
+  border-radius: 0.75rem;
+}

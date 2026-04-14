@@ -1,0 +1,709 @@
+<!-- Contact Inbox Management -->
+<div class="contacts-inbox">
+    <!-- Inbox Header -->
+    <div class="inbox-header">
+        <div class="inbox-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="unreadCount">0</div>
+                <div class="stat-label">Unread</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalCount">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="responseTime">--</div>
+                <div class="stat-label">Avg Response</div>
+            </div>
+        </div>
+        <div class="inbox-actions">
+            <button class="action-btn primary" id="composeBtn">
+                <i class="ph-bold ph-plus"></i>
+                Compose
+            </button>
+            <button class="action-btn secondary" id="bulkActionsBtn">
+                <i class="ph-bold ph-dots-three"></i>
+                Actions
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="inbox-filters">
+        <div class="search-box">
+            <i class="ph-bold ph-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search messages...">
+        </div>
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="unread">Unread</button>
+            <button class="filter-tab" data-filter="starred">Starred</button>
+            <button class="filter-tab" data-filter="high">High Priority</button>
+        </div>
+        <div class="sort-options">
+            <select id="sortSelect">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="priority">By Priority</option>
+                <option value="sender">By Sender</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="messages-container">
+        <!-- Messages List -->
+        <div class="messages-list" id="messagesList">
+            <!-- Messages will be populated here -->
+        </div>
+
+        <!-- Message Preview -->
+        <div class="message-preview" id="messagePreview">
+            <div class="preview-placeholder">
+                <i class="ph-bold ph-envelope-open"></i>
+                <p>Select a message to view</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contacts-inbox {
+        padding: 2rem;
+    }
+
+    /* Inbox Header */
+    .inbox-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .inbox-stats {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .inbox-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .action-btn.primary {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    /* Filters */
+    .inbox-filters {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+        max-width: 300px;
+        padding: 0.75rem;
+        background: var(--admin-background);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+    }
+
+    .search-box i {
+        color: var(--admin-text-secondary);
+    }
+
+    .search-box input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+    }
+
+    .search-box input:focus {
+        outline: none;
+    }
+
+    .filter-tabs {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .filter-tab {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-secondary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .filter-tab.active {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .sort-options select {
+        padding: 0.5rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+    }
+
+    /* Messages Container */
+    .messages-container {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1.5rem;
+        height: calc(100vh - 300px);
+    }
+
+    /* Messages List */
+    .messages-list {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+    }
+
+    .message-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid var(--admin-border);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .message-item:hover {
+        background: var(--admin-background);
+    }
+
+    .message-item.selected {
+        background: var(--admin-primary);
+        color: white;
+    }
+
+    .message-item.unread {
+        background: rgba(124, 58, 237, 0.05);
+        border-left: 3px solid var(--admin-primary);
+    }
+
+    .message-checkbox {
+        width: 18px;
+        height: 18px;
+        border: 1px solid var(--admin-border);
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .message-star {
+        color: var(--admin-text-secondary);
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .message-star.starred {
+        color: var(--admin-warning);
+    }
+
+    .message-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .message-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .message-sender {
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+    }
+
+    .message-priority {
+        padding: 0.125rem 0.375rem;
+        border-radius: 3px;
+        font-size: 0.625rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .message-priority.high {
+        background: var(--admin-error);
+        color: white;
+    }
+
+    .message-priority.normal {
+        background: var(--admin-secondary);
+        color: white;
+    }
+
+    .message-priority.low {
+        background: var(--admin-text-secondary);
+        color: white;
+    }
+
+    .message-subject {
+        font-size: 0.875rem;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-preview {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .message-time {
+        font-size: 0.75rem;
+        color: var(--admin-text-secondary);
+    }
+
+    /* Message Preview */
+    .message-preview {
+        background: var(--admin-surface);
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-lg);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    .preview-sender {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .preview-subject {
+        font-size: 1rem;
+        color: var(--admin-text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .preview-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.875rem;
+        color: var(--admin-text-secondary);
+    }
+
+    .preview-content {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+    }
+
+    .preview-body {
+        line-height: 1.6;
+        color: var(--admin-text-primary);
+    }
+
+    .preview-actions {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid var(--admin-border);
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .preview-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--admin-border);
+        border-radius: var(--admin-radius-md);
+        background: var(--admin-surface);
+        color: var(--admin-text-primary);
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .preview-btn:hover {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .preview-btn.primary {
+        background: var(--admin-primary);
+        color: white;
+        border-color: var(--admin-primary);
+    }
+
+    .preview-placeholder {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--admin-text-secondary);
+        text-align: center;
+    }
+
+    .preview-placeholder i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .preview-placeholder p {
+        font-size: 1.125rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .messages-container {
+            grid-template-columns: 1fr;
+        }
+
+        .inbox-filters {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .filter-tabs {
+            order: 3;
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contacts-inbox {
+            padding: 1rem;
+        }
+
+        .inbox-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .inbox-stats {
+            width: 100%;
+            justify-content: space-around;
+        }
+
+        .inbox-actions {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .message-item {
+            padding: 0.75rem;
+        }
+
+        .message-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.25rem;
+        }
+    }
+</style>
+
+<script>
+    // Contact Inbox Management
+    function initContactsInbox() {
+        loadInboxData();
+        setupEventListeners();
+    }
+
+    async function loadInboxData() {
+        try {
+            const response = await fetch('/api/admin/contacts/inbox');
+            if (response.ok) {
+                const data = await response.json();
+                updateInboxStats(data.stats);
+                updateMessagesList(data.messages);
+            }
+        } catch (error) {
+            console.error('Error loading inbox data:', error);
+        }
+    }
+
+    function updateInboxStats(stats) {
+        document.getElementById('unreadCount').textContent = stats.unread || 0;
+        document.getElementById('totalCount').textContent = stats.total || 0;
+        document.getElementById('responseTime').textContent = formatResponseTime(stats.avgResponseTime);
+    }
+
+    function updateMessagesList(messages) {
+        const container = document.getElementById('messagesList');
+        container.innerHTML = '';
+
+        (messages || []).forEach(message => {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message-item ${message.read ? '' : 'unread'} ${message.selected ? 'selected' : ''}`;
+            messageElement.dataset.id = message.id;
+            messageElement.onclick = () => selectMessage(message.id);
+
+            messageElement.innerHTML = `
+                <input type="checkbox" class="message-checkbox" onchange="toggleMessageSelection(${message.id})">
+                <i class="ph-bold ph-star ${message.starred ? 'starred' : ''} message-star" onclick="toggleStar(${message.id})"></i>
+                <div class="message-content">
+                    <div class="message-header">
+                        <div class="message-sender">${message.sender}</div>
+                        <span class="message-priority ${message.priority}">${message.priority}</span>
+                    </div>
+                    <div class="message-subject">${message.subject}</div>
+                    <div class="message-preview">${message.preview}</div>
+                </div>
+                <div class="message-time">${formatTimeAgo(message.timestamp)}</div>
+            `;
+
+            container.appendChild(messageElement);
+        });
+    }
+
+    function selectMessage(messageId) {
+        // Update selection state
+        document.querySelectorAll('.message-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+
+        const selectedItem = document.querySelector(`[data-id="${messageId}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('selected');
+            loadMessagePreview(messageId);
+        }
+    }
+
+    async function loadMessagePreview(messageId) {
+        try {
+            const response = await fetch(`/api/admin/contacts/message/${messageId}`);
+            if (response.ok) {
+                const message = await response.json();
+                updateMessagePreview(message);
+            }
+        } catch (error) {
+            console.error('Error loading message:', error);
+        }
+    }
+
+    function updateMessagePreview(message) {
+        const container = document.getElementById('messagePreview');
+
+        container.innerHTML = `
+            <div class="preview-header">
+                <div class="preview-sender">${message.sender}</div>
+                <div class="preview-subject">${message.subject}</div>
+                <div class="preview-meta">
+                    <span>From: ${message.senderEmail}</span>
+                    <span>${formatDate(message.timestamp)}</span>
+                    <span>Priority: ${message.priority}</span>
+                </div>
+            </div>
+            <div class="preview-content">
+                <div class="preview-body">${message.body}</div>
+            </div>
+            <div class="preview-actions">
+                <button class="preview-btn primary" onclick="replyToMessage(${message.id})">
+                    <i class="ph-bold ph-arrow-bend-up-left"></i>
+                    Reply
+                </button>
+                <button class="preview-btn" onclick="archiveMessage(${message.id})">
+                    <i class="ph-bold ph-archive"></i>
+                    Archive
+                </button>
+                <button class="preview-btn" onclick="markAsSpam(${message.id})">
+                    <i class="ph-bold ph-shield-x"></i>
+                    Mark as Spam
+                </button>
+            </div>
+        `;
+    }
+
+    function setupEventListeners() {
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', debounce(() => {
+            filterMessages(searchInput.value);
+        }, 300));
+
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                applyFilters();
+            });
+        });
+
+        // Sort options
+        document.getElementById('sortSelect').addEventListener('change', applyFilters);
+
+        // Compose button
+        document.getElementById('composeBtn').addEventListener('click', showComposeModal);
+    }
+
+    function filterMessages(searchTerm) {
+        const messages = document.querySelectorAll('.message-item');
+        messages.forEach(message => {
+            const text = message.textContent.toLowerCase();
+            const matches = text.includes(searchTerm.toLowerCase());
+            message.style.display = matches ? 'flex' : 'none';
+        });
+    }
+
+    function applyFilters() {
+        // Apply current filters and sorting
+        loadInboxData();
+    }
+
+    function toggleMessageSelection(messageId) {
+        // Handle bulk selection
+    }
+
+    function toggleStar(messageId) {
+        // Toggle star status
+        fetch(`/api/admin/contacts/star/${messageId}`, { method: 'POST' })
+            .then(() => loadInboxData());
+    }
+
+    function replyToMessage(messageId) {
+        // Show reply modal/form
+    }
+
+    function archiveMessage(messageId) {
+        fetch(`/api/admin/contacts/archive/${messageId}`, { method: 'POST' })
+            .then(() => loadInboxData());
+    }
+
+    function markAsSpam(messageId) {
+        fetch(`/api/admin/contacts/spam/${messageId}`, { method: 'POST' })
+            .then(() => loadInboxData());
+    }
+
+    function showComposeModal() {
+        // Show compose new message modal
+    }
+
+    function formatResponseTime(minutes) {
+        if (!minutes) return '--';
+        if (minutes < 60) return `${Math.round(minutes)}m`;
+        const hours = Math.floor(minutes / 60);
+        return `${hours}h`;
+    }
+
+    function formatTimeAgo(timestamp) {
+        const now = new Date();
+        const time = new Date(timestamp);
+        const diff = now - time;
+
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+
+        if (minutes < 1) return 'now';
+        if (minutes < 60) return `${minutes}m`;
+        if (hours < 24) return `${hours}h`;
+        return `${days}d`;
+    }
+
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleDateString();
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Initialize when page loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initContactsInbox);
+    } else {
+        initContactsInbox();
+    }
+</script>

@@ -1,0 +1,69 @@
+name: Deploy All Services
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy Infrastructure
+        run: |
+          echo "Deploying infrastructure..."
+          docker-compose up -d postgres redis nginx
+      
+      - name: Deploy Admin Service
+        run: |
+          docker build -t nekwasar-admin:latest services/admin
+          docker stop ecosystem_admin || true
+          docker rm ecosystem_admin || true
+          docker run -d --name ecosystem_admin --network ecosystem_network -p 8001:8001 nekwasar-admin:latest
+      
+      - name: Deploy Blog Service
+        run: |
+          docker build -t nekwasar-blog:latest services/blog
+          docker stop ecosystem_blog || true
+          docker rm ecosystem_blog || true
+          docker run -d --name ecosystem_blog --network ecosystem_network -p 8003:8003 nekwasar-blog:latest
+      
+      - name: Deploy Store Service
+        run: |
+          docker build -t nekwasar-store:latest services/store
+          docker stop ecosystem_store || true
+          docker rm ecosystem_store || true
+          docker run -d --name ecosystem_store --network ecosystem_network -p 8004:8004 nekwasar-store:latest
+      
+      - name: Deploy Portfolio
+        run: |
+          docker build -t nekwasar-portfolio:latest services/portfolio
+          docker stop ecosystem_portfolio || true
+          docker rm ecosystem_portfolio || true
+          docker run -d --name ecosystem_portfolio --network ecosystem_network -p 80:80 nekwasar-portfolio:latest
+      
+      - name: Deploy Agent Service
+        run: |
+          docker build -t nekwasar-agent:latest services/agent
+          docker stop ecosystem_agent || true
+          docker rm ecosystem_agent || true
+          docker run -d --name ecosystem_agent --network ecosystem_network -p 8002:8002 nekwasar-agent:latest
+      
+
+      
+      - name: Deploy Gigs Service
+        run: |
+          docker build -t nekwasar-gigs:latest gigs
+          docker stop ecosystem_gigs || true
+          docker rm ecosystem_gigs || true
+          docker run -d --name ecosystem_gigs --network ecosystem_network -p 3000:3000 nekwasar-gigs:latest
+      
+      - name: Verify Deployment
+        run: |
+          sleep 10
+          docker ps
+          curl -s http://localhost:8001/health || echo "Admin not ready"
+          curl -s http://localhost:8003/health || echo "Blog not ready"
+          curl -s http://localhost:8004/health || echo "Store not ready"

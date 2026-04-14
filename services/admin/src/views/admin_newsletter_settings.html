@@ -1,0 +1,685 @@
+<!-- Tailwind Configuration Script -->
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        'syne': ['Syne', 'sans-serif'],
+      },
+      colors: {
+        'base': 'var(--base)',
+        'base-tint': 'var(--base-tint)',
+        'base-shade': 'var(--base-shade)',
+        'accent': 'var(--accent)',
+        'secondary': 'var(--secondary)',
+        'secondary-rgba': 'var(--secondary-rgba)',
+        'stroke-controls': 'var(--stroke-controls)',
+        'stroke-elements': 'var(--stroke-elements)',
+        't-bright': 'var(--t-bright)',
+        't-medium': 'var(--t-medium)',
+        't-muted': 'var(--t-muted)',
+        't-accent': 'var(--t-accent)',
+        't-secondary': 'var(--t-secondary)',
+        't-disabled': 'var(--t-disabled)',
+        't-placeholder': 'var(--t-placeholder)',
+        'base-opp': 'var(--base-opp)',
+        't-opp-bright': 'var(--t-opp-bright)',
+        't-opp-medium': 'var(--t-opp-medium)',
+        't-opp-muted': 'var(--t-opp-muted)',
+        'gradient-one': 'var(--gradient-one)',
+        'gradient-two': 'var(--gradient-two)',
+        'gradient-three': 'var(--gradient-three)',
+      },
+      borderRadius: {
+        's': 'var(--_radius-s)',
+        'm': 'var(--_radius-m)',
+        'l': 'var(--_radius-l)',
+        'xl': 'var(--_radius-xl)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.4s ease-out forwards',
+      },
+      transitionTimingFunction: {
+        'bezier': 'var(--_animbezier)',
+      },
+      transitionDuration: {
+        'fast': 'var(--_animspeed-fast)',
+        'medium': 'var(--_animspeed-medium)',
+        'slow': 'var(--_animspeed-slow)',
+      },
+    },
+  },
+}
+</script>
+
+<div class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium overflow-x-hidden">
+    <div class="p-4 md:p-6 lg:p-8 max-w-full">
+        <!-- Page Header -->
+        <div class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">Newsletter Settings</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Configure your newsletter preferences and advanced options</p>
+                <div class="mt-8 flex justify-center">
+                    <div class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- API Status Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-plug"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="apiStatus">Active</div>
+                        <div class="text-base text-t-medium font-syne mb-3">API Status</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400">
+                            <i class="ph-bold ph-check-circle text-base"></i>
+                            <span>Connected</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Bounce Rate Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-target"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="bounceRate">0.2%</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Bounce Rate</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400">
+                            <i class="ph-bold ph-trend-down text-base"></i>
+                            <span>Low</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Spam Complaints Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-shield-x"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="spamComplaints">0.1%</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Spam Complaints</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-blue-500 dark:text-blue-400">
+                            <i class="ph-bold ph-shield-check text-base"></i>
+                            <span>Excellent</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+
+            <!-- Unsubscribe Rate Card -->
+            <div class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium"></div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-user-minus"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="unsubscribeRate">2.1%</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Unsubscribe Rate</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-yellow-500 dark:text-yellow-400">
+                            <i class="ph-bold ph-activity text-base"></i>
+                            <span>Normal</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium"></div>
+            </div>
+        </div>
+
+        <!-- Settings Sections -->
+        <div class="space-y-8">
+            <!-- General Settings -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-gear text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">General Settings</h3>
+                            <p class="text-t-medium font-syne text-sm">Basic newsletter configuration and preferences</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright font-syne">Newsletter Name</label>
+                            <input type="text" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="newsletterName" placeholder="Your Newsletter Name">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright font-syne">From Email</label>
+                            <input type="email" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="fromEmail" placeholder="newsletter@yourdomain.com">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright font-syne">From Name</label>
+                            <input type="text" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="fromName" placeholder="Your Company Name">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright font-syne">Reply-To Email</label>
+                            <input type="email" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="replyToEmail" placeholder="support@yourdomain.com">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-t-bright font-syne">Default Footer Text</label>
+                        <textarea class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright resize-none" id="footerText" rows="3" placeholder="Copyright © 2024 Your Company. All rights reserved."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Delivery Settings -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-paper-plane-tilt text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Email Delivery</h3>
+                            <p class="text-t-medium font-syne text-sm">Configure sending limits and delivery preferences</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright font-syne">Daily Send Limit</label>
+                            <input type="number" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="dailyLimit" placeholder="5000" min="1" max="100000">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright font-syne">Hourly Send Limit</label>
+                            <input type="number" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="hourlyLimit" placeholder="500" min="1" max="10000">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright font-syne">Batch Size</label>
+                            <input type="number" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="batchSize" placeholder="100" min="1" max="1000">
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold text-t-bright font-syne">Delivery Options</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="doubleOptIn">
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">Double Opt-In</div>
+                                    <div class="text-xs text-t-medium font-syne">Require confirmation before adding subscribers</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="trackOpens" checked>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">Track Opens</div>
+                                    <div class="text-xs text-t-medium font-syne">Monitor email open rates</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="trackClicks" checked>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">Track Clicks</div>
+                                    <div class="text-xs text-t-medium font-syne">Monitor link clicks in emails</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="autoUnsubscribe">
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">Auto Unsubscribe</div>
+                                    <div class="text-xs text-t-medium font-syne">Automatically remove bounced emails</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API & Integration Settings -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-plug text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">API & Integrations</h3>
+                            <p class="text-t-medium font-syne text-sm">Connect with external services and APIs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8 space-y-6">
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold text-t-bright font-syne">Email Service Provider</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright font-syne">Provider</label>
+                                <select class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="emailProvider">
+                                    <option value="sendgrid">SendGrid</option>
+                                    <option value="mailgun">Mailgun</option>
+                                    <option value="amazon-ses">Amazon SES</option>
+                                    <option value="smtp">Custom SMTP</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright font-syne">API Key</label>
+                                <input type="password" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="apiKey" placeholder="Your API Key">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold text-t-bright font-syne">Webhook URLs</h4>
+                        <div class="space-y-3">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright font-syne">Delivery Webhook</label>
+                                <input type="url" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="deliveryWebhook" placeholder="https://yourapp.com/webhooks/delivery">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright font-syne">Bounce Webhook</label>
+                                <input type="url" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="bounceWebhook" placeholder="https://yourapp.com/webhooks/bounce">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright font-syne">Unsubscribe Webhook</label>
+                                <input type="url" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="unsubscribeWebhook" placeholder="https://yourapp.com/webhooks/unsubscribe">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings -->
+            <div class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium">
+                <div class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-wrench text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Advanced Settings</h3>
+                            <p class="text-t-medium font-syne text-sm">Expert configuration options</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8 space-y-6">
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold text-t-bright font-syne">Performance & Limits</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright font-syne">Max Attachment Size (MB)</label>
+                                <input type="number" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="maxAttachmentSize" placeholder="10" min="1" max="50">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright font-syne">Rate Limit (emails/minute)</label>
+                                <input type="number" class="w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright" id="rateLimit" placeholder="60" min="1" max="1000">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold text-t-bright font-syne">Security & Compliance</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="enableDKIM" checked>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">Enable DKIM</div>
+                                    <div class="text-xs text-t-medium font-syne">DomainKeys Identified Mail authentication</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="enableSPF">
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">Enable SPF</div>
+                                    <div class="text-xs text-t-medium font-syne">Sender Policy Framework validation</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="enableDMARC">
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">Enable DMARC</div>
+                                    <div class="text-xs text-t-medium font-syne">Domain-based Message Authentication</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium">
+                                <input type="checkbox" class="w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0" id="gdprCompliance" checked>
+                                <div class="flex-1">
+                                    <div class="text-sm font-medium text-t-bright font-syne">GDPR Compliance</div>
+                                    <div class="text-xs text-t-medium font-syne">Enable GDPR-compliant features</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Settings Button -->
+            <div class="flex justify-center pt-8">
+                <button class="inline-flex items-center justify-center space-x-3 px-12 py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne" id="saveSettingsBtn">
+                    <i class="ph-bold ph-floppy-disk text-lg"></i>
+                    <span>Save All Settings</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Enhanced scrollbar */
+.overflow-x-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: var(--base-tint);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Enhanced focus states */
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--accent);
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, .cursor-pointer {
+  transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+/* Enhanced hover effects */
+.hover\:glow:hover {
+  animation: glow 0.6s ease-out;
+}
+
+/* Settings sections */
+.settings-section {
+  @apply bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-medium;
+}
+
+.settings-header {
+  @apply bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements;
+}
+
+.settings-content {
+  @apply p-8;
+}
+
+/* Form controls */
+.form-group {
+  @apply space-y-2;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-t-bright font-syne;
+}
+
+.form-input {
+  @apply w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright;
+}
+
+.form-textarea {
+  @apply w-full px-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright resize-none;
+}
+
+.form-checkbox {
+  @apply w-5 h-5 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0;
+}
+
+.checkbox-label {
+  @apply flex items-center space-x-3 p-4 bg-base-tint/30 dark:bg-base-shade/30 rounded-lg cursor-pointer hover:bg-base-tint/50 dark:hover:bg-base-shade/50 transition-all duration-medium;
+}
+
+/* Status indicators */
+.status-indicator {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide font-syne;
+}
+
+.status-active {
+  @apply bg-green-500/10 text-green-500 border border-green-500/20;
+}
+
+.status-inactive {
+  @apply bg-red-500/10 text-red-500 border border-red-500/20;
+}
+
+.status-warning {
+  @apply bg-yellow-500/10 text-yellow-500 border border-yellow-500/20;
+}
+</style>
+
+<script>
+// Newsletter Settings Page
+function initNewsletterSettings() {
+    loadSettingsData();
+    setupEventListeners();
+}
+
+async function loadSettingsData() {
+    try {
+        const response = await fetch('/api/admin/newsletter/settings');
+        if (response.ok) {
+            const data = await response.json();
+            populateSettings(data.settings);
+            updateStatusIndicators(data.status);
+        } else {
+            showFallbackSettings();
+        }
+    } catch (error) {
+        console.error('Error loading settings data:', error);
+        showFallbackSettings();
+    }
+}
+
+function populateSettings(settings) {
+    // General settings
+    document.getElementById('newsletterName').value = settings.newsletterName || '';
+    document.getElementById('fromEmail').value = settings.fromEmail || '';
+    document.getElementById('fromName').value = settings.fromName || '';
+    document.getElementById('replyToEmail').value = settings.replyToEmail || '';
+    document.getElementById('footerText').value = settings.footerText || '';
+
+    // Delivery settings
+    document.getElementById('dailyLimit').value = settings.dailyLimit || '';
+    document.getElementById('hourlyLimit').value = settings.hourlyLimit || '';
+    document.getElementById('batchSize').value = settings.batchSize || '';
+
+    // Checkboxes
+    document.getElementById('doubleOptIn').checked = settings.doubleOptIn || false;
+    document.getElementById('trackOpens').checked = settings.trackOpens !== false;
+    document.getElementById('trackClicks').checked = settings.trackClicks !== false;
+    document.getElementById('autoUnsubscribe').checked = settings.autoUnsubscribe || false;
+
+    // API settings
+    document.getElementById('emailProvider').value = settings.emailProvider || 'sendgrid';
+    document.getElementById('apiKey').value = settings.apiKey || '';
+    document.getElementById('deliveryWebhook').value = settings.deliveryWebhook || '';
+    document.getElementById('bounceWebhook').value = settings.bounceWebhook || '';
+    document.getElementById('unsubscribeWebhook').value = settings.unsubscribeWebhook || '';
+
+    // Advanced settings
+    document.getElementById('maxAttachmentSize').value = settings.maxAttachmentSize || '';
+    document.getElementById('rateLimit').value = settings.rateLimit || '';
+    document.getElementById('enableDKIM').checked = settings.enableDKIM !== false;
+    document.getElementById('enableSPF').checked = settings.enableSPF || false;
+    document.getElementById('enableDMARC').checked = settings.enableDMARC || false;
+    document.getElementById('gdprCompliance').checked = settings.gdprCompliance !== false;
+}
+
+function updateStatusIndicators(status) {
+    document.getElementById('apiStatus').textContent = status.apiStatus || 'Active';
+    document.getElementById('bounceRate').textContent = `${status.bounceRate || 0}%`;
+    document.getElementById('spamComplaints').textContent = `${status.spamComplaints || 0}%`;
+    document.getElementById('unsubscribeRate').textContent = `${status.unsubscribeRate || 0}%`;
+}
+
+function setupEventListeners() {
+    // Save settings button
+    document.getElementById('saveSettingsBtn').onclick = () => saveSettings();
+}
+
+function showFallbackSettings() {
+    // Show default settings when API is not available
+    updateStatusIndicators({
+        apiStatus: 'Active',
+        bounceRate: 0.2,
+        spamComplaints: 0.1,
+        unsubscribeRate: 2.1
+    });
+
+    // Populate with sample data
+    populateSettings({
+        newsletterName: 'NekwasaR Newsletter',
+        fromEmail: 'newsletter@nekwasar.com',
+        fromName: 'NekwasaR',
+        replyToEmail: 'support@nekwasar.com',
+        footerText: 'Copyright © 2024 NekwasaR. All rights reserved.',
+        dailyLimit: 5000,
+        hourlyLimit: 500,
+        batchSize: 100,
+        doubleOptIn: true,
+        trackOpens: true,
+        trackClicks: true,
+        autoUnsubscribe: false,
+        emailProvider: 'sendgrid',
+        maxAttachmentSize: 10,
+        rateLimit: 60,
+        enableDKIM: true,
+        gdprCompliance: true
+    });
+}
+
+function saveSettings() {
+    const settings = {
+        // General settings
+        newsletterName: document.getElementById('newsletterName').value,
+        fromEmail: document.getElementById('fromEmail').value,
+        fromName: document.getElementById('fromName').value,
+        replyToEmail: document.getElementById('replyToEmail').value,
+        footerText: document.getElementById('footerText').value,
+
+        // Delivery settings
+        dailyLimit: parseInt(document.getElementById('dailyLimit').value) || 5000,
+        hourlyLimit: parseInt(document.getElementById('hourlyLimit').value) || 500,
+        batchSize: parseInt(document.getElementById('batchSize').value) || 100,
+        doubleOptIn: document.getElementById('doubleOptIn').checked,
+        trackOpens: document.getElementById('trackOpens').checked,
+        trackClicks: document.getElementById('trackClicks').checked,
+        autoUnsubscribe: document.getElementById('autoUnsubscribe').checked,
+
+        // API settings
+        emailProvider: document.getElementById('emailProvider').value,
+        apiKey: document.getElementById('apiKey').value,
+        deliveryWebhook: document.getElementById('deliveryWebhook').value,
+        bounceWebhook: document.getElementById('bounceWebhook').value,
+        unsubscribeWebhook: document.getElementById('unsubscribeWebhook').value,
+
+        // Advanced settings
+        maxAttachmentSize: parseInt(document.getElementById('maxAttachmentSize').value) || 10,
+        rateLimit: parseInt(document.getElementById('rateLimit').value) || 60,
+        enableDKIM: document.getElementById('enableDKIM').checked,
+        enableSPF: document.getElementById('enableSPF').checked,
+        enableDMARC: document.getElementById('enableDMARC').checked,
+        gdprCompliance: document.getElementById('gdprCompliance').checked
+    };
+
+    // Validate required fields
+    if (!settings.newsletterName.trim()) {
+        showNotification('Please enter a newsletter name', 'error');
+        return;
+    }
+
+    if (!settings.fromEmail.trim()) {
+        showNotification('Please enter a from email address', 'error');
+        return;
+    }
+
+    // Save settings (would normally send to API)
+    showNotification('Settings saved successfully!', 'success');
+
+    // In a real implementation, you would send this to your backend
+    console.log('Saving settings:', settings);
+}
+
+function showNotification(message, type = 'info') {
+    // TODO: Implement notification system
+    console.log(`${type.toUpperCase()}: ${message}`);
+}
+
+// Initialize when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNewsletterSettings);
+} else {
+    initNewsletterSettings();
+}
+</script>

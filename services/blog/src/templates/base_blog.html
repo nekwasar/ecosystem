@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ post_data.title if post_data else 'NekwasaR Blog - Professional Insights & Innovation' }}{%
+    endblock %}</title>
+  <meta name="description"
+    content="{% block description %}{{ (post_data.excerpt or '') if post_data else 'Professional insights, analysis, and storytelling from NekwasaR.' }}{% endblock %}">
+  <meta name="author" content="{{ post_data.author if post_data else 'NekwasaR' }}">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}">
+
+  <!-- Search Engine Verification (Optional but recommended) -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="{{ 'article' if post_data and post_data.slug else 'website' }}">
+  <meta property="og:url"
+    content="https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}">
+  <meta property="og:title" content="{{ post_data.title if post_data else 'NekwasaR Blog' }}">
+  <meta property="og:description"
+    content="{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights from NekwasaR.' }}">
+  <meta property="og:image"
+    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
+  <meta property="og:site_name" content="NekwasaR Blog">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url"
+    content="https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}">
+  <meta name="twitter:title" content="{{ post_data.title if post_data else 'NekwasaR Blog' }}">
+  <meta name="twitter:description"
+    content="{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights from NekwasaR.' }}">
+  <meta name="twitter:image"
+    content="{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}">
+  <meta name="twitter:site" content="@nekwasar">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "{{ 'BlogPosting' if post_data and post_data.slug else 'WebSite' }}",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://blog.nekwasar.com/{{ post_data.slug if post_data and post_data.slug else '' }}"
+    },
+    "headline": "{{ post_data.title if post_data else 'NekwasaR Blog' }}",
+    "description": "{{ post_data.excerpt|truncate(160) if post_data else 'Professional insights from NekwasaR.' }}",
+    "image": "{% if post_data and post_data.featured_image %}{% if post_data.featured_image.startswith('http') %}{{ post_data.featured_image }}{% else %}https://blog.nekwasar.com{{ post_data.featured_image }}{% endif %}{% else %}https://nekwasar.com/icon{% endif %}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ post_data.author if post_data else 'NekwasaR' }}",
+      "url": "https://nekwasar.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "NekwasaR",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nekwasar.com/icon"
+      }
+    },
+    "datePublished": "{{ post_data.published_at if post_data and post_data.published_at else '2024-01-01' }}",
+    "dateModified": "{{ post_data.published_at if post_data and post_data.published_at else '2024-01-01' }}"
+  }
+  </script>
+
+  {% block head_extra %}{% endblock %}
+
+  <!-- Early theme bootstrap: apply saved theme ASAP and provide global fallbacks -->
+  <script>
+    (function () {
+      try {
+        var root = document.documentElement;
+
+        function readTheme() {
+          var t = localStorage.getItem('blog.theme') || localStorage.getItem('color-scheme');
+          if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          return t === 'dark' ? 'dark' : 'light';
+        }
+
+        function applyTheme(theme) {
+          var isLight = theme === 'light';
+          root.setAttribute('color-scheme', isLight ? 'light' : 'dark');
+          root.setAttribute('data-theme', theme);
+          if (isLight) { root.classList.remove('dark'); } else { root.classList.add('dark'); }
+          try { root.style.colorScheme = isLight ? 'light' : 'dark'; } catch (e) { }
+
+          try {
+            localStorage.setItem('blog.theme', theme);
+            localStorage.setItem('color-scheme', theme);
+          } catch (e) { }
+
+          // Update header icon if present
+          var btn = document.getElementById('theme-toggle') ||
+            document.getElementById('themeToggle') ||
+            document.getElementById('menu-theme-toggle') ||
+            document.getElementById('menuThemeToggle');
+          if (btn) {
+            var i = btn.querySelector('i') || document.createElement('i');
+            i.className = isLight ? 'ph ph-sun' : 'ph ph-moon-stars';
+            if (!i.parentNode) { btn.innerHTML = ''; btn.appendChild(i); }
+            btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+          }
+        }
+
+        // Expose globals for any inline/on-demand use and SPA re-sync
+        window.__applyTheme = applyTheme;
+        window.__toggleTheme = function () {
+          var next = readTheme() === 'dark' ? 'light' : 'dark';
+          applyTheme(next);
+        };
+        // Signal that early theme bootstrap is active (prevents duplicate listeners)
+        window.__themeBootstrap = true;
+
+        // Apply immediately to avoid FOUC and guarantee correct initial state
+        applyTheme(readTheme());
+
+        /* Removed delegated fallback click handler to prevent double-toggles.
+           Toggling is handled by [initThemeToggle()](blog/js/blog.js:218) and direct button bindings. */
+      } catch (e) {
+        // fail-safe: do nothing
+      }
+    })();
+  </script>
+
+  <!-- Fonts & Icons -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/bold/style.css">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+
+  <!-- TailwindCSS (CDN JIT) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+            syne: ['Syne', 'sans-serif'],
+          },
+          colors: {
+            base: 'var(--base)',
+            'base-tint': 'var(--base-tint)',
+            't-bright': 'var(--t-bright)',
+            't-medium': 'var(--t-medium)',
+            't-muted': 'var(--t-muted)',
+            accent: 'var(--accent)',
+            secondary: 'var(--secondary)',
+            'stroke-elements': 'var(--stroke-elements)',
+          },
+          borderColor: {
+            DEFAULT: 'var(--stroke-elements)',
+          },
+        },
+      },
+      corePlugins: {
+        preflight: true
+      },
+    };
+  </script>
+
+  <!-- Design System -->
+  <link rel="stylesheet" href="/blog/templates/css/blog-templates.css">
+  <!-- Global Blog Styles -->
+  <link rel="stylesheet" href="/blog/css/blog.css">
+
+  <!-- Fluid layout opt-in: neutralize Tailwind container clamps only within main[data-fluid="true"] -->
+  <style>
+    /* Remove Tailwind's max-w-* clamping (all variants, including -screen-* and -prose) */
+    main#route-container[data-fluid="true"] [class*="max-w-"],
+    main#route-container[data-fluid="true"] .container,
+    main#route-container[data-fluid="true"] .prose,
+    main#route-container[data-fluid="true"] .max-w-prose {
+      max-width: none !important;
+      width: 100% !important;
+    }
+
+    /* Neutralize centering via mx-auto including responsive variants (sm:, md:, lg:, xl:, 2xl:) */
+    main#route-container[data-fluid="true"] [class*="mx-auto"],
+    main#route-container[data-fluid="true"] .sm\:mx-auto,
+    main#route-container[data-fluid="true"] .md\:mx-auto,
+    main#route-container[data-fluid="true"] .lg\:mx-auto,
+    main#route-container[data-fluid="true"] .xl\:mx-auto,
+    main#route-container[data-fluid="true"] .\32xl\:mx-auto {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    /* Ensure top-level sections inside fluid container stretch full width */
+    main#route-container[data-fluid="true"] section {
+      width: 100% !important;
+    }
+
+    /* Sidebar spacing improvements in fluid mode (avoid jam-packed stacks) */
+    main#route-container[data-fluid="true"] aside .sticky>*+* {
+      margin-top: 1.5rem !important;
+      /* 24px vertical rhythm between widgets */
+    }
+
+    main#route-container[data-fluid="true"] aside .space-y-3>*+* {
+      margin-top: 1rem !important;
+      /* normalize small stacks */
+    }
+
+    main#route-container[data-fluid="true"] aside .space-y-4>*+* {
+      margin-top: 1.25rem !important;
+      /* 20px */
+    }
+
+    /* Normalize Tailwind text scale in fluid mode (root html is 62.5% => 1rem = 10px).
+         Map common text utilities to the intended px sizes as if 1rem = 16px. */
+    main#route-container[data-fluid="true"] .text-xs {
+      font-size: 1.2rem !important;
+    }
+
+    /* ~12px */
+    main#route-container[data-fluid="true"] .text-sm {
+      font-size: 1.4rem !important;
+    }
+
+    /* ~14px */
+    main#route-container[data-fluid="true"] .text-base {
+      font-size: 1.6rem !important;
+    }
+
+    /* ~16px */
+    main#route-container[data-fluid="true"] .text-lg {
+      font-size: 1.8rem !important;
+    }
+
+    /* ~18px */
+    main#route-container[data-fluid="true"] .text-xl {
+      font-size: 2.0rem !important;
+    }
+
+    /* ~20px */
+    main#route-container[data-fluid="true"] .text-2xl {
+      font-size: 2.4rem !important;
+    }
+
+    /* ~24px */
+    main#route-container[data-fluid="true"] .text-3xl {
+      font-size: 3.0rem !important;
+    }
+
+    /* ~30px */
+    main#route-container[data-fluid="true"] .text-4xl {
+      font-size: 4.0rem !important;
+    }
+
+    /* ~40px */
+
+    /* Headings scale consistent with homepage rhythm for fluid templates */
+    main#route-container[data-fluid="true"] h1 {
+      font-family: inherit !important;
+      font-weight: 700 !important;
+      font-size: 4.0rem !important;
+      line-height: 1.1 !important;
+    }
+
+    main#route-container[data-fluid="true"] h2 {
+      font-family: inherit !important;
+      font-weight: 700 !important;
+      font-size: 3.0rem !important;
+      line-height: 1.2 !important;
+    }
+
+    main#route-container[data-fluid="true"] h3 {
+      font-family: inherit !important;
+      font-weight: 700 !important;
+      font-size: 2.0rem !important;
+      line-height: 1.3 !important;
+    }
+  </style>
+
+  <!-- Favicon -->
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="/favicon.png">
+</head>
+
+<body class="bg-base text-t-medium {% block body_font %}font-inter{% endblock %}"
+  data-use-routing="{% block routing_flag %}true{% endblock %}">
+  {% include 'includes/navbar.html' %}
+
+  <main id="route-container" class="relative min-h-screen" data-fluid="{% block fluid_layout %}false{% endblock %}">
+    {% block hero %}{% endblock %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include 'includes/footer.html' %}
+
+  <!-- Shared Modals (available on all pages) -->
+  <div class="search-modal-overlay" id="searchOverlay">
+    <div class="search-modal-container">
+      <div class="search-header">
+        <div class="search-title">
+          <i class="ph-bold ph-magnifying-glass"></i>
+          <span>Discover Content</span>
+        </div>
+        <button class="search-close" id="searchClose">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+      <div class="search-input-section">
+        <div class="search-input-wrapper">
+          <input type="text" class="search-input" id="searchInput" placeholder="Search articles, topics, or authors...">
+          <div class="search-input-accent"></div>
+          <button class="search-submit" id="searchBtn">
+            <i class="ph-bold ph-arrow-right"></i>
+          </button>
+        </div>
+        <div class="search-suggestions" id="searchSuggestions">
+          <!-- Dynamic suggestions will be loaded here -->
+        </div>
+        <div class="search-typing-state" id="typingState">
+          <div class="typing-message">
+            <i class="ph-bold ph-magnifying-glass"></i>
+            <span>Start typing to search...</span>
+          </div>
+        </div>
+      </div>
+      <div class="search-filters">
+        <!-- TODO: Sections filter - work in progress -->
+        <!-- <div class="filter-group">
+          <label class="filter-label">Sections</label>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-section="all"><span>All</span></button>
+            <button class="filter-btn" data-section="latest"><i
+                class="ph-bold ph-clock"></i><span>Latest</span></button>
+            <button class="filter-btn" data-section="popular"><i
+                class="ph-bold ph-star"></i><span>Popular</span></button>
+            <button class="filter-btn" data-section="others"><i
+                class="ph-bold ph-grid-four"></i><span>Others</span></button>
+            <button class="filter-btn" data-section="featured"><i
+                class="ph-bold ph-star"></i><span>Featured</span></button>
+          </div>
+        </div> -->
+        <div class="filter-group">
+          <label class="filter-label">Topics</label>
+          <div class="tag-filters" id="tagFilters">
+            <!-- Dynamic tags will be loaded here -->
+          </div>
+        </div>
+      </div>
+      <div class="search-results-section">
+        <div class="results-header">
+          <div class="results-meta">
+            <span class="results-count" id="resultsCount">Start typing to search...</span>
+            <div class="search-stats" id="searchStats"></div>
+          </div>
+          <div class="results-sort" id="resultsSort">
+            <button class="sort-btn active" data-sort="relevance"><i
+                class="ph-bold ph-target"></i><span>Relevance</span></button>
+            <button class="sort-btn" data-sort="recent"><i class="ph-bold ph-clock"></i><span>Recent</span></button>
+            <button class="sort-btn" data-sort="popular"><i class="ph-bold ph-heart"></i><span>Popular</span></button>
+          </div>
+        </div>
+        <div class="search-results" id="searchResults">
+          <div class="no-results">
+            <div class="no-results-icon">
+              <i class="ph-bold ph-magnifying-glass"></i>
+            </div>
+            <h3>Discover Amazing Content</h3>
+            <p>Search through our collection of articles, tutorials, and insights</p>
+          </div>
+        </div>
+        <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+          <button class="load-more-btn" id="loadMoreBtn">
+            <span>Load More Results</span>
+            <i class="ph-bold ph-arrow-down"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="menuOverlay">
+    <div class="modal-content menu-modal">
+      <div class="menu-header">
+        <div class="menu-logo">NekwasaR</div>
+        <div class="menu-actions">
+          <button class="modal-close" id="menuClose">
+            <i class="ph-bold ph-x"></i>
+          </button>
+        </div>
+      </div>
+      <nav class="mobile-nav">
+        <a href="https://nekwasar.com" class="mobile-nav-link" target="_blank" rel="noopener">Back to Portfolio</a>
+        <a href="/" data-route="home" class="mobile-nav-link">Home</a>
+        <!-- <a href="/latest" data-route="latest" class="mobile-nav-link">Latest</a>
+        <a href="/popular" data-route="popular" class="mobile-nav-link">Popular</a>
+        <a href="/others" data-route="others" class="mobile-nav-link">Others</a>
+        <a href="/featured" data-route="featured" class="mobile-nav-link">Featured</a> -->
+        <a href="/topics" data-route="topics" class="mobile-nav-link">Topics</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Post Modal -->
+  <div class="post-modal-overlay" id="postModal">
+    <div class="post-modal-container">
+      <div class="post-modal-header">
+        <div class="post-modal-nav">
+          <button class="post-modal-nav-btn" id="postModalPrev" disabled>
+            <i class="ph-bold ph-caret-left"></i>
+          </button>
+          <div class="post-modal-title">
+            <span class="post-modal-category">Loading...</span>
+            <h2 class="post-modal-title-text">Loading post...</h2>
+          </div>
+          <button class="post-modal-nav-btn" id="postModalNext" disabled>
+            <i class="ph-bold ph-caret-right"></i>
+          </button>
+        </div>
+        <button class="post-modal-close" id="postModalClose">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+      <div class="post-modal-content" id="postModalContent">
+        <div class="post-modal-loading">
+          <div class="loading-spinner"></div>
+          <p>Loading post content...</p>
+        </div>
+      </div>
+      <div class="post-modal-footer">
+        <div class="post-modal-actions">
+          <button class="post-modal-action-btn" id="postModalLike">
+            <i class="ph-bold ph-heart"></i>
+            <span class="action-count">0</span>
+          </button>
+
+          <button class="post-modal-action-btn" id="postModalBookmark">
+            <i class="ph-bold ph-bookmark"></i>
+            <span>Save</span>
+          </button>
+          <button class="post-modal-action-btn" id="postModalShare">
+            <i class="ph-bold ph-share-network"></i>
+            <span>Share</span>
+          </button>
+        </div>
+        <button class="post-modal-read-full" id="postModalReadFull">
+          <span>Read Full Article</span>
+          <i class="ph-bold ph-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Modal Start -->
+  <div id="share-modal" class="share-modal">
+    <div class="share-modal__overlay"></div>
+    <div class="share-modal__content">
+      <div class="share-modal__header">
+        <h3>Share this article</h3>
+        <button class="share-modal__close" id="share-modal-close">&times;</button>
+      </div>
+      <div class="share-modal__body">
+        <div class="share-links">
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="share-link">
+            <i class="ph-bold ph-facebook-logo"></i>
+            <span>Facebook</span>
+          </a>
+          <a href="https://t.me/share/url?url={{ request.url }}&text={{ (post_data.title if post_data else 'Check out this article') or 'Check out this article' }}"
+            target="_blank" class="share-link">
+            <i class="ph-bold ph-telegram-logo"></i>
+            <span>Telegram</span>
+          </a>
+          <a href="https://www.reddit.com/submit?url={{ request.url }}&title={{ (post_data.title if post_data else 'Check out this article') or 'Check out this article' }}"
+            target="_blank" class="share-link">
+            <i class="ph-bold ph-reddit-logo"></i>
+            <span>Reddit</span>
+          </a>
+          <a href="https://wa.me/?text={{ (post_data.title if post_data else 'Check out this article') or 'Check out this article' }}%20{{ request.url }}"
+            target="_blank" class="share-link">
+            <i class="ph-bold ph-whatsapp-logo"></i>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+        <button id="copy-link-btn" class="btn btn-default btn-fullwidth copy-link-btn">
+          <span class="btn-caption">Copy Link</span>
+          <i class="ph-bold ph-copy"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Share Modal End -->
+
+  <div class="scroll-to-top" id="scrollToTop">
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <i class="ph-bold ph-arrow-up"></i>
+  </div>
+
+  <!-- Cookie Consent Banner (Dynamic Overlay) -->
+  <div id="cookieConsent"
+    class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-[1200px] translate-y-32 opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
+    <div
+      class="bg-base-tint/50 backdrop-blur-3xl border border-white/10 dark:border-white/5 rounded-[2rem] p-6 md:px-12 md:py-8 shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row items-center gap-8 md:gap-16">
+      <div class="flex-1 flex flex-col md:flex-row items-center gap-4 md:gap-10 text-center md:text-left">
+        <div class="flex items-center gap-3 shrink-0">
+          <i class="ph ph-shield-check text-accent text-3xl"></i>
+          <h3 class="text-lg font-bold font-syne text-t-bright tracking-[0.15em] uppercase whitespace-nowrap">Privacy
+            First</h3>
+        </div>
+        <div class="hidden md:block w-[1px] h-10 bg-white/10"></div>
+        <p class="text-base md:text-[1.5rem] font-medium text-t-medium leading-relaxed tracking-wide">
+          We use strictly necessary cookies to ensure the absolute best experience.
+          Visit our <a href="/privacy"
+            class="text-accent hover:text-accent/80 transition-colors font-bold underline underline-offset-8">Privacy
+            Policy</a> to learn more.
+        </p>
+      </div>
+      <div class="w-full md:w-auto shrink-0">
+        <button id="acceptCookies"
+          class="w-full md:w-auto px-8 py-3 md:px-12 md:py-5 bg-accent text-white text-base md:text-lg font-bold rounded-xl md:rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_12px_30px_rgba(var(--accent-rgb),0.3)] tracking-widest">
+          Accept & Enter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Newsletter Slide-in (Behavioral Trigger) -->
+  <div id="newsletterSlideIn"
+    class="fixed bottom-[420px] md:bottom-60 right-1/2 translate-x-1/2 md:right-10 md:translate-x-0 z-[9998] w-[95%] max-w-[540px] translate-y-20 opacity-0 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-none">
+    <div
+      class="bg-base-tint/60 backdrop-blur-3xl border border-white/10 dark:border-white/5 rounded-[2.5rem] p-10 md:p-12 shadow-[0_50px_150px_rgba(0,0,0,0.7)] relative overflow-hidden group">
+      <!-- Decorative background orb with increased size -->
+      <div
+        class="absolute -top-12 -right-12 w-48 h-48 bg-accent/20 blur-[80px] rounded-full group-hover:bg-accent/30 transition-all duration-700">
+      </div>
+
+      <button id="closeNewsletter" class="absolute top-6 right-6 text-t-muted hover:text-t-bright transition-colors">
+        <i class="ph-bold ph-x text-2xl"></i>
+      </button>
+
+      <div class="relative z-10">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center">
+            <i class="ph-bold ph-sparkle text-accent text-3xl"></i>
+          </div>
+          <h3 class="text-2xl font-bold font-syne text-t-bright tracking-[0.15em] uppercase whitespace-nowrap">Let's
+            Stay Close</h3>
+        </div>
+
+        <p class="text-xl font-medium text-t-medium leading-relaxed mb-8 tracking-wide">
+          Join 2,500+ friends already getting our weekly deep-dives on the future. No spam, just the good stuff!
+        </p>
+
+        <form id="slideInNewsletterForm" class="space-y-4">
+          <div class="relative">
+            <input type="email" id="slideInEmail" placeholder="What's your email?" required
+              class="w-full bg-base/50 border border-white/10 rounded-2xl px-6 py-5 text-xl font-medium text-t-bright focus:outline-none focus:border-accent/50 transition-all placeholder:text-t-muted">
+          </div>
+          <button type="submit" id="slideInSubmit"
+            class="w-full py-5 bg-accent text-white text-xl font-bold rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_15px_40px_rgba(var(--accent-rgb),0.3)] flex items-center justify-center gap-3 tracking-widest uppercase">
+            <span>Yes! Sign me up</span>
+            <i class="ph-bold ph-arrow-right"></i>
+          </button>
+        </form>
+
+        <div id="slideInMessage" class="mt-6 text-base font-bold hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Consent Logic -->
+  <script>
+    (function () {
+      const initCookieBanner = () => {
+        const banner = document.getElementById('cookieConsent');
+        const acceptBtn = document.getElementById('acceptCookies');
+        if (!banner || !acceptBtn) return;
+
+        // Check if consent was already given
+        const hasConsent = localStorage.getItem('nekwasar_cookie_consent');
+
+        if (!hasConsent) {
+          // Show banner after short delay
+          setTimeout(() => {
+            banner.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+          }, 1500);
+        }
+
+        acceptBtn.addEventListener('click', () => {
+          localStorage.setItem('nekwasar_cookie_consent', 'true');
+          // Animate out
+          banner.classList.add('translate-y-16', 'opacity-0', 'pointer-events-none');
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCookieBanner);
+      } else {
+        initCookieBanner();
+      }
+    })();
+  </script>
+
+  <!-- Newsletter Controller Logic -->
+  <script>
+    (function () {
+      const initNewsletterController = () => {
+        const slideIn = document.getElementById('newsletterSlideIn');
+        const form = document.getElementById('slideInNewsletterForm');
+        const closeBtn = document.getElementById('closeNewsletter');
+        const message = document.getElementById('slideInMessage');
+        const submitBtn = document.getElementById('slideInSubmit');
+
+        if (!slideIn || !form) return;
+
+        // --- 1. Behavioral Check ---
+        // Don't show if on homepage, author page, OR already subscribed/closed
+        const isHome = window.location.pathname === '/' || window.location.pathname === '';
+        const isAuthorPage = window.location.pathname.startsWith('/author/');
+        const hasInteracted = localStorage.getItem('nekwasar_newsletter_interacted');
+
+        if (isHome || isAuthorPage || hasInteracted) return;
+
+        // --- 2. Scroll Trigger ---
+        let triggered = false;
+        const onScroll = () => {
+          if (triggered) return;
+
+          const scrollPct = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+          if (scrollPct > 0.5) { // 50% scroll
+            triggered = true;
+            slideIn.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            window.removeEventListener('scroll', onScroll);
+          }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        // --- 3. Close Logic ---
+        closeBtn?.addEventListener('click', () => {
+          localStorage.setItem('nekwasar_newsletter_interacted', 'true'); // Persistent dismissal
+          slideIn.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        });
+
+        // --- 4. Submission Logic ---
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('slideInEmail').value;
+
+          submitBtn.disabled = true;
+          const originalContent = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<span>Entering...</span>';
+
+          try {
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('name', email.split('@')[0]);
+
+            const response = await fetch('/api/newsletter/subscribe', {
+              method: 'POST',
+              body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok || data.success || (data.message && data.message.toLowerCase().includes('already'))) {
+              localStorage.setItem('nekwasar_newsletter_interacted', 'true');
+              message.textContent = 'Successfully joined! Check your inbox soon.';
+              message.className = 'mt-4 text-sm font-bold text-accent animate-pulse';
+              message.classList.remove('hidden');
+
+              setTimeout(() => {
+                slideIn.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+              }, 3000);
+            } else {
+              throw new Error(data.message || 'Subscription failed');
+            }
+          } catch (err) {
+            message.textContent = err.message || 'Something went wrong. Try again.';
+            message.className = 'mt-4 text-sm font-bold text-red-500';
+            message.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalContent;
+          }
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNewsletterController);
+      } else {
+        initNewsletterController();
+      }
+    })();
+  </script>
+
+  <!-- Device Fingerprinting Script -->
+  <script src="/blog/js/device-fingerprint.js" defer></script>
+  <!-- Global Blog Script -->
+  <script src="/blog/js/blog.js" defer></script>
+  <script src="/blog/templates/js/blog-templates.js" defer></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

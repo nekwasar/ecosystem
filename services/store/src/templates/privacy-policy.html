@@ -1,0 +1,99 @@
+{% extends "base_store.html" %}
+
+{% block title %}Privacy Policy | NekwasaR Store{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-base min-h-screen">
+    <div class="max-w-4xl mx-auto px-6">
+        <!-- Header -->
+        <div class="mb-16 border-l-4 border-secondary pl-8">
+            <h1 class="font-display font-black text-5xl text-t-bright uppercase tracking-tighter mb-4">Privacy <span
+                    class="text-secondary underline decoration-stroke-elements underline-offset-8">Policy</span></h1>
+            <p class="text-t-muted font-medium text-lg italic">Transparency in the digital era.</p>
+        </div>
+
+        <div class="space-y-12">
+            <!-- Intro -->
+            <div class="bg-base-tint/50 backdrop-blur-md border border-stroke-elements p-8 rounded-2xl shadow-xl">
+                <p class="text-t-medium leading-relaxed font-inter mb-0">
+                    At <span
+                        class="text-t-bright font-bold font-display uppercase tracking-wider text-sm">NekwasaR</span>,
+                    we prioritize the protection of your digital footprint. This Privacy Policy details the specific
+                    data we collect, how it is processed via our secure partners, and your rights as a user of the
+                    NekwasaR Store.
+                </p>
+            </div>
+
+            <!-- Data Collection -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div
+                    class="bg-base-shade border border-stroke-elements p-6 rounded-xl group hover:border-secondary/50 transition-colors">
+                    <h3 class="font-display font-bold text-t-bright mb-4 flex items-center gap-3">
+                        <i class="ph ph-user-circle text-secondary"></i> Identity Data
+                    </h3>
+                    <p class="text-sm text-t-muted leading-relaxed">
+                        We collect your <span class="text-t-medium font-bold">Email Address</span> and <span
+                            class="text-t-medium font-bold">Name</span> to deliver your digital purchases and maintain
+                        your account history. We never sell this information to third-party advertisers.
+                    </p>
+                </div>
+                <div
+                    class="bg-base-shade border border-stroke-elements p-6 rounded-xl group hover:border-secondary/50 transition-colors">
+                    <h3 class="font-display font-bold text-t-bright mb-4 flex items-center gap-3">
+                        <i class="ph ph-credit-card text-secondary"></i> Payment Data
+                    </h3>
+                    <p class="text-sm text-t-muted leading-relaxed">
+                        Financial transactions are handled by <span class="text-t-medium font-bold">Stripe</span>.
+                        NekwasaR never sees or stores your full credit card number or CVC code in our local database.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Detailed Sections -->
+            <div class="space-y-12 pt-8">
+                <section class="group">
+                    <h2
+                        class="font-display font-bold text-2xl text-t-bright mb-6 group-hover:text-secondary transition-colors">
+                        How We Use Your Data</h2>
+                    <div class="pl-8 border-l border-stroke-elements space-y-4 text-t-medium leading-relaxed">
+                        <p>Your data is strictly used for:</p>
+                        <ul class="list-disc pl-5 space-y-2 marker:text-secondary">
+                            <li>Generating secure download tokens for purchased assets.</li>
+                            <li>Automated invoicing and tax compliance.</li>
+                            <li>Security monitoring to prevent fraudulent purchases.</li>
+                            <li>Occasional store updates (only if you opt-in to our newsletter).</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="group">
+                    <h2
+                        class="font-display font-bold text-2xl text-t-bright mb-6 group-hover:text-secondary transition-colors">
+                        Cookies & Analytics</h2>
+                    <div class="pl-8 border-l border-stroke-elements space-y-4 text-t-medium leading-relaxed">
+                        <p>We use essential cookies to keep you logged in and process your cart. We also use minimal,
+                            anonymized analytics to understand site performance. No tracking data is used to build
+                            personal profiles outside of our ecosystem.</p>
+                    </div>
+                </section>
+
+                <section class="group">
+                    <h2
+                        class="font-display font-bold text-2xl text-t-bright mb-6 group-hover:text-secondary transition-colors">
+                        Your Rights</h2>
+                    <div class="pl-8 border-l border-stroke-elements space-y-4 text-t-medium leading-relaxed">
+                        <p>Under GDPR and CCPA, you have the right to request a copy of your data or its permanent
+                            deletion. To exercise these rights, please contact us via the support portal.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div class="mt-20 text-center">
+            <p class="text-t-muted text-sm font-bold font-display uppercase tracking-widest">NekwasaR Store Security
+                Protocol v1.0</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

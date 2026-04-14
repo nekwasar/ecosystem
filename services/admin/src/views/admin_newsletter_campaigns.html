@@ -1,0 +1,2015 @@
+<!-- Tailwind Configuration Script -->
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: {
+                    'syne': ['Syne', 'sans-serif'],
+                },
+                colors: {
+                    'base': 'var(--base)',
+                    'base-tint': 'var(--base-tint)',
+                    'base-shade': 'var(--base-shade)',
+                    'accent': 'var(--accent)',
+                    'secondary': 'var(--secondary)',
+                    'secondary-rgba': 'var(--secondary-rgba)',
+                    'stroke-controls': 'var(--stroke-controls)',
+                    'stroke-elements': 'var(--stroke-elements)',
+                    't-bright': 'var(--t-bright)',
+                    't-medium': 'var(--t-medium)',
+                    't-muted': 'var(--t-muted)',
+                    't-accent': 'var(--t-accent)',
+                    't-secondary': 'var(--t-secondary)',
+                    't-disabled': 'var(--t-disabled)',
+                    't-placeholder': 'var(--t-placeholder)',
+                    'base-opp': 'var(--base-opp)',
+                    't-opp-bright': 'var(--t-opp-bright)',
+                    't-opp-medium': 'var(--t-opp-medium)',
+                    't-opp-muted': 'var(--t-opp-muted)',
+                    'gradient-one': 'var(--gradient-one)',
+                    'gradient-two': 'var(--gradient-two)',
+                    'gradient-three': 'var(--gradient-three)',
+                },
+                borderRadius: {
+                    's': 'var(--_radius-s)',
+                    'm': 'var(--_radius-m)',
+                    'l': 'var(--_radius-l)',
+                    'xl': 'var(--_radius-xl)',
+                },
+                animation: {
+                    'fade-in': 'fadeIn 0.6s ease-out forwards',
+                    'slide-up': 'slideUp 0.6s ease-out forwards',
+                    'scale-in': 'scaleIn 0.4s ease-out forwards',
+                },
+                transitionTimingFunction: {
+                    'bezier': 'var(--_animbezier)',
+                },
+                transitionDuration: {
+                    'fast': 'var(--_animspeed-fast)',
+                    'medium': 'var(--_animspeed-medium)',
+                    'slow': 'var(--_animspeed-slow)',
+                },
+            },
+        },
+    }
+</script>
+
+<div
+    class="min-h-screen bg-gradient-to-br from-gradient-one via-base to-gradient-two dark:from-base dark:via-base-tint dark:to-base-shade transition-all duration-medium overflow-x-hidden">
+    <div class="p-4 md:p-6 lg:p-8 max-w-full">
+        <!-- Page Header -->
+        <div
+            class="text-center mb-12 p-12 bg-gradient-to-r from-accent via-secondary to-t-accent rounded-xl text-t-opp-bright shadow-2xl hover:shadow-3xl transform hover:scale-[1.01] transition-all duration-medium relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-secondary/20 animate-pulse">
+            </div>
+            <div class="relative z-10">
+                <h1
+                    class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight font-syne bg-gradient-to-r from-t-opp-bright via-white to-t-opp-medium bg-clip-text text-transparent">
+                    Campaign Management</h1>
+                <p class="text-xl md:text-2xl opacity-90 font-syne font-light">Create, schedule, and manage your email
+                    campaigns with advanced automation</p>
+                <div class="mt-8 flex justify-center">
+                    <div
+                        class="w-24 h-1 bg-gradient-to-r from-transparent via-t-opp-bright to-transparent rounded-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
+            <!-- Total Campaigns Card -->
+            <div
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-accent/20 cursor-pointer overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
+                </div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-accent via-secondary to-t-accent rounded-xl flex items-center justify-center text-t-opp-bright text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-envelope"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="totalCampaigns">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Total Campaigns</div>
+                        <div
+                            class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+12.5%</span>
+                            <span class="text-t-muted font-syne">this month</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium">
+                </div>
+            </div>
+
+            <!-- Active Campaigns Card -->
+            <div
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
+                </div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-teal-500 to-green-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-play-circle"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="activeCampaigns">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Active Campaigns</div>
+                        <div
+                            class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+8.2%</span>
+                            <span class="text-t-muted font-syne">this month</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium">
+                </div>
+            </div>
+
+            <!-- Scheduled Campaigns Card -->
+            <div
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
+                </div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-clock"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="scheduledCampaigns">0</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Scheduled</div>
+                        <div class="flex items-center space-x-2 text-sm font-semibold text-blue-500 dark:text-blue-400">
+                            <i class="ph-bold ph-calendar text-base"></i>
+                            <span>Next: 2h</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium">
+                </div>
+            </div>
+
+            <!-- Average Open Rate Card -->
+            <div
+                class="group relative bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl p-8 hover:scale-105 hover:-translate-y-2 transition-all duration-medium shadow-xl hover:shadow-2xl hover:shadow-yellow-500/20 cursor-pointer overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-transparent to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-medium">
+                </div>
+                <div class="relative z-10 flex items-center space-x-6">
+                    <div
+                        class="w-16 h-16 bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl shadow-lg group-hover:shadow-xl transition-all duration-medium">
+                        <i class="ph-bold ph-chart-bar"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-3xl font-bold text-t-bright font-syne mb-1" id="avgOpenRate">0%</div>
+                        <div class="text-base text-t-medium font-syne mb-3">Avg. Open Rate</div>
+                        <div
+                            class="flex items-center space-x-2 text-sm font-semibold text-green-500 dark:text-green-400">
+                            <i class="ph-bold ph-trend-up text-base"></i>
+                            <span>+5.7%</span>
+                            <span class="text-t-muted font-syne">vs last month</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 rounded-full blur-xl group-hover:blur-2xl transition-all duration-medium">
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Management -->
+        <div
+            class="bg-base/90 dark:bg-base-tint/90 backdrop-blur-xl border border-stroke-elements rounded-xl shadow-2xl mb-12 overflow-hidden hover:shadow-3xl transition-all duration-medium">
+            <div
+                class="bg-gradient-to-r from-base-tint to-base-shade dark:from-base-shade dark:to-base p-8 border-b border-stroke-elements">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between space-y-6 xl:space-y-0">
+                    <div class="flex items-center space-x-4">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-accent to-secondary rounded-xl flex items-center justify-center text-t-opp-bright shadow-lg">
+                            <i class="ph-bold ph-megaphone text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-t-bright font-syne">Campaign Management</h3>
+                            <p class="text-t-medium font-syne text-sm">Create, edit, and monitor your email campaigns
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button
+                            class="inline-flex items-center justify-center space-x-3 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-accent via-secondary to-t-accent hover:from-accent/90 hover:via-secondary/90 hover:to-t-accent/90 text-t-opp-bright font-semibold rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne text-sm md:text-base"
+                            id="createCampaignBtn">
+                            <i class="ph-bold ph-plus text-lg"></i>
+                            <span>Create Campaign</span>
+                        </button>
+                        <button
+                            class="inline-flex items-center justify-center space-x-3 px-6 py-3 md:px-8 md:py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne text-sm md:text-base"
+                            id="openSettingsBtn" onclick="openSettings()">
+                            <i class="ph-bold ph-gear text-lg"></i>
+                            <span>Settings</span>
+                        </button>
+                        <button
+                            class="inline-flex items-center justify-center space-x-3 px-6 py-3 md:px-8 md:py-4 bg-base-tint dark:bg-base-shade hover:bg-base-shade dark:hover:bg-base border border-stroke-elements text-t-bright font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-medium font-syne text-sm md:text-base"
+                            id="openAutomationsBtn" onclick="openAutomations()">
+                            <i class="ph-bold ph-robot text-lg"></i>
+                            <span>Automations</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="p-4 md:p-6 lg:p-8 border-b border-stroke-elements">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-t-bright font-syne">Search Campaigns</label>
+                        <div class="relative">
+                            <input type="text"
+                                class="w-full pl-10 pr-4 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright placeholder-t-muted"
+                                id="searchCampaigns" placeholder="Search by name, subject...">
+                            <i
+                                class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-t-muted"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-t-bright font-syne">Status</label>
+                        <div class="relative">
+                            <select
+                                class="w-full pl-10 pr-10 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright appearance-none cursor-pointer"
+                                id="statusFilter">
+                                <option value="">All Statuses</option>
+                                <option value="draft">Draft</option>
+                                <option value="scheduled">Scheduled</option>
+                                <option value="sending">Sending</option>
+                                <option value="sent">Sent</option>
+                                <option value="paused">Paused</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <i
+                                class="ph-bold ph-check-circle absolute left-3 top-1/2 transform -translate-y-1/2 text-t-muted"></i>
+                            <i
+                                class="ph-bold ph-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-t-muted pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-t-bright font-syne">Type</label>
+                        <div class="relative">
+                            <select
+                                class="w-full pl-10 pr-10 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright appearance-none cursor-pointer"
+                                id="typeFilter">
+                                <option value="">All Types</option>
+                                <option value="newsletter">Newsletter</option>
+                                <option value="promotional">Promotional</option>
+                                <option value="transactional">Transactional</option>
+                                <option value="welcome">Welcome</option>
+                                <option value="reengagement">Re-engagement</option>
+                            </select>
+                            <i
+                                class="ph-bold ph-tag absolute left-3 top-1/2 transform -translate-y-1/2 text-t-muted"></i>
+                            <i
+                                class="ph-bold ph-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-t-muted pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-t-bright font-syne">Date Range</label>
+                        <div class="relative">
+                            <select
+                                class="w-full pl-10 pr-10 py-3 bg-base dark:bg-base-tint border border-stroke-elements rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all duration-medium text-t-bright appearance-none cursor-pointer"
+                                id="dateFilter">
+                                <option value="">All Dates</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                            <i
+                                class="ph-bold ph-calendar absolute left-3 top-1/2 transform -translate-y-1/2 text-t-muted"></i>
+                            <i
+                                class="ph-bold ph-caret-down absolute right-3 top-1/2 transform -translate-y-1/2 text-t-muted pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campaigns Table -->
+            <div class="overflow-x-auto w-full">
+                <table class="w-full table-fixed min-w-[600px]" id="campaignsTable">
+                    <thead class="bg-base-tint/50 dark:bg-base-shade/50">
+                        <tr class="border-b border-stroke-elements">
+                            <th class="w-12 px-2 md:px-4 py-3 md:py-4 text-left">
+                                <input type="checkbox" id="selectAllCampaigns"
+                                    class="w-4 h-4 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0 cursor-pointer">
+                            </th>
+                            <th
+                                class="w-40 md:w-48 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
+                                Campaign</th>
+                            <th
+                                class="w-24 md:w-28 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
+                                Status</th>
+                            <th
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
+                                Type</th>
+                            <th
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne hidden md:table-cell">
+                                Recipients</th>
+                            <th
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne hidden md:table-cell">
+                                Sent</th>
+                            <th
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne hidden md:table-cell">
+                                Open Rate</th>
+                            <th
+                                class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-left text-xs font-bold text-t-bright uppercase tracking-wider font-syne">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaignsTableBody" class="divide-y divide-stroke-elements">
+                        <!-- Campaign data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div
+                class="px-4 md:px-6 lg:px-8 py-4 md:py-6 bg-base-tint/30 dark:bg-base-shade/30 border-t border-stroke-elements">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                    <div class="text-xs md:text-sm text-t-medium font-syne">
+                        Showing <span id="showingStart">1</span> to <span id="showingEnd">10</span> of <span
+                            id="totalRecords">0</span> campaigns
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button
+                            class="px-3 md:px-4 py-2 bg-base-tint dark:bg-base-shade border border-stroke-elements rounded-lg text-t-bright hover:bg-base-shade dark:hover:bg-base transition-all duration-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                            id="prevPage" disabled>
+                            <i class="ph-bold ph-caret-left"></i>
+                        </button>
+                        <span class="px-3 md:px-4 py-2 text-t-bright font-syne text-sm" id="currentPage">1</span>
+                        <button
+                            class="px-3 md:px-4 py-2 bg-base-tint dark:bg-base-shade border border-stroke-elements rounded-lg text-t-bright hover:bg-base-shade dark:hover:bg-base transition-all duration-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                            id="nextPage">
+                            <i class="ph-bold ph-caret-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Actions Panel (Hidden by default) -->
+        <div class="bg-accent/10 border border-accent/20 rounded-xl p-6 mb-8 hidden" id="bulkActionsPanel">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="ph-bold ph-stack text-accent text-xl"></i>
+                    <span class="text-t-bright font-syne font-semibold" id="selectedCount">0 campaigns selected</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button
+                        class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-accent/20 hover:bg-accent/30 text-accent font-semibold rounded-lg transition-all duration-medium font-syne text-sm hidden"
+                        id="bulkEditBtn">
+                        <i class="ph-bold ph-pencil text-sm"></i>
+                        <span>Edit</span>
+                    </button>
+                    <button
+                        class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-500 font-semibold rounded-lg transition-all duration-medium font-syne text-sm"
+                        id="bulkDeleteBtn">
+                        <i class="ph-bold ph-trash text-sm"></i>
+                        <span>Delete</span>
+                    </button>
+                    <button
+                        class="inline-flex items-center justify-center space-x-2 px-4 py-2 bg-base-tint dark:bg-base-shade border border-stroke-elements text-t-bright font-semibold rounded-lg transition-all duration-medium font-syne text-sm"
+                        id="clearSelectionBtn">
+                        <i class="ph-bold ph-x text-sm"></i>
+                        <span>Clear</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Wizard Modal -->
+<div id="campaignWizardModal" class="fixed inset-0 z-50 hidden"
+    style="background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div
+            class="bg-base dark:bg-base border border-stroke-elements rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden theme-card">
+
+            <!-- Wizard Header -->
+            <div
+                class="px-4 py-4 md:px-8 md:py-5 border-b border-stroke-elements bg-base-tint flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg md:text-xl font-bold text-t-bright font-syne">Create Campaign</h3>
+                    <p class="text-xs md:text-sm text-t-medium">Step <span id="currentStepNum">1</span> of 4: <span
+                            id="currentStepName">Setup</span></p>
+                </div>
+                <button onclick="closeWizard()" class="text-t-medium hover:text-t-bright p-2">
+                    <i class="ph-bold ph-x text-lg md:text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Wizard Progress Bar -->
+            <div class="w-full bg-base-shade h-1">
+                <div id="wizardProgress" class="h-full bg-accent transition-all duration-500 ease-out"
+                    style="width: 25%"></div>
+            </div>
+
+            <!-- Wizard Body -->
+            <div class="flex-1 overflow-hidden relative">
+
+                <!-- STEP 1: SETUP -->
+                <div id="step1" class="wizard-step absolute inset-0 p-4 md:p-8 overflow-y-auto">
+                    <div class="max-w-2xl mx-auto space-y-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright">Campaign Name (Internal)</label>
+                            <input type="text" id="campName"
+                                class="w-full px-4 py-3 rounded-lg bg-base border border-stroke-controls text-t-bright focus:border-accent outline-none transition-colors"
+                                placeholder="e.g. January Newsletter">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright">Email Subject Line</label>
+                            <input type="text" id="campSubject"
+                                class="w-full px-4 py-3 rounded-lg bg-base border border-stroke-controls text-t-bright focus:border-accent outline-none transition-colors"
+                                placeholder="e.g. 5 Trends You Need to Know">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-t-bright">Target Audience</label>
+                            <select id="segmentSelect"
+                                class="w-full px-4 py-3 rounded-lg bg-base border border-stroke-controls text-t-bright focus:border-accent outline-none transition-colors">
+                                <option value="">Loading segments...</option>
+                            </select>
+                            <p class="text-xs text-t-muted">Limit recipients to a specific segment or send to everyone.
+                            </p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright">Sender Name</label>
+                                <input type="text" id="wizardSenderName"
+                                    class="w-full px-4 py-3 rounded-lg bg-base-tint border border-stroke-controls text-t-muted cursor-not-allowed"
+                                    disabled>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-t-bright">Sender Email</label>
+                                <input type="text" id="wizardSenderEmail"
+                                    class="w-full px-4 py-3 rounded-lg bg-base-tint border border-stroke-controls text-t-muted cursor-not-allowed"
+                                    disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: SELECT TEMPLATE -->
+                <div id="step2" class="wizard-step absolute inset-0 p-8 overflow-y-auto hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="wizardTemplateGrid">
+                        <!-- Templates injected here -->
+                    </div>
+                </div>
+
+                <!-- STEP 3: VISUAL EDITOR -->
+                <div id="step3" class="wizard-step absolute inset-0 flex flex-col hidden">
+                    <div
+                        class="bg-base-tint p-2 flex justify-center text-xs text-t-medium border-b border-stroke-elements">
+                        <span class="flex items-center gap-2"><i class="ph-bold ph-info"></i> Click directly on the
+                            preview text to edit content.</span>
+                    </div>
+                    <div class="flex-1 bg-gray-100 p-8 overflow-y-auto flex flex-col items-center">
+                        <!-- Toolbar -->
+                        <div
+                            class="bg-white border border-stroke-controls rounded-t-lg p-2 flex gap-2 w-full max-w-[600px] mb-0 sticky top-0 z-10 shadow-sm">
+                            <button onclick="document.execCommand('bold')"
+                                class="p-2 hover:bg-base-tint rounded text-t-medium"><i
+                                    class="ph-bold ph-text-b"></i></button>
+                            <button onclick="document.execCommand('italic')"
+                                class="p-2 hover:bg-base-tint rounded text-t-medium"><i
+                                    class="ph-bold ph-text-i"></i></button>
+                            <button onclick="document.execCommand('underline')"
+                                class="p-2 hover:bg-base-tint rounded text-t-medium"><i
+                                    class="ph-bold ph-text-u"></i></button>
+                            <div class="w-px bg-stroke-elements mx-1"></div>
+                            <button onclick="insertImage()"
+                                class="p-2 hover:bg-base-tint rounded text-t-medium group relative"
+                                title="Insert Image via URL">
+                                <i class="ph-bold ph-image"></i>
+                            </button>
+                            <button onclick="document.execCommand('justifyLeft')"
+                                class="p-2 hover:bg-base-tint rounded text-t-medium"><i
+                                    class="ph-bold ph-text-align-left"></i></button>
+                            <button onclick="document.execCommand('justifyCenter')"
+                                class="p-2 hover:bg-base-tint rounded text-t-medium"><i
+                                    class="ph-bold ph-text-align-center"></i></button>
+                            <button onclick="document.execCommand('justifyRight')"
+                                class="p-2 hover:bg-base-tint rounded text-t-medium"><i
+                                    class="ph-bold ph-text-align-right"></i></button>
+                        </div>
+
+                        <div id="visualEditorContainer"
+                            class="bg-white shadow-xl w-full max-w-[600px] min-h-[800px] p-8 rounded-b-lg outline-none focus:ring-2 focus:ring-accent/20 transition-shadow"
+                            contenteditable="true">
+                            <!-- Template Content Injected Here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: SUMMARY & PREVIEW -->
+                <div id="step4" class="wizard-step absolute inset-0 flex flex-col hidden">
+                    <div class="flex-1 flex overflow-hidden">
+                        <!-- Left: Preview -->
+                        <div class="flex-1 bg-gray-200 p-8 overflow-y-auto flex flex-col items-center">
+                            <div class="text-xs text-gray-500 mb-2 font-bold uppercase tracking-wider">Email Preview
+                            </div>
+                            <iframe id="finalPreviewFrame"
+                                class="w-full max-w-[600px] h-full bg-white shadow-2xl rounded-lg border-none"
+                                sandbox="allow-same-origin"></iframe>
+                        </div>
+
+                        <!-- Right: Metadata & Confirm -->
+                        <div class="w-96 bg-base border-l border-stroke-elements p-8 flex flex-col justify-between">
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="text-lg font-bold text-t-bright mb-4">Campaign Summary</h4>
+
+                                    <div class="space-y-4">
+                                        <div class="p-4 bg-base-tint rounded-lg border border-stroke-elements">
+                                            <div class="text-xs text-t-medium uppercase tracking-wide mb-1">Subject
+                                            </div>
+                                            <div class="font-medium text-t-bright" id="summarySubject">...</div>
+                                        </div>
+
+                                        <div class="p-4 bg-base-tint rounded-lg border border-stroke-elements">
+                                            <div class="text-xs text-t-medium uppercase tracking-wide mb-1">Audience
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <span class="font-medium text-t-bright" id="summaryAudience">All
+                                                    Subscribers</span>
+                                                <span
+                                                    class="bg-accent/10 text-accent px-2 py-0.5 rounded text-xs font-bold"
+                                                    id="summaryCount">0</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-4 bg-base-tint rounded-lg border border-stroke-elements">
+                                            <label class="block text-xs text-t-medium uppercase tracking-wide mb-1">Send
+                                                Time</label>
+                                            <select id="sendTimeOption" onchange="toggleScheduleInput()"
+                                                class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                <option value="immediate">Immediate</option>
+                                                <option value="draft">Leave as Draft</option>
+                                                <option value="schedule">Schedule</option>
+                                            </select>
+
+                                            <!-- Schedule Inputs -->
+                                            <div id="scheduleContainer" class="hidden mt-3 space-y-2">
+                                                <div class="space-y-2">
+                                                    <div>
+                                                        <label
+                                                            class="block text-[10px] text-t-muted uppercase mb-1">Date</label>
+                                                        <input type="date" id="scheduleDate"
+                                                            class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                    </div>
+                                                    <div class="flex gap-2">
+                                                        <div class="flex-1">
+                                                            <label
+                                                                class="block text-[10px] text-t-muted uppercase mb-1">Time
+                                                                (12h)</label>
+                                                            <input type="time" id="scheduleTime"
+                                                                class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                        </div>
+                                                        <div class="w-20">
+                                                            <label
+                                                                class="block text-[10px] text-t-muted uppercase mb-1">AM/PM</label>
+                                                            <select id="scheduleAMPM"
+                                                                class="w-full bg-base border border-stroke-controls rounded px-2 py-1 text-t-bright text-sm outline-none focus:border-accent">
+                                                                <option value="AM">AM</option>
+                                                                <option value="PM">PM</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <p class="text-[10px] text-t-muted">Time will be sent in your current
+                                                    timezone.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="submitCampaign()"
+                                class="w-full py-4 bg-gradient-to-r from-accent to-secondary hover:from-accent/90 hover:to-secondary/90 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group">
+                                <i class="ph-bold ph-floppy-disk group-hover:animate-pulse"></i>
+                                Save Campaign
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Wizard Footer -->
+            <div
+                class="px-4 py-4 md:px-8 md:py-5 border-t border-stroke-elements bg-base flex justify-between items-center">
+                <button onclick="prevStep()" id="prevBtn"
+                    class="px-4 py-2 md:px-6 md:py-2 border border-stroke-controls rounded-lg text-t-medium hover:text-t-bright disabled:opacity-30 disabled:cursor-not-allowed text-sm md:text-base">Previous</button>
+                <button onclick="nextStep()" id="nextBtn"
+                    class="px-4 py-2 md:px-6 md:py-2 bg-t-bright text-base-opp font-bold rounded-lg hover:bg-t-bright/90 text-sm md:text-base">Next
+                    Step</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="fixed inset-0 z-50 hidden"
+    style="background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div
+            class="bg-base dark:bg-base border border-stroke-elements rounded-xl shadow-2xl w-full max-w-lg theme-card p-6">
+            <h3 class="text-xl font-bold text-t-bright font-syne mb-6">System Settings</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-t-bright mb-1">Default Sender Name</label>
+                    <input type="text" id="settingSenderName"
+                        class="w-full px-4 py-2 rounded-lg bg-base-tint border border-stroke-controls text-t-bright focus:border-accent outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-t-bright mb-1">Default Sender Email</label>
+                    <input type="text" id="settingSenderEmail"
+                        class="w-full px-4 py-2 rounded-lg bg-base-tint border border-stroke-controls text-t-bright focus:border-accent outline-none">
+                </div>
+            </div>
+            <div class="mt-8 flex justify-end space-x-3">
+                <button onclick="document.getElementById('settingsModal').classList.add('hidden')"
+                    class="px-4 py-2 rounded-lg border border-stroke-controls text-t-medium hover:text-t-bright">Cancel</button>
+                <button onclick="saveSettings()"
+                    class="px-4 py-2 rounded-lg bg-accent text-white font-bold hover:bg-accent/90">Save
+                    Settings</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Automations Modal -->
+<div id="automationsModal" class="fixed inset-0 z-50 hidden"
+    style="background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div
+            class="bg-base dark:bg-base border border-stroke-elements rounded-xl shadow-2xl w-full max-w-4xl h-[80vh] flex flex-col theme-card">
+            <div class="p-6 border-b border-stroke-elements flex justify-between items-center">
+                <h3 class="text-xl font-bold text-t-bright font-syne">Automations</h3>
+                <button onclick="document.getElementById('automationsModal').classList.add('hidden')"
+                    class="text-t-medium hover:text-t-bright"><i class="ph-bold ph-x text-xl"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6">
+                <!-- Create New -->
+                <div class="mb-8 p-6 bg-base-tint/50 rounded-xl border border-stroke-elements">
+                    <h4 class="text-lg font-bold text-t-bright mb-4">Create New Rule</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="autoName" placeholder="Rule Name (e.g. Welcome Series)"
+                            class="px-4 py-2 rounded-lg bg-base border border-stroke-controls text-t-bright outline-none">
+                        <select id="autoTrigger"
+                            class="px-4 py-2 rounded-lg bg-base border border-stroke-controls text-t-bright outline-none">
+                            <option value="welcome">Trigger: Welcome Email</option>
+                        </select>
+                        <select id="autoTemplate"
+                            class="px-4 py-2 rounded-lg bg-base border border-stroke-controls text-t-bright outline-none">
+                            <option value="">Select Template...</option>
+                        </select>
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        <button onclick="createAutomation()"
+                            class="px-6 py-2 bg-gradient-to-r from-accent to-secondary text-white font-bold rounded-lg hover:shadow-lg transition-all">+
+                            Create Rule</button>
+                    </div>
+                </div>
+
+                <!-- List -->
+                <h4 class="text-lg font-bold text-t-bright mb-4">Active Rules</h4>
+                <div id="automationsList" class="space-y-4">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS for enhanced animations and effects -->
+<style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes glow {
+
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(var(--accent), 0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 30px rgba(var(--accent), 0.6);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .animate-scale-in {
+        animation: scaleIn 0.4s ease-out forwards;
+    }
+
+    .animate-glow {
+        animation: glow 2s ease-in-out infinite;
+    }
+
+    /* Enhanced scrollbar */
+    .overflow-x-auto::-webkit-scrollbar,
+    .overflow-y-auto::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-track,
+    .overflow-y-auto::-webkit-scrollbar-track {
+        background: var(--base-tint);
+        border-radius: 4px;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-thumb,
+    .overflow-y-auto::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 4px;
+    }
+
+    .overflow-x-auto::-webkit-scrollbar-thumb:hover,
+    .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+        background: var(--secondary);
+    }
+
+    /* Enhanced focus states */
+    .focus\:ring-accent:focus {
+        --tw-ring-color: var(--accent);
+    }
+
+    /* Smooth transitions for all interactive elements */
+    button,
+    input,
+    select,
+    .cursor-pointer {
+        transition: all var(--_animspeed-medium) var(--_animbezier);
+    }
+
+    /* Enhanced hover effects */
+    .hover\:glow:hover {
+        animation: glow 0.6s ease-out;
+    }
+
+    /* Campaign status badges */
+    .status-draft {
+        @apply bg-gray-500/10 text-gray-500 border-gray-500/20;
+    }
+
+    .status-scheduled {
+        @apply bg-blue-500/10 text-blue-500 border-blue-500/20;
+    }
+
+    .status-sending {
+        @apply bg-yellow-500/10 text-yellow-500 border-yellow-500/20;
+    }
+
+    .status-sent {
+        @apply bg-green-500/10 text-green-500 border-green-500/20;
+    }
+
+    .status-paused {
+        @apply bg-orange-500/10 text-orange-500 border-orange-500/20;
+    }
+
+    .status-cancelled {
+        @apply bg-red-500/10 text-red-500 border-red-500/20;
+    }
+
+    /* Campaign type badges */
+    .type-newsletter {
+        @apply bg-purple-500/10 text-purple-500 border-purple-500/20;
+    }
+
+    .type-promotional {
+        @apply bg-pink-500/10 text-pink-500 border-pink-500/20;
+    }
+
+    .type-transactional {
+        @apply bg-indigo-500/10 text-indigo-500 border-indigo-500/20;
+    }
+
+    .type-welcome {
+        @apply bg-emerald-500/10 text-emerald-500 border-emerald-500/20;
+    }
+
+    .type-reengagement {
+        @apply bg-amber-500/10 text-amber-500 border-amber-500/20;
+    }
+</style>
+
+<!-- Editor Context Menu -->
+<div id="editorContextMenu"
+    class="fixed z-50 bg-white dark:bg-gray-800 shadow-xl rounded-lg border border-gray-200 dark:border-gray-700 w-56 hidden flex flex-col py-1 text-sm font-medium text-gray-700 dark:text-gray-200 transition-opacity duration-100">
+    <div class="px-3 py-2 text-xs text-gray-400 uppercase tracking-wider font-bold border-b border-gray-100 dark:border-gray-700 mb-1"
+        id="ctxMenuTitle">Element Actions</div>
+
+    <button onclick="execCtx('editLink')" id="ctxEditLink"
+        class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+        <i class="ph-bold ph-link"></i> Set Link (Href)
+    </button>
+    <hr class="my-1 border-stroke-elements">
+    <button onclick="execCtx('editText')" class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+        <i class="ph-bold ph-text-t"></i> Edit Text
+    </button>
+    <button onclick="execCtx('toggleButton')" class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2"
+        id="ctxBtnToggle">
+        <i class="ph-bold ph-toggle-left"></i> Toggle Button Style
+    </button>
+
+    <!-- Image Actions (Hidden by default) -->
+    <div id="ctxImgActions" class="hidden flex-col">
+        <hr class="my-1 border-stroke-elements">
+        <button onclick="execCtx('imgEditUrl')" class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+            <i class="ph-bold ph-pencil-simple"></i> Change Image URL
+        </button>
+        <button onclick="execCtx('imgWidth100')" class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+            <i class="ph-bold ph-arrows-out-line-horizontal"></i> Width: 100%
+        </button>
+        <button onclick="execCtx('imgWidth50')" class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+            <i class="ph-bold ph-arrows-in-line-horizontal"></i> Width: 50%
+        </button>
+        <button onclick="execCtx('imgAlignCenter')"
+            class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+            <i class="ph-bold ph-align-center-horizontal"></i> Align Center
+        </button>
+        <button onclick="execCtx('imgSetBackground')"
+            class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2">
+            <i class="ph-bold ph-image-square"></i> Set as Background
+        </button>
+        <button onclick="execCtx('imgRemove')"
+            class="text-left px-4 py-2 hover:bg-base-tint flex items-center gap-2 text-red-600">
+            <i class="ph-bold ph-trash"></i> Remove Image
+        </button>
+    </div>
+</div>
+
+<script>
+    // Newsletter Campaigns Page
+    var allCampaigns = [];
+    var currentPage = 1;
+    var pageSize = 25;
+    var selectedCampaigns = new Set();
+    var wizardStep = 1;
+    var campaignData = {
+        name: '',
+        subject: '',
+        templateId: null,
+        htmlContent: ''
+    };
+    var allTemplates = []; // Will be loaded from API
+
+    function initNewsletterCampaigns() {
+        loadCampaignData();
+        setupEventListeners();
+        setupBulkActions();
+
+        // Explicitly make createCampaign global so it can be called from sidebar or other places
+        window.createCampaign = openWizard;
+    }
+
+    // --- Wizard Navigation ---
+    async function fetchSegments() {
+        const sel = document.getElementById('segmentSelect');
+        if (!sel) return;
+        try {
+            const res = await fetch('/api/newsletter/admin/segments', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` } });
+            const data = await res.json();
+            sel.innerHTML = '<option value="">All Subscribers</option>';
+            if (data.success && data.segments) {
+                data.segments.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.innerText = `${s.name} (${s.cached_count || '?'} active)`;
+                    sel.appendChild(opt);
+                });
+            }
+        } catch (e) { console.error("Segments load error", e); sel.innerHTML = '<option value="">All Subscribers (Error loading segments)</option>'; }
+    }
+
+    async function openWizard() {
+        document.getElementById('campaignWizardModal').classList.remove('hidden');
+        resetWizard();
+        fetchSegments();
+
+        // Load Settings to autofill
+        try {
+            const res = await fetch('/api/newsletter/admin/settings', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            const data = await res.json();
+            if (data.success && data.settings) {
+                document.getElementById('wizardSenderName').value = data.settings.sender_name || 'NekwasaR Team';
+                document.getElementById('wizardSenderEmail').value = data.settings.sender_email || 'newsletter@nekwasar.com';
+            }
+        } catch (e) {
+            console.log('Failed to load settings');
+        }
+
+        loadTemplatesForWizard();
+    }
+
+    function closeWizard() {
+        document.getElementById('campaignWizardModal').classList.add('hidden');
+    }
+
+    function resetWizard() {
+        wizardStep = 1;
+        campaignData = { id: null, name: '', subject: '', templateId: null, htmlContent: '' };
+        document.getElementById('campName').value = '';
+        document.getElementById('campSubject').value = '';
+
+        // Reset visual editor
+        document.getElementById('visualEditorContainer').innerHTML = '';
+
+        // Hide all steps except step 1
+        document.getElementById('step1').classList.remove('hidden');
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step3').classList.add('hidden');
+        document.getElementById('step4').classList.add('hidden');
+
+        updateWizardUI();
+    }
+
+    async function nextStep() {
+        if (!validateStep(wizardStep)) return;
+
+        if (wizardStep === 1) {
+            // Just moving to select template
+        }
+
+        if (wizardStep === 2) {
+            // Capture chosen template content for editing
+            const tpl = allTemplates.find(t => t.id === campaignData.templateId);
+            if (tpl) {
+                // Fetch content if missing (since we removed pre-caching)
+                if (!tpl.content_template) {
+                    try {
+                        const res = await fetch(`/api/newsletter/admin/templates/${tpl.id}`, {
+                            headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                        });
+                        const data = await res.json();
+                        if (data.success) tpl.content_template = data.template.content_template;
+                    } catch (e) { console.error('Failed to load content', e); }
+                }
+                // Initialize Visual Editor: If we already have content (from editing a draft), use that.
+                // Otherwise use the template default.
+                if (campaignData.htmlContent) {
+                    document.getElementById('visualEditorContainer').innerHTML = campaignData.htmlContent;
+                } else {
+                    document.getElementById('visualEditorContainer').innerHTML = tpl.content_template || '';
+                }
+            }
+        }
+
+        if (wizardStep === 3) {
+            // Capture edited content
+            campaignData.htmlContent = document.getElementById('visualEditorContainer').innerHTML;
+
+            // Setup Final Preview
+            renderFinalPreview();
+        }
+
+        if (wizardStep < 4) {
+            transitionStep(wizardStep, wizardStep + 1);
+            wizardStep++;
+            updateWizardUI();
+        }
+    }
+
+    function prevStep() {
+        if (wizardStep > 1) {
+            transitionStep(wizardStep, wizardStep - 1);
+            wizardStep--;
+            updateWizardUI();
+        }
+    }
+
+    function transitionStep(current, next) {
+        document.getElementById(`step${current}`).classList.add('hidden');
+        document.getElementById(`step${next}`).classList.remove('hidden');
+    }
+
+    function updateWizardUI() {
+        // Step Indicators
+        document.getElementById('currentStepNum').innerText = wizardStep;
+        const names = ['Setup', 'Select Template', 'Edit Content', 'Review'];
+        document.getElementById('currentStepName').innerText = names[wizardStep - 1];
+
+        // Progress Bar
+        document.getElementById('wizardProgress').style.width = `${wizardStep * 25}%`;
+
+        // Buttons
+        document.getElementById('prevBtn').disabled = (wizardStep === 1);
+        const nextBtn = document.getElementById('nextBtn');
+        if (wizardStep === 4) {
+            nextBtn.classList.add('hidden');
+        } else {
+            nextBtn.classList.remove('hidden');
+        }
+    }
+
+    function validateStep(step) {
+        if (step === 1) {
+            const name = document.getElementById('campName').value.trim();
+            const subject = document.getElementById('campSubject').value.trim();
+            if (!name || !subject) {
+                alert('Please fill in all fields.');
+                return false;
+            }
+            campaignData.name = name;
+            campaignData.subject = subject;
+        }
+        if (step === 2) {
+            if (!campaignData.templateId) {
+                alert('Please select a template.');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // --- Templates Loading ---
+    async function loadTemplatesForWizard() {
+        console.log('🧙 loadTemplatesForWizard: Starting...');
+        try {
+            const res = await fetch('/api/newsletter/admin/templates', {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            console.log('🧙 loadTemplatesForWizard: API Status', res.status);
+
+            const data = await res.json();
+            console.log('🧙 loadTemplatesForWizard: Data', data);
+
+            if (data.success && data.templates) {
+                allTemplates = data.templates;
+                console.log('🧙 loadTemplatesForWizard: Templates found', allTemplates.length);
+                renderWizardTemplates(allTemplates);
+            } else {
+                console.warn('🧙 loadTemplatesForWizard: No success or no templates', data);
+            }
+        } catch (e) {
+            console.error("🧙 loadTemplatesForWizard: Failed", e);
+        }
+    }
+
+    function renderWizardTemplates(templates) {
+        console.log('🧙 renderWizardTemplates: Rendering', templates.length, 'templates');
+        const grid = document.getElementById('wizardTemplateGrid');
+
+        if (!grid) {
+            console.error('🧙 renderWizardTemplates: CRITICAL - #wizardTemplateGrid NOT FOUND in DOM');
+            return;
+        }
+
+        if (templates.length === 0) {
+            grid.innerHTML = '<div class="col-span-full text-center p-4 text-gray-500">No templates found. Please create one in the Templates section.</div>';
+            return;
+        }
+
+        grid.innerHTML = templates.map(t => `
+        <div onclick="selectTemplate(${t.id})" id="tpl-card-${t.id}" class="cursor-pointer border-2 border-transparent hover:border-accent rounded-xl bg-base-tint overflow-hidden transition-all text-left group">
+            <div class="h-32 bg-gray-200 flex items-center justify-center relative overlow-hidden">
+                 <i class="ph-bold ph-envelope-simple text-4xl text-gray-400 group-hover:scale-110 transition-transform"></i>
+            </div>
+            <div class="p-4">
+                <h4 class="font-bold text-t-bright text-sm truncate">${t.name}</h4>
+                <span class="text-xs text-t-medium uppercase tracking-wide">${t.category || 'General'}</span>
+            </div>
+        </div>
+    `).join('');
+    }
+
+    function selectTemplate(id) {
+        campaignData.templateId = id;
+        // Visual selection state
+        document.querySelectorAll('#wizardTemplateGrid > div').forEach(el => el.classList.remove('border-accent', 'ring-2', 'ring-accent'));
+        document.getElementById(`tpl-card-${id}`).classList.add('border-accent', 'ring-2', 'ring-accent');
+    }
+
+    // --- Final Step Logic ---
+    function renderFinalPreview() {
+        // Iframe injection
+        const frame = document.getElementById('finalPreviewFrame');
+        if (frame) frame.srcdoc = campaignData.htmlContent;
+
+        // Metadata
+        document.getElementById('summarySubject').innerText = campaignData.subject || '(No Subject)';
+
+        // Audience Logic
+        const segSelect = document.getElementById('segmentSelect');
+        const summaryAudience = document.getElementById('summaryAudience');
+        const summaryCount = document.getElementById('summaryCount');
+
+        if (segSelect && segSelect.selectedIndex >= 0) {
+            const selectedText = segSelect.options[segSelect.selectedIndex].text;
+            // Text format is usually "Name (Count active)"
+            // Let's just display the whole text for clarity
+            summaryAudience.innerText = selectedText;
+
+            // Try to extract count for the badge, or just hide/clear it if redundancy is weird
+            // Format: "Name (5 active)"
+            // Let's just blank the count badge since the text contains it
+            summaryCount.innerText = '';
+            summaryCount.classList.add('hidden');
+        } else {
+            summaryAudience.innerText = 'All Subscribers';
+            summaryCount.innerText = '?';
+        }
+    }
+
+    function toggleScheduleInput() {
+        const option = document.getElementById('sendTimeOption').value;
+        const container = document.getElementById('scheduleContainer');
+        if (option === 'schedule') {
+            container.classList.remove('hidden');
+        } else {
+            container.classList.add('hidden');
+        }
+    }
+
+    async function submitCampaign() {
+        try {
+            const option = document.getElementById('sendTimeOption').value;
+            let scheduledAt = null;
+            let status = 'draft';
+
+            if (option === 'schedule') {
+                const dateVal = document.getElementById('scheduleDate').value;
+                const timeVal = document.getElementById('scheduleTime').value; // Usually returns 24h HH:mm but we'll normalize
+                const amPm = document.getElementById('scheduleAMPM').value;
+
+                if (!dateVal || !timeVal) {
+                    alert('Please select both a date and time to schedule.');
+                    return;
+                }
+
+                // Parse timeVal and adjust based on AM/PM selection
+                let [hours, minutes] = timeVal.split(':').map(Number);
+
+                // If browser input is 24h, we allow for it but override with AM/PM selection for force-preference
+                if (amPm === 'PM' && hours < 12) hours += 12;
+                if (amPm === 'AM' && hours === 12) hours = 0;
+
+                // Format back to 24h HH:mm for Date constructor
+                const formattedHours = hours.toString().padStart(2, '0');
+                const formattedMinutes = minutes.toString().padStart(2, '0');
+
+                const localDate = new Date(`${dateVal}T${formattedHours}:${formattedMinutes}:00`);
+
+                // Ensure the date is valid and in the future
+                if (isNaN(localDate.getTime())) {
+                    alert('Invalid date or time selected.');
+                    return;
+                }
+
+                if (localDate < new Date()) {
+                    if (!confirm('The scheduled time is in the past. It will be sent as soon as possible. Continue?')) return;
+                }
+
+                scheduledAt = localDate.toISOString();
+                status = 'scheduled';
+            } else if (option === 'immediate') {
+                if (!confirm('Are you sure you want to send this campaign immediately?')) return;
+                status = 'sending';
+            }
+
+            const payload = {
+                name: campaignData.name,
+                subject: campaignData.subject,
+                content: campaignData.htmlContent,
+                template_id: campaignData.templateId,
+                template_type: 'custom',
+                segment_id: document.getElementById('segmentSelect') ? (document.getElementById('segmentSelect').value || null) : null,
+                scheduled_at: scheduledAt,
+                status: status
+            };
+
+            const url = campaignData.id ? `/api/newsletter/admin/campaigns/${campaignData.id}` : '/api/newsletter/admin/campaigns';
+            const method = campaignData.id ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                alert('Campaign Saved Successfully!');
+                closeWizard();
+                loadCampaignData();
+            } else {
+                alert('Failed: ' + data.message);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error sending campaign. Check console.');
+        }
+    } // --- Standard Page Functions ---
+
+    async function loadCampaignData() {
+        try {
+            const response = await fetch('/api/newsletter/admin/campaigns'); // Corrected endpoint if needed
+            if (response.ok) {
+                const data = await response.json();
+                allCampaigns = data.campaigns || [];
+                updateCampaignStats(data.stats);
+                renderCampaigns();
+            } else {
+                // fallback
+                console.log('API endpoints might not be fully ready, showing empty state');
+            }
+        } catch (error) {
+            console.error('Error loading campaign data:', error);
+        }
+    }
+
+    function updateCampaignStats(stats) {
+        if (!stats) return;
+        document.getElementById('totalCampaigns').textContent = stats.totalCampaigns || 0;
+        document.getElementById('activeCampaigns').textContent = stats.activeCampaigns || 0;
+        document.getElementById('scheduledCampaigns').textContent = stats.scheduledCampaigns || 0;
+        document.getElementById('avgOpenRate').textContent = stats.avgOpenRate || '0%';
+    }
+
+    function renderCampaigns() {
+        const tbody = document.getElementById('campaignsTableBody');
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const campaignsToShow = allCampaigns.slice(startIndex, endIndex);
+
+        if (campaignsToShow.length === 0) {
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="px-4 md:px-8 py-8 md:py-16 text-center">
+                    <div class="flex flex-col items-center space-y-4 md:space-y-6">
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-base-tint dark:bg-base-shade rounded-2xl flex items-center justify-center shadow-xl mx-auto">
+                            <i class="ph-bold ph-megaphone text-3xl md:text-5xl text-t-muted opacity-60"></i>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <h3 class="text-lg md:text-2xl font-bold text-t-bright font-syne">No campaigns found</h3>
+                            <p class="text-sm md:text-base text-t-medium font-syne max-w-md">No campaigns match your current filters. Create your first campaign to get started.</p>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+            return;
+        }
+
+        tbody.innerHTML = campaignsToShow.map(campaign => {
+            const isSelected = selectedCampaigns.has(campaign.id.toString());
+            return `
+        <tr class="transition-all duration-medium group ${isSelected ? 'bg-accent/10 border-l-4 border-l-accent' : 'hover:bg-base-tint/30 dark:hover:bg-base-shade/30'}">
+            <td class="w-12 px-2 md:px-4 py-3 md:py-4">
+                <input type="checkbox" class="campaign-checkbox w-4 h-4 text-accent bg-base dark:bg-base-tint border-2 border-stroke-elements rounded focus:ring-2 focus:ring-accent focus:ring-offset-0 cursor-pointer" value="${campaign.id}" ${isSelected ? 'checked' : ''}>
+            </td>
+            <td class="w-40 md:w-48 px-2 md:px-4 py-3 md:py-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-accent to-secondary rounded-lg flex items-center justify-center text-t-opp-bright text-xs font-bold shadow-lg flex-shrink-0">
+                        ${getCampaignInitials(campaign.name || 'Campaign')}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-xs font-semibold text-t-bright group-hover:text-accent transition-colors font-syne truncate">
+                            ${campaign.name || 'Untitled'}
+                        </div>
+                        <div class="text-xs text-t-muted font-syne truncate">${campaign.subject || ''}</div>
+                    </div>
+                </div>
+            </td>
+            <td class="w-24 md:w-28 px-2 md:px-4 py-3 md:py-4">
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide font-syne ${getStatusClass(campaign.status)} border">
+                    ${formatStatus(campaign.status || 'draft')}
+                </span>
+            </td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4">
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide font-syne ${getTypeClass(campaign.templateType)} border">
+                    ${formatType(campaign.templateType || 'standard')}
+                </span>
+            </td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap hidden md:table-cell">${formatNumber(campaign.recipientCount || 0)}</td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap hidden md:table-cell">
+                ${campaign.status === 'scheduled' && campaign.scheduledAt ? formatDate(campaign.scheduledAt, true) : (campaign.sentAt ? formatDate(campaign.sentAt, true) : '-')}
+            </td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4 text-xs text-t-medium font-medium font-syne whitespace-nowrap hidden md:table-cell">${campaign.openRate || 0}%</td>
+            <td class="w-20 md:w-24 px-2 md:px-4 py-3 md:py-4">
+                <div class="flex items-center space-x-1">
+                    <button class="w-6 h-6 bg-accent/10 hover:bg-accent/20 text-accent rounded flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Edit Campaign" onclick="editCampaign('${campaign.id}')">
+                        <i class="ph-bold ph-pencil text-xs"></i>
+                    </button>
+                    <button class="w-6 h-6 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded flex items-center justify-center transition-all duration-medium hover:scale-110 hover:shadow-lg" title="Delete Campaign" onclick="deleteCampaign('${campaign.id}')">
+                        <i class="ph-bold ph-trash text-xs"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `;
+        }).join('');
+
+        updatePagination();
+    }
+
+    function getCampaignInitials(name) {
+        if (!name) return 'C';
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function getStatusClass(status) {
+        switch (status) {
+            case 'draft': return 'status-draft';
+            case 'scheduled': return 'status-scheduled';
+            case 'sending': return 'status-sending';
+            case 'sent': return 'status-sent';
+            default: return 'status-draft';
+        }
+    }
+
+    function getTypeClass(type) {
+        return 'type-newsletter'; // Default for now
+    }
+
+    function formatStatus(status) {
+        if (!status) return '-';
+        return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+
+    function formatType(type) {
+        if (!type) return '-';
+        return type.charAt(0).toUpperCase() + type.slice(1);
+    }
+
+    function formatNumber(num) {
+        return new Intl.NumberFormat().format(num);
+    }
+
+    function formatDate(dateString, withTime = false) {
+        if (!dateString) return '-';
+        const date = new Date(dateString);
+        let options = {
+            month: 'short',
+            day: 'numeric'
+        };
+        if (withTime) {
+            options.hour = 'numeric';
+            options.minute = '2-digit';
+            options.hour12 = true;
+        }
+        return date.toLocaleDateString('en-US', options).replace(',', '');
+    }
+
+    function updatePagination() {
+        const totalRecords = allCampaigns.length;
+        const totalPages = Math.ceil(totalRecords / pageSize);
+        const startRecord = (currentPage - 1) * pageSize + 1;
+        const endRecord = Math.min(currentPage * pageSize, totalRecords);
+
+        document.getElementById('showingStart').textContent = startRecord;
+        document.getElementById('showingEnd').textContent = endRecord;
+        document.getElementById('totalRecords').textContent = totalRecords;
+        document.getElementById('currentPage').textContent = currentPage;
+
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+    }
+
+    function setupEventListeners() {
+        // Search and filters
+        document.getElementById('searchCampaigns').oninput = debounce(filterCampaigns, 300);
+        document.getElementById('statusFilter').onchange = filterCampaigns;
+        document.getElementById('typeFilter').onchange = filterCampaigns;
+        document.getElementById('dateFilter').onchange = filterCampaigns;
+
+        // Pagination
+        document.getElementById('prevPage').onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderCampaigns();
+            }
+        };
+
+        document.getElementById('nextPage').onclick = () => {
+            const totalPages = Math.ceil(allCampaigns.length / pageSize);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderCampaigns();
+            }
+        };
+
+        // Action buttons
+        document.getElementById('createCampaignBtn').onclick = openWizard;
+
+        // Select all checkbox
+        document.getElementById('selectAllCampaigns').onchange = toggleSelectAll;
+    }
+
+    function setupBulkActions() {
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('campaign-checkbox')) {
+                updateBulkActionsState();
+            }
+        });
+
+        // Bulk action buttons
+        const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+        if (bulkDeleteBtn) bulkDeleteBtn.onclick = () => bulkDelete();
+
+        const bulkEditBtn = document.getElementById('bulkEditBtn');
+        if (bulkEditBtn) bulkEditBtn.onclick = () => {
+            if (selectedCampaigns.size === 1) {
+                const id = selectedCampaigns.values().next().value;
+                editCampaign(id);
+            } else {
+                alert('Please select exactly one campaign to edit.');
+            }
+        };
+
+        const clearSelectionBtn = document.getElementById('clearSelectionBtn');
+        if (clearSelectionBtn) clearSelectionBtn.onclick = () => clearSelection();
+    }
+
+    async function deleteCampaign(id) {
+        if (!confirm('Are you sure you want to delete this campaign?')) return;
+        try {
+            const res = await fetch(`/api/newsletter/admin/campaigns/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Campaign deleted');
+                loadCampaignData();
+            } else {
+                alert('Delete failed: ' + data.message);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Error deleting campaign. Check console.');
+        }
+    }
+
+    async function editCampaign(id) {
+        if (!id) return;
+
+        try {
+            const res = await fetch(`/api/newsletter/admin/campaigns/${id}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+            });
+            const data = await res.json();
+
+            if (data.success && data.campaign) {
+                // Pre-load segments
+                await fetchSegments();
+
+                document.getElementById('campaignWizardModal').classList.remove('hidden');
+                resetWizard();
+
+                const c = data.campaign;
+                campaignData = {
+                    id: c.id,
+                    name: c.name || '',
+                    subject: c.subject || '',
+                    templateId: c.templateId,
+                    htmlContent: c.content || ''
+                };
+
+                // Set UI values
+                document.getElementById('campName').value = campaignData.name;
+                document.getElementById('campSubject').value = campaignData.subject;
+
+                const segSel = document.getElementById('segmentSelect');
+                if (segSel && c.segmentId) {
+                    segSel.value = c.segmentId;
+                }
+
+                // Pre-fill send time options
+                const sendOpt = document.getElementById('sendTimeOption');
+                if (c.status === 'scheduled' && c.scheduledAt) {
+                    sendOpt.value = 'schedule';
+                    toggleScheduleInput();
+
+                    const schedDate = new Date(c.scheduledAt);
+                    document.getElementById('scheduleDate').value = schedDate.toISOString().split('T')[0];
+
+                    // Input type="time" expects 24h format HH:mm
+                    const hours24 = schedDate.getHours();
+                    const mins = schedDate.getMinutes().toString().padStart(2, '0');
+                    document.getElementById('scheduleTime').value = `${hours24.toString().padStart(2, '0')}:${mins}`;
+
+                    // Set our custom AM/PM selector
+                    document.getElementById('scheduleAMPM').value = hours24 >= 12 ? 'PM' : 'AM';
+                } else if (c.status === 'draft') {
+                    sendOpt.value = 'draft';
+                    toggleScheduleInput();
+                } else {
+                    sendOpt.value = 'immediate';
+                    toggleScheduleInput();
+                }
+
+                wizardStep = 1;
+                updateWizardUI();
+                loadTemplatesForWizard();
+            } else {
+                alert('Campaign not found or failed to load.');
+            }
+        } catch (e) {
+            console.error('Wizard Edit Error:', e);
+            alert('Error loading campaign data. Check console.');
+        }
+    }
+
+    function toggleSelectAll() {
+        const selectAll = document.getElementById('selectAllCampaigns');
+        const checkboxes = document.querySelectorAll('.campaign-checkbox');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAll.checked;
+            if (selectAll.checked) {
+                selectedCampaigns.add(checkbox.value);
+            } else {
+                selectedCampaigns.delete(checkbox.value);
+            }
+        });
+
+        updateBulkActionsState();
+    }
+
+    function updateBulkActionsState() {
+        const checkboxes = document.querySelectorAll('.campaign-checkbox');
+        selectedCampaigns.clear();
+
+        checkboxes.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            if (checkbox.checked) {
+                selectedCampaigns.add(checkbox.value);
+                if (row) {
+                    row.classList.add('bg-accent/10', 'border-l-4', 'border-l-accent');
+                    row.classList.remove('hover:bg-base-tint/30', 'dark:hover:bg-base-shade/30');
+                }
+            } else {
+                if (row) {
+                    row.classList.remove('bg-accent/10', 'border-l-4', 'border-l-accent');
+                    row.classList.add('hover:bg-base-tint/30', 'dark:hover:bg-base-shade/30');
+                }
+            }
+        });
+
+        const bulkPanel = document.getElementById('bulkActionsPanel');
+        const selectedCount = document.getElementById('selectedCount');
+        const bulkEditBtn = document.getElementById('bulkEditBtn');
+
+        if (selectedCampaigns.size > 0) {
+            bulkPanel.classList.remove('hidden');
+            selectedCount.textContent = `${selectedCampaigns.size} campaign${selectedCampaigns.size > 1 ? 's' : ''} selected`;
+
+            // Only show Edit button if exactly 1 is selected
+            if (bulkEditBtn) {
+                if (selectedCampaigns.size === 1) bulkEditBtn.classList.remove('hidden');
+                else bulkEditBtn.classList.add('hidden');
+            }
+        } else {
+            bulkPanel.classList.add('hidden');
+        }
+    }
+
+    function filterCampaigns() {
+        const searchTerm = document.getElementById('searchCampaigns').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value;
+        const typeFilter = document.getElementById('typeFilter').value;
+        const dateFilter = document.getElementById('dateFilter').value;
+
+        // Apply filters (simplified implementation)
+        currentPage = 1;
+        renderCampaigns();
+    }
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    function importCampaigns() {
+        // Placeholder
+    }
+
+    function exportCampaigns() {
+        // Placeholder
+    }
+
+
+
+    async function bulkDelete() {
+        if (selectedCampaigns.size === 0) return;
+        if (!confirm(`Are you sure you want to delete ${selectedCampaigns.size} campaigns?`)) return;
+
+        let okCount = 0;
+        let failCount = 0;
+
+        for (const id of selectedCampaigns) {
+            try {
+                const res = await fetch(`/api/newsletter/admin/campaigns/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+                });
+                const data = await res.json();
+                if (data.success) okCount++;
+                else failCount++;
+            } catch (e) { failCount++; }
+        }
+
+        alert(`Bulk delete complete. Success: ${okCount}, Failed: ${failCount}`);
+        selectedCampaigns.clear();
+        loadCampaignData();
+    }
+
+    function clearSelection() {
+        selectedCampaigns.clear();
+        const checkboxes = document.querySelectorAll('.campaign-checkbox');
+        checkboxes.forEach(cb => cb.checked = false);
+        document.getElementById('selectAllCampaigns').checked = false;
+        updateBulkActionsState();
+    }
+
+    // --- Settings & Automation Logic ---
+
+    async function openSettings() {
+        const modal = document.getElementById('settingsModal');
+        try {
+            const res = await fetch('/api/newsletter/admin/settings', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            const data = await res.json();
+            if (data.success && data.settings) {
+                document.getElementById('settingSenderName').value = data.settings.sender_name || '';
+                document.getElementById('settingSenderEmail').value = data.settings.sender_email || '';
+            }
+            modal.classList.remove('hidden');
+        } catch (e) {
+            alert('Failed to load settings: ' + e);
+        }
+    }
+
+    async function saveSettings() {
+        const name = document.getElementById('settingSenderName').value;
+        const email = document.getElementById('settingSenderEmail').value;
+        try {
+            const res = await fetch('/api/newsletter/admin/settings', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sender_name: name, sender_email: email })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Settings saved successfully');
+                document.getElementById('settingsModal').classList.add('hidden');
+            }
+        } catch (e) {
+            alert('Failed to save settings');
+        }
+    }
+
+    async function openAutomations() {
+        const modal = document.getElementById('automationsModal');
+
+        // Load templates for dropdown
+        try {
+            // Note: Reuse existing fetch logic or call endpoint
+            const tRes = await fetch('/api/newsletter/admin/templates', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            const tData = await tRes.json();
+            if (tData.success) {
+                const select = document.getElementById('autoTemplate');
+                select.innerHTML = '<option value="">Select Template...</option>';
+                tData.templates.forEach(t => {
+                    select.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+                });
+            }
+        } catch (e) { console.error(e); }
+
+        await loadAutomationsList();
+        modal.classList.remove('hidden');
+    }
+
+    async function loadAutomationsList() {
+        try {
+            const res = await fetch('/api/newsletter/admin/automations', { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            const data = await res.json();
+            const container = document.getElementById('automationsList');
+            container.innerHTML = '';
+
+            if (data.success && data.automations.length > 0) {
+                data.automations.forEach(auto => {
+                    container.innerHTML += `
+                    <div class="p-4 bg-base-tint border border-stroke-elements rounded-lg flex justify-between items-center transition-all hover:bg-base-shade/50">
+                        <div>
+                            <div class="font-bold text-t-bright font-syne">${auto.name}</div>
+                            <div class="text-sm text-t-medium"><i class="ph-bold ph-lightning"></i> Trigger: ${auto.trigger_type} • <i class="ph-bold ph-clock"></i> Delay: ${auto.delay_hours}h</div>
+                        </div>
+                        <button onclick="deleteAutomation(${auto.id})" class="p-2 text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors" title="Delete Rule">
+                            <i class="ph-bold ph-trash"></i>
+                        </button>
+                    </div>`;
+                });
+            } else {
+                container.innerHTML = '<div class="text-center text-t-muted py-8 bg-base-tint/30 rounded-lg border border-dashed border-stroke-elements">No active automations found. Create one above!</div>';
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function createAutomation() {
+        const name = document.getElementById('autoName').value;
+        const trigger = document.getElementById('autoTrigger').value;
+        const templateId = document.getElementById('autoTemplate').value;
+
+        if (!name || !templateId) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('trigger_type', trigger);
+        formData.append('template_id', templateId);
+        formData.append('delay_hours', 0);
+
+        try {
+            const res = await fetch('/api/newsletter/admin/automations', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: formData
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('autoName').value = '';
+                await loadAutomationsList();
+                // Optional: Show success toast
+            } else {
+                alert('Failed: ' + data.message);
+            }
+        } catch (e) {
+            alert('Error creating automation');
+        }
+    }
+
+    async function deleteAutomation(id) {
+        if (!confirm('Delete this automation?')) return;
+        try {
+            await fetch(`/api/newsletter/admin/automations/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            });
+            await loadAutomationsList();
+        } catch (e) { alert('Error deleting'); }
+    }
+
+    // --- Visual Editor Context Menu & Logic ---
+    let ctxTarget = null;
+    // (Note: editor variable removed from global scope to avoid conflicts, accessed in init)
+
+    function initVisualEditorListeners() {
+        const editor = document.getElementById('visualEditorContainer');
+        const menu = document.getElementById('editorContextMenu');
+        if (!editor || !menu) return;
+
+        // Right Click
+        editor.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const target = e.target.closest('a, button, .button, [role="button"]') || e.target;
+            ctxTarget = target;
+
+            // Position menu
+            const rect = editor.getBoundingClientRect();
+            let x = e.clientX;
+            let y = e.clientY;
+
+            // Ensure menu stays within viewport
+            if (x + 230 > window.innerWidth) x -= 230;
+
+            menu.style.left = `${x}px`;
+            menu.style.top = `${y}px`;
+            menu.classList.remove('hidden');
+
+            // Update Menu Title
+            const type = target.tagName.toLowerCase();
+            const titleEl = document.getElementById('ctxMenuTitle');
+            if (titleEl) titleEl.innerText = `${type.toUpperCase()} ACTIONS`;
+
+            // Toggle Image Options
+            const imgOpts = document.getElementById('ctxImgActions');
+            const btnToggle = document.getElementById('ctxBtnToggle');
+            const linkOpts = document.getElementById('ctxEditLink');
+
+            if (type === 'img') {
+                imgOpts.classList.remove('hidden');
+                imgOpts.classList.add('flex');
+                if (btnToggle) btnToggle.classList.add('hidden');
+                if (linkOpts) linkOpts.classList.add('hidden'); // Hide link opts for cleaner view
+            } else {
+                imgOpts.classList.add('hidden');
+                imgOpts.classList.remove('flex');
+                if (btnToggle) btnToggle.classList.remove('hidden');
+                if (linkOpts) linkOpts.classList.remove('hidden');
+            }
+        });
+
+        // Hide on click elsewhere
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target)) menu.classList.add('hidden');
+        });
+
+        // Also hide on scroll
+        editor.addEventListener('scroll', () => menu.classList.add('hidden'));
+    }
+
+    function execCtx(action) {
+        if (!ctxTarget) return;
+        const menu = document.getElementById('editorContextMenu');
+        menu.classList.add('hidden');
+
+        switch (action) {
+            case 'editLink':
+                const currentHref = ctxTarget.getAttribute('href') || '#';
+                const newHref = prompt('Enter URL (href):', currentHref);
+                if (newHref !== null) ctxTarget.setAttribute('href', newHref);
+                break;
+
+            case 'editText':
+                const txt = prompt('Edit Text:', ctxTarget.innerText);
+                if (txt !== null) ctxTarget.innerText = txt;
+                break;
+
+            case 'toggleButton':
+                // Simple preset for a nice button style
+                if (ctxTarget.classList.contains('button-style')) {
+                    // Remove style
+                    ctxTarget.classList.remove('button-style');
+                    ctxTarget.removeAttribute('style');
+                } else {
+                    // Add inline styles for email compatibility
+                    ctxTarget.classList.add('button-style');
+                    Object.assign(ctxTarget.style, {
+                        display: "inline-block",
+                        padding: "12px 24px",
+                        backgroundColor: "#007bff",
+                        color: "#ffffff",
+                        textDecoration: "none",
+                        borderRadius: "5px",
+                        fontWeight: "bold",
+                        cursor: "pointer"
+                    });
+                }
+                break;
+
+            // --- Image Actions ---
+            case 'imgEditUrl':
+                const curSrc = ctxTarget.getAttribute('src');
+                const newSrc = prompt('Image URL:', curSrc);
+                if (newSrc) ctxTarget.alt = "Image"; // Reset/Init
+                if (newSrc) ctxTarget.src = newSrc;
+                break;
+            case 'imgWidth100':
+                ctxTarget.style.width = '100%';
+                ctxTarget.style.height = 'auto'; // Maintain aspect ratio
+                showToast('Width set to 100%');
+                break;
+            case 'imgWidth50':
+                ctxTarget.style.width = '50%';
+                ctxTarget.style.height = 'auto';
+                showToast('Width set to 50%');
+                break;
+            case 'imgAlignCenter':
+                ctxTarget.style.display = 'block';
+                ctxTarget.style.margin = '0 auto';
+                showToast('Aligned Center');
+                break;
+            case 'imgSetBackground':
+                const bgUrl = ctxTarget.src;
+
+                // Traverse up to find a suitable container (TD, or Card Div)
+                // Stop if we hit the editor root
+                let contextEl = ctxTarget.parentElement;
+                let foundContainer = null;
+
+                while (contextEl && contextEl.id !== 'visualEditorContainer') {
+                    const tag = contextEl.tagName;
+                    // Prefer Table Cells (standard for email) or specific Classes
+                    if (tag === 'TD' || tag === 'TH' || contextEl.classList.contains('card') || contextEl.classList.contains('content-block')) {
+                        foundContainer = contextEl;
+                        break;
+                    }
+                    // Fallback: if this element is a direct child of the editor, it is the "Row/Section"
+                    if (contextEl.parentElement && contextEl.parentElement.id === 'visualEditorContainer') {
+                        foundContainer = contextEl;
+                        break;
+                    }
+                    contextEl = contextEl.parentElement;
+                }
+
+                if (foundContainer) {
+                    foundContainer.style.backgroundImage = `url('${bgUrl}')`;
+                    foundContainer.style.backgroundSize = 'cover';
+                    foundContainer.style.backgroundPosition = 'center';
+                    foundContainer.style.backgroundRepeat = 'no-repeat';
+                    showToast('Background set on ' + foundContainer.tagName);
+                } else {
+                    showToast('No suitable container found');
+                }
+                break;
+            case 'imgRemove':
+                if (ctxTarget) {
+                    ctxTarget.remove();
+                    ctxTarget = null;
+                    showToast('Image removed');
+                }
+                break;
+        }
+    }
+
+    function insertImage() {
+        const url = prompt('Enter Image URL:', 'https://');
+        if (url && url !== 'https://' && url !== null) {
+            const container = document.getElementById('visualEditorContainer');
+            container.focus();
+
+            const imgHtml = `<img src="${url}" style="max-width:100%; height:auto; display:block; margin: 10px 0;" alt="Inserted">`;
+            const success = document.execCommand('insertHTML', false, imgHtml);
+
+            if (!success) {
+                // Fallback: Append to end if command fails (e.g. selection lost)
+                const div = document.createElement('div');
+                div.innerHTML = imgHtml;
+                container.appendChild(div.firstChild);
+            }
+        }
+    }
+
+    function showToast(msg) {
+        // Simple console log or alert for now
+        console.log("Toast:", msg);
+        // We could implement a real toast later
+    }
+
+    // Attach to window so onclick works
+    window.execCtx = execCtx;
+    // Auto-init listeners if page is loaded
+    setTimeout(initVisualEditorListeners, 1000);
+
+    // Initialize
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNewsletterCampaigns);
+    } else if (!window.adminApp) {
+        initNewsletterCampaigns();
+    }
+</script>

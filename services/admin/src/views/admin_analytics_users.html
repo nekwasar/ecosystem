@@ -1,0 +1,1129 @@
+<div class="analytics-users">
+    <div class="analytics-header">
+        <h1 class="page-title">User Analytics</h1>
+        <p class="page-subtitle">Understand your audience behavior and demographics</p>
+    </div>
+
+    <!-- User Overview Cards -->
+    <div class="user-overview">
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-users"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="totalUsers">0</div>
+                <div class="card-label">Total Users</div>
+                <div class="card-trend" id="usersTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+12.5%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-user-plus"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="newUsers">0</div>
+                <div class="card-label">New Users (30d)</div>
+                <div class="card-trend" id="newUsersTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+8.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-repeat"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="returningUsers">0%</div>
+                <div class="card-label">Returning Users</div>
+                <div class="card-trend" id="returningTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+5.7%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overview-card">
+            <div class="card-icon">
+                <i class="ph-bold ph-clock"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-value" id="avgSessionTime">0m 0s</div>
+                <div class="card-label">Avg. Session Time</div>
+                <div class="card-trend" id="sessionTrend">
+                    <i class="ph-bold ph-trend-up"></i>
+                    <span>+15.3%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Growth Chart -->
+    <div class="growth-section">
+        <div class="section-header">
+            <h2>User Growth</h2>
+            <div class="growth-filters">
+                <button class="growth-filter-btn active" data-period="7d">7 Days</button>
+                <button class="growth-filter-btn" data-period="30d">30 Days</button>
+                <button class="growth-filter-btn" data-period="90d">90 Days</button>
+                <button class="growth-filter-btn" data-period="1y">1 Year</button>
+            </div>
+        </div>
+        <div class="growth-chart">
+            <canvas id="userGrowthChart"></canvas>
+        </div>
+    </div>
+
+    <!-- User Demographics -->
+    <div class="demographics-section">
+        <div class="section-header">
+            <h2>User Demographics</h2>
+        </div>
+        <div class="demographics-grid">
+            <!-- Geographic Distribution -->
+            <div class="demo-card">
+                <div class="card-header">
+                    <h3>Geographic Distribution</h3>
+                </div>
+                <div class="countries-list" id="topCountries">
+                    <!-- Country items will be populated here -->
+                </div>
+            </div>
+
+            <!-- Device Types -->
+            <div class="demo-card">
+                <div class="card-header">
+                    <h3>Device Types</h3>
+                </div>
+                <div class="device-breakdown">
+                    <div class="device-item">
+                        <div class="device-icon">
+                            <i class="ph-bold ph-device-desktop"></i>
+                        </div>
+                        <div class="device-info">
+                            <div class="device-name">Desktop</div>
+                            <div class="device-percentage" id="desktopPercent">0%</div>
+                        </div>
+                    </div>
+                    <div class="device-item">
+                        <div class="device-icon">
+                            <i class="ph-bold ph-device-tablet"></i>
+                        </div>
+                        <div class="device-info">
+                            <div class="device-name">Tablet</div>
+                            <div class="device-percentage" id="tabletPercent">0%</div>
+                        </div>
+                    </div>
+                    <div class="device-item">
+                        <div class="device-icon">
+                            <i class="ph-bold ph-device-mobile"></i>
+                        </div>
+                        <div class="device-info">
+                            <div class="device-name">Mobile</div>
+                            <div class="device-percentage" id="mobilePercent">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Browser Types -->
+            <div class="demo-card">
+                <div class="card-header">
+                    <h3>Browser Types</h3>
+                </div>
+                <div class="browser-breakdown">
+                    <div class="browser-item">
+                        <div class="browser-name">Chrome</div>
+                        <div class="browser-bar">
+                            <div class="browser-fill chrome" id="chromeBar"></div>
+                        </div>
+                        <div class="browser-percentage" id="chromePercent">0%</div>
+                    </div>
+                    <div class="browser-item">
+                        <div class="browser-name">Firefox</div>
+                        <div class="browser-bar">
+                            <div class="browser-fill firefox" id="firefoxBar"></div>
+                        </div>
+                        <div class="browser-percentage" id="firefoxPercent">0%</div>
+                    </div>
+                    <div class="browser-item">
+                        <div class="browser-name">Safari</div>
+                        <div class="browser-bar">
+                            <div class="browser-fill safari" id="safariBar"></div>
+                        </div>
+                        <div class="browser-percentage" id="safariPercent">0%</div>
+                    </div>
+                    <div class="browser-item">
+                        <div class="browser-name">Edge</div>
+                        <div class="browser-bar">
+                            <div class="browser-fill edge" id="edgeBar"></div>
+                        </div>
+                        <div class="browser-percentage" id="edgePercent">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Behavior Analysis -->
+    <div class="behavior-section">
+        <div class="section-header">
+            <h2>User Behavior Analysis</h2>
+        </div>
+        <div class="behavior-grid">
+            <!-- Page Views per Session -->
+            <div class="behavior-card">
+                <div class="behavior-header">
+                    <h3>Pages per Session</h3>
+                    <div class="behavior-value" id="pagesPerSession">0.0</div>
+                </div>
+                <div class="behavior-chart">
+                    <canvas id="pagesPerSessionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Session Duration Distribution -->
+            <div class="behavior-card">
+                <div class="behavior-header">
+                    <h3>Session Duration</h3>
+                    <div class="behavior-value" id="avgSessionDuration">0m 0s</div>
+                </div>
+                <div class="behavior-chart">
+                    <canvas id="sessionDurationChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bounce Rate by Source -->
+            <div class="behavior-card">
+                <div class="behavior-header">
+                    <h3>Bounce Rate by Source</h3>
+                </div>
+                <div class="bounce-sources" id="bounceSources">
+                    <!-- Bounce rate items will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Engagement Metrics -->
+    <div class="engagement-section">
+        <div class="section-header">
+            <h2>User Engagement</h2>
+        </div>
+        <div class="engagement-metrics">
+            <div class="engagement-card">
+                <div class="engagement-icon">
+                    <i class="ph-bold ph-heart"></i>
+                </div>
+                <div class="engagement-content">
+                    <div class="engagement-value" id="totalLikes">0</div>
+                    <div class="engagement-label">Total Likes</div>
+                </div>
+            </div>
+
+            <div class="engagement-card">
+                <div class="engagement-icon">
+                    <i class="ph-bold ph-chat-circle"></i>
+                </div>
+                <div class="engagement-content">
+                    <div class="engagement-value" id="totalComments">0</div>
+                    <div class="engagement-label">Total Comments</div>
+                </div>
+            </div>
+
+            <div class="engagement-card">
+                <div class="engagement-icon">
+                    <i class="ph-bold ph-share"></i>
+                </div>
+                <div class="engagement-content">
+                    <div class="engagement-value" id="totalShares">0</div>
+                    <div class="engagement-label">Total Shares</div>
+                </div>
+            </div>
+
+            <div class="engagement-card">
+                <div class="engagement-icon">
+                    <i class="ph-bold ph-bookmark"></i>
+                </div>
+                <div class="engagement-content">
+                    <div class="engagement-value" id="totalBookmarks">0</div>
+                    <div class="engagement-label">Total Bookmarks</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Journey Analysis -->
+    <div class="journey-section">
+        <div class="section-header">
+            <h2>User Journey Analysis</h2>
+        </div>
+        <div class="journey-content">
+            <div class="journey-flow" id="userJourney">
+                <!-- User journey steps will be populated here -->
+            </div>
+            <div class="journey-insights">
+                <div class="insight-card">
+                    <h4>Top Entry Pages</h4>
+                    <div class="insight-list" id="entryPages">
+                        <!-- Entry pages will be populated here -->
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <h4>Top Exit Pages</h4>
+                    <div class="insight-list" id="exitPages">
+                        <!-- Exit pages will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.analytics-users {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.analytics-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.page-title {
+    font: normal 700 2.38rem/1.2 var(--_font-accent);
+    color: var(--t-accent);
+    background: var(--t-accent);
+    background: -webkit-linear-gradient(15deg, var(--t-accent) 0%, var(--t-secondary) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    font: normal 400 1.26rem/1.4 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* User Overview */
+.user-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.overview-card {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 2rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-value {
+    font: normal 700 1.96rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.card-label {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+    margin-bottom: 0.5rem;
+}
+
+.card-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: normal 500 0.84rem/1.2 var(--_font-default);
+    color: var(--success, #10b981);
+}
+
+/* Growth Section */
+.growth-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.section-header h2 {
+    font: normal 600 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.growth-filters {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.growth-filter-btn {
+    background: none;
+    border: 1px solid var(--stroke-elements);
+    color: var(--t-medium);
+    padding: 0.5rem 1rem;
+    border-radius: var(--_radius-s);
+    cursor: pointer;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+}
+
+.growth-filter-btn.active {
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    border-color: var(--accent);
+}
+
+.growth-chart {
+    height: 400px;
+    position: relative;
+}
+
+/* Demographics Section */
+.demographics-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.demographics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.demo-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+}
+
+.card-header h3 {
+    font: normal 600 1.26rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0 0 2rem 0;
+}
+
+/* Countries List */
+.countries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.country-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: var(--_radius-m);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.country-item:hover {
+    background: var(--base);
+}
+
+.country-name {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.country-users {
+    font: normal 600 0.98rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Device Breakdown */
+.device-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.device-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.device-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+}
+
+.device-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.device-name {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.device-percentage {
+    font: normal 600 0.98rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Browser Breakdown */
+.browser-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.browser-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.browser-name {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    min-width: 80px;
+}
+
+.browser-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--stroke-elements);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.browser-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width var(--_animspeed-slow) var(--_animbezier);
+}
+
+.browser-fill.chrome { background: var(--accent); }
+.browser-fill.firefox { background: var(--secondary); }
+.browser-fill.safari { background: var(--success, #10b981); }
+.browser-fill.edge { background: var(--warning, #f59e0b); }
+
+.browser-percentage {
+    font: normal 600 0.98rem/1.2 var(--_font-default);
+    color: var(--accent);
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Behavior Section */
+.behavior-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.behavior-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+}
+
+.behavior-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+}
+
+.behavior-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.behavior-header h3 {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0;
+}
+
+.behavior-value {
+    font: normal 700 1.68rem/1.2 var(--_font-accent);
+    color: var(--accent);
+}
+
+.behavior-chart {
+    height: 200px;
+    position: relative;
+}
+
+/* Bounce Sources */
+.bounce-sources {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.bounce-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: var(--_radius-m);
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.bounce-item:hover {
+    background: var(--base);
+}
+
+.bounce-source {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.bounce-rate {
+    font: normal 600 0.98rem/1.2 var(--_font-default);
+    color: var(--error, #ef4444);
+}
+
+/* Engagement Section */
+.engagement-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.engagement-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.engagement-card {
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all var(--_animspeed-medium) var(--_animbezier);
+}
+
+.engagement-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.engagement-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent);
+    background: -webkit-linear-gradient(315deg, var(--accent) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--t-opp-bright);
+    font-size: 1.5rem;
+}
+
+.engagement-content {
+    flex: 1;
+}
+
+.engagement-value {
+    font: normal 700 1.68rem/1.2 var(--_font-accent);
+    color: var(--t-bright);
+    margin-bottom: 0.25rem;
+}
+
+.engagement-label {
+    font: normal 400 0.98rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+/* Journey Section */
+.journey-section {
+    background: var(--base);
+    border: 1px solid var(--stroke-elements);
+    border-radius: var(--_radius-l);
+    padding: 2rem;
+}
+
+.journey-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+}
+
+.journey-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.journey-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-m);
+    position: relative;
+}
+
+.journey-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    bottom: -1rem;
+    width: 2px;
+    height: 1rem;
+    background: var(--accent);
+}
+
+.journey-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--t-opp-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.98rem;
+}
+
+.journey-info {
+    flex: 1;
+}
+
+.journey-page {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin-bottom: 0.5rem;
+}
+
+.journey-stats {
+    font: normal 400 0.91rem/1.2 var(--_font-default);
+    color: var(--t-medium);
+}
+
+.journey-insights {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.insight-card h4 {
+    font: normal 600 1.12rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+    margin: 0 0 1rem 0;
+}
+
+.insight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.insight-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--stroke-elements);
+    border-radius: var(--_radius-s);
+}
+
+.insight-page {
+    font: normal 500 0.98rem/1.2 var(--_font-default);
+    color: var(--t-bright);
+}
+
+.insight-count {
+    font: normal 600 0.98rem/1.2 var(--_font-default);
+    color: var(--accent);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .behavior-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .journey-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .analytics-users {
+        padding: 1rem;
+    }
+
+    .user-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .demographics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .engagement-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .growth-filters {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
+<script>
+// User Analytics JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initUserAnalytics();
+});
+
+function initUserAnalytics() {
+    loadUserData();
+    initGrowthFilters();
+}
+
+function loadUserData() {
+    fetch('/api/analytics/users')
+        .then(response => response.json())
+        .then(data => {
+            updateUserOverview(data.overview);
+            updateUserGrowthChart(data.growth);
+            updateDemographics(data.demographics);
+            updateBehaviorAnalysis(data.behavior);
+            updateEngagementMetrics(data.engagement);
+            updateUserJourney(data.journey);
+        })
+        .catch(error => {
+            console.error('Error loading user data:', error);
+            showFallbackUserData();
+        });
+}
+
+function updateUserOverview(overview) {
+    document.getElementById('totalUsers').textContent = overview.totalUsers.toLocaleString();
+    document.getElementById('newUsers').textContent = overview.newUsers.toLocaleString();
+    document.getElementById('returningUsers').textContent = overview.returningUsers + '%';
+    document.getElementById('avgSessionTime').textContent = formatDuration(overview.avgSessionTime);
+
+    updateTrend('usersTrend', overview.usersChange);
+    updateTrend('newUsersTrend', overview.newUsersChange);
+    updateTrend('returningTrend', overview.returningChange);
+    updateTrend('sessionTrend', overview.sessionChange);
+}
+
+function updateTrend(elementId, change) {
+    const element = document.getElementById(elementId);
+    const span = element.querySelector('span');
+    span.textContent = (change >= 0 ? '+' : '') + Math.abs(change).toFixed(1) + '%';
+}
+
+function updateUserGrowthChart(growthData) {
+    const ctx = document.getElementById('userGrowthChart').getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (window.userGrowthChart) {
+        window.userGrowthChart.destroy();
+    }
+
+    window.userGrowthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: growthData.labels,
+            datasets: [{
+                label: 'Total Users',
+                data: growthData.totalUsers,
+                borderColor: 'var(--accent)',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'New Users',
+                data: growthData.newUsers,
+                borderColor: 'var(--secondary)',
+                backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updateDemographics(demographics) {
+    updateTopCountries(demographics.countries);
+    updateDeviceBreakdown(demographics.devices);
+    updateBrowserBreakdown(demographics.browsers);
+}
+
+function updateTopCountries(countries) {
+    const container = document.getElementById('topCountries');
+    container.innerHTML = countries.map(country => `
+        <div class="country-item">
+            <div class="country-name">${country.name}</div>
+            <div class="country-users">${country.users.toLocaleString()}</div>
+        </div>
+    `).join('');
+}
+
+function updateDeviceBreakdown(devices) {
+    const total = devices.desktop + devices.tablet + devices.mobile;
+    document.getElementById('desktopPercent').textContent = Math.round((devices.desktop / total) * 100) + '%';
+    document.getElementById('tabletPercent').textContent = Math.round((devices.tablet / total) * 100) + '%';
+    document.getElementById('mobilePercent').textContent = Math.round((devices.mobile / total) * 100) + '%';
+}
+
+function updateBrowserBreakdown(browsers) {
+    const total = browsers.chrome + browsers.firefox + browsers.safari + browsers.edge;
+
+    updateBrowserBar('chrome', browsers.chrome, total);
+    updateBrowserBar('firefox', browsers.firefox, total);
+    updateBrowserBar('safari', browsers.safari, total);
+    updateBrowserBar('edge', browsers.edge, total);
+}
+
+function updateBrowserBar(browser, count, total) {
+    const percentage = total > 0 ? (count / total * 100) : 0;
+    document.getElementById(`${browser}Percent`).textContent = Math.round(percentage) + '%';
+    document.getElementById(`${browser}Bar`).style.width = percentage + '%';
+}
+
+function updateBehaviorAnalysis(behavior) {
+    updatePagesPerSessionChart(behavior.pagesPerSession);
+    updateSessionDurationChart(behavior.sessionDuration);
+    updateBounceSources(behavior.bounceSources);
+}
+
+function updatePagesPerSessionChart(data) {
+    const ctx = document.getElementById('pagesPerSessionChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Pages per Session',
+                data: data.values,
+                backgroundColor: 'var(--accent)',
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function updateSessionDurationChart(data) {
+    const ctx = document.getElementById('sessionDurationChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                data: data.values,
+                backgroundColor: [
+                    'var(--accent)',
+                    'var(--secondary)',
+                    'var(--success, #10b981)',
+                    'var(--warning, #f59e0b)',
+                    'var(--error, #ef4444)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+}
+
+function updateBounceSources(sources) {
+    const container = document.getElementById('bounceSources');
+    container.innerHTML = sources.map(source => `
+        <div class="bounce-item">
+            <div class="bounce-source">${source.name}</div>
+            <div class="bounce-rate">${source.rate}%</div>
+        </div>
+    `).join('');
+}
+
+function updateEngagementMetrics(engagement) {
+    document.getElementById('totalLikes').textContent = engagement.likes.toLocaleString();
+    document.getElementById('totalComments').textContent = engagement.comments.toLocaleString();
+    document.getElementById('totalShares').textContent = engagement.shares.toLocaleString();
+    document.getElementById('totalBookmarks').textContent = engagement.bookmarks.toLocaleString();
+}
+
+function updateUserJourney(journey) {
+    updateJourneyFlow(journey.flow);
+    updateJourneyInsights(journey.insights);
+}
+
+function updateJourneyFlow(flow) {
+    const container = document.getElementById('userJourney');
+    container.innerHTML = flow.map((step, index) => `
+        <div class="journey-step">
+            <div class="journey-number">${index + 1}</div>
+            <div class="journey-info">
+                <div class="journey-page">${step.page}</div>
+                <div class="journey-stats">${step.visitors.toLocaleString()} visitors • ${step.time} avg. time</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateJourneyInsights(insights) {
+    updateInsightList('entryPages', insights.entryPages);
+    updateInsightList('exitPages', insights.exitPages);
+}
+
+function updateInsightList(containerId, items) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = items.map(item => `
+        <div class="insight-item">
+            <div class="insight-page">${item.page}</div>
+            <div class="insight-count">${item.count.toLocaleString()}</div>
+        </div>
+    `).join('');
+}
+
+function initGrowthFilters() {
+    document.querySelectorAll('.growth-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.growth-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadUserGrowthData(this.dataset.period);
+        });
+    });
+}
+
+function loadUserGrowthData(period) {
+    fetch(`/api/analytics/users/growth?period=${period}`)
+        .then(response => response.json())
+        .then(data => updateUserGrowthChart(data))
+        .catch(error => console.error('Error loading user growth data:', error));
+}
+
+function formatDuration(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}m ${remainingSeconds}s`;
+}
+
+function showFallbackUserData() {
+    // Show sample data when API is not available
+    updateUserOverview({
+        totalUsers: 15432,
+        newUsers: 1243,
+        returningUsers: 68.5,
+        avgSessionTime: 184,
+        usersChange: 12.5,
+        newUsersChange: 8.2,
+        returningChange: 5.7,
+        sessionChange: 15.3
+    });
+}
+</script>

@@ -1,0 +1,520 @@
+<!-- Futuristic Author Management System (v2.0 - List View) -->
+<div class="author-system-container h-full flex flex-col relative overflow-hidden">
+
+    <!-- Background Elements -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent/5 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-secondary/5 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- Toolbar -->
+    <header
+        class="relative z-20 px-6 py-4 flex items-center justify-between border-b border-stroke-elements bg-base/80 backdrop-blur-md">
+        <div class="flex items-center gap-4">
+            <h1 class="text-xl font-bold font-syne text-t-bright tracking-tight">Identity Database</h1>
+
+            <div class="h-6 w-px bg-stroke-elements"></div>
+
+            <div id="selectionActions" class="hidden flex items-center gap-2">
+                <span class="text-xs font-mono text-t-muted" id="selectionCount">0 selected</span>
+                <button onclick="deleteSelected()"
+                    class="px-3 py-1.5 rounded bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white text-xs font-bold transition-colors border border-red-500/20">
+                    TERMINATE
+                </button>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="relative group">
+                <input type="text" id="authorSearch" placeholder="Search entries..."
+                    class="pl-9 pr-4 py-2 bg-base-shade border border-stroke-controls rounded-lg text-sm text-t-bright focus:border-accent outline-none w-56 transition-all font-mono">
+                <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-t-muted"></i>
+            </div>
+
+            <button onclick="openAuthorEditor()"
+                class="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-lg font-bold text-sm hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-accent/20">
+                <i class="ph-bold ph-plus"></i>
+                <span>NEW IDENTITY</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- List View -->
+    <main class="flex-1 overflow-y-auto relative z-10" id="authorListContainer">
+        <!-- Header Row -->
+        <div
+            class="grid grid-cols-[auto_auto_1fr_2fr_auto] gap-4 px-6 py-3 border-b border-stroke-elements bg-base-shade/50 text-xs font-bold text-t-muted uppercase tracking-wider sticky top-0 z-10 backdrop-blur-sm">
+            <div class="w-5 flex items-center"><input type="checkbox" onchange="toggleSelectAll(this)"
+                    class="accent-accent"></div>
+            <div class="w-12">Avatar</div>
+            <div>Identity</div>
+            <div>Credentials</div>
+            <div class="text-right">Action</div>
+        </div>
+
+        <!-- Data Rows injected here -->
+        <div id="authorsList" class="divide-y divide-stroke-elements">
+            <div class="p-10 text-center text-t-muted font-mono opacity-50">
+                <i class="ph-duotone ph-spinner-gap text-2xl animate-spin mb-2"></i>
+                <div>SYNCING DATABASE...</div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Context Menu -->
+<div id="contextMenu" class="fixed z-50 bg-base border border-stroke-elements rounded-lg shadow-2xl py-1 w-48 hidden">
+    <button onclick="contextEdit()"
+        class="w-full text-left px-4 py-2 text-sm text-t-bright hover:bg-accent hover:text-white flex items-center gap-2">
+        <i class="ph-bold ph-pencil-simple"></i> Edit Profile
+    </button>
+    <button onclick="contextView()"
+        class="w-full text-left px-4 py-2 text-sm text-t-bright hover:bg-accent hover:text-white flex items-center gap-2">
+        <i class="ph-bold ph-eye"></i> View Public
+    </button>
+    <div class="h-px bg-stroke-elements my-1"></div>
+    <button onclick="contextDelete()"
+        class="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-500 hover:text-white flex items-center gap-2">
+        <i class="ph-bold ph-trash"></i> Delete
+    </button>
+</div>
+
+<!-- Editor Modal -->
+<div id="authorModal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity opacity-0" id="modalBackdrop"
+        onclick="closeAuthorEditor()"></div>
+
+    <div class="absolute right-0 top-0 bottom-0 w-full max-w-2xl bg-base border-l border-stroke-elements shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col"
+        id="modalPanel">
+
+        <div class="px-6 py-5 border-b border-stroke-elements flex items-center justify-between bg-base-shade/50">
+            <div>
+                <h2 class="text-xl font-bold font-syne text-t-bright" id="modalTitle">Configure Identity</h2>
+                <p class="text-xs text-t-muted font-mono uppercase tracking-wider">Secure Profile Management</p>
+            </div>
+            <button onclick="closeAuthorEditor()"
+                class="w-8 h-8 rounded-full hover:bg-base-tint flex items-center justify-center transition-colors">
+                <i class="ph-bold ph-x text-t-muted"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-8">
+            <form id="authorForm" onsubmit="return false">
+                <input type="hidden" id="authorId">
+
+                <!-- Basic Info -->
+                <div class="grid grid-cols-[auto_1fr] gap-8 mb-8">
+                    <div class="flex flex-col items-center gap-3">
+                        <img id="avatarPreview" src=""
+                            class="w-32 h-32 rounded-2xl object-cover bg-base-shade border border-stroke-elements">
+                        <input type="text" id="authorAvatar" placeholder="Avatar URL" onchange="updatePreview()"
+                            class="w-32 text-xs bg-base-shade border border-stroke-controls rounded px-2 py-1 outline-none focus:border-accent">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Full Name</label>
+                                <input type="text" id="authorName" oninput="updatePreview()"
+                                    class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Username</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-t-muted text-xs">@</span>
+                                    <input type="text" id="authorUsername"
+                                        class="w-full pl-7 pr-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none font-mono text-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Bio</label>
+                            <textarea id="authorBio" rows="3"
+                                class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Cover Image URL</label>
+                            <input type="text" id="authorCover"
+                                class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-t-muted uppercase mb-1 block">Expert Tags (comma
+                                separated)</label>
+                            <input type="text" id="authorTags"
+                                class="w-full px-3 py-2 bg-base-shade border border-stroke-controls rounded text-t-bright focus:border-accent outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-px bg-stroke-elements my-6"></div>
+
+                <!-- Connect Module -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg font-syne text-t-bright">Connect Module</h3>
+                        <button onclick="addSocialRow()"
+                            class="text-xs bg-base-shade hover:bg-accent hover:text-white px-2 py-1 rounded transition-colors">+
+                            Add Link</button>
+                    </div>
+                    <div id="socialsContainer" class="space-y-2">
+                        <!-- Dynamic Rows -->
+                    </div>
+                </div>
+
+                <div class="h-px bg-stroke-elements my-6"></div>
+
+                <!-- Library Module -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-lg font-syne text-t-bright">Library Module (Books)</h3>
+                        <button onclick="addBookRow()"
+                            class="text-xs bg-base-shade hover:bg-accent hover:text-white px-2 py-1 rounded transition-colors">+
+                            Add Book</button>
+                    </div>
+                    <div id="booksContainer" class="space-y-4">
+                        <!-- Dynamic Rows -->
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div
+            class="p-6 border-t border-stroke-elements bg-base-shade/30 flex justify-end gap-3 sticky bottom-0 backdrop-blur-md">
+            <button onclick="closeAuthorEditor()"
+                class="px-5 py-2 rounded text-sm font-bold text-t-muted hover:text-t-bright hover:bg-base-tint transition-colors">Cancel</button>
+            <button onclick="saveAuthor()"
+                class="px-6 py-2 bg-accent text-white rounded text-sm font-bold shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all">Save
+                Identity</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let authors = [];
+    let selectedIds = new Set();
+    let contextTargetId = null;
+
+    // --- Loading & Rendering ---
+    async function loadAuthors() {
+        const list = document.getElementById('authorsList');
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/admin/api/authors', { headers: { 'Authorization': `Bearer ${token}` } });
+            if (!res.ok) throw new Error("API Error");
+            authors = await res.json();
+            renderList();
+        } catch (e) {
+            console.error(e);
+            list.innerHTML = `<div class="p-8 text-center text-red-500">System Malfunction: Database Link Failed</div>`;
+        }
+    }
+
+    function renderList() {
+        const list = document.getElementById('authorsList');
+        const search = document.getElementById('authorSearch').value.toLowerCase();
+        selectedIds.clear();
+        updateSelectionUI();
+
+        const filtered = authors.filter(a => a.name.toLowerCase().includes(search) || a.username.includes(search));
+
+        if (filtered.length === 0) {
+            list.innerHTML = `<div class="p-8 text-center text-t-muted font-mono">No identities found in registry.</div>`;
+            return;
+        }
+
+        list.innerHTML = filtered.map(a => `
+            <div class="grid grid-cols-[auto_auto_1fr_2fr_auto] gap-4 px-6 py-3 items-center hover:bg-base-shade transition-colors group cursor-default"
+                 oncontextmenu="showContext(event, ${a.id})">
+                <div class="w-5 flex items-center">
+                    <input type="checkbox" onchange="toggleSelect(${a.id})" class="accent-accent author-checkbox">
+                </div>
+                <div class="w-12 h-12">
+                    <img src="${a.avatar_image || 'https://ui-avatars.com/api/?name=' + a.name}" class="w-full h-full rounded object-cover bg-surface-2">
+                </div>
+                <div>
+                    <div class="font-bold text-t-bright text-sm">${a.name}</div>
+                    <div class="font-mono text-xs text-t-muted">@${a.username}</div>
+                </div>
+                <div>
+                     <div class="flex flex-wrap gap-1">
+                        ${(a.expert_tags || []).slice(0, 3).map(t => `<span class="px-1.5 py-0.5 rounded bg-base-shade border border-stroke-elements text-[10px] text-t-muted uppercase font-bold">${t}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="text-right opacity-100">
+                    <button onclick="editAuthor(${a.id})" class="w-8 h-8 rounded hover:bg-base-tint text-t-muted hover:text-accent transition-colors"><i class="ph-bold ph-pencil-simple"></i></button>
+                    <a href="/author/${a.username}" target="_blank" class="w-8 h-8 rounded hover:bg-base-tint text-t-muted hover:text-accent inline-flex items-center justify-center transition-colors"><i class="ph-bold ph-arrow-square-out"></i></a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // --- Dynamic Fields ---
+    function addSocialRow(data = {}) {
+        const container = document.getElementById('socialsContainer');
+        const div = document.createElement('div');
+        div.className = "flex gap-2 items-center bg-base p-2 rounded border border-stroke-elements";
+
+        // Curated platform list
+        const platforms = ['twitter', 'github', 'linkedin', 'instagram', 'youtube', 'facebook', 'medium', 'tiktok', 'website', 'email', 'discord', 'reddit', 'threads', 'patreon', 'stackoverflow'];
+
+        let options = platforms.map(p =>
+            `<option value="${p}" ${data.platform === p ? 'selected' : ''}>${p.charAt(0).toUpperCase() + p.slice(1)}</option>`
+        ).join('');
+
+        // Add custom option in case it's not in the list
+        if (data.platform && !platforms.includes(data.platform)) {
+            options += `<option value="${data.platform}" selected>${data.platform}</option>`;
+        }
+
+        div.innerHTML = `
+            <select class="social-platform bg-surface-1 border border-stroke-elements text-t-bright text-xs rounded px-2 py-2 w-32 focus:border-accent outline-none font-bold uppercase">
+                ${options}
+            </select>
+            <input type="text" class="social-url flex-1 bg-surface-1 border border-stroke-elements text-t-bright text-xs rounded px-3 py-2 focus:border-accent outline-none font-mono" placeholder="https://..." value="${data.url || ''}">
+            <button onclick="this.parentElement.remove()" class="text-red-500 hover:bg-red-500/10 p-1.5 rounded transition-colors"><i class="ph-bold ph-trash"></i></button>
+        `;
+        container.appendChild(div);
+    }
+
+    function addBookRow(data = {}) {
+        const div = document.createElement('div');
+        div.className = "grid grid-cols-[auto_1fr] gap-3 p-3 bg-base-shade/50 rounded border border-stroke-elements relative group";
+        div.innerHTML = `
+            <div class="w-16 h-24 bg-base-shade rounded border border-stroke-elements flex items-center justify-center overflow-hidden">
+                <img src="" class="book-cover-preview w-full h-full object-cover hidden">
+                <i class="ph-duotone ph-book text-2xl text-t-muted book-icon"></i>
+            </div>
+            <div class="space-y-2">
+                <input type="text" class="book-title w-full bg-base border border-stroke-controls rounded px-2 py-1 text-xs text-t-bright outline-none" placeholder="Book Title">
+                <input type="text" class="book-link w-full bg-base border border-stroke-controls rounded px-2 py-1 text-xs text-t-bright outline-none" placeholder="Purchase Link">
+                <input type="text" onchange="previewBookCover(this)" class="book-cover w-full bg-base border border-stroke-controls rounded px-2 py-1 text-xs text-t-muted outline-none" placeholder="Cover Image URL">
+            </div>
+            <button onclick="this.parentElement.remove()" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-t-muted hover:text-red-500"><i class="ph-bold ph-trash"></i></button>
+        `;
+        document.getElementById('booksContainer').appendChild(div);
+        if (data.title) div.querySelector('.book-title').value = data.title;
+        if (data.link) div.querySelector('.book-link').value = data.link;
+        if (data.cover) {
+            const input = div.querySelector('.book-cover');
+            input.value = data.cover;
+            previewBookCover(input);
+        }
+    }
+
+    function previewBookCover(input) {
+        const container = input.closest('.grid').querySelector('.w-16');
+        const img = container.querySelector('img');
+        const icon = container.querySelector('i');
+        if (input.value) {
+            img.src = input.value;
+            img.classList.remove('hidden');
+            icon.classList.add('hidden');
+        } else {
+            img.classList.add('hidden');
+            icon.classList.remove('hidden');
+        }
+    }
+
+    // --- Editor Logic ---
+    function openAuthorEditor() {
+        // Reset
+        document.getElementById('authorForm').reset();
+        document.getElementById('authorId').value = '';
+        document.getElementById('avatarPreview').src = 'https://ui-avatars.com/api/?name=New+Identity&background=random';
+        document.getElementById('socialsContainer').innerHTML = '';
+        document.getElementById('booksContainer').innerHTML = '';
+        document.getElementById('modalTitle').textContent = 'New Identity';
+
+        // Show
+        document.getElementById('authorModal').classList.remove('hidden');
+        requestAnimationFrame(() => {
+            document.getElementById('modalBackdrop').classList.remove('opacity-0');
+            document.getElementById('modalPanel').classList.remove('translate-x-full');
+        });
+    }
+
+    function closeAuthorEditor() {
+        document.getElementById('modalBackdrop').classList.add('opacity-0');
+        document.getElementById('modalPanel').classList.add('translate-x-full');
+        setTimeout(() => document.getElementById('authorModal').classList.add('hidden'), 300);
+    }
+
+    function updatePreview() {
+        const url = document.getElementById('authorAvatar').value;
+        const name = document.getElementById('authorName').value;
+        document.getElementById('avatarPreview').src = url || `https://ui-avatars.com/api/?name=${name || 'User'}&background=random`;
+    }
+
+    function editAuthor(id) {
+        const a = authors.find(x => x.id === id);
+        if (!a) return;
+
+        openAuthorEditor();
+        document.getElementById('modalTitle').textContent = 'Edit Identity';
+        document.getElementById('authorId').value = a.id;
+        document.getElementById('authorName').value = a.name;
+        document.getElementById('authorUsername').value = a.username;
+        document.getElementById('authorBio').value = a.bio || '';
+        document.getElementById('authorAvatar').value = a.avatar_image || '';
+        document.getElementById('authorCover').value = a.cover_image || '';
+        document.getElementById('authorTags').value = (a.expert_tags || []).join(', ');
+
+        // Load Repeaters
+        (a.social_links || []).forEach(addSocialRow);
+        (a.books || []).forEach(addBookRow);
+
+        updatePreview();
+    }
+
+    async function saveAuthor() {
+        const id = document.getElementById('authorId').value;
+        const socials = Array.from(document.querySelectorAll('#socialsContainer > div')).map(row => ({
+            platform: row.querySelector('.social-platform').value,
+            url: row.querySelector('.social-url').value
+        })).filter(s => s.url); // Only save if URL exists
+
+        const books = Array.from(document.querySelectorAll('#booksContainer > div')).map(row => ({
+            title: row.querySelector('.book-title').value,
+            link: row.querySelector('.book-link').value,
+            cover: row.querySelector('.book-cover').value
+        })).filter(b => b.title);
+
+        const data = {
+            name: document.getElementById('authorName').value,
+            username: document.getElementById('authorUsername').value,
+            bio: document.getElementById('authorBio').value,
+            avatar_image: document.getElementById('authorAvatar').value,
+            cover_image: document.getElementById('authorCover').value,
+            expert_tags: document.getElementById('authorTags').value.split(',').map(s => s.trim()).filter(s => s),
+            social_links: socials,
+            books: books
+        };
+
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/admin/api/authors/${id}` : '/admin/api/authors';
+        const token = localStorage.getItem('token');
+
+        try {
+            const res = await fetch(url, {
+                method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) {
+                closeAuthorEditor();
+                loadAuthors();
+            } else {
+                alert("Save Failed: " + (await res.text()));
+            }
+        } catch (e) {
+            alert("System Error: " + e.message);
+        }
+    }
+
+    // --- Context Menu & Selection ---
+    function showContext(e, id) {
+        e.preventDefault();
+        contextTargetId = id;
+        const menu = document.getElementById('contextMenu');
+        menu.style.left = e.clientX + 'px';
+        menu.style.top = e.clientY + 'px';
+        menu.classList.remove('hidden');
+    }
+
+    function contextEdit() { editAuthor(contextTargetId); hideContext(); }
+    function contextView() {
+        const a = authors.find(x => x.id === contextTargetId);
+        if (a) window.open('/author/' + a.username, '_blank');
+        hideContext();
+    }
+    async function deleteSelected() {
+        if (!confirm(`Delete ${selectedIds.size} identities? This cannot be undone.`)) return;
+
+        const token = localStorage.getItem('token');
+        const ids = Array.from(selectedIds);
+
+        let successCount = 0;
+        for (const id of ids) {
+            try {
+                const res = await fetch(`/admin/api/authors/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    successCount++;
+                    selectedIds.delete(id);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        loadAuthors();
+        alert(`Terminated ${successCount} identities.`);
+    }
+
+    function contextDelete() {
+        const a = authors.find(x => x.id === contextTargetId);
+        if (!a) return hideContext();
+
+        if (confirm(`Permanently terminate identity: ${a.name}?`)) {
+            // Fake adding to selection to reuse logic or just call API directly
+            const token = localStorage.getItem('token');
+            fetch(`/admin/api/authors/${a.id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            }).then(res => {
+                if (res.ok) loadAuthors();
+                else alert("Termination failed.");
+            });
+        }
+        hideContext();
+    }
+
+    function hideContext() { document.getElementById('contextMenu').classList.add('hidden'); }
+
+    // Clicking outside closes context menu
+    document.addEventListener('click', hideContext);
+
+    // Search Listener
+    document.getElementById('authorSearch').addEventListener('input', renderList);
+
+    // Initial Load
+    loadAuthors();
+
+    function toggleSelect(id) {
+        if (selectedIds.has(id)) selectedIds.delete(id);
+        else selectedIds.add(id);
+        updateSelectionUI();
+    }
+
+    function toggleSelectAll(checkbox) {
+        const checkboxes = document.querySelectorAll('.author-checkbox');
+        checkboxes.forEach(cb => {
+            cb.checked = checkbox.checked;
+            // Extract ID from onchange="toggleSelect(ID)" string or parent row logic
+            // Hacky extraction from onclick attribute context or data attribute
+            // Better: update logic in renderList to add data-id to checkbox
+            const row = cb.closest('[oncontextmenu]');
+            // The row doesn't have ID easily accessible unless parsed from HTML or context menu arg
+            // Let's rely on finding the ID via regex from the onchange attribute for now to be safe without full DOM rework
+            const idMatch = cb.getAttribute('onchange').match(/\d+/);
+            if (idMatch) {
+                const id = parseInt(idMatch[0]);
+                if (checkbox.checked) selectedIds.add(id);
+                else selectedIds.delete(id);
+            }
+        });
+        updateSelectionUI();
+    }
+
+    function updateSelectionUI() {
+        const container = document.getElementById('selectionActions');
+        const countSpan = document.getElementById('selectionCount');
+        if (selectedIds.size > 0) {
+            container.classList.remove('hidden');
+            countSpan.textContent = `${selectedIds.size} selected`;
+        } else {
+            container.classList.add('hidden');
+        }
+    }
+</script>
